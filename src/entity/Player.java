@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 
 public class Player extends Entity{
 
@@ -23,14 +24,18 @@ public class Player extends Entity{
 
     public void getPlayerImage() {
         try {
-            up1 = ImageIO.read(getClass().getResourceAsStream("/player/ghost_up_1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/player/ghost_up_2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/player/ghost_down_1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/player/ghost_down_2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/player/ghost_down_1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/player/ghost_down_2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/player/ghost_down_1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/player/ghost_down_2.png"));
+            up1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/ghost_up_1.png")));
+            up2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/ghost_up_2.png")));
+            up3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/ghost_up_3.png")));
+            down1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/ghost_down_1.png")));
+            down2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/ghost_down_2.png")));
+            down3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/ghost_down_3.png")));
+            left1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/ghost_left_1.png")));
+            left2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/ghost_left_2.png")));
+            left3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/ghost_left_3.png")));
+            right1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/ghost_right_1.png")));
+            right2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/ghost_right_2.png")));
+            right3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/ghost_right_3.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,10 +63,12 @@ public class Player extends Entity{
                 x += speed;
             }
             spriteCounter ++;
-            if (spriteCounter > 12) {
+            if (spriteCounter > 10) {
                 if (spriteNumber == 1) {
                     spriteNumber = 2;
                 } else if (spriteNumber == 2) {
+                    spriteNumber = 3;
+                } else if (spriteNumber == 3) {
                     spriteNumber = 1;
                 }
                 spriteCounter = 0;
@@ -72,10 +79,10 @@ public class Player extends Entity{
         BufferedImage image = null;
 
         switch (direction) {
-            case "up": if (spriteNumber == 1) {image = up1;} else if (spriteNumber == 2) {image = up2;} break;
-            case "down": if (spriteNumber == 1) {image = down1;} else if (spriteNumber == 2) {image = down2;} break;
-            case "left": if (spriteNumber == 1) {image = left1;} else if (spriteNumber == 2) {image = left2;} break;
-            case "right": if (spriteNumber == 1) {image = right1;} else if (spriteNumber == 2) {image = right2;} break;
+            case "up": if (spriteNumber == 1) {image = up1;} else if (spriteNumber == 2) {image = up2;} else if (spriteNumber == 3) {image = up3;}break;
+            case "down": if (spriteNumber == 1) {image = down1;} else if (spriteNumber == 2) {image = down2;} else if (spriteNumber == 3) {image = down3;} break;
+            case "left": if (spriteNumber == 1) {image = left1;} else if (spriteNumber == 2) {image = left2;} else if (spriteNumber == 3) {image = left3;}break;
+            case "right": if (spriteNumber == 1) {image = right1;} else if (spriteNumber == 2) {image = right2;} else if (spriteNumber == 3) {image = right3;}break;
         }
         g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
     }
