@@ -1,6 +1,7 @@
 package main;
 
 import entity.Player;
+import environment.EnvironmentManager;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -27,9 +28,13 @@ public class GamePanel extends JPanel implements Runnable{
     // FPS
     int FPS = 60;
 
+    // System
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
+    EnvironmentManager environmentM = new EnvironmentManager(this);
     Thread gameThread;
+
+    // Entities
     public CollisionChecker cChecker = new CollisionChecker(this);
     public Player player = new Player(this, keyH);
 
@@ -39,6 +44,10 @@ public class GamePanel extends JPanel implements Runnable{
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+    }
+
+    public void setupGame() {
+        environmentM.setup();
     }
 
     public void startGameThread() {
@@ -86,6 +95,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         tileM.draw(g2);
         player.draw(g2);
+        environmentM.draw(g2);
 
         g2.dispose();
     }
