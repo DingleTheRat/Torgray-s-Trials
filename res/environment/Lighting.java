@@ -39,7 +39,7 @@ public class Lighting {
         color[8] = new Color(0, 0, 0, 0.91f);
         color[9] = new Color(0, 0, 0, 0.94f);
         color[10] = new Color(0, 0, 0, 0.96f);
-        color[11] = new Color(0, 0, 0, 0.98f); //e
+        color[11] = new Color(0, 0, 0, 0.98f);
 
         float[] fraction = new float[12];
         fraction[0] = 0f;
