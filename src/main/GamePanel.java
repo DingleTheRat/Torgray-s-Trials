@@ -93,20 +93,40 @@ public class GamePanel extends JPanel implements Runnable{
     public void update() {
         player.update();
     }
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
 
+        // Debug
+        long drawStart = 0;
+        if (keyH.debug) {
+            drawStart = System.nanoTime();
+        }
+
+        // Tiles and Objects
         tileM.draw(g2);
         for (int i = 0; i < obj.length; i++) {
             if (obj[i] != null) {
                 obj[i].draw(g2, this);
             }
         }
+
+        // Other Drawing
         player.draw(g2);
         environmentM.draw(g2);
         ui.draw(g2);
 
+        // Debug
+        if (keyH.debug) {
+            long drawEnd = System.nanoTime();
+            long passed = drawEnd - drawStart;
+            g2.setColor(Color.white);
+            g2.drawString("Draw Time: " + passed, 10 ,400);
+            System.out.println("Draw Time: " + passed);
+        }
+
+        // Toxic Waste
         g2.dispose();
     }
 
