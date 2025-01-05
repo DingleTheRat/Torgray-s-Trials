@@ -130,7 +130,7 @@ public class Player extends Entity{
                 case "Gate": if (hasKey > 0) {gp.playSE(3); gp.obj[i] = null; hasKey--; gp.ui.showMessage("-1 Key");} else {gp.ui.showMessage("Key Required");} break;
                 case "Boots": gp.playSE(2); speed += 1; gp.obj[i] = null; gp.ui.showMessage("+1 Speed"); break;
                 case  "Chest": gp.ui.gameEnd = true;
-                gp.playSE(4);
+                //gp.playSE(4);
                      break;
             }
         }
