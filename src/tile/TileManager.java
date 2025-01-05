@@ -5,7 +5,6 @@ import main.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,21 +18,70 @@ public class TileManager {
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tile = new Tile[10];
+        tile = new Tile[50];
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         getTileImage();
-        loadMap("/maps/world01.txt");
+        loadMap("/maps/world02.txt");
     }
 
     public void getTileImage() {
-        setup(0, "grass", false);
-        setup(1, "wall", true);
-        setup(2, "water", true);
-        setup(3, "earth", false);
-        setup(4, "tree", true);
-        setup(5, "sand", false);
+        // Disabled
+        registerTile(0, "disabled", false);
+        registerTile(1, "disabled", false);
+        registerTile(2, "disabled", false);
+        registerTile(3, "disabled", false);
+        registerTile(4, "disabled", false);
+        registerTile(5, "disabled", false);
+        registerTile(6, "disabled", false);
+        registerTile(7, "disabled", false);
+        registerTile(8, "disabled", false);
+        registerTile(9, "disabled", false);
+
+        // Grass
+        registerTile(10, "grass_1", false);
+        registerTile(11, "grass_2", false);
+
+        // Water
+        registerTile(12, "water", true);
+        registerTile(13, "white_line_water", true);
+        registerTile(14, "water_corner_1", true);
+        registerTile(15, "water_edge_3", true);
+        registerTile(16, "water_corner_3", true);
+        registerTile(17, "water_edge_4", true);
+        registerTile(18, "water_edge_2", true);
+        registerTile(19, "water_corner_2", true);
+        registerTile(20, "water_edge_1", true);
+        registerTile(21, "water_corner_4", true);
+        registerTile(22, "water_outer_corner_1", true);
+        registerTile(23, "water_outer_corner_2", true);
+        registerTile(24, "water_outer_corner_3", true);
+        registerTile(25, "water_outer_corner_4", true);
+
+        // Path
+        registerTile(26, "path", false);
+        registerTile(27, "path_outer_corner_2", false);
+        registerTile(28, "path_edge_1", false);
+        registerTile(29, "path_outer_corner_3", false);
+        registerTile(30, "path_edge_4", false);
+        registerTile(31, "path_edge_2", false);
+        registerTile(32, "path_outer_corner_4", false);
+        registerTile(33, "path_edge_3", false);
+        registerTile(34, "path_outer_corner_1", false);
+        registerTile(35, "path_corner_4", false);
+        registerTile(36, "path_corner_2", false);
+        registerTile(37, "path_corner_3", false);
+        registerTile(38, "path_corner_1", false);
+
+        // Dirt
+        registerTile(39, "dirt", false);
+
+        // Wall
+        registerTile(40, "wall", true);
+
+        // Tree
+        registerTile(41, "tree", true);
     }
-    public void setup(int i, String imageName, boolean collision) {
+    public void registerTile(int i, String imageName, boolean collision) {
         UtilityTool uTool = new UtilityTool();
 
         try {
@@ -86,7 +134,6 @@ public class TileManager {
                     worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
                     worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
                     worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
-
                 g2.drawImage(tile[tileNum].image, screenX, screenY, null);
             }
             worldCol++;

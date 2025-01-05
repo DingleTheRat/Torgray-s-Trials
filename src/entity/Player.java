@@ -40,23 +40,23 @@ public class Player extends Entity{
     }
 
     public void getPlayerImage() {
-        up1 = setup("ghost_up_1");
-        up2 = setup("ghost_up_2");
-        up3 = setup("ghost_up_3");
+        up1 = registerPlayerSprite("ghost_up_1");
+        up2 = registerPlayerSprite("ghost_up_2");
+        up3 = registerPlayerSprite("ghost_up_3");
 
-        down1 = setup("ghost_down_1");
-        down2 = setup("ghost_down_2");
-        down3 = setup("ghost_down_3");
+        down1 = registerPlayerSprite("ghost_down_1");
+        down2 = registerPlayerSprite("ghost_down_2");
+        down3 = registerPlayerSprite("ghost_down_3");
 
-        left1 = setup("ghost_left_1");
-        left2 = setup("ghost_left_2");
-        left3 = setup("ghost_left_3");
+        left1 = registerPlayerSprite("ghost_left_1");
+        left2 = registerPlayerSprite("ghost_left_2");
+        left3 = registerPlayerSprite("ghost_left_3");
 
-        right1 = setup("ghost_right_1");
-        right2 = setup("ghost_right_2");
-        right3 = setup("ghost_right_3");
+        right1 = registerPlayerSprite("ghost_right_1");
+        right2 = registerPlayerSprite("ghost_right_2");
+        right3 = registerPlayerSprite("ghost_right_3");
     }
-    public BufferedImage setup(String imageName) {
+    public BufferedImage registerPlayerSprite(String imageName) {
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
 
@@ -130,7 +130,7 @@ public class Player extends Entity{
                 case "Gate": if (hasKey > 0) {gp.playSE(3); gp.obj[i] = null; hasKey--; gp.ui.showMessage("-1 Key");} else {gp.ui.showMessage("Key Required");} break;
                 case "Boots": gp.playSE(2); speed += 1; gp.obj[i] = null; gp.ui.showMessage("+1 Speed"); break;
                 case  "Chest": gp.ui.gameEnd = true;
-                //gp.playSE(4);
+                gp.playSE(4);
                      break;
             }
         }
