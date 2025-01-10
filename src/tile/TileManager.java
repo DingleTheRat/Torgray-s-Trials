@@ -59,18 +59,18 @@ public class TileManager {
 
         // Path
         registerTile(26, "path", false);
-        registerTile(27, "path_outer_corner_2", false);
+        registerTile(27, "path_corner_1", false);
         registerTile(28, "path_edge_1", false);
-        registerTile(29, "path_outer_corner_3", false);
+        registerTile(29, "path_corner_2", false);
         registerTile(30, "path_edge_4", false);
         registerTile(31, "path_edge_2", false);
-        registerTile(32, "path_outer_corner_4", false);
+        registerTile(32, "path_corner_3", false);
         registerTile(33, "path_edge_3", false);
-        registerTile(34, "path_outer_corner_1", false);
-        registerTile(35, "path_corner_4", false);
-        registerTile(36, "path_corner_2", false);
-        registerTile(37, "path_corner_3", false);
-        registerTile(38, "path_corner_1", false);
+        registerTile(34, "path_corner_4", false);
+        registerTile(35, "path_outer_corner_1", false);
+        registerTile(36, "path_outer_corner_2", false);
+        registerTile(37, "path_outer_corner_3", false);
+        registerTile(38, "path_outer_corner_4", false);
 
         // Dirt
         registerTile(39, "dirt", false);
@@ -86,7 +86,7 @@ public class TileManager {
 
         try {
             tile[i] = new Tile();
-            tile[i].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tiles/" + imageName + ".png")));
+            tile[i].image = ImageIO.read(getClass().getResourceAsStream("/tiles/" + imageName + ".png"));
             tile[i].image = uTool.scaleImage(tile[i].image, gp.tileSize, gp.tileSize);
             tile[i].collision = collision;
         } catch (IOException e) {

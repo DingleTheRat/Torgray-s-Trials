@@ -30,8 +30,8 @@ public class NPC_GateKeeper extends Entity{
     public void setDialogue() {
         dialogues[0] = "Hey there partner!";
         dialogues[1] = "Let me tell you a very special secret";
-        dialogues[2] = "This game is actually for a science fair";
-        dialogues[3] = "The person who made this game, dingle, /n is actually super screwed for the science /n fair";
+        dialogues[2] = "This game is for a science fair";
+        dialogues[3] = "The person who made this game, /n dingle, is actually super screwed /n for the science fair";
     }
     public void setAction() {
         actionLockCounter++;
