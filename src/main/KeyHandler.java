@@ -71,13 +71,13 @@ public class KeyHandler implements KeyListener {
                         gp.gameState = gp.playState;
                         gp.stopMusic();
                         gp.playMusic(0);
-                        System.out.println("Imagine Picking Easy");
+                        System.out.println("Kinda a mid game mode lol");
                     }
                     if (gp.ui.commandNum == 2) {
                         gp.gameState = gp.playState;
                         gp.stopMusic();
                         gp.playMusic(0);
-                        System.out.println("Imagine Picking Easy");
+                        System.out.println("You really think you are \"hardcore\"?");
                     }
                     if (gp.ui.commandNum == 3) {
                         gp.ui.titleScreenState = 0;
