@@ -56,7 +56,7 @@ public class Player extends Entity{
         direction = "down";
 
         // Player Status
-        maxHealth = 6;
+        maxHealth = 12;
         health = maxHealth;
     }
     public void update() {
@@ -83,6 +83,11 @@ public class Player extends Entity{
             int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
             interactNPC(npcIndex);
 
+            // Check Event
+            gp.eHandler.checkEvent();
+
+            gp.keyH.interactKeyPressed = false;
+
             if (!collisionOn) {
                 switch (direction) {
                     case "up": worldY -= speed; break;
@@ -97,7 +102,7 @@ public class Player extends Entity{
                 if (spriteNumber == 1) {
                     spriteNumber = 2;
                 } else if (spriteNumber == 2) {
-                    spriteNumber = 1;
+                    spriteNumber = 3;
                 } else if (spriteNumber == 3) {
                     spriteNumber = 1;
                 }
@@ -116,12 +121,11 @@ public class Player extends Entity{
     public void pickUpObject(int i) {if (i != 999) {}}
     public void interactNPC(int i) {
         if (i != 999) {
-            if (gp.keyH.interactPressed) {
+            if (gp.keyH.interactKeyPressed) {
                 gp.gameState = gp.dialogueState;
                 gp.npc[i].speak();
             }
         }
-        gp.keyH.interactPressed = false;
     }
 
     public void draw(Graphics2D g2) {

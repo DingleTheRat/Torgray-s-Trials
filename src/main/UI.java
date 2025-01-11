@@ -57,9 +57,11 @@ public class UI {
         }
         if (gp.gameState == gp.pauseState) {
             drawPauseScreen();
+            drawPlayerHealth();
         }
         if (gp.gameState == gp.dialogueState) {
             drawDialogueScreen();
+            drawPlayerHealth();
         }
     }
 
