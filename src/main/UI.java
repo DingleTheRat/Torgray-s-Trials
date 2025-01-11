@@ -1,7 +1,7 @@
 package main;
 
+import entity.Entity;
 import object.OBJ_Heart;
-import object.SuperObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -34,7 +34,7 @@ public class UI {
         }
 
         // Make a HUD object
-        SuperObject obj_heart = new OBJ_Heart(gp);
+        Entity obj_heart = new OBJ_Heart(gp);
         heart = obj_heart.image;
         half_heart = obj_heart.image2;
         lost_heart = obj_heart.image3;

@@ -1,24 +1,21 @@
 package object;
 
+import entity.Entity;
 import main.GamePanel;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.util.Objects;
-
-public class OBJ_Gate extends SuperObject{
-    GamePanel gp;
-
+public class OBJ_Gate extends Entity {
     public OBJ_Gate(GamePanel gp) {
-        this.gp = gp;
-        name = "Gate";
+        super(gp);
 
-        try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/objects/gate.png")));
-            uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        name = "Gate";
+        down1 = registerEntitySprite("/objects/gate");
         collision = true;
+
+        solidArea.x = 0;
+        solidArea.y = 16;
+        solidArea.width = 48;
+        solidArea.height = 32;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
     }
 }

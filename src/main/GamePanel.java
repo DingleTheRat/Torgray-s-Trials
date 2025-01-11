@@ -3,11 +3,13 @@ package main;
 import entity.Entity;
 import entity.Player;
 import environment.EnvironmentManager;
-import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -43,7 +45,8 @@ public class GamePanel extends JPanel implements Runnable{
     // Entities and Objects
     public Player player = new Player(this, keyH);
     public Entity[] npc = new Entity[10];
-    public SuperObject[] obj = new SuperObject[10];
+    public Entity[] obj = new Entity[10];
+    ArrayList<Entity> entityList = new ArrayList<>();
 
     // Game States
     public int gameState;
@@ -132,23 +135,38 @@ public class GamePanel extends JPanel implements Runnable{
         if (gameState == titleState) {
             ui.draw(g2);
         } else {
-            // Tiles and Objects
+            // Draw :)
             tileM.draw(g2);
-            for (int i = 0; i < obj.length; i++) {
-                if (obj[i] != null) {
-                    obj[i].draw(g2, this);
-                }
-            }
 
-            // NPCs
+            // Add entities to list
+            entityList.add(player);
             for (int i = 0; i < npc.length; i++) {
                 if (npc[i] != null) {
-                    npc[i].draw(g2);
+                    entityList.add(npc[i]);
+                }
+            }
+            for (int i = 0; i < obj.length; i++) {
+                if (obj[i] != null) {
+                    entityList.add(obj[i]);
                 }
             }
 
-            // Other Drawing
-            player.draw(g2);
+            // Sort
+            entityList.sort((e1, e2) -> {
+                int result = Integer.compare(e1.worldY, e2.worldY);
+                return result;
+            });
+
+            // Draw Entities
+            for (int i = 0; i < entityList.size(); i++) {
+                entityList.get(i).draw(g2);
+            }
+            // Empty Entity List
+            for (int i = 0; i < entityList.size(); i++) {
+                entityList.remove(i);
+            }
+
+            // More  drawing :D
             environmentM.draw(g2);
             ui.draw(g2);
         }
