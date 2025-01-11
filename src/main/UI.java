@@ -153,6 +153,7 @@ public class UI {
         int x = getCentreX(text);
         int y = gp.screenHeight / 2;
 
+        drawSubWindow(x - 10, y - 75, gp.tileSize * 6 + 32, gp.tileSize * 2);
         g2.drawString(text, x, y);
     }
     public void drawDialogueScreen() {

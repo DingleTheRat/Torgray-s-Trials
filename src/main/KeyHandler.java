@@ -106,10 +106,12 @@ public class KeyHandler implements KeyListener {
             }
 
             // Debug
-            if (code == KeyEvent.VK_P) {
+            if (code == KeyEvent.VK_F3) {
                 if (!debug) {
+                    System.out.println("Debugging Enabled");
                     debug = true;
                 } else if (debug) {
+                    System.out.println("Debugging Disabled");
                     debug = false;
                 }
             }
