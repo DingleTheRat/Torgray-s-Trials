@@ -7,7 +7,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Objects;
 
 public class Entity {
     GamePanel gp;
@@ -23,6 +22,10 @@ public class Entity {
     public int actionLockCounter = 0;
     String[] dialogues = new String[20];
     int dialogueIndex = 0;
+
+    // Character Status
+    public int maxHealth;
+    public int health;
 
     public Entity(GamePanel gp) {
         this.gp = gp;

@@ -1,6 +1,10 @@
 package main;
 
+import object.OBJ_Heart;
+import object.SuperObject;
+
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -8,6 +12,7 @@ public class UI {
     GamePanel gp;
     Graphics2D g2;
     Font maruMonica;
+    BufferedImage heart, half_heart, lost_heart;
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
@@ -27,6 +32,12 @@ public class UI {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Make a HUD object
+        SuperObject obj_heart = new OBJ_Heart(gp);
+        heart = obj_heart.image;
+        half_heart = obj_heart.image2;
+        lost_heart = obj_heart.image3;
     }
 
     public void showMessage(String text) {
@@ -42,7 +53,7 @@ public class UI {
             drawTitleScreen();
         }
         if (gp.gameState == gp.playState) {
-            // for later...
+            drawPlayerHealth();
         }
         if (gp.gameState == gp.pauseState) {
             drawPauseScreen();
@@ -52,6 +63,35 @@ public class UI {
         }
     }
 
+    public void drawPlayerHealth() {
+        int x = gp.tileSize / 2;
+        int y = gp.tileSize / 2;
+        int i = 0;
+
+        // Draw max health
+        while (i < gp.player.maxHealth / 2) {
+            g2.drawImage(lost_heart, x, y, null);
+            i++;
+            x += gp.tileSize;
+        }
+
+        // Reset
+        x = gp.tileSize / 2;
+        y = gp.tileSize / 2;
+        i = 0;
+
+        // Draw current health
+        while (i < gp.player.health) {
+            g2.drawImage(half_heart, x, y, null);
+            i++;
+            if (i < gp.player.health) {
+                g2.drawImage(heart, x, y, null);
+            }
+            i++;
+            x += gp.tileSize;
+        }
+
+    }
     public void drawTitleScreen() {
         if (titleScreenState == 0) {
             // Title Text

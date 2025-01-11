@@ -54,6 +54,10 @@ public class Player extends Entity{
         worldY = gp.tileSize * 21;
         speed = 4;
         direction = "down";
+
+        // Player Status
+        maxHealth = 6;
+        health = maxHealth;
     }
     public void update() {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
