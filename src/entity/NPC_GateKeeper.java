@@ -15,17 +15,21 @@ public class NPC_GateKeeper extends Entity{
     }
 
     public void getImage() {
-        up1 = registerEntitySprite("/npc/oldman_up_1");
-        up2 = registerEntitySprite("/npc/oldman_up_2");
+        up1 = registerEntitySprite("/npc/gatekeeper_up_1");
+        up2 = registerEntitySprite("/npc/gatekeeper_up_2");
+        up3 = registerEntitySprite("/npc/gatekeeper_up_3");
 
-        down1 = registerEntitySprite("/npc/oldman_down_1");
-        down2 = registerEntitySprite("/npc/oldman_down_2");
+        down1 = registerEntitySprite("/npc/gatekeeper_down_1");
+        down2 = registerEntitySprite("/npc/gatekeeper_down_2");
+        down3 = registerEntitySprite("/npc/gatekeeper_down_3");
 
-        left1 = registerEntitySprite("/npc/oldman_left_1");
-        left2 = registerEntitySprite("/npc/oldman_left_2");
+        left1 = registerEntitySprite("/npc/gatekeeper_left_1");
+        left2 = registerEntitySprite("/npc/gatekeeper_left_2");
+        left3 = registerEntitySprite("/npc/gatekeeper_left_3");
 
-        right1 = registerEntitySprite("/npc/oldman_right_1");
-        right2 = registerEntitySprite("/npc/oldman_right_2");
+        right1 = registerEntitySprite("/npc/gatekeeper_right_1");
+        right2 = registerEntitySprite("/npc/gatekeeper_right_2");
+        right3 = registerEntitySprite("/npc/gatekeeper_right_3");
     }
     public void setDialogue() {
         dialogues[0] = "Hey there partner!";
