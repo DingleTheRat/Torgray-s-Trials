@@ -86,6 +86,10 @@ public class Player extends Entity{
             // Check Event
             gp.eHandler.checkEvent();
 
+            // Check Mob Collision
+            int mobIndex = gp.cChecker.checkEntity(this, gp.mob);
+            contactMob(mobIndex);
+
             gp.keyH.interactKeyPressed = false;
 
             if (!collisionOn) {
@@ -116,6 +120,13 @@ public class Player extends Entity{
                 spriteCounter = 0;
             }
         }
+        if (invincible) {
+            invincibleCounter++;
+            if (invincibleCounter > 60) {
+                invincible = false;
+                invincibleCounter = 0;
+            }
+        }
     }
 
     public void pickUpObject(int i) {if (i != 999) {}}
@@ -124,6 +135,16 @@ public class Player extends Entity{
             if (gp.keyH.interactKeyPressed) {
                 gp.gameState = gp.dialogueState;
                 gp.npc[i].speak();
+            } else {
+                gp.ui.interactable = true;
+            }
+        }
+    }
+    public void contactMob(int i) {
+        if (i != 999) {
+            if (!invincible) {
+                health -= 2;
+                invincible = true;
             }
         }
     }
@@ -137,6 +158,11 @@ public class Player extends Entity{
             case "left": if (spriteNumber == 1) {image = left1;} else if (spriteNumber == 2) {image = left2;} else if (spriteNumber == 3) {image = left3;} break;
             case "right": if (spriteNumber == 1) {image = right1;} else if (spriteNumber == 2) {image = right2;} else if (spriteNumber == 3) {image = right3;} break;
         }
+        if (invincible) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+        }
+
         g2.drawImage(image, screenX, screenY, null);
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
 }

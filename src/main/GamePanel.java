@@ -8,8 +8,6 @@ import tile.TileManager;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -46,6 +44,7 @@ public class GamePanel extends JPanel implements Runnable{
     public Player player = new Player(this, keyH);
     public Entity[] npc = new Entity[10];
     public Entity[] obj = new Entity[10];
+    public Entity[] mob = new Entity[20];
     ArrayList<Entity> entityList = new ArrayList<>();
 
     // Game States
@@ -66,6 +65,7 @@ public class GamePanel extends JPanel implements Runnable{
     public void setupGame() {
         assetS.setObject();
         assetS.setNPC();
+        assetS.setMonster();
         environmentM.setup();
         playMusic(5);
         gameState = titleState;
@@ -115,6 +115,12 @@ public class GamePanel extends JPanel implements Runnable{
                     npc[i].update();
                 }
             }
+            // Mobs
+            for (int i = 0; i < mob.length; i++) {
+                if (mob[i] != null) {
+                    mob[i].update();
+                }
+            }
         }
         if (gameState == pauseState) {
             // NOTHIN!
@@ -148,6 +154,11 @@ public class GamePanel extends JPanel implements Runnable{
             for (int i = 0; i < obj.length; i++) {
                 if (obj[i] != null) {
                     entityList.add(obj[i]);
+                }
+            }
+            for (int i = 0; i < mob.length; i++) {
+                if (mob[i] != null) {
+                    entityList.add(mob[i]);
                 }
             }
 
@@ -188,7 +199,8 @@ public class GamePanel extends JPanel implements Runnable{
             g2.drawString("Col: " + (player.worldX + player.solidArea.x) / tileSize, x, y);  y += lineHeight;
             g2.drawString("Row: " + (player.worldY + player.solidArea.y) / tileSize, x, y); y += lineHeight;
 
-            g2.drawString("Draw Time: " + passed, x ,y);
+            g2.drawString("Draw Time: " + passed, x ,y); y += lineHeight;
+            g2.drawString("Invincibility: " + player.invincibleCounter, x, y);
         }
 
         // Toxic Waste

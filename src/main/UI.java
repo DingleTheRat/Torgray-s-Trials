@@ -16,6 +16,7 @@ public class UI {
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
+    public boolean interactable = false;
     public boolean gameEnd = false;
     public String currentDialogue = "";
     public int commandNum = 0;
@@ -54,6 +55,9 @@ public class UI {
         }
         if (gp.gameState == gp.playState) {
             drawPlayerHealth();
+            if (interactable) {
+                drawInteractScreen();
+            }
         }
         if (gp.gameState == gp.pauseState) {
             drawPauseScreen();
@@ -196,6 +200,19 @@ public class UI {
         int y = gp.screenHeight / 2;
 
         drawSubWindow(x - 10, y - 75, gp.tileSize * 6 + 32, gp.tileSize * 2);
+        g2.drawString(text, x, y);
+    }
+    public void drawInteractScreen() {
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 35f));
+        String text = "Press E to interact";
+        int x = gp.screenWidth / 4 + 20;
+        int y = gp.tileSize / 2 + (gp.tileSize * 8);
+
+        int width = gp.tileSize * 7;
+        int height = gp.tileSize * 2 - 13;
+        drawSubWindow(x, y, width, height);
+        y += 52;
+        x += 16;
         g2.drawString(text, x, y);
     }
     public void drawDialogueScreen() {

@@ -13,6 +13,7 @@ public class Entity {
     GamePanel gp;
     public int worldX, worldY;
     public int speed;
+    public int type; // 0 = player | 1 = npc | 2 = mob
     // Sprites
     public BufferedImage up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
     public String direction = "down";
@@ -22,6 +23,9 @@ public class Entity {
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
+    // Invincibility
+    public boolean invincible = false;
+    public int invincibleCounter = 0;
     // NPC interaction
     public int actionLockCounter = 0;
     String[] dialogues = new String[20];
@@ -58,7 +62,16 @@ public class Entity {
         collisionOn = false;
         gp.cChecker.checkTile(this);
         gp.cChecker.checkObject(this, false);
-        gp.cChecker.checkPlayer(this);
+        gp.cChecker.checkEntity(this, gp.npc);
+        gp.cChecker.checkEntity(this, gp.mob);
+        boolean contactPlayer = gp.cChecker.checkPlayer(this);
+
+        if (this.type == 2 && contactPlayer) {
+            if (!gp.player.invincible) {
+                gp.player.health -= 2;
+                gp.player.invincible = true;
+            }
+        }
 
         if (!collisionOn) {
             switch (direction) {
@@ -74,7 +87,7 @@ public class Entity {
             if (spriteNumber == 1) {
                 spriteNumber = 2;
             } else if (spriteNumber == 2) {
-                spriteNumber = 1;
+                spriteNumber = 3;
             } else if (spriteNumber == 3) {
                 spriteNumber = 1;
             }

@@ -42,7 +42,7 @@ public class EventHandler {
         if (canTouchEvent) {
             if (hit(27, 16, "right")) {damagePit(27, 16, gp.dialogueState);}
             if (hit(23, 19, "any")) {damagePit(23, 19, gp.dialogueState);}
-            if (hit(23, 12, "up")) {healingPond(23, 12, gp.dialogueState);}
+            if (hit(23, 12, "up")) {healingPond(23, 12, gp.dialogueState);} else {gp.ui.interactable = false;}
         }
     }
     public boolean hit(int col, int row, String reqDirection) {
@@ -75,9 +75,12 @@ public class EventHandler {
     }
     public void healingPond(int col, int row, int gameState) {
         if (gp.keyH.interactKeyPressed) {
+            gp.ui.interactable = false;
             gp.gameState = gameState;
             gp.ui.currentDialogue = "*Drinks water* /n Yay, the pond of healing healed me!";
             gp.player.health = gp.player.maxHealth;
+        } else {
+            gp.ui.interactable = true;
         }
     }
 }
