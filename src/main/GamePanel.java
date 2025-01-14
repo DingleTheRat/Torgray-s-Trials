@@ -7,6 +7,7 @@ import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable{
@@ -173,9 +174,7 @@ public class GamePanel extends JPanel implements Runnable{
                 entityList.get(i).draw(g2);
             }
             // Empty Entity List
-            for (int i = 0; i < entityList.size(); i++) {
-                entityList.remove(i);
-            }
+            entityList.clear();
 
             // More  drawing :D
             environmentM.draw(g2);

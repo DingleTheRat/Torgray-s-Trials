@@ -7,6 +7,7 @@ import java.util.Random;
 public class NPC_GateKeeper extends Entity{
     public NPC_GateKeeper(GamePanel gp) {
         super(gp);
+        type = 1;
         direction = "down";
         speed = 1;
 
@@ -15,21 +16,21 @@ public class NPC_GateKeeper extends Entity{
     }
 
     public void getImage() {
-        up1 = registerEntitySprite("/npc/gatekeeper_up_1");
-        up2 = registerEntitySprite("/npc/gatekeeper_up_2");
-        up3 = registerEntitySprite("/npc/gatekeeper_up_3");
+        up1 = registerEntitySprite("/npc/gatekeeper_up_1", gp.tileSize, gp.tileSize);
+        up2 = registerEntitySprite("/npc/gatekeeper_up_2", gp.tileSize, gp.tileSize);
+        up3 = registerEntitySprite("/npc/gatekeeper_up_3", gp.tileSize, gp.tileSize);
 
-        down1 = registerEntitySprite("/npc/gatekeeper_down_1");
-        down2 = registerEntitySprite("/npc/gatekeeper_down_2");
-        down3 = registerEntitySprite("/npc/gatekeeper_down_3");
+        down1 = registerEntitySprite("/npc/gatekeeper_down_1", gp.tileSize, gp.tileSize);
+        down2 = registerEntitySprite("/npc/gatekeeper_down_2", gp.tileSize, gp.tileSize);
+        down3 = registerEntitySprite("/npc/gatekeeper_down_3", gp.tileSize, gp.tileSize);
 
-        left1 = registerEntitySprite("/npc/gatekeeper_left_1");
-        left2 = registerEntitySprite("/npc/gatekeeper_left_2");
-        left3 = registerEntitySprite("/npc/gatekeeper_left_3");
+        left1 = registerEntitySprite("/npc/gatekeeper_left_1", gp.tileSize, gp.tileSize);
+        left2 = registerEntitySprite("/npc/gatekeeper_left_2", gp.tileSize, gp.tileSize);
+        left3 = registerEntitySprite("/npc/gatekeeper_left_3", gp.tileSize, gp.tileSize);
 
-        right1 = registerEntitySprite("/npc/gatekeeper_right_1");
-        right2 = registerEntitySprite("/npc/gatekeeper_right_2");
-        right3 = registerEntitySprite("/npc/gatekeeper_right_3");
+        right1 = registerEntitySprite("/npc/gatekeeper_right_1", gp.tileSize, gp.tileSize);
+        right2 = registerEntitySprite("/npc/gatekeeper_right_2", gp.tileSize, gp.tileSize);
+        right3 = registerEntitySprite("/npc/gatekeeper_right_3", gp.tileSize, gp.tileSize);
     }
     public void setDialogue() {
         dialogues[0] = "Hey there partner!";

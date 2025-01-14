@@ -8,6 +8,6 @@ public class OBJ_Boots extends Entity {
         super(gp);
 
         name = "Boots";
-        down1 = registerEntitySprite("/objects/boots");
+        down1 = registerEntitySprite("/objects/boots", gp.tileSize, gp.tileSize);
     }
 }

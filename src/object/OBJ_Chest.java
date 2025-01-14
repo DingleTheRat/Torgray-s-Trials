@@ -8,6 +8,6 @@ public class OBJ_Chest extends Entity {
         super(gp);
 
         name = "Chest";
-        down1 = registerEntitySprite("/objects/chest");
+        down1 = registerEntitySprite("/objects/chest", gp.tileSize, gp.tileSize);
     }
 }

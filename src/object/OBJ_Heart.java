@@ -8,8 +8,8 @@ public class OBJ_Heart extends Entity {
         super(gp);
         name = "Heart";
 
-        image = registerEntitySprite("/objects/heart");
-        image2 = registerEntitySprite("/objects/half_heart");
-        image3 = registerEntitySprite("/objects/lost_heart");
+        image = registerEntitySprite("/objects/heart", gp.tileSize, gp.tileSize);
+        image2 = registerEntitySprite("/objects/half_heart", gp.tileSize, gp.tileSize);
+        image3 = registerEntitySprite("/objects/lost_heart", gp.tileSize, gp.tileSize);
     }
 }

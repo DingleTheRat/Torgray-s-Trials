@@ -6,8 +6,11 @@ import main.GamePanel;
 import java.util.Random;
 
 public class MOB_Dracore extends Entity {
+    GamePanel gp;
+
     public MOB_Dracore(GamePanel gp) {
         super(gp);
+        this.gp = gp;
 
         name = "Dracore";
         type = 2;
@@ -18,21 +21,21 @@ public class MOB_Dracore extends Entity {
         getImage();
     }
     public void getImage() {
-        up1 = registerEntitySprite("/mob/dracore_1");
-        up2 = registerEntitySprite("/mob/dracore_2");
-        up3 = registerEntitySprite("/mob/dracore_3");
+        up1 = registerEntitySprite("/mob/dracore_1", gp.tileSize, gp.tileSize);
+        up2 = registerEntitySprite("/mob/dracore_2", gp.tileSize, gp.tileSize);
+        up3 = registerEntitySprite("/mob/dracore_3", gp.tileSize, gp.tileSize);
         
-        down1 = registerEntitySprite("/mob/dracore_1");
-        down2 = registerEntitySprite("/mob/dracore_2");
-        down3 = registerEntitySprite("/mob/dracore_3");
+        down1 = registerEntitySprite("/mob/dracore_1", gp.tileSize, gp.tileSize);
+        down2 = registerEntitySprite("/mob/dracore_2", gp.tileSize, gp.tileSize);
+        down3 = registerEntitySprite("/mob/dracore_3", gp.tileSize, gp.tileSize);
         
-        left1 = registerEntitySprite("/mob/dracore_1");
-        left2 = registerEntitySprite("/mob/dracore_2");
-        left3 = registerEntitySprite("/mob/dracore_3");
+        left1 = registerEntitySprite("/mob/dracore_1", gp.tileSize, gp.tileSize);
+        left2 = registerEntitySprite("/mob/dracore_2", gp.tileSize, gp.tileSize);
+        left3 = registerEntitySprite("/mob/dracore_3", gp.tileSize, gp.tileSize);
         
-        right1 = registerEntitySprite("/mob/dracore_1");
-        right2 = registerEntitySprite("/mob/dracore_2");
-        right3 = registerEntitySprite("/mob/dracore_3");
+        right1 = registerEntitySprite("/mob/dracore_1", gp.tileSize, gp.tileSize);
+        right2 = registerEntitySprite("/mob/dracore_2", gp.tileSize, gp.tileSize);
+        right3 = registerEntitySprite("/mob/dracore_3", gp.tileSize, gp.tileSize);
     }
     public void setAction() {
         actionLockCounter++;

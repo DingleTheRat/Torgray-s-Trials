@@ -8,6 +8,6 @@ public class OBJ_Key extends Entity {
         super(gp);
 
         name = "Key";
-        down1 = registerEntitySprite("/objects/key");
+        down1 = registerEntitySprite("/objects/key", gp.tileSize, gp.tileSize);
     }
 }

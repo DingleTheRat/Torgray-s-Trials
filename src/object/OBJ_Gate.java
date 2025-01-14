@@ -8,7 +8,7 @@ public class OBJ_Gate extends Entity {
         super(gp);
 
         name = "Gate";
-        down1 = registerEntitySprite("/objects/gate");
+        down1 = registerEntitySprite("/objects/gate", gp.tileSize, gp.tileSize);
         collision = true;
 
         solidArea.x = 0;

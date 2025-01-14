@@ -9,32 +9,34 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Entity {
-    // Main
     GamePanel gp;
-    public int worldX, worldY;
-    public int speed;
-    public int type; // 0 = player | 1 = npc | 2 = mob
-    // Sprites
     public BufferedImage up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
-    public String direction = "down";
-    public int spriteCounter = 0;
-    public int spriteNumber = 1;
-    // Collision
-    public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
-    public int solidAreaDefaultX, solidAreaDefaultY;
-    public boolean collisionOn = false;
-    // Invincibility
-    public boolean invincible = false;
-    public int invincibleCounter = 0;
-    // NPC interaction
-    public int actionLockCounter = 0;
-    String[] dialogues = new String[20];
-    int dialogueIndex = 0;
-    // Objects
+    public BufferedImage attackUp, attackDown, attackLeft, attackRight;
     public BufferedImage image, image2, image3;
-    public String name;
+    public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
+    public  Rectangle attackArea = new Rectangle(0, 0, 0, 0);
+    public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collision = false;
-    // Health
+    String[] dialogues = new String[20];
+
+    // States
+    public int worldX, worldY;
+    public String direction = "down";
+    public int spriteNumber = 1;
+    int dialogueIndex = 0;
+    public boolean collisionOn = false;
+    public boolean invincible = false;
+    public boolean attacking = false;
+
+    // Counters
+    public int spriteCounter = 0;
+    public int actionLockCounter = 0;
+    public int invincibleCounter = 0;
+
+    // Attributes
+    public int speed;
+    public String name;
+    public int type; // 0 = player | 1 = npc | 2 = mob
     public int maxHealth;
     public int health;
 
@@ -62,7 +64,7 @@ public class Entity {
         collisionOn = false;
         gp.cChecker.checkTile(this);
         gp.cChecker.checkObject(this, false);
-        gp.cChecker.checkEntity(this, gp.npc);
+        int npcContact = gp.cChecker.checkEntity(this, gp.npc);
         gp.cChecker.checkEntity(this, gp.mob);
         boolean contactPlayer = gp.cChecker.checkPlayer(this);
 
@@ -93,6 +95,14 @@ public class Entity {
             }
             spriteCounter = 0;
         }
+
+        if (invincible) {
+            invincibleCounter++;
+            if (invincibleCounter > 40) {
+                invincible = false;
+                invincibleCounter = 0;
+            }
+        }
     }
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
@@ -109,16 +119,21 @@ public class Entity {
                 case "left": if (spriteNumber == 1) {image = left1;} else if (spriteNumber == 2) {image = left2;} else if (spriteNumber == 3) {image = left3;} break;
                 case "right": if (spriteNumber == 1) {image = right1;} else if (spriteNumber == 2) {image = right2;} else if (spriteNumber == 3) {image = right3;} break;
             }
+            if (invincible) {
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+            }
+
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
     }
-    public BufferedImage registerEntitySprite(String imagePath) {
+    public BufferedImage registerEntitySprite(String imagePath, int width, int height) {
         UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
 
         try {
             image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
-            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+            image = uTool.scaleImage(image, width, height);
         } catch (IOException e) {
             e.printStackTrace();
         }
