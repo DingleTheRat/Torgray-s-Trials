@@ -196,6 +196,7 @@ public class Player extends Entity{
     public void contactMob(int i) {
         if (i != 999) {
             if (!invincible) {
+                gp.playSE(7);
                 health -= 2;
                 invincible = true;
             }
@@ -205,11 +206,13 @@ public class Player extends Entity{
     public void damageMob(int i) {
         if (i != 999) {
             if (!gp.mob[i].invincible) {
+                gp.playSE(6);
                 gp.mob[i].health -= 1;
                 gp.mob[i].invincible = true;
+                gp.mob[i].damageReaction();
 
                 if (gp.mob[i].health <= 0) {
-                    gp.mob[i] = null;
+                    gp.mob[i].dying = true;
                 }
             }
         }

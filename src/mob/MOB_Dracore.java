@@ -15,7 +15,7 @@ public class MOB_Dracore extends Entity {
         name = "Dracore";
         type = 2;
         speed = 1;
-        maxHealth = 4;
+        maxHealth = 5;
         health = maxHealth;
         
         getImage();
@@ -56,6 +56,16 @@ public class MOB_Dracore extends Entity {
                 direction = "right";
             }
             actionLockCounter = 0;
+        }
+    }
+    public void damageReaction() {
+        actionLockCounter = 0;
+
+        switch (gp.player.direction) {
+            case "up": direction = "down"; break;
+            case "down": direction = "up"; break;
+            case "left": direction = "right"; break;
+            case "right": direction = "left"; break;
         }
     }
 }
