@@ -72,7 +72,7 @@ public class Player extends Entity{
     public void update() {
         if (attacking) {
             attack();
-        } else if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed || keyH.interactKeyPressed) {
+        } else if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed || keyH.spacePressed) {
             if (keyH.upPressed) {
                 direction = "up";
             } else if (keyH.downPressed) {
@@ -102,7 +102,7 @@ public class Player extends Entity{
             int mobIndex = gp.cChecker.checkEntity(this, gp.mob);
             contactMob(mobIndex);
 
-            if (!collisionOn && !keyH.interactKeyPressed) {
+            if (!collisionOn && !keyH.spacePressed) {
                 switch (direction) {
                     case "up": worldY -= speed; break;
                     case "down": worldY += speed; break;
@@ -111,7 +111,7 @@ public class Player extends Entity{
                 }
             }
 
-            gp.keyH.interactKeyPressed = false;
+            gp.keyH.spacePressed = false;
 
             spriteCounter ++;
             if (spriteCounter > 10) {
@@ -188,9 +188,9 @@ public class Player extends Entity{
             if (i != 999) {
                 gp.gameState = gp.dialogueState;
                 gp.npc[i].speak();
-            } else {
-                attacking = true;
             }
+        } else if (gp.keyH.spacePressed) {
+            attacking = true;
         }
     }
     public void contactMob(int i) {

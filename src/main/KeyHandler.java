@@ -7,7 +7,7 @@ import java.awt.event.MouseListener;
 
 public class KeyHandler implements KeyListener {
     GamePanel gp;
-    public boolean upPressed, downPressed, leftPressed, rightPressed, interactKeyPressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, interactKeyPressed;
     // Debug
     public boolean debug = false;
 
@@ -104,6 +104,9 @@ public class KeyHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_E) {
                 interactKeyPressed = true;
+            }
+            if (code == KeyEvent.VK_SPACE) {
+                spacePressed = true;
             }
 
             // Debug
