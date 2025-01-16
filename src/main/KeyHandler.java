@@ -24,110 +24,125 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
 
-        if (gp.gameState == gp.titleState) {
-            if (gp.ui.titleScreenState == 0) {
-                if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
-                    gp.ui.commandNum--;
-                    if (gp.ui.commandNum < 0) {
-                        gp.ui.commandNum = 2;
-                    }
-                }
-                if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
-                    gp.ui.commandNum++;
-                    if (gp.ui.commandNum > 2) {
-                        gp.ui.commandNum = 0;
-                    }
-                }
-                if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
-                    if (gp.ui.commandNum == 0) {
-                        gp.ui.titleScreenState = 1;
-                    }
-                    if (gp.ui.commandNum == 1) {
-                        // For later
-                    }
-                    if (gp.ui.commandNum == 2) {
-                        System.exit(0);
-                    }
-                }
-            } else if (gp.ui.titleScreenState == 1) {
-                if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
-                    gp.ui.commandNum--;
-                    if (gp.ui.commandNum < 0) {
-                        gp.ui.commandNum = 3;
-                    }
-                }
-                if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
-                    gp.ui.commandNum++;
-                    if (gp.ui.commandNum > 3) {
-                        gp.ui.commandNum = 0;
-                    }
-                }
-                if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
-                    if (gp.ui.commandNum == 0) {
-                        gp.gameState = gp.playState;
-                        gp.stopMusic();
-                        gp.playMusic(0);
-                        System.out.println("Imagine Picking Easy");
-                    }
-                    if (gp.ui.commandNum == 1) {
-                        gp.gameState = gp.playState;
-                        gp.stopMusic();
-                        gp.playMusic(0);
-                        System.out.println("Kinda a mid game mode lol");
-                    }
-                    if (gp.ui.commandNum == 2) {
-                        gp.gameState = gp.playState;
-                        gp.stopMusic();
-                        gp.playMusic(0);
-                        System.out.println("You really think you are \"hardcore\"?");
-                    }
-                    if (gp.ui.commandNum == 3) {
-                        gp.ui.titleScreenState = 0;
-                    }
+        if (gp.gameState == gp.titleState) {titleState(code);}
+        else if (gp.gameState == gp.playState) {playState(code);}
+        else if (gp.gameState == gp.pauseState) {pauseState(code);}
+        else if (gp.gameState == gp.dialogueState) {dialogueState(code);}
+        else if (gp.gameState == gp.characterState) {characterState(code);}
+    }
+    public void titleState(int code) {
+        if (gp.ui.titleScreenState == 0) {
+            if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+                gp.ui.commandNum--;
+                if (gp.ui.commandNum < 0) {
+                    gp.ui.commandNum = 2;
                 }
             }
-        } else if (gp.gameState == gp.playState) {
-            if (code == KeyEvent.VK_W) {
-                upPressed = true;
+            if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+                gp.ui.commandNum++;
+                if (gp.ui.commandNum > 2) {
+                    gp.ui.commandNum = 0;
+                }
             }
-            if (code == KeyEvent.VK_A) {
-                leftPressed = true;
+            if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
+                if (gp.ui.commandNum == 0) {
+                    gp.ui.titleScreenState = 1;
+                }
+                if (gp.ui.commandNum == 1) {
+                    // For later
+                }
+                if (gp.ui.commandNum == 2) {
+                    System.exit(0);
+                }
             }
-            if (code == KeyEvent.VK_S) {
-                downPressed = true;
+        } else if (gp.ui.titleScreenState == 1) {
+            if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+                gp.ui.commandNum--;
+                if (gp.ui.commandNum < 0) {
+                    gp.ui.commandNum = 3;
+                }
             }
-            if (code == KeyEvent.VK_D) {
-                rightPressed = true;
+            if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+                gp.ui.commandNum++;
+                if (gp.ui.commandNum > 3) {
+                    gp.ui.commandNum = 0;
+                }
             }
-            if (code == KeyEvent.VK_ESCAPE) {
-                gp.gameState = gp.pauseState;
-            }
-            if (code == KeyEvent.VK_E) {
-                interactKeyPressed = true;
-            }
-            if (code == KeyEvent.VK_SPACE) {
-                spacePressed = true;
-            }
-
-            // Debug
-            if (code == KeyEvent.VK_F3) {
-                if (!debug) {
-                    System.out.println("Debugging Enabled");
-                    debug = true;
-                } else if (debug) {
-                    System.out.println("Debugging Disabled");
-                    debug = false;
+            if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
+                if (gp.ui.commandNum == 0) {
+                    gp.gameState = gp.playState;
+                    gp.stopMusic();
+                    gp.playMusic(0);
+                    System.out.println("Imagine Picking Easy");
+                }
+                if (gp.ui.commandNum == 1) {
+                    gp.gameState = gp.playState;
+                    gp.stopMusic();
+                    gp.playMusic(0);
+                    System.out.println("Kinda a mid game mode lol");
+                }
+                if (gp.ui.commandNum == 2) {
+                    gp.gameState = gp.playState;
+                    gp.stopMusic();
+                    gp.playMusic(0);
+                    System.out.println("You really think you are \"hardcore\"?");
+                }
+                if (gp.ui.commandNum == 3) {
+                    gp.ui.titleScreenState = 0;
                 }
             }
         }
-        else if (gp.gameState == gp.pauseState) {
-            if (code == KeyEvent.VK_ESCAPE) {
-                gp.gameState = gp.playState;
+    }
+    public void playState(int code) {
+        if (code == KeyEvent.VK_W) {
+            upPressed = true;
+        }
+        if (code == KeyEvent.VK_A) {
+            leftPressed = true;
+        }
+        if (code == KeyEvent.VK_S) {
+            downPressed = true;
+        }
+        if (code == KeyEvent.VK_D) {
+            rightPressed = true;
+        }
+        if (code == KeyEvent.VK_ESCAPE) {
+            gp.gameState = gp.pauseState;
+        }
+        if (code == KeyEvent.VK_E) {
+            interactKeyPressed = true;
+        }
+        if (code == KeyEvent.VK_E) {
+            interactKeyPressed = true;
+        }
+        if (code == KeyEvent.VK_SPACE) {
+            spacePressed = true;
+        }
+
+        // Debug
+        if (code == KeyEvent.VK_F3) {
+            if (!debug) {
+                System.out.println("Debugging Enabled");
+                debug = true;
+            } else if (debug) {
+                System.out.println("Debugging Disabled");
+                debug = false;
             }
-        }  else if (gp.gameState == gp.dialogueState) {
-            if (code == KeyEvent.VK_SPACE) {
-                gp.gameState = gp.playState;
-            }
+        }
+    }
+    public void pauseState(int code) {
+        if (code == KeyEvent.VK_ESCAPE) {
+            gp.gameState = gp.playState;
+        }
+    }
+    public void dialogueState(int code) {
+        if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ESCAPE) {
+            gp.gameState = gp.playState;
+        }
+    }
+    public void characterState(int code) {
+        if (code == KeyEvent.VK_E || code == KeyEvent.VK_ESCAPE) {
+            gp.gameState = gp.playState;
         }
     }
 

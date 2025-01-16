@@ -77,6 +77,7 @@ public class EventHandler {
         if (gp.keyH.interactKeyPressed) {
             gp.ui.interactable = false;
             gp.gameState = gameState;
+            gp.player.attackCanceled = true;
             gp.ui.currentDialogue = "*Drinks water* /n Yay, the pond of healing healed me!";
             gp.player.health = gp.player.maxHealth;
         } else {

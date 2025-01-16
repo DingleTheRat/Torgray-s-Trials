@@ -2,6 +2,8 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import main.OBJ_Shield;
+import main.OBJ_Sword_Normal;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -12,6 +14,7 @@ public class Player extends Entity{
     public final int screenX;
     public final int screenY;
     int standCounter = 0;
+    public boolean attackCanceled = false;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -66,13 +69,29 @@ public class Player extends Entity{
         direction = "down";
 
         // Player Status
+        level = 1;
         maxHealth = 12;
         health = maxHealth;
+        strength = 1;
+        dexterity = 1;
+        exp = 0;
+        nextLevelExp = 5;
+        coins = 0;
+        currentWeapon = new OBJ_Sword_Normal(gp);
+        currentShield = new OBJ_Shield(gp);
+        attack = getAttack();
+        defence = getDefence();
+    }
+    public int getAttack() {
+        return attack = strength * currentWeapon.attackValue;
+    }
+    public int getDefence() {
+        return defence = dexterity * currentShield.defenceValue;
     }
     public void update() {
         if (attacking) {
             attack();
-        } else if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed || keyH.spacePressed) {
+        } else if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed || keyH.spacePressed || keyH.interactKeyPressed) {
             if (keyH.upPressed) {
                 direction = "up";
             } else if (keyH.downPressed) {
@@ -102,7 +121,7 @@ public class Player extends Entity{
             int mobIndex = gp.cChecker.checkEntity(this, gp.mob);
             contactMob(mobIndex);
 
-            if (!collisionOn && !keyH.spacePressed) {
+            if (!collisionOn && !keyH.spacePressed && !keyH.interactKeyPressed) {
                 switch (direction) {
                     case "up": worldY -= speed; break;
                     case "down": worldY += speed; break;
@@ -111,7 +130,20 @@ public class Player extends Entity{
                 }
             }
 
+            // Attacking
+            if (keyH.spacePressed && !attackCanceled) {
+                attacking = true;
+                spriteCounter = 0;
+            }
+
+            // Inventory
+            if (keyH.interactKeyPressed && !attackCanceled) {
+                gp.gameState = gp.characterState;
+            }
+
+            attackCanceled = false;
             gp.keyH.spacePressed = false;
+            gp.keyH.interactKeyPressed = false;
 
             spriteCounter ++;
             if (spriteCounter > 10) {
@@ -186,11 +218,10 @@ public class Player extends Entity{
     public void interactNPC(int i) {
         if (gp.keyH.interactKeyPressed) {
             if (i != 999) {
+                attackCanceled = true;
                 gp.gameState = gp.dialogueState;
                 gp.npc[i].speak();
             }
-        } else if (gp.keyH.spacePressed) {
-            attacking = true;
         }
     }
     public void contactMob(int i) {
