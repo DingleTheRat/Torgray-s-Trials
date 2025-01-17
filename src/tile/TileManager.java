@@ -80,6 +80,11 @@ public class TileManager {
 
         // Tree
         registerTile(41, "tree", true);
+
+        // Event Ties
+        registerTile(42, "path_pit", false);
+        registerTile(43, "grass_pit", false);
+        registerTile(44, "grass_healing", false);
     }
     public void registerTile(int i, String imageName, boolean collision) {
         UtilityTool uTool = new UtilityTool();

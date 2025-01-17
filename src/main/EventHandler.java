@@ -42,6 +42,12 @@ public class EventHandler {
         if (canTouchEvent) {
             if (hit(27, 16, "right")) {damagePit(27, 16, gp.dialogueState);}
             if (hit(23, 19, "any")) {damagePit(23, 19, gp.dialogueState);}
+            if (hit(22, 40, "any")) {damagePit(22, 40, gp.dialogueState);}
+            if (hit(14, 26, "any")) {damagePit(14, 26, gp.dialogueState);}
+            if (hit(14, 26, "any")) {damagePit(9, 30, gp.dialogueState);}
+            if (hit(36, 9, "any")) {damagePit(36, 9, gp.dialogueState);}
+            if (hit(37, 34, "any")) {damagePit(37, 34, gp.dialogueState);}
+            if (hit(35, 38, "any")) {damagePit(37, 34, gp.dialogueState);}
             if (hit(23, 12, "up")) {healingPond(23, 12, gp.dialogueState);} else {gp.ui.interactable = false;}
         }
     }
@@ -80,6 +86,7 @@ public class EventHandler {
             gp.player.attackCanceled = true;
             gp.ui.currentDialogue = "*Drinks water* /n Yay, the pond of healing healed me!";
             gp.player.health = gp.player.maxHealth;
+            gp.assetS.setMonster();
         } else {
             gp.ui.interactable = true;
         }

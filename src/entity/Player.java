@@ -2,8 +2,8 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
-import main.OBJ_Shield;
-import main.OBJ_Sword_Normal;
+import object.OBJ_Shield;
+import object.OBJ_Sword;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -77,7 +77,7 @@ public class Player extends Entity{
         exp = 0;
         nextLevelExp = 5;
         coins = 0;
-        currentWeapon = new OBJ_Sword_Normal(gp);
+        currentWeapon = new OBJ_Sword(gp);
         currentShield = new OBJ_Shield(gp);
         attack = getAttack();
         defence = getDefence();
@@ -228,7 +228,12 @@ public class Player extends Entity{
         if (i != 999) {
             if (!invincible) {
                 gp.playSE(7);
-                health -= 2;
+
+                int damage = gp.mob[i].attack - defence;
+                if (damage < 0) {
+                    damage = 0;
+                }
+                health -= damage;
                 invincible = true;
             }
         }
@@ -238,14 +243,37 @@ public class Player extends Entity{
         if (i != 999) {
             if (!gp.mob[i].invincible) {
                 gp.playSE(6);
-                gp.mob[i].health -= 1;
+
+                int damage = attack - gp.mob[i].defence;
+                if (damage < 0) {
+                    damage = 0;
+                }
+                gp.mob[i].health -= damage;
+
                 gp.mob[i].invincible = true;
                 gp.mob[i].damageReaction();
 
                 if (gp.mob[i].health <= 0) {
                     gp.mob[i].dying = true;
+                    gp.ui.addMessage("Killed " + gp.mob[i].name);
+                    gp.ui.addMessage("+" + gp.mob[i].exp + " exp");
+                    exp += gp.mob[i].exp;
+                    checkLevelUp();
                 }
             }
+        }
+    }
+    public void checkLevelUp() {
+        if (exp >= nextLevelExp) {
+            level++;
+            exp = 0;
+            nextLevelExp = nextLevelExp * 2;
+            health += level * 2;
+            strength++;
+            dexterity++;
+            attack = getAttack();
+            defence = getDefence();
+            gp.ui.addMessage("Level Up!");
         }
     }
 

@@ -7,16 +7,16 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class UI {
     GamePanel gp;
     Graphics2D g2;
     Font maruMonica;
     BufferedImage heart, half_heart, lost_heart;
-    public boolean messageOn = false;
-    public String message = "";
-    int messageCounter = 0;
     public boolean interactable = false;
+    ArrayList<String> messages = new ArrayList<>();
+    ArrayList<Integer> messageCounter = new ArrayList<>();
     public boolean gameEnd = false;
     public String currentDialogue = "";
     public int commandNum = 0;
@@ -41,9 +41,9 @@ public class UI {
         lost_heart = obj_heart.image3;
     }
 
-    public void showMessage(String text) {
-        message = text;
-        messageOn = true;
+    public void addMessage(String message) {
+        messages.add(message);
+        messageCounter.add(0);
     }
     public void draw(Graphics2D g2) {
         this.g2 = g2;
@@ -55,6 +55,7 @@ public class UI {
         }
         if (gp.gameState == gp.playState) {
             drawPlayerHealth();
+            drawMessage();
             if (interactable) {
                 drawInteractScreen();
             }
@@ -100,6 +101,27 @@ public class UI {
             x += gp.tileSize;
         }
 
+    }
+    public void drawMessage() {
+        int messageX = gp.tileSize / 2;
+        int messageY = gp.tileSize * 12 - gp.tileSize / 2;
+        g2.setFont(g2.getFont().deriveFont(23f));
+
+        for (int i = 0; i < messages.size(); i++) {
+            if (messages.get(i) != null) {
+                g2.setColor(Color.white);
+                g2.drawString(messages.get(i), messageX, messageY);
+
+                int counter = messageCounter.get(i) + 1; // Counter ++
+                messageCounter.set(i, counter); // Set counter = array
+                messageY -= 30;
+
+                if (messageCounter.get(i) > 120) {
+                    messages.remove(i);
+                    messageCounter.remove(i);
+                }
+            }
+        }
     }
     public void drawTitleScreen() {
         if (titleScreenState == 0) {
