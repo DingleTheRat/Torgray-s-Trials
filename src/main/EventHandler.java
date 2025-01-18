@@ -75,7 +75,7 @@ public class EventHandler {
     }
     public void damagePit(int col, int row, int gameState) {
         gp.gameState = gameState;
-        gp.ui.currentDialogue = "Dang it, I fell into a pit again!";
+        gp.ui.currentDialogue = "Dang it, I feel into a pit!";
         gp.player.health -= 1;
         canTouchEvent = false;
     }

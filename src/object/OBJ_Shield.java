@@ -7,8 +7,9 @@ public class OBJ_Shield extends Entity {
     public OBJ_Shield(GamePanel gp) {
         super(gp);
 
-        name = "Normal Shield";
-        down1 = registerEntitySprite("/tiles/disabled", gp.tileSize, gp.tileSize);
+        name = "Amethyst Shield";
+        down1 = registerEntitySprite("/objects/amethyst_shield", gp.tileSize, gp.tileSize);
         defenceValue = 1;
+        description = "/n A majestic purple shield /n Defence: +" + defenceValue;
     }
 }

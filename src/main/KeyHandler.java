@@ -27,19 +27,21 @@ public class KeyHandler implements KeyListener {
         if (gp.gameState == gp.titleState) {titleState(code);}
         else if (gp.gameState == gp.playState) {playState(code);}
         else if (gp.gameState == gp.pauseState) {pauseState(code);}
-        else if (gp.gameState == gp.dialogueState) {dialogueState(code);}
+        else if (gp.gameState == gp.dialogueState) {dialogueState(code); playState(code);}
         else if (gp.gameState == gp.characterState) {characterState(code);}
     }
     public void titleState(int code) {
         if (gp.ui.titleScreenState == 0) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 gp.ui.commandNum--;
+                gp.playSE(8);
                 if (gp.ui.commandNum < 0) {
                     gp.ui.commandNum = 2;
                 }
             }
             if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
                 gp.ui.commandNum++;
+                gp.playSE(8);
                 if (gp.ui.commandNum > 2) {
                     gp.ui.commandNum = 0;
                 }
@@ -58,12 +60,14 @@ public class KeyHandler implements KeyListener {
         } else if (gp.ui.titleScreenState == 1) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 gp.ui.commandNum--;
+                gp.playSE(8);
                 if (gp.ui.commandNum < 0) {
                     gp.ui.commandNum = 3;
                 }
             }
             if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
                 gp.ui.commandNum++;
+                gp.playSE(8);
                 if (gp.ui.commandNum > 3) {
                     gp.ui.commandNum = 0;
                 }
@@ -74,18 +78,32 @@ public class KeyHandler implements KeyListener {
                     gp.stopMusic();
                     gp.playMusic(0);
                     System.out.println("Imagine Picking Easy");
+
+                    // Modified Stats
+                    gp.player.strength = 2;
+                    gp.player.dexterity = 2;
+                    gp.player.nextLevelExp = 4;
+                    gp.player.attack = gp.player.getAttack();
+                    gp.player.defence = gp.player.getDefence();
                 }
                 if (gp.ui.commandNum == 1) {
                     gp.gameState = gp.playState;
                     gp.stopMusic();
                     gp.playMusic(0);
                     System.out.println("Kinda a mid game mode lol");
+
+                    // No modified stats since Medium is the default
                 }
                 if (gp.ui.commandNum == 2) {
                     gp.gameState = gp.playState;
                     gp.stopMusic();
                     gp.playMusic(0);
                     System.out.println("You really think you are \"hardcore\"?");
+
+                    // Modified Stats
+                    gp.player.dexterity = 0;
+                    gp.player.nextLevelExp = 6;
+                    gp.player.defence = gp.player.getDefence();
                 }
                 if (gp.ui.commandNum == 3) {
                     gp.ui.titleScreenState = 0;
@@ -143,6 +161,30 @@ public class KeyHandler implements KeyListener {
     public void characterState(int code) {
         if (code == KeyEvent.VK_E || code == KeyEvent.VK_ESCAPE) {
             gp.gameState = gp.playState;
+        }
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+            if (gp.ui.slotRow != 0) {
+                gp.ui.slotRow --;
+                gp.playSE(8);
+            }
+        }
+        if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
+            if (gp.ui.slotCol != 0) {
+                gp.ui.slotCol --;
+                gp.playSE(8);
+            }
+        }
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+            if (gp.ui.slotRow != 4) {
+                gp.ui.slotRow ++;
+                gp.playSE(8);
+            }
+        }
+        if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
+            if (gp.ui.slotCol != 4) {
+                gp.ui.slotCol ++;
+                gp.playSE(8);
+            }
         }
     }
 

@@ -55,9 +55,10 @@ public class Entity {
     public Entity currentWeapon;
     public Entity currentShield;
 
-    // Weapon Attributes
+    // Item Attributes
     public int attackValue;
     public int defenceValue;
+    public String description = "";
 
     public Entity(GamePanel gp) {
         this.gp = gp;
@@ -93,8 +94,8 @@ public class Entity {
                 gp.playSE(7);
 
                 int damage = attack - gp.player.defence;
-                if (damage < 0) {
-                    damage = 0;
+                if (damage <= 0) {
+                    damage = 1;
                 }
                 gp.player.health -= damage;
                 gp.player.invincible = true;

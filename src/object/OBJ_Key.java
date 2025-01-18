@@ -9,5 +9,6 @@ public class OBJ_Key extends Entity {
 
         name = "Key";
         down1 = registerEntitySprite("/objects/key", gp.tileSize, gp.tileSize);
+        description = "/n Probably opens a gate";
     }
 }

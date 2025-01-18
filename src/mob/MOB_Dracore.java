@@ -17,7 +17,7 @@ public class MOB_Dracore extends Entity {
         speed = 1;
         maxHealth = 5;
         health = maxHealth;
-        attack = 3;
+        attack = 4;
         defence = 0;
         exp = 2;
         
