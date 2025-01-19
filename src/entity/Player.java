@@ -241,7 +241,7 @@ public class Player extends Entity{
             if (gp.obj.get(i).tags.contains(EntityTags.TAG_INTERACTABLE)) {
                 for (int j = 0; j < inventory.size(); j++) {
                     if (inventory.get(j).name.equals("Key")) {
-                        gp.obj.remove(i);
+                        gp.obj.put(i, null);
                         inventory.remove(j);
                         gp.ui.addMessage("-1 Key");
                         gp.playSE(3);
@@ -259,7 +259,7 @@ public class Player extends Entity{
                     text = "Inventory Full";
                 }
                 gp.ui.addMessage(text);
-                gp.obj.remove(i);
+                gp.obj.put(i, null);
             }
         }
     }

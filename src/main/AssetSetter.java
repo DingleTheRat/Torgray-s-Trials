@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 public class AssetSetter {
     GamePanel gp;
+    private static int i = 0;
 
     public AssetSetter(GamePanel gp) {this.gp = gp;}
 

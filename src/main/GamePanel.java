@@ -121,7 +121,7 @@ public class GamePanel extends JPanel implements Runnable{
                         mob.get(i).update();
                     }
                     if (!mob.get(i).alive) {
-                        mob.remove(i);
+                        mob.put(i, null);
                     }
                 }
             }
