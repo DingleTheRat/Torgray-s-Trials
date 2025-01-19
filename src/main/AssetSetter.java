@@ -57,8 +57,8 @@ public class AssetSetter {
         gp.obj.get(i).worldY = 40 * gp.tileSize;
         i++;
         gp.obj.put(i, new OBJ_Lantern(gp));
-        gp.obj.get(i).worldX = 21 * gp.tileSize;
-        gp.obj.get(i).worldY = 19 * gp.tileSize;
+        gp.obj.get(i).worldX = 12 * gp.tileSize;
+        gp.obj.get(i).worldY = 21 * gp.tileSize;
 
     }
     public void setNPC() {

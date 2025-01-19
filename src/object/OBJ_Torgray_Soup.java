@@ -43,7 +43,7 @@ public class OBJ_Torgray_Soup extends Entity {
             gp.ui.currentDialogue = "Erm Torgray made two of us. /n+4 health";
         }
         if (i == 5) {
-            gp.ui.currentDialogue = "Erm If you are still without a light it's /nvery close to spawn. /n+4 health";
+            gp.ui.currentDialogue = "Erm If you are still without a light it's /non the edge of one of the paths /n+4 health";
         }
 
         if (gp.player.health + value > gp.player.maxHealth) {
