@@ -237,10 +237,10 @@ public class Player extends Entity{
     }
     public void pickUpObject(int i) {
         if (i != 999) {
-            if (gp.obj[i].tags.contains(EntityTags.TAG_INTERACTABLE)) {
+            if (gp.obj.get(i).tags.contains(EntityTags.TAG_INTERACTABLE)) {
                 for (int j = 0; j < inventory.size(); j++) {
                     if (inventory.get(j).name.equals("Key")) {
-                        gp.obj[i] = null;
+                        gp.obj.remove(i);
                         inventory.remove(j);
                         gp.ui.addMessage("-1 Key");
                         gp.playSE(3);
@@ -250,15 +250,15 @@ public class Player extends Entity{
             } else {
                 String text;
                 if (inventory.size() != maxInventorySize) {
-                    inventory.add(gp.obj[i]);
+                    inventory.add(gp.obj.get(i));
                     gp.playSE(1);
-                    text = "+1 " + gp.obj[i].name;
+                    text = "+1 " + gp.obj.get(i).name;
                 }
                 else {
                     text = "Inventory Full";
                 }
                 gp.ui.addMessage(text);
-                gp.obj[i] = null;
+                gp.obj.remove(i);
             }
         }
     }
@@ -267,7 +267,7 @@ public class Player extends Entity{
             if (i != 999) {
                 attackCanceled = true;
                 gp.gameState = States.STATE_DIALOGUE;
-                gp.npc[i].speak();
+                gp.npc.get(i).speak();
             }
         }
     }
@@ -276,7 +276,7 @@ public class Player extends Entity{
             if (!invincible) {
                 gp.playSE(7);
 
-                int damage = gp.mob[i].attack - defence;
+                int damage = gp.mob.get(i).attack - defence;
                 if (damage < 0) {
                     damage = 0;
                 }
@@ -288,23 +288,23 @@ public class Player extends Entity{
 
     public void damageMob(int i) {
         if (i != 999) {
-            if (!gp.mob[i].invincible) {
+            if (!gp.mob.get(i).invincible) {
                 gp.playSE(6);
 
-                int damage = attack - gp.mob[i].defence;
+                int damage = attack - gp.mob.get(i).defence;
                 if (damage < 0) {
                     damage = 0;
                 }
-                gp.mob[i].health -= damage;
+                gp.mob.get(i).health -= damage;
 
-                gp.mob[i].invincible = true;
-                gp.mob[i].damageReaction();
+                gp.mob.get(i).invincible = true;
+                gp.mob.get(i).damageReaction();
 
-                if (gp.mob[i].health <= 0) {
-                    gp.mob[i].dying = true;
-                    gp.ui.addMessage("Killed " + gp.mob[i].name);
-                    gp.ui.addMessage("+" + gp.mob[i].exp + " exp");
-                    exp += gp.mob[i].exp;
+                if (gp.mob.get(i).health <= 0) {
+                    gp.mob.get(i).dying = true;
+                    gp.ui.addMessage("Killed " + gp.mob.get(i).name);
+                    gp.ui.addMessage("+" + gp.mob.get(i).exp + " exp");
+                    exp += gp.mob.get(i).exp;
                     checkLevelUp();
                 }
             }

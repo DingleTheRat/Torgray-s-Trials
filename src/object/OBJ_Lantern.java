@@ -20,6 +20,6 @@ public class OBJ_Lantern extends Entity {
         tags.add(EntityTags.TAG_LIGHT);
         lightRadius = 150;
         down1 = registerEntitySprite("/objects/lantern", gp.tileSize, gp.tileSize);
-        description = "/nSHINE BRIGHTTTTTT /nTONIGHTTTTTT /lyr /nLight Radius: +" + lightRadius;
+        description = "/nSHINE BRIGHTTTTTT /nTONIGHTTTTTT /lyr /nLight Radius: " + lightRadius;
     }
 }

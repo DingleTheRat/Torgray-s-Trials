@@ -4,11 +4,13 @@ import entity.Entity;
 import entity.Player;
 import environment.EnvironmentManager;
 import events.EventHandler;
+import tile.Tile;
 import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -44,9 +46,9 @@ public class GamePanel extends JPanel implements Runnable{
 
     // Entities and Objects
     public Player player = new Player(this, keyH);
-    public Entity[] npc = new Entity[10];
-    public Entity[] obj = new Entity[10];
-    public Entity[] mob = new Entity[20];
+    public HashMap<Integer, Entity> npc = new HashMap<>();
+    public HashMap<Integer, Entity> obj = new HashMap<>();
+    public HashMap<Integer, Entity> mob = new HashMap<>();
     ArrayList<Entity> entityList = new ArrayList<>();
 
     // Game States;
@@ -107,19 +109,19 @@ public class GamePanel extends JPanel implements Runnable{
             player.update();
 
             // NPCs
-            for (int i = 0; i < npc.length; i++) {
-                if (npc[i] != null) {
-                    npc[i].update();
+            for (int i = 0; i < npc.size(); i++) {
+                if (npc.get(i) != null) {
+                    npc.get(i).update();
                 }
             }
             // Mobs
-            for (int i = 0; i < mob.length; i++) {
-                if (mob[i] != null) {
-                    if (mob[i].alive && !mob[i].dying) {
-                        mob[i].update();
+            for (int i = 0; i < mob.size(); i++) {
+                if (mob.get(i) != null) {
+                    if (mob.get(i).alive && !mob.get(i).dying) {
+                        mob.get(i).update();
                     }
-                    if (!mob[i].alive) {
-                        mob[i] = null;
+                    if (!mob.get(i).alive) {
+                        mob.remove(i);
                     }
                 }
             }
@@ -149,19 +151,19 @@ public class GamePanel extends JPanel implements Runnable{
 
             // Add entities to list
             entityList.add(player);
-            for (int i = 0; i < npc.length; i++) {
-                if (npc[i] != null) {
-                    entityList.add(npc[i]);
+            for (int i = 0; i < npc.size(); i++) {
+                if (npc.get(i) != null) {
+                    entityList.add(npc.get(i));
                 }
             }
-            for (int i = 0; i < obj.length; i++) {
-                if (obj[i] != null) {
-                    entityList.add(obj[i]);
+            for (int i = 0; i < obj.size(); i++) {
+                if (obj.get(i) != null) {
+                    entityList.add(obj.get(i));
                 }
             }
-            for (int i = 0; i < mob.length; i++) {
-                if (mob[i] != null) {
-                    entityList.add(mob[i]);
+            for (int i = 0; i < mob.size(); i++) {
+                if (mob.get(i) != null) {
+                    entityList.add(mob.get(i));
                 }
             }
 

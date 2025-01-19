@@ -8,8 +8,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class Entity {
+public abstract class Entity {
     GamePanel gp;
     public BufferedImage up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
     public BufferedImage attackUp, attackDown, attackLeft, attackRight;
@@ -18,7 +19,7 @@ public class Entity {
     public  Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collision = false;
-    String[] dialogues = new String[20];
+    HashMap<Integer, String> dialogues = new HashMap<>();
 
     // States
     public int worldX, worldY;
@@ -71,10 +72,10 @@ public class Entity {
     public void setAction() {}
     public void damageReaction() {}
     public void speak() {
-        if (dialogues[dialogueIndex] == null) {
+        if (dialogues.get(dialogueIndex) == null) {
             dialogueIndex = 0;
         }
-        gp.ui.currentDialogue = dialogues[dialogueIndex];
+        gp.ui.currentDialogue = dialogues.get(dialogueIndex);
         dialogueIndex++;
 
         switch (gp.player.direction) {

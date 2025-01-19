@@ -9,33 +9,23 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class TileManager {
     GamePanel gp;
-    public Tile[] tile;
+    public HashMap<Integer, Tile> tile;
     public int[][] mapTileNum;
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tile = new Tile[50];
+        tile = new HashMap<>();
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         getTileImage();
         loadMap("/maps/world02.txt");
     }
 
     public void getTileImage() {
-        // Disabled
-        registerTile(0, "disabled", false);
-        registerTile(1, "disabled", false);
-        registerTile(2, "disabled", false);
-        registerTile(3, "disabled", false);
-        registerTile(4, "disabled", false);
-        registerTile(5, "disabled", false);
-        registerTile(6, "disabled", false);
-        registerTile(7, "disabled", false);
-        registerTile(8, "disabled", false);
-        registerTile(9, "disabled", false);
 
         // Grass
         registerTile(10, "grass_1", false);
@@ -90,10 +80,10 @@ public class TileManager {
         UtilityTool uTool = new UtilityTool();
 
         try {
-            tile[i] = new Tile();
-            tile[i].image = ImageIO.read(getClass().getResourceAsStream("/tiles/" + imageName + ".png"));
-            tile[i].image = uTool.scaleImage(tile[i].image, gp.tileSize, gp.tileSize);
-            tile[i].collision = collision;
+            tile.put(i, new Tile());
+            tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/tiles/" + imageName + ".png"));
+            tile.get(i).image = uTool.scaleImage(tile.get(i).image, gp.tileSize, gp.tileSize);
+            tile.get(i).collision = collision;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -139,7 +129,7 @@ public class TileManager {
                     worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
                     worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
                     worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
-                g2.drawImage(tile[tileNum].image, screenX, screenY, null);
+                g2.drawImage(tile.get(tileNum).image, screenX, screenY, null);
             }
             worldCol++;
             if (worldCol == gp.maxWorldCol) {
