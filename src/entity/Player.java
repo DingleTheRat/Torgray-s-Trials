@@ -3,6 +3,7 @@ package entity;
 import main.GamePanel;
 import main.KeyHandler;
 import main.States;
+import object.OBJ_Lantern;
 import object.OBJ_Shield_Iron;
 import object.OBJ_Sword_Iron;
 import object.OBJ_Torgray_Soup;
@@ -18,6 +19,9 @@ public class Player extends Entity{
     public final int screenY;
     int standCounter = 0;
     public boolean attackCanceled = false;
+    public boolean lightUpdated = false;
+
+
     public ArrayList<Entity> inventory = new ArrayList<>();
     public final int maxInventorySize = 25;
 
@@ -329,16 +333,24 @@ public class Player extends Entity{
         if (itemIndex < inventory.size()) {
             Entity selectedItem = inventory.get(itemIndex);
 
-            if (selectedItem.type == EntityTypes.TYPE_SWORD) {
+            if (selectedItem.tags.contains(EntityTags.TAG_SWORD)) {
                 currentWeapon = selectedItem;
                 attack = getAttack();
                 getAttackImage();
             }
-            if (selectedItem.type == EntityTypes.TYPE_SHIELD) {
+            if (selectedItem.tags.contains(EntityTags.TAG_SHIELD)) {
                 currentShield = selectedItem;
                 defence = getDefence();
             }
-            if (selectedItem.type == EntityTypes.TYPE_CONSUMABLE) {
+            if (selectedItem.tags.contains(EntityTags.TAG_LIGHT)) {
+                if (currentLight == selectedItem) {
+                    currentLight = null;
+                } else {
+                    currentLight = selectedItem;
+                }
+                lightUpdated = true;
+            }
+            if (selectedItem.tags.contains(EntityTags.TAG_CONSUMABLE)) {
                 selectedItem.use(this);
                 inventory.remove(itemIndex);
             }

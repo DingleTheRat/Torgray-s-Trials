@@ -34,7 +34,7 @@ public class GamePanel extends JPanel implements Runnable{
     public KeyHandler keyH = new KeyHandler(this);
     Sound music = new Sound();
     Sound sound = new Sound();
-    EnvironmentManager environmentM = new EnvironmentManager(this);
+    EnvironmentManager eManager = new EnvironmentManager(this);
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter assetS = new AssetSetter(this);
     public UI ui = new UI(this);
@@ -63,7 +63,7 @@ public class GamePanel extends JPanel implements Runnable{
         assetS.setObject();
         assetS.setNPC();
         assetS.setMonster();
-        environmentM.setup();
+        eManager.setup();
         playMusic(5);
         gameState = States.STATE_TILE;
     }
@@ -123,6 +123,7 @@ public class GamePanel extends JPanel implements Runnable{
                     }
                 }
             }
+            eManager.update();
         }
         if (gameState == States.STATE_PAUSE) {
             // NOTHIN!
@@ -178,7 +179,7 @@ public class GamePanel extends JPanel implements Runnable{
             entityList.clear();
 
             // More  drawing :D
-            environmentM.draw(g2);
+            eManager.draw(g2);
             ui.draw(g2);
         }
 

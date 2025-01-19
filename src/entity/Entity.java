@@ -56,11 +56,13 @@ public class Entity {
     public int coins;
     public Entity currentWeapon;
     public Entity currentShield;
+    public Entity currentLight;
 
     // Item Attributes
     public int attackValue;
     public int defenceValue;
     public String description = "";
+    public int lightRadius;
 
     public Entity(GamePanel gp) {
         this.gp = gp;

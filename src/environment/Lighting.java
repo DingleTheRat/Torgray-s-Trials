@@ -3,30 +3,27 @@ package environment;
 import main.GamePanel;
 
 import java.awt.*;
-import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class Lighting {
     GamePanel gp;
     BufferedImage darknessFilter;
 
-    public Lighting(GamePanel gp, int circleSize) {
+    public Lighting(GamePanel gp) {
+        this.gp = gp;
+        setLightSource();
+    }
+
+    public void setLightSource() {
+        // Make buffered image for darkness filter
         darknessFilter = new BufferedImage(gp.screenWidth, gp.screenHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = (Graphics2D)darknessFilter.getGraphics();
-        Area screenArea = new Area(new Rectangle2D.Double(0, 0, gp.screenWidth, gp.screenHeight));
 
+        // Calculate the centre of the player
         int centreX = gp.player.screenX + (gp.tileSize) / 2;
         int centreY = gp.player.screenY + (gp.tileSize) / 2;
 
-        double x = centreX - (circleSize / 2);
-        double y = centreY - (circleSize / 2);
-
-        Shape circleShape = new Ellipse2D.Double(x, y, circleSize, circleSize);
-        Area lightArea = new Area(circleShape);
-        screenArea.subtract(lightArea);
-
+        // Create a radial gradient paint
         Color[] color = new Color[12];
         color[0] = new Color(0, 0, 0, 0.1f);
         color[1] = new Color(0, 0, 0, 0.42f);
@@ -55,14 +52,24 @@ public class Lighting {
         fraction[10] = 0.95f;
         fraction[11] = 1f;
 
-        RadialGradientPaint gPaint = new RadialGradientPaint(centreX, centreY, (circleSize / 2), fraction, color);
+        if (gp.player.currentLight == null) {
+            RadialGradientPaint gPaint = new RadialGradientPaint(centreX, centreY, 70, fraction, color);
+            g2.setPaint(gPaint);
+        } else {
+            RadialGradientPaint gPaint = new RadialGradientPaint(centreX, centreY, gp.player.currentLight.lightRadius, fraction, color);
+            g2.setPaint(gPaint);
+        }
 
-        g2.setPaint(gPaint);
-        g2.fill(lightArea);
-        g2.fill(screenArea);
+        // Fill the buffered image with the radial gradient paint
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
         g2.dispose();
     }
-
+    public void update() {
+        if (gp.player.lightUpdated) {
+            setLightSource();
+            gp.player.lightUpdated = false;
+        }
+    }
     public void draw(Graphics2D g2) {
         g2.drawImage(darknessFilter, 0,0, null);
     }

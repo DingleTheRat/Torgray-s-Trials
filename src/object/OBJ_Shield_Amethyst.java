@@ -10,8 +10,9 @@ public class OBJ_Shield_Amethyst extends Entity {
         super(gp);
 
         name = "Amethyst Shield";
-        type = EntityTypes.TYPE_SHIELD;
+        type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_AMETHIST);
+        tags.add(EntityTags.TAG_SHIELD);
         down1 = registerEntitySprite("/objects/amethyst_shield", gp.tileSize, gp.tileSize);
         defenceValue = 2;
         description = "/n A majestic purple shield /n Defence: +" + defenceValue;

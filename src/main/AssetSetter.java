@@ -48,10 +48,14 @@ public class AssetSetter {
         gp.obj[i].worldY = 23 * gp.tileSize;
         i++;
 
-        // Torgray's Soup
+        // Others
         gp.obj[i] = new OBJ_Torgray_Soup(gp);
         gp.obj[i].worldX = 35 * gp.tileSize;
         gp.obj[i].worldY = 40 * gp.tileSize;
+        i++;
+        gp.obj[i] = new OBJ_Lantern(gp);
+        gp.obj[i].worldX = 21 * gp.tileSize;
+        gp.obj[i].worldY = 19 * gp.tileSize;
 
     }
     public void setNPC() {
