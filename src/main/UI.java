@@ -20,7 +20,7 @@ public class UI {
     public boolean gameEnd = false;
     public String currentDialogue = "";
     public int commandNum = 0;
-    public int titleScreenState = 0; //0 = Main Screen | 1 = GameMode Screen
+    public States titleScreenState = States.TITLE_STATE_MAIN;
     public int slotCol = 0;
     public int slotRow = 0;
 
@@ -52,25 +52,25 @@ public class UI {
         g2.setFont(maruMonica);
         g2.setColor(Color.white);
 
-        if (gp.gameState == gp.titleState) {
+        if (gp.gameState == States.STATE_TILE) {
             drawTitleScreen();
         }
-        if (gp.gameState == gp.playState) {
+        if (gp.gameState == States.STATE_PLAY) {
             drawPlayerHealth();
             drawMessage();
             if (interactable) {
                 drawInteractScreen();
             }
         }
-        if (gp.gameState == gp.pauseState) {
+        if (gp.gameState == States.STATE_PAUSE) {
             drawPauseScreen();
             drawPlayerHealth();
         }
-        if (gp.gameState == gp.dialogueState) {
+        if (gp.gameState == States.STATE_DIALOGUE) {
             drawDialogueScreen();
             drawPlayerHealth();
         }
-        if (gp.gameState == gp.characterState) {
+        if (gp.gameState == States.STATE_CHARACTER) {
             drawCharacterScreen();
             drawInventory();
         }
@@ -127,7 +127,7 @@ public class UI {
         }
     }
     public void drawTitleScreen() {
-        if (titleScreenState == 0) {
+        if (titleScreenState == States.TITLE_STATE_MAIN) {
             // Title Text
             g2.setFont(g2.getFont().deriveFont(Font.BOLD, 90f));
             String text = "Torgray's Trials";
@@ -177,7 +177,7 @@ public class UI {
             if (commandNum == 2) {
                 g2.drawString(">", x - gp.tileSize,  y);
             }
-        } else if (titleScreenState == 1) {
+        } else if (titleScreenState == States.TITLE_STATE_MODES) {
             // GameMode Selection
             g2.setColor(Color.white);
             g2.setFont(g2.getFont().deriveFont(42f));
@@ -251,7 +251,7 @@ public class UI {
         drawSubWindow(x, y, width, height);
 
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28f));
-        x += gp.tileSize;
+        x += gp.tileSize / 2;
         y += gp.tileSize;
 
         for (String line : currentDialogue.split("/n")) {
@@ -352,11 +352,11 @@ public class UI {
         value = String.valueOf(gp.player.coins);
         textX = alignXToRight(value, tailX);
         g2.drawString(value, textX, textY);
-        textY += lineHeight * 2;
+        textY += lineHeight * 2 - (lineHeight / 4);
 
-//        g2.drawImage(gp.player.currentWeapon.down1, tailX - gp.tileSize, textY - 37, null);
-//        textY += gp.tileSize;
-//        g2.drawImage(gp.player.currentShield.down1, tailX - gp.tileSize, textY - 37, null);
+       g2.drawImage(gp.player.currentWeapon.down1, tailX - gp.tileSize, textY - 37, null);
+       textY += gp.tileSize;
+       g2.drawImage(gp.player.currentShield.down1, tailX - gp.tileSize, textY - 37, null);
     }
     public void drawInventory() {
         // Frame
@@ -375,6 +375,12 @@ public class UI {
 
         // Draw Items
         for (int i = 0; i < gp.player.inventory.size(); i++) {
+            // Equip Cursor
+            if (gp.player.inventory.get(i) == gp.player.currentWeapon || gp.player.inventory.get(i) == gp.player.currentShield) {
+                g2.setColor(new Color(240, 190, 90));
+                g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
+            }
+
             g2.drawImage(gp.player.inventory.get(i).down1, slotX, slotY, null);
             slotX += slotSize;
 

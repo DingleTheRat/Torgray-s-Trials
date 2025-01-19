@@ -1,6 +1,8 @@
 package object;
 
 import entity.Entity;
+import entity.EntityTags;
+import entity.EntityTypes;
 import main.GamePanel;
 
 public class OBJ_Gate extends Entity {
@@ -9,6 +11,8 @@ public class OBJ_Gate extends Entity {
 
         name = "Gate";
         down1 = registerEntitySprite("/objects/gate", gp.tileSize, gp.tileSize);
+        type = EntityTypes.TYPE_OBJECT;
+        tags.add(EntityTags.TAG_INTERACTABLE);
         collision = true;
 
         solidArea.x = 0;

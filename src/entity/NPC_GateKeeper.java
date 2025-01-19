@@ -7,7 +7,7 @@ import java.util.Random;
 public class NPC_GateKeeper extends Entity{
     public NPC_GateKeeper(GamePanel gp) {
         super(gp);
-        type = 1;
+        type = EntityTypes.TYPE_NPC;
         direction = "down";
         speed = 1;
 
@@ -36,7 +36,7 @@ public class NPC_GateKeeper extends Entity{
         dialogues[0] = "Hey there partner!";
         dialogues[1] = "Let me tell you a very special secret";
         dialogues[2] = "This game is for a science fair";
-        dialogues[3] = "The person who made this game, /n dingle, is actually super screwed /n for the science fair";
+        dialogues[3] = "The person who made this game, /ndingle,is actually super screwed for /nthe science fair";
     }
     public void setAction() {
         actionLockCounter++;

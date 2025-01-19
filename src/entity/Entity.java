@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Entity {
     GamePanel gp;
@@ -39,9 +40,10 @@ public class Entity {
     int hpBarCounter = 0;
 
     // Attributes
-    public int speed;
     public String name;
-    public int type; // 0 = player | 1 = npc | 2 = mob
+    public EntityTypes type;
+    public ArrayList<EntityTags> tags = new ArrayList<>();
+    public int speed;
     public int maxHealth;
     public int health;
     public int level;
@@ -80,6 +82,7 @@ public class Entity {
             case "right": direction = "left"; break;
         }
     }
+    public void use(Entity entity) {}
     public void update() {
         setAction();
         collisionOn = false;
@@ -89,7 +92,7 @@ public class Entity {
         gp.cChecker.checkEntity(this, gp.mob);
         boolean contactPlayer = gp.cChecker.checkPlayer(this);
 
-        if (this.type == 2 && contactPlayer) {
+        if (this.type == EntityTypes.TYPE_MOB && contactPlayer) {
             if (!gp.player.invincible) {
                 gp.playSE(7);
 
@@ -148,7 +151,7 @@ public class Entity {
             }
 
             // Mob Health Bar
-            if (type == 2 && hpBarOn) {
+            if (type == EntityTypes.TYPE_MOB && hpBarOn) {
                 double oneScale = (double)gp.tileSize / maxHealth;
                 double hpBarValue = oneScale * health;
 

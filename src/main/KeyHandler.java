@@ -24,14 +24,14 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
 
-        if (gp.gameState == gp.titleState) {titleState(code);}
-        else if (gp.gameState == gp.playState) {playState(code);}
-        else if (gp.gameState == gp.pauseState) {pauseState(code);}
-        else if (gp.gameState == gp.dialogueState) {dialogueState(code); playState(code);}
-        else if (gp.gameState == gp.characterState) {characterState(code);}
+        if (gp.gameState == States.STATE_TILE) {titleState(code);}
+        else if (gp.gameState == States.STATE_PLAY) {playState(code);}
+        else if (gp.gameState == States.STATE_PAUSE) {pauseState(code);}
+        else if (gp.gameState == States.STATE_DIALOGUE) {dialogueState(code); playState(code);}
+        else if (gp.gameState == States.STATE_CHARACTER) {characterState(code);}
     }
     public void titleState(int code) {
-        if (gp.ui.titleScreenState == 0) {
+        if (gp.ui.titleScreenState == States.TITLE_STATE_MAIN) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 gp.ui.commandNum--;
                 gp.playSE(8);
@@ -48,7 +48,7 @@ public class KeyHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                 if (gp.ui.commandNum == 0) {
-                    gp.ui.titleScreenState = 1;
+                    gp.ui.titleScreenState = States.TITLE_STATE_MODES;
                 }
                 if (gp.ui.commandNum == 1) {
                     // For later
@@ -57,7 +57,7 @@ public class KeyHandler implements KeyListener {
                     System.exit(0);
                 }
             }
-        } else if (gp.ui.titleScreenState == 1) {
+        } else if (gp.ui.titleScreenState == States.TITLE_STATE_MODES) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 gp.ui.commandNum--;
                 gp.playSE(8);
@@ -74,7 +74,7 @@ public class KeyHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                 if (gp.ui.commandNum == 0) {
-                    gp.gameState = gp.playState;
+                    gp.gameState = States.STATE_PLAY;
                     gp.stopMusic();
                     gp.playMusic(0);
                     System.out.println("Imagine Picking Easy");
@@ -87,7 +87,7 @@ public class KeyHandler implements KeyListener {
                     gp.player.defence = gp.player.getDefence();
                 }
                 if (gp.ui.commandNum == 1) {
-                    gp.gameState = gp.playState;
+                    gp.gameState = States.STATE_PLAY;
                     gp.stopMusic();
                     gp.playMusic(0);
                     System.out.println("Kinda a mid game mode lol");
@@ -95,7 +95,7 @@ public class KeyHandler implements KeyListener {
                     // No modified stats since Medium is the default
                 }
                 if (gp.ui.commandNum == 2) {
-                    gp.gameState = gp.playState;
+                    gp.gameState = States.STATE_PLAY;
                     gp.stopMusic();
                     gp.playMusic(0);
                     System.out.println("You really think you are \"hardcore\"?");
@@ -106,7 +106,7 @@ public class KeyHandler implements KeyListener {
                     gp.player.defence = gp.player.getDefence();
                 }
                 if (gp.ui.commandNum == 3) {
-                    gp.ui.titleScreenState = 0;
+                    gp.ui.titleScreenState = States.TITLE_STATE_MAIN;
                 }
             }
         }
@@ -125,7 +125,7 @@ public class KeyHandler implements KeyListener {
             rightPressed = true;
         }
         if (code == KeyEvent.VK_ESCAPE) {
-            gp.gameState = gp.pauseState;
+            gp.gameState = States.STATE_PAUSE;
         }
         if (code == KeyEvent.VK_E) {
             interactKeyPressed = true;
@@ -150,17 +150,18 @@ public class KeyHandler implements KeyListener {
     }
     public void pauseState(int code) {
         if (code == KeyEvent.VK_ESCAPE) {
-            gp.gameState = gp.playState;
+            gp.gameState = States.STATE_PLAY;
         }
     }
     public void dialogueState(int code) {
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ESCAPE) {
-            gp.gameState = gp.playState;
+            gp.player.attackCanceled = true;
+            gp.gameState = States.STATE_PLAY;
         }
     }
     public void characterState(int code) {
         if (code == KeyEvent.VK_E || code == KeyEvent.VK_ESCAPE) {
-            gp.gameState = gp.playState;
+            gp.gameState = States.STATE_PLAY;
         }
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
             if (gp.ui.slotRow != 0) {
@@ -185,6 +186,9 @@ public class KeyHandler implements KeyListener {
                 gp.ui.slotCol ++;
                 gp.playSE(8);
             }
+        }
+        if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
+            gp.player.selectItem();
         }
     }
 

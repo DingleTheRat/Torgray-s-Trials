@@ -1,6 +1,7 @@
-package main;
+package events;
 
-import java.awt.*;
+import main.GamePanel;
+import main.States;
 
 public class EventHandler {
     GamePanel gp;
@@ -40,15 +41,16 @@ public class EventHandler {
         if (distance > gp.tileSize) {canTouchEvent = true;}
 
         if (canTouchEvent) {
-            if (hit(27, 16, "right")) {damagePit(27, 16, gp.dialogueState);}
-            if (hit(23, 19, "any")) {damagePit(23, 19, gp.dialogueState);}
-            if (hit(22, 40, "any")) {damagePit(22, 40, gp.dialogueState);}
-            if (hit(14, 26, "any")) {damagePit(14, 26, gp.dialogueState);}
-            if (hit(14, 26, "any")) {damagePit(9, 30, gp.dialogueState);}
-            if (hit(36, 9, "any")) {damagePit(36, 9, gp.dialogueState);}
-            if (hit(37, 34, "any")) {damagePit(37, 34, gp.dialogueState);}
-            if (hit(35, 38, "any")) {damagePit(37, 34, gp.dialogueState);}
-            if (hit(23, 12, "up")) {healingPond(23, 12, gp.dialogueState);} else {gp.ui.interactable = false;}
+            if (hit(27, 16, "right")) {damagePit(27, 16, States.STATE_DIALOGUE);}
+            if (hit(23, 19, "any")) {damagePit(23, 19, States.STATE_DIALOGUE);}
+            if (hit(22, 40, "any")) {damagePit(22, 40, States.STATE_DIALOGUE);}
+            if (hit(14, 26, "any")) {damagePit(14, 26, States.STATE_DIALOGUE);}
+            if (hit(14, 26, "any")) {damagePit(9, 30, States.STATE_DIALOGUE);}
+            if (hit(36, 9, "any")) {damagePit(36, 9, States.STATE_DIALOGUE);}
+            if (hit(37, 34, "any")) {damagePit(37, 34, States.STATE_DIALOGUE);}
+            if (hit(35, 38, "any")) {damagePit(35, 38, States.STATE_DIALOGUE);}
+            if (hit(9, 30, "any")) {damagePit(9, 30, States.STATE_DIALOGUE);}
+            if (hit(23, 12, "up")) {healingPond(23, 12, States.STATE_DIALOGUE);} else {gp.ui.interactable = false;}
         }
     }
     public boolean hit(int col, int row, String reqDirection) {
@@ -73,13 +75,13 @@ public class EventHandler {
 
         return hit;
     }
-    public void damagePit(int col, int row, int gameState) {
+    public void damagePit(int col, int row, States gameState) {
         gp.gameState = gameState;
         gp.ui.currentDialogue = "Dang it, I feel into a pit!";
         gp.player.health -= 1;
         canTouchEvent = false;
     }
-    public void healingPond(int col, int row, int gameState) {
+    public void healingPond(int col, int row, States gameState) {
         if (gp.keyH.interactKeyPressed) {
             gp.ui.interactable = false;
             gp.gameState = gameState;

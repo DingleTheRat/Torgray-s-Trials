@@ -2,9 +2,10 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
-import object.OBJ_Key;
-import object.OBJ_Shield;
-import object.OBJ_Sword;
+import main.States;
+import object.OBJ_Shield_Iron;
+import object.OBJ_Sword_Iron;
+import object.OBJ_Torgray_Soup;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,7 +19,7 @@ public class Player extends Entity{
     int standCounter = 0;
     public boolean attackCanceled = false;
     public ArrayList<Entity> inventory = new ArrayList<>();
-    public final int maxInventorySize = 20;
+    public final int maxInventorySize = 25;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -27,6 +28,7 @@ public class Player extends Entity{
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
+        // Solid Area
         solidArea = new Rectangle();
         solidArea.x = 8;
         solidArea.y = 16;
@@ -35,9 +37,6 @@ public class Player extends Entity{
         solidArea.width = 32;
         solidArea.height = 32;
 
-        attackArea.width = 36;
-        attackArea.height = 36;
-
         setDefaultValues();
         getImage();
         getAttackImage();
@@ -45,27 +44,34 @@ public class Player extends Entity{
     }
 
     public void getImage() {
-        up1 = registerEntitySprite("/player/ghost_up_1", gp.tileSize, gp.tileSize);
-        up2 = registerEntitySprite("/player/ghost_up_2", gp.tileSize, gp.tileSize);
-        up3 = registerEntitySprite("/player/ghost_up_3", gp.tileSize, gp.tileSize);
+        up1 = registerEntitySprite("/player/walking/ghost_up_1", gp.tileSize, gp.tileSize);
+        up2 = registerEntitySprite("/player/walking/ghost_up_2", gp.tileSize, gp.tileSize);
+        up3 = registerEntitySprite("/player/walking/ghost_up_3", gp.tileSize, gp.tileSize);
 
-        down1 = registerEntitySprite("/player/ghost_down_1", gp.tileSize, gp.tileSize);
-        down2 = registerEntitySprite("/player/ghost_down_2", gp.tileSize, gp.tileSize);
-        down3 = registerEntitySprite("/player/ghost_down_3", gp.tileSize, gp.tileSize);
+        down1 = registerEntitySprite("/player/walking/ghost_down_1", gp.tileSize, gp.tileSize);
+        down2 = registerEntitySprite("/player/walking/ghost_down_2", gp.tileSize, gp.tileSize);
+        down3 = registerEntitySprite("/player/walking/ghost_down_3", gp.tileSize, gp.tileSize);
 
-        left1 = registerEntitySprite("/player/ghost_left_1", gp.tileSize, gp.tileSize);
-        left2 = registerEntitySprite("/player/ghost_left_2", gp.tileSize, gp.tileSize);
-        left3 = registerEntitySprite("/player/ghost_left_3", gp.tileSize, gp.tileSize);
+        left1 = registerEntitySprite("/player/walking/ghost_left_1", gp.tileSize, gp.tileSize);
+        left2 = registerEntitySprite("/player/walking/ghost_left_2", gp.tileSize, gp.tileSize);
+        left3 = registerEntitySprite("/player/walking/ghost_left_3", gp.tileSize, gp.tileSize);
 
-        right1 = registerEntitySprite("/player/ghost_right_1", gp.tileSize, gp.tileSize);
-        right2 = registerEntitySprite("/player/ghost_right_2", gp.tileSize, gp.tileSize);
-        right3 = registerEntitySprite("/player/ghost_right_3", gp.tileSize, gp.tileSize);
+        right1 = registerEntitySprite("/player/walking/ghost_right_1", gp.tileSize, gp.tileSize);
+        right2 = registerEntitySprite("/player/walking/ghost_right_2", gp.tileSize, gp.tileSize);
+        right3 = registerEntitySprite("/player/walking/ghost_right_3", gp.tileSize, gp.tileSize);
     }
     public void getAttackImage() {
-        attackUp = registerEntitySprite("/player/torgray_attack_up", gp.tileSize, gp.tileSize * 2);
-        attackDown = registerEntitySprite("/player/torgray_attack_down", gp.tileSize, gp.tileSize * 2);
-        attackLeft = registerEntitySprite("/player/torgray_attack_left", gp.tileSize * 2, gp.tileSize);
-        attackRight = registerEntitySprite("/player/torgray_attack_right", gp.tileSize * 2, gp.tileSize);
+        if (currentWeapon.tags.contains(EntityTags.TAG_AMETHIST)) {
+            attackUp = registerEntitySprite("/player/attack/torgray_amethist_attack_up", gp.tileSize, gp.tileSize * 2);
+            attackDown = registerEntitySprite("/player/attack/torgray_amethist_attack_down", gp.tileSize, gp.tileSize * 2);
+            attackLeft = registerEntitySprite("/player/attack/torgray_amethist_attack_left", gp.tileSize * 2, gp.tileSize);
+            attackRight = registerEntitySprite("/player/attack/torgray_amethist_attack_right", gp.tileSize * 2, gp.tileSize);
+        } else if (currentWeapon.tags.contains(EntityTags.TAG_IRON)) {
+            attackUp = registerEntitySprite("/player/attack/torgray_iron_attack_up", gp.tileSize, gp.tileSize * 2);
+            attackDown = registerEntitySprite("/player/attack/torgray_iron_attack_down", gp.tileSize, gp.tileSize * 2);
+            attackLeft = registerEntitySprite("/player/attack/torgray_iron_attack_left", gp.tileSize * 2, gp.tileSize);
+            attackRight = registerEntitySprite("/player/attack/torgray_iron_attack_right", gp.tileSize * 2, gp.tileSize);
+        }
     }
     public void setDefaultValues() {
         worldX = gp.tileSize * 23;
@@ -82,18 +88,18 @@ public class Player extends Entity{
         exp = 0;
         nextLevelExp = 5;
         coins = 0;
-        currentWeapon = new OBJ_Sword(gp);
-        currentShield = new OBJ_Shield(gp);
+        currentWeapon = new OBJ_Sword_Iron(gp);
+        currentShield = new OBJ_Shield_Iron(gp);
         attack = getAttack();
         defence = getDefence();
     }
     public void setItems() {
         inventory.add(currentWeapon);
         inventory.add(currentShield);
-        inventory.add(new OBJ_Key(gp));
-        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Torgray_Soup(gp));
     }
     public int getAttack() {
+        attackArea = currentWeapon.attackArea;
         return attack = strength * currentWeapon.attackValue;
     }
     public int getDefence() {
@@ -149,7 +155,7 @@ public class Player extends Entity{
 
             // Inventory
             if (keyH.interactKeyPressed && !attackCanceled) {
-                gp.gameState = gp.characterState;
+                gp.gameState = States.STATE_CHARACTER;
             }
 
             attackCanceled = false;
@@ -225,12 +231,38 @@ public class Player extends Entity{
             attacking = false;
         }
     }
-    public void pickUpObject(int i) {if (i != 999) {}}
+    public void pickUpObject(int i) {
+        if (i != 999) {
+            if (gp.obj[i].tags.contains(EntityTags.TAG_INTERACTABLE)) {
+                for (int j = 0; j < inventory.size(); j++) {
+                    if (inventory.get(j).name.equals("Key")) {
+                        gp.obj[i] = null;
+                        inventory.remove(j);
+                        gp.ui.addMessage("-1 Key");
+                        gp.playSE(3);
+                        break;
+                    }
+                }
+            } else {
+                String text;
+                if (inventory.size() != maxInventorySize) {
+                    inventory.add(gp.obj[i]);
+                    gp.playSE(1);
+                    text = "+1 " + gp.obj[i].name;
+                }
+                else {
+                    text = "Inventory Full";
+                }
+                gp.ui.addMessage(text);
+                gp.obj[i] = null;
+            }
+        }
+    }
     public void interactNPC(int i) {
         if (gp.keyH.interactKeyPressed) {
             if (i != 999) {
                 attackCanceled = true;
-                gp.gameState = gp.dialogueState;
+                gp.gameState = States.STATE_DIALOGUE;
                 gp.npc[i].speak();
             }
         }
@@ -288,6 +320,27 @@ public class Player extends Entity{
 
             if (health >= maxHealth) {
                 health = maxHealth;
+            }
+        }
+    }
+    public void selectItem() {
+        int itemIndex = gp.ui.getItemIndex();
+
+        if (itemIndex < inventory.size()) {
+            Entity selectedItem = inventory.get(itemIndex);
+
+            if (selectedItem.type == EntityTypes.TYPE_SWORD) {
+                currentWeapon = selectedItem;
+                attack = getAttack();
+                getAttackImage();
+            }
+            if (selectedItem.type == EntityTypes.TYPE_SHIELD) {
+                currentShield = selectedItem;
+                defence = getDefence();
+            }
+            if (selectedItem.type == EntityTypes.TYPE_CONSUMABLE) {
+                selectedItem.use(this);
+                inventory.remove(itemIndex);
             }
         }
     }

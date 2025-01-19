@@ -1,6 +1,7 @@
 package mob;
 
 import entity.Entity;
+import entity.EntityTypes;
 import main.GamePanel;
 
 import java.util.Random;
@@ -13,7 +14,7 @@ public class MOB_Dracore extends Entity {
         this.gp = gp;
 
         name = "Dracore";
-        type = 2;
+        type = EntityTypes.TYPE_MOB;
         speed = 1;
         maxHealth = 5;
         health = maxHealth;

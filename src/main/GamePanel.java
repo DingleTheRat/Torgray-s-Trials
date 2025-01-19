@@ -3,11 +3,11 @@ package main;
 import entity.Entity;
 import entity.Player;
 import environment.EnvironmentManager;
+import events.EventHandler;
 import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements Runnable{
@@ -38,7 +38,8 @@ public class GamePanel extends JPanel implements Runnable{
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter assetS = new AssetSetter(this);
     public UI ui = new UI(this);
-    public  EventHandler eHandler = new EventHandler(this);
+    public EventHandler eHandler = new EventHandler(this);
+    public States gameState;
     Thread gameThread;
 
     // Entities and Objects
@@ -48,13 +49,7 @@ public class GamePanel extends JPanel implements Runnable{
     public Entity[] mob = new Entity[20];
     ArrayList<Entity> entityList = new ArrayList<>();
 
-    // Game States
-    public int gameState;
-    public final int titleState = 0;
-    public final int playState = 1;
-    public final int pauseState = 2;
-    public final int dialogueState = 3;
-    public int characterState = 4;
+    // Game States;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -70,7 +65,7 @@ public class GamePanel extends JPanel implements Runnable{
         assetS.setMonster();
         environmentM.setup();
         playMusic(5);
-        gameState = titleState;
+        gameState = States.STATE_TILE;
     }
 
     public void startGameThread() {
@@ -108,7 +103,7 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
     public void update() {
-        if (gameState == playState || gameState == characterState || gameState == dialogueState) {
+        if (gameState == States.STATE_PLAY || gameState == States.STATE_CHARACTER || gameState == States.STATE_DIALOGUE) {
             player.update();
 
             // NPCs
@@ -129,7 +124,7 @@ public class GamePanel extends JPanel implements Runnable{
                 }
             }
         }
-        if (gameState == pauseState) {
+        if (gameState == States.STATE_PAUSE) {
             // NOTHIN!
         }
     }
@@ -145,7 +140,7 @@ public class GamePanel extends JPanel implements Runnable{
         }
 
         // Title Screen
-        if (gameState == titleState) {
+        if (gameState == States.STATE_TILE) {
             ui.draw(g2);
         } else {
             // Draw :)
