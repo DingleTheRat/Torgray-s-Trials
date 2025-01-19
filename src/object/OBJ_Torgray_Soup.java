@@ -25,7 +25,7 @@ public class OBJ_Torgray_Soup extends Entity {
     public void use(Entity entity) {
         gp.gameState = States.STATE_DIALOGUE;
         Random random = new Random();
-        int i = random.nextInt(6) + 1; // Pick a number from 1 to 100
+        int i = random.nextInt(5) + 1;
 
         if (i == 1) {
             gp.ui.currentDialogue = "Erm a last key is behind the pond. /n+4 health";
@@ -41,9 +41,6 @@ public class OBJ_Torgray_Soup extends Entity {
         }
         if (i == 5) {
             gp.ui.currentDialogue = "Erm Torgray made two of us. /n+4 health";
-        }
-        if (i == 5) {
-            gp.ui.currentDialogue = "Erm If you are still without a light it's /non the edge of one of the paths /n+4 health";
         }
 
         if (gp.player.health + value > gp.player.maxHealth) {
