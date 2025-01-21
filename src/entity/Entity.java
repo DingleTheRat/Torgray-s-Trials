@@ -60,6 +60,7 @@ public abstract class Entity {
     public Entity currentLight;
 
     // Item Attributes
+    public int value;
     public int attackValue;
     public int defenceValue;
     public String description = "";
@@ -86,6 +87,47 @@ public abstract class Entity {
         }
     }
     public void use(Entity entity) {}
+    public void use(Entity entity, int j) {}
+    public void checkDrop() {}
+    public void dropItem(Entity droppedItem) {
+        for (int i = 0; i < gp.obj.size(); i++) {
+            if (gp.obj.get(i) == null) {
+                gp.obj.put(i, droppedItem);
+                gp.obj.get(i).worldX = worldX;
+                gp.obj.get(i).worldY = worldY;
+                break;
+            }
+        }
+    }
+    public Color getParticleColor() {return null;}
+    public int getParticleSize() {return 0;}
+    public int getParticleSpeed() {return 0;}
+    public int getParticleMaxHealth() {return 0;}
+    public void generateParticles(Entity generator, Entity target, int amount) {
+        Color color = generator.getParticleColor();
+        int size = generator.getParticleSize();
+        int speed = generator.getParticleSpeed();
+        int maxHealth = generator.getParticleMaxHealth();
+
+        Particle p1 = new Particle(gp, target, color, size, speed, maxHealth, -2, -1);
+        Particle p2 = new Particle(gp, target, color, size, speed, maxHealth, 2, -1);
+        Particle p3 = new Particle(gp, target, color, size, speed, maxHealth, -2, 1);
+        Particle p4 = new Particle(gp, target, color, size, speed, maxHealth, 2, 1);
+        gp.particleList.add(p1);
+          gp.particleList.add(p2);
+        gp.particleList.add(p3);
+        gp.particleList.add(p4);
+
+//        if (amount == 1) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, -2, -1); gp.particleList.add(p);}
+//        if (amount == 2) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, 2, -1); gp.particleList.add(p);}
+//        if (amount == 3) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, -2, 1); gp.particleList.add(p);}
+//        if (amount == 4) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, 2, 1); gp.particleList.add(p);}
+//        if (amount == 5) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, -1, -1); gp.particleList.add(p);}
+//        if (amount == 6) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, 1, -1); gp.particleList.add(p);}
+//        if (amount == 7) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, -1, 1); gp.particleList.add(p);}
+//        if (amount == 8) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, 1, 1); gp.particleList.add(p);}
+    }
+
     public void update() {
         setAction();
         collisionOn = false;
@@ -96,16 +138,7 @@ public abstract class Entity {
         boolean contactPlayer = gp.cChecker.checkPlayer(this);
 
         if (this.type == EntityTypes.TYPE_MOB && contactPlayer) {
-            if (!gp.player.invincible) {
-                gp.playSE(7);
-
-                int damage = attack - gp.player.defence;
-                if (damage <= 0) {
-                    damage = 1;
-                }
-                gp.player.health -= damage;
-                gp.player.invincible = true;
-            }
+            damagePlayer(attack);
         }
 
         if (!collisionOn) {
@@ -135,6 +168,18 @@ public abstract class Entity {
                 invincible = false;
                 invincibleCounter = 0;
             }
+        }
+    }
+    public void damagePlayer(int Attack) {
+        if (!gp.player.invincible) {
+            gp.playSE(7);
+
+            int damage = attack - gp.player.defence;
+            if (damage <= 0) {
+                damage = 1;
+            }
+            gp.player.health -= damage;
+            gp.player.invincible = true;
         }
     }
     public void draw(Graphics2D g2) {
@@ -177,7 +222,7 @@ public abstract class Entity {
             }
             if (dying) {dyingAnimation(g2, 5);}
 
-            g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+            g2.drawImage(image, screenX, screenY, null);
             changeAlpha(g2, 1f);
         }
     }
@@ -192,7 +237,7 @@ public abstract class Entity {
         if (dyingCounter > i * 5 && dyingCounter <= i * 6) {changeAlpha(g2, 1f);}
         if (dyingCounter > i * 6 && dyingCounter <= i * 7) {changeAlpha(g2, 0f);}
         if (dyingCounter > i * 7 && dyingCounter <= i * 8) {changeAlpha(g2, 1f);}
-        if (dyingCounter > i * 8) {dying = false; alive = false;}
+        if (dyingCounter > i * 8) {alive = false;}
     }
     public void changeAlpha(Graphics2D g2, float alphaValue) {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));

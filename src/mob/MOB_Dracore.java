@@ -3,7 +3,10 @@ package mob;
 import entity.Entity;
 import entity.EntityTypes;
 import main.GamePanel;
+import object.OBJ_Coin;
+import object.OBJ_Torgray_Soup;
 
+import java.awt.*;
 import java.util.Random;
 
 public class MOB_Dracore extends Entity {
@@ -72,4 +75,22 @@ public class MOB_Dracore extends Entity {
             case "right": direction = "left"; break;
         }
     }
+    public void checkDrop() {
+        int i = new Random().nextInt(3) + 1;
+
+        // Set mob drop
+        if (i == 1) {
+            dropItem(new OBJ_Torgray_Soup(gp));
+        }
+        if (i == 2) {
+            dropItem(new OBJ_Coin(gp));
+        }
+    }
+
+
+    // Particles
+    public Color getParticleColor() {return new Color(63, 6, 5);}
+    public int getParticleSize() {return 6;} // 6 pixels
+    public int getParticleSpeed() {return 1;}
+    public int getParticleMaxHealth() {return 20;}
 }

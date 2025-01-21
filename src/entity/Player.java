@@ -6,7 +6,6 @@ import main.States;
 import object.OBJ_Lantern;
 import object.OBJ_Shield_Iron;
 import object.OBJ_Sword_Iron;
-import object.OBJ_Torgray_Soup;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -100,7 +99,6 @@ public class Player extends Entity{
     public void setItems() {
         inventory.add(currentWeapon);
         inventory.add(currentShield);
-        inventory.add(new OBJ_Torgray_Soup(gp));
         inventory.add(new OBJ_Lantern(gp));
     }
     public int getAttack() {
@@ -112,6 +110,7 @@ public class Player extends Entity{
     }
     public void update() {
         if (attacking) {
+            attack();
             attack();
         } else if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed || keyH.spacePressed || keyH.interactKeyPressed) {
             if (keyH.upPressed) {
@@ -239,15 +238,10 @@ public class Player extends Entity{
     public void pickUpObject(int i) {
         if (i != 999) {
             if (gp.obj.get(i).tags.contains(EntityTags.TAG_INTERACTABLE)) {
-                for (int j = 0; j < inventory.size(); j++) {
-                    if (inventory.get(j).name.equals("Key")) {
-                        gp.obj.put(i, null);
-                        inventory.remove(j);
-                        gp.ui.addMessage("-1 Key");
-                        gp.playSE(3);
-                        break;
-                    }
-                }
+                gp.obj.get(i).use(this, i);
+            } else if (gp.obj.get(i).tags.contains(EntityTags.TAG_PICKUPONLY)) {
+                gp.obj.get(i).use(this);
+                gp.obj.put(i, null);
             } else {
                 String text;
                 if (inventory.size() != maxInventorySize) {
@@ -274,7 +268,7 @@ public class Player extends Entity{
     }
     public void contactMob(int i) {
         if (i != 999) {
-            if (!invincible) {
+            if (!invincible && !gp.mob.get(i).dying) {
                 gp.playSE(7);
 
                 int damage = gp.mob.get(i).attack - defence;
@@ -282,6 +276,7 @@ public class Player extends Entity{
                     damage = 0;
                 }
                 health -= damage;
+                generateParticles(gp.player, gp.player, damage);
                 invincible = true;
             }
         }
@@ -300,6 +295,8 @@ public class Player extends Entity{
 
                 gp.mob.get(i).invincible = true;
                 gp.mob.get(i).damageReaction();
+
+                generateParticles(gp.mob.get(i), gp.mob.get(i), damage);
 
                 if (gp.mob.get(i).health <= 0) {
                     gp.mob.get(i).dying = true;
@@ -421,4 +418,10 @@ public class Player extends Entity{
         g2.drawImage(image, tempScreenX, tempScreenY, null);
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
+
+    // Particles
+    public Color getParticleColor() {return new Color(178, 29, 29);}
+    public int getParticleSize() {return 6;} // 6 pixels
+    public int getParticleSpeed() {return 1;}
+    public int getParticleMaxHealth() {return 20;}
 }

@@ -7,5 +7,6 @@ public enum EntityTags {
     TAG_LIGHT,
     TAG_SWORD,
     TAG_SHIELD,
-    TAG_CONSUMABLE
+    TAG_CONSUMABLE,
+    TAG_PICKUPONLY,
 }

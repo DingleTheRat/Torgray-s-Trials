@@ -6,17 +6,18 @@ import entity.EntityTypes;
 import main.GamePanel;
 import main.States;
 
+import java.awt.*;
 import java.util.Random;
 
 public class OBJ_Torgray_Soup extends Entity {
     GamePanel gp;
-    int value = 4;
 
     public OBJ_Torgray_Soup(GamePanel gp) {
         super(gp);
         this.gp = gp;
 
         name = "Torgray's Soup";
+        value = 4;
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_CONSUMABLE);
         down1 = registerEntitySprite("/objects/torgray_soup", gp.tileSize, gp.tileSize);
@@ -40,7 +41,7 @@ public class OBJ_Torgray_Soup extends Entity {
             gp.ui.currentDialogue = "Erm I think you are left handed. /n+4 health";
         }
         if (i == 5) {
-            gp.ui.currentDialogue = "Erm Torgray made two of us. /n+4 health";
+            gp.ui.currentDialogue = "Erm after passing all 3 gates you get a /nreward. /n+4 health";
         }
 
         if (gp.player.health + value > gp.player.maxHealth) {
@@ -48,6 +49,13 @@ public class OBJ_Torgray_Soup extends Entity {
         } else {
             gp.player.health += value;
         }
+        gp.player.generateParticles(this, gp.player, value);
         gp.playSE(2);
     }
+
+    // Particles
+    public Color getParticleColor() {return new Color(209, 25, 25);}
+    public int getParticleSize() {return 6;} // 6 pixels
+    public int getParticleSpeed() {return 1;}
+    public int getParticleMaxHealth() {return 20;}
 }

@@ -52,12 +52,6 @@ public class AssetSetter {
         gp.obj.get(i).worldY = 23 * gp.tileSize;
         i++;
 
-        // Others
-        gp.obj.put(i, new OBJ_Torgray_Soup(gp));
-        gp.obj.get(i).worldX = 35 * gp.tileSize;
-        gp.obj.get(i).worldY = 40 * gp.tileSize;
-        i++;
-
     }
     public void setNPC() {
         gp.npc.put(0, new NPC_GateKeeper(gp));
