@@ -113,7 +113,15 @@ public class Player extends Entity{
             attack();
             attack();
         } else if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed || keyH.spacePressed || keyH.interactKeyPressed) {
-            if (keyH.upPressed) {
+            if (keyH.upPressed && keyH.leftPressed) {
+                direction = "up left";
+            } else if (keyH.upPressed && keyH.rightPressed) {
+                direction = "up right";
+            } else if (keyH.downPressed && keyH.leftPressed) {
+                direction = "down left";
+            } else if (keyH.downPressed && keyH.rightPressed) {
+                direction = "down right";
+            } else if (keyH.upPressed) {
                 direction = "up";
             } else if (keyH.downPressed) {
                 direction = "down";
@@ -144,6 +152,10 @@ public class Player extends Entity{
 
             if (!collisionOn && !keyH.spacePressed && !keyH.interactKeyPressed) {
                 switch (direction) {
+                    case "up left": worldX -= (speed - 1); worldY -= (speed - 1); break;
+                    case "up right": worldX += (speed - 1); worldY -= (speed - 1); break;
+                    case "down left": worldX -= (speed - 1); worldY += (speed - 1); break;
+                    case "down right": worldX += (speed - 1); worldY += (speed - 1); break;
                     case "up": worldY -= speed; break;
                     case "down": worldY += speed; break;
                     case "left": worldX -= speed; break;
@@ -212,8 +224,8 @@ public class Player extends Entity{
             switch (direction) {
                 case "up": worldY -= attackArea.height; break;
                 case "down": worldY += attackArea.height; break;
-                case "left": worldX -= attackArea.width; break;
-                case "right": worldX += attackArea.width; break;
+                case "left", "down left", "up left": worldX -= attackArea.width; break;
+                case "right", "up right", "down right": worldX += attackArea.width; break;
             }
             // Attack Area = Solid Area
             solidArea.width = attackArea.width;
@@ -385,7 +397,7 @@ public class Player extends Entity{
                     if (spriteNumber == 3) {image = attackDown;}
                 }
             break;
-            case "left":
+            case "left", "up left", "down left":
                 if (!attacking) {
                     if (spriteNumber == 1) {image = left1;}
                     else if (spriteNumber == 2) {image = left2;}
@@ -398,7 +410,7 @@ public class Player extends Entity{
                     if (spriteNumber == 3) {image = attackLeft;}
                 }
             break;
-            case "right":
+            case "right", "up right", "down right":
                 if (!attacking) {
                     if (spriteNumber == 1) {image = right1;}
                     else if (spriteNumber == 2) {image = right2;}

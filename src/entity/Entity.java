@@ -114,18 +114,9 @@ public abstract class Entity {
         Particle p3 = new Particle(gp, target, color, size, speed, maxHealth, -2, 1);
         Particle p4 = new Particle(gp, target, color, size, speed, maxHealth, 2, 1);
         gp.particleList.add(p1);
-          gp.particleList.add(p2);
+        gp.particleList.add(p2);
         gp.particleList.add(p3);
         gp.particleList.add(p4);
-
-//        if (amount == 1) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, -2, -1); gp.particleList.add(p);}
-//        if (amount == 2) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, 2, -1); gp.particleList.add(p);}
-//        if (amount == 3) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, -2, 1); gp.particleList.add(p);}
-//        if (amount == 4) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, 2, 1); gp.particleList.add(p);}
-//        if (amount == 5) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, -1, -1); gp.particleList.add(p);}
-//        if (amount == 6) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, 1, -1); gp.particleList.add(p);}
-//        if (amount == 7) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, -1, 1); gp.particleList.add(p);}
-//        if (amount == 8) { Particle p = new Particle(gp, target, color, size, speed, maxHealth, 1, 1); gp.particleList.add(p);}
     }
 
     public void update() {
