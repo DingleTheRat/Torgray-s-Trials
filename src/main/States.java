@@ -11,4 +11,10 @@ public enum States {
     // Title Sub-States
     TITLE_STATE_MAIN,
     TITLE_STATE_MODES,
+
+    // Pause Sub-States
+    PAUSE_SETTINGS_MAIN,
+    PAUSE_CONTROLS,
+    PAUSE_SETTINGS_NOTIFICATION,
+    PAUSE_SETTINGS_CONFIRM
 }

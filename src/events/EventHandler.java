@@ -86,7 +86,7 @@ public class EventHandler {
             gp.ui.interactable = false;
             gp.gameState = gameState;
             gp.player.attackCanceled = true;
-            gp.ui.currentDialogue = "*Drinks water* /n Yay, the pond of healing healed me!";
+            gp.ui.currentDialogue = "*Drinks water* /nYay, the pond of healing healed me!";
             gp.player.health = gp.player.maxHealth;
             gp.assetS.setMonster();
         } else {

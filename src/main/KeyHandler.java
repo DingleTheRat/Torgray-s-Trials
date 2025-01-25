@@ -2,17 +2,15 @@ package main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class KeyHandler implements KeyListener {
-    GamePanel gp;
+    GamePanel gamePanel;
     public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, interactKeyPressed;
     // Debug
     public boolean debug = false;
 
-    public KeyHandler(GamePanel gp) {
-        this.gp = gp;
+    public KeyHandler(GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
     }
 
     @Override
@@ -24,89 +22,89 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
 
-        if (gp.gameState == States.STATE_TILE) {titleState(code);}
-        else if (gp.gameState == States.STATE_PLAY) {playState(code);}
-        else if (gp.gameState == States.STATE_PAUSE) {pauseState(code);}
-        else if (gp.gameState == States.STATE_DIALOGUE) {dialogueState(code); playState(code);}
-        else if (gp.gameState == States.STATE_CHARACTER) {characterState(code);}
+        if (gamePanel.gameState == States.STATE_TILE) {titleState(code);}
+        else if (gamePanel.gameState == States.STATE_PLAY) {playState(code);}
+        else if (gamePanel.gameState == States.STATE_PAUSE) {pauseState(code);}
+        else if (gamePanel.gameState == States.STATE_DIALOGUE) {dialogueState(code); playState(code);}
+        else if (gamePanel.gameState == States.STATE_CHARACTER) {characterState(code);}
     }
     public void titleState(int code) {
-        if (gp.ui.titleScreenState == States.TITLE_STATE_MAIN) {
+        if (gamePanel.ui.titleScreenState == States.TITLE_STATE_MAIN) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
-                gp.ui.commandNum--;
-                gp.playSE(8);
-                if (gp.ui.commandNum < 0) {
-                    gp.ui.commandNum = 2;
+                gamePanel.ui.commandNum--;
+                gamePanel.playSE(8);
+                if (gamePanel.ui.commandNum < 0) {
+                    gamePanel.ui.commandNum = 2;
                 }
             }
             if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
-                gp.ui.commandNum++;
-                gp.playSE(8);
-                if (gp.ui.commandNum > 2) {
-                    gp.ui.commandNum = 0;
+                gamePanel.ui.commandNum++;
+                gamePanel.playSE(8);
+                if (gamePanel.ui.commandNum > 2) {
+                    gamePanel.ui.commandNum = 0;
                 }
             }
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
-                if (gp.ui.commandNum == 0) {
-                    gp.ui.titleScreenState = States.TITLE_STATE_MODES;
+                if (gamePanel.ui.commandNum == 0) {
+                    gamePanel.ui.titleScreenState = States.TITLE_STATE_MODES;
                 }
-                if (gp.ui.commandNum == 1) {
+                if (gamePanel.ui.commandNum == 1) {
                     // For later
                 }
-                if (gp.ui.commandNum == 2) {
+                if (gamePanel.ui.commandNum == 2) {
                     System.exit(0);
                 }
             }
-        } else if (gp.ui.titleScreenState == States.TITLE_STATE_MODES) {
+        } else if (gamePanel.ui.titleScreenState == States.TITLE_STATE_MODES) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
-                gp.ui.commandNum--;
-                gp.playSE(8);
-                if (gp.ui.commandNum < 0) {
-                    gp.ui.commandNum = 3;
+                gamePanel.ui.commandNum--;
+                gamePanel.playSE(8);
+                if (gamePanel.ui.commandNum < 0) {
+                    gamePanel.ui.commandNum = 3;
                 }
             }
             if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
-                gp.ui.commandNum++;
-                gp.playSE(8);
-                if (gp.ui.commandNum > 3) {
-                    gp.ui.commandNum = 0;
+                gamePanel.ui.commandNum++;
+                gamePanel.playSE(8);
+                if (gamePanel.ui.commandNum > 3) {
+                    gamePanel.ui.commandNum = 0;
                 }
             }
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
-                if (gp.ui.commandNum == 0) {
-                    gp.gameState = States.STATE_PLAY;
-                    gp.stopMusic();
-                    gp.playMusic(0);
+                if (gamePanel.ui.commandNum == 0) {
+                    gamePanel.gameState = States.STATE_PLAY;
+                    gamePanel.stopMusic();
+                    gamePanel.playMusic(0);
                     System.out.println("Imagine Picking Easy");
 
                     // Modified Stats
-                    gp.player.strength = 2;
-                    gp.player.dexterity = 2;
-                    gp.player.nextLevelExp = 4;
-                    gp.player.attack = gp.player.getAttack();
-                    gp.player.defence = gp.player.getDefence();
+                    gamePanel.player.strength = 2;
+                    gamePanel.player.dexterity = 2;
+                    gamePanel.player.nextLevelExp = 4;
+                    gamePanel.player.attack = gamePanel.player.getAttack();
+                    gamePanel.player.defence = gamePanel.player.getDefence();
                 }
-                if (gp.ui.commandNum == 1) {
-                    gp.gameState = States.STATE_PLAY;
-                    gp.stopMusic();
-                    gp.playMusic(0);
+                if (gamePanel.ui.commandNum == 1) {
+                    gamePanel.gameState = States.STATE_PLAY;
+                    gamePanel.stopMusic();
+                    gamePanel.playMusic(0);
                     System.out.println("Kinda a mid game mode lol");
 
                     // No modified stats since Medium is the default
                 }
-                if (gp.ui.commandNum == 2) {
-                    gp.gameState = States.STATE_PLAY;
-                    gp.stopMusic();
-                    gp.playMusic(0);
+                if (gamePanel.ui.commandNum == 2) {
+                    gamePanel.gameState = States.STATE_PLAY;
+                    gamePanel.stopMusic();
+                    gamePanel.playMusic(0);
                     System.out.println("You really think you are \"hardcore\"?");
 
                     // Modified Stats
-                    gp.player.dexterity = 0;
-                    gp.player.nextLevelExp = 6;
-                    gp.player.defence = gp.player.getDefence();
+                    gamePanel.player.dexterity = 0;
+                    gamePanel.player.nextLevelExp = 6;
+                    gamePanel.player.defence = gamePanel.player.getDefence();
                 }
-                if (gp.ui.commandNum == 3) {
-                    gp.ui.titleScreenState = States.TITLE_STATE_MAIN;
+                if (gamePanel.ui.commandNum == 3) {
+                    gamePanel.ui.titleScreenState = States.TITLE_STATE_MAIN;
                 }
             }
         }
@@ -125,7 +123,7 @@ public class KeyHandler implements KeyListener {
             rightPressed = true;
         }
         if (code == KeyEvent.VK_ESCAPE) {
-            gp.gameState = States.STATE_PAUSE;
+            gamePanel.gameState = States.STATE_PAUSE;
         }
         if (code == KeyEvent.VK_E) {
             interactKeyPressed = true;
@@ -150,45 +148,98 @@ public class KeyHandler implements KeyListener {
     }
     public void pauseState(int code) {
         if (code == KeyEvent.VK_ESCAPE) {
-            gp.gameState = States.STATE_PLAY;
+            gamePanel.gameState = States.STATE_PLAY;
+        }
+
+        int maxCommandNum = 0;
+        switch (gamePanel.ui.subState) {
+            case States.PAUSE_SETTINGS_MAIN: maxCommandNum = 5; break;
+            case States.PAUSE_SETTINGS_CONFIRM: maxCommandNum = 1; break;
+        }
+
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+            gamePanel.ui.commandNum--;
+            gamePanel.playSE(8);
+
+            if (gamePanel.ui.commandNum < 0) {
+                gamePanel.ui.commandNum = maxCommandNum;
+            }
+        }
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+            gamePanel.ui.commandNum++;
+            gamePanel.playSE(8);
+
+            if (gamePanel.ui.commandNum > maxCommandNum) {
+                gamePanel.ui.commandNum = 0;
+            }
+        }
+        if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
+            spacePressed = true;
+        }
+
+        if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
+            if (gamePanel.ui.subState == States.PAUSE_SETTINGS_MAIN) {
+                if (gamePanel.ui.commandNum == 1 && gamePanel.music.volumeScale > 0) {
+                    gamePanel.music.volumeScale--;
+                    gamePanel.music.checkVolume();
+                    gamePanel.playSE(8);
+                }
+                if (gamePanel.ui.commandNum == 2 && gamePanel.sound.volumeScale > 0) {
+                    gamePanel.sound.volumeScale--;
+                    gamePanel.playSE(8);
+                }
+            }
+        }
+        if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
+            if (gamePanel.ui.subState == States.PAUSE_SETTINGS_MAIN) {
+                if (gamePanel.ui.commandNum == 1 && gamePanel.music.volumeScale < 5) {
+                    gamePanel.music.volumeScale++;
+                    gamePanel.music.checkVolume();
+                    gamePanel.playSE(8);
+                }
+                if (gamePanel.ui.commandNum == 2 && gamePanel.sound.volumeScale < 5) {
+                    gamePanel.sound.volumeScale++;
+                    gamePanel.playSE(8);
+                }
+            }
         }
     }
     public void dialogueState(int code) {
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ESCAPE) {
-            gp.player.attackCanceled = true;
-            gp.gameState = States.STATE_PLAY;
+            gamePanel.player.attackCanceled = true;
+            gamePanel.gameState = States.STATE_PLAY;
         }
     }
     public void characterState(int code) {
         if (code == KeyEvent.VK_E || code == KeyEvent.VK_ESCAPE) {
-            gp.gameState = States.STATE_PLAY;
+            gamePanel.gameState = States.STATE_PLAY;
         }
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
-            if (gp.ui.slotRow != 0) {
-                gp.ui.slotRow --;
-                gp.playSE(8);
+            if (gamePanel.ui.slotRow != 0) {
+                gamePanel.ui.slotRow --;
+                gamePanel.playSE(8);
             }
         }
         if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
-            if (gp.ui.slotCol != 0) {
-                gp.ui.slotCol --;
-                gp.playSE(8);
+            if (gamePanel.ui.slotCol != 0) {
+                gamePanel.ui.slotCol --;
+                gamePanel.playSE(8);
             }
         }
         if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
-            if (gp.ui.slotRow != 4) {
-                gp.ui.slotRow ++;
-                gp.playSE(8);
+            if (gamePanel.ui.slotRow != 4) {
+                gamePanel.ui.slotRow ++;
+                gamePanel.playSE(8);
             }
         }
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
-            if (gp.ui.slotCol != 4) {
-                gp.ui.slotCol ++;
-                gp.playSE(8);
+            if (gamePanel.ui.slotCol != 4) {
+                gamePanel.ui.slotCol ++;
+                gamePanel.playSE(8);
             }
         }
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
-            gp.player.selectItem();
+            gamePanel.player.selectItem();
         }
     }
 

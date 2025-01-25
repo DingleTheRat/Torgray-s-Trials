@@ -4,7 +4,6 @@ import entity.Entity;
 import entity.Player;
 import environment.EnvironmentManager;
 import events.EventHandler;
-import tile.Tile;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -20,7 +19,7 @@ public class GamePanel extends JPanel implements Runnable {
     final int scale = 3;
 
     public final int tileSize = originalTileSize * scale; // 48x48 tile
-    public final int maxScreenCol = 15;
+    public final int maxScreenCol = 20;
     public final int maxScreenRow = 12;
     public int screenWidth = tileSize * maxScreenCol; // 960 pixels
     public int screenHeight = tileSize * maxScreenRow; // 576 pixels
@@ -33,7 +32,8 @@ public class GamePanel extends JPanel implements Runnable {
     int screenWidth2 = screenWidth;
     int screenHeight2 = screenHeight;
     BufferedImage tempScreen;
-    Graphics2D g2;
+    Graphics2D graphics2D;
+    public boolean fullScreen = false;
 
     // FPS
     int FPS = 60;
@@ -80,7 +80,7 @@ public class GamePanel extends JPanel implements Runnable {
         //setFullScreen();
 
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
-        g2 = (Graphics2D)tempScreen.getGraphics();
+        graphics2D = (Graphics2D)tempScreen.getGraphics();
     }
     public void setFullScreen() {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -178,10 +178,10 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Title Screen
         if (gameState == States.STATE_TILE) {
-            ui.draw(g2);
+            ui.draw(graphics2D);
         } else {
             // Draw :)
-            tileM.draw(g2);
+            tileM.draw(graphics2D);
 
             // Add entities to list
             entityList.add(player);
@@ -214,14 +214,14 @@ public class GamePanel extends JPanel implements Runnable {
 
             // Draw Entities
             for (int i = 0; i < entityList.size(); i++) {
-                entityList.get(i).draw(g2);
+                entityList.get(i).draw(graphics2D);
             }
             // Empty Entity List
             entityList.clear();
 
             // More  drawing :D
-            eManager.draw(g2);
-            ui.draw(g2);
+            eManager.draw(graphics2D);
+            ui.draw(graphics2D);
         }
 
         // Debug
@@ -229,20 +229,20 @@ public class GamePanel extends JPanel implements Runnable {
             long drawEnd = System.nanoTime();
             long passed = drawEnd - drawStart;
 
-            g2.setFont(new Font("Arial", Font.PLAIN, 20));
-            g2.setColor(Color.white);
+            graphics2D.setFont(new Font("Arial", Font.PLAIN, 20));
+            graphics2D.setColor(Color.white);
             int x = 10;
             int y = 400;
             int lineHeight = 20;
 
             // Player Position
-            g2.drawString("World X: " + player.worldX, x, y); y += lineHeight;
-            g2.drawString("World Y: " + player.worldY, x, y);  y += lineHeight;
-            g2.drawString("Col: " + (player.worldX + player.solidArea.x) / tileSize, x, y);  y += lineHeight;
-            g2.drawString("Row: " + (player.worldY + player.solidArea.y) / tileSize, x, y); y += lineHeight;
+            graphics2D.drawString("World X: " + player.worldX, x, y); y += lineHeight;
+            graphics2D.drawString("World Y: " + player.worldY, x, y);  y += lineHeight;
+            graphics2D.drawString("Col: " + (player.worldX + player.solidArea.x) / tileSize, x, y);  y += lineHeight;
+            graphics2D.drawString("Row: " + (player.worldY + player.solidArea.y) / tileSize, x, y); y += lineHeight;
 
-            g2.drawString("Draw Time: " + passed, x ,y); y += lineHeight;
-            g2.drawString("Invincibility: " + player.invincibleCounter, x, y);
+            graphics2D.drawString("Draw Time: " + passed, x ,y); y += lineHeight;
+            graphics2D.drawString("Invincibility: " + player.invincibleCounter, x, y);
         }
     }
 
@@ -251,9 +251,9 @@ public class GamePanel extends JPanel implements Runnable {
         g.drawImage(tempScreen,0,0,screenWidth2, screenHeight2, null);
         g.dispose();;
     }
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D)g;
+    public void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
+        Graphics2D graphics2D = (Graphics2D)graphics;
 
         // Debug
         long drawStart = 0;
@@ -263,10 +263,10 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Title Screen
         if (gameState == States.STATE_TILE) {
-            ui.draw(g2);
+            ui.draw(graphics2D);
         } else {
             // Draw :)
-            tileM.draw(g2);
+            tileM.draw(graphics2D);
 
             // Add entities to list
             entityList.add(player);
@@ -299,14 +299,14 @@ public class GamePanel extends JPanel implements Runnable {
 
             // Draw Entities
             for (int i = 0; i < entityList.size(); i++) {
-                entityList.get(i).draw(g2);
+                entityList.get(i).draw(graphics2D);
             }
             // Empty Entity List
             entityList.clear();
 
             // More  drawing :D
-            eManager.draw(g2);
-            ui.draw(g2);
+            eManager.draw(graphics2D);
+            ui.draw(graphics2D);
         }
 
         // Debug
@@ -314,24 +314,24 @@ public class GamePanel extends JPanel implements Runnable {
             long drawEnd = System.nanoTime();
             long passed = drawEnd - drawStart;
 
-            g2.setFont(new Font("Arial", Font.PLAIN, 20));
-            g2.setColor(Color.white);
+            graphics2D.setFont(new Font("Arial", Font.PLAIN, 20));
+            graphics2D.setColor(Color.white);
             int x = 10;
             int y = 400;
             int lineHeight = 20;
 
             // Player Position
-            g2.drawString("World X: " + player.worldX, x, y); y += lineHeight;
-            g2.drawString("World Y: " + player.worldY, x, y);  y += lineHeight;
-            g2.drawString("Col: " + (player.worldX + player.solidArea.x) / tileSize, x, y);  y += lineHeight;
-            g2.drawString("Row: " + (player.worldY + player.solidArea.y) / tileSize, x, y); y += lineHeight;
+            graphics2D.drawString("World X: " + player.worldX, x, y); y += lineHeight;
+            graphics2D.drawString("World Y: " + player.worldY, x, y);  y += lineHeight;
+            graphics2D.drawString("Col: " + (player.worldX + player.solidArea.x) / tileSize, x, y);  y += lineHeight;
+            graphics2D.drawString("Row: " + (player.worldY + player.solidArea.y) / tileSize, x, y); y += lineHeight;
 
-            g2.drawString("Draw Time: " + passed, x ,y); y += lineHeight;
-            g2.drawString("Invincibility: " + player.invincibleCounter, x, y);
+            graphics2D.drawString("Draw Time: " + passed, x ,y); y += lineHeight;
+            graphics2D.drawString("Invincibility: " + player.invincibleCounter, x, y);
         }
 
         // Toxic Waste
-        g2.dispose();
+        graphics2D.dispose();
     }
 
     // Sounds
