@@ -21,6 +21,14 @@ public class Config {
             }
             bufferedWriter.newLine();
 
+            // BRendering
+            if (gamePanel.BRendering) {
+                bufferedWriter.write("true");
+            } else {
+                bufferedWriter.write("false");
+            }
+            bufferedWriter.newLine();
+
             // Music Volume
             bufferedWriter.write(String.valueOf(gamePanel.music.volumeScale));
             bufferedWriter.newLine();
@@ -46,6 +54,15 @@ public class Config {
             } else {
                 gamePanel.fullScreen = false;
             }
+
+            // BRendering
+            s = bufferedReader.readLine();
+            if (s.equals("true")) {
+                gamePanel.BRendering = true;
+            } else {
+                gamePanel.BRendering = false;
+            }
+
 
             // Music Volume
             s = bufferedReader.readLine();

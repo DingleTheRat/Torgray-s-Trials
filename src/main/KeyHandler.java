@@ -149,10 +149,13 @@ public class KeyHandler implements KeyListener {
     public void pauseState(int code) {
         if (code == KeyEvent.VK_ESCAPE) {
             gamePanel.gameState = States.STATE_PLAY;
+            gamePanel.ui.subState = States.PAUSE_STATE_MAIN;
+            gamePanel.ui.commandNum = 0;
         }
 
         int maxCommandNum = 0;
         switch (gamePanel.ui.subState) {
+            case States.PAUSE_STATE_MAIN: maxCommandNum = 2; break;
             case States.PAUSE_SETTINGS_MAIN: maxCommandNum = 5; break;
             case States.PAUSE_SETTINGS_CONFIRM: maxCommandNum = 1; break;
         }

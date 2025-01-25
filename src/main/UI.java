@@ -22,7 +22,7 @@ public class UI {
     public String currentDialogue = "";
     public int commandNum = 0;
     public States titleScreenState = States.TITLE_STATE_MAIN;
-    public States subState = States.PAUSE_SETTINGS_MAIN;
+    public States subState = States.PAUSE_STATE_MAIN;
     public int slotCol = 0;
     public int slotRow = 0;
     public String actionMethod;
@@ -214,7 +214,6 @@ public class UI {
             }
 
             text = "Back";
-            x = getCentreX(text);
             y += gamePanel.tileSize * 2;
             graphics2D.drawString(text, x, y);
             if (commandNum == 3) {
@@ -225,20 +224,77 @@ public class UI {
     }
     public void drawPauseScreen() {
         graphics2D.setColor(Color.white);
-        graphics2D.setFont(graphics2D.getFont().deriveFont(48f));
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 48f));
 
         // Sub-Window
         int frameX = gamePanel.tileSize * 6;
-        int frameY = gamePanel.tileSize;
+        int frameY = gamePanel.tileSize * 3;
         int frameWidth = gamePanel.tileSize * 8;
-        int frameHeight = gamePanel.tileSize * 10;
-        if (subState == States.PAUSE_SETTINGS_NOTIFICATION || subState == States.PAUSE_SETTINGS_CONFIRM) {
+        int frameHeight = gamePanel.tileSize * 2;
+
+        if (subState == States.PAUSE_SETTINGS_MAIN || subState == States.PAUSE_CONTROLS) {
+            frameY = gamePanel.tileSize;
+            frameHeight = gamePanel.tileSize * 10;
+        }
+        else if (subState == States.PAUSE_SETTINGS_NOTIFICATION || subState == States.PAUSE_SETTINGS_CONFIRM) {
             frameY = gamePanel.tileSize * 3;
             frameHeight = gamePanel.tileSize * 6;
         }
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
         switch (subState) {
+            case States.PAUSE_STATE_MAIN:
+                // Title
+                String text = "Game Paused";
+                int x = getCentreX(text);
+                int y = frameY + gamePanel.tileSize + (gamePanel.tileSize / 3);
+                graphics2D.drawString(text, x, y);
+
+                // Options Frame
+                x = frameX + gamePanel.tileSize;
+                y = frameY + (gamePanel.tileSize * 2) + (gamePanel.tileSize / 4);
+                drawSubWindow(x, y, frameWidth - (gamePanel.tileSize * 2), frameHeight + gamePanel.tileSize + (gamePanel.tileSize / 2));
+
+                // Settings
+                graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 32f));
+                y += gamePanel.tileSize;
+                x += gamePanel.tileSize + (gamePanel.tileSize / 2);
+                graphics2D.drawString("Settings", x, y);
+                if (commandNum == 0) {
+                    graphics2D.drawString(">", x - gamePanel.tileSize, y);
+
+                    if (gamePanel.keyHandler.spacePressed) {
+                        subState = States.PAUSE_SETTINGS_MAIN;
+                        commandNum = 0;
+                    }
+                }
+
+                // End Game
+                y += gamePanel.tileSize;
+                graphics2D.drawString("End Game", x, y);
+                if (commandNum == 1) {
+                    graphics2D.drawString(">", x - gamePanel.tileSize, y);
+
+                    if (gamePanel.keyHandler.spacePressed) {
+                        commandNum = 1;
+                        subState = States.PAUSE_SETTINGS_CONFIRM;
+                        currentDialogue = "Are you sure you wanna /nend this game? Your data /nwon't be saved.";
+                        actionMethod = "yesGameEnd";
+                    }
+                }
+
+                // Resume
+                y += gamePanel.tileSize;
+                graphics2D.drawString("Resume", x, y);
+                if (commandNum == 2) {
+                    graphics2D.drawString(">", x - gamePanel.tileSize, y);
+
+                    if (gamePanel.keyHandler.spacePressed) {
+                        gamePanel.gameState = States.STATE_PLAY;
+                        commandNum = 0;
+                    }
+                }
+                break;
             case States.PAUSE_SETTINGS_MAIN: settingsMain(frameX, frameY); break;
             case States.PAUSE_SETTINGS_NOTIFICATION: settingsNotification(frameX, frameY); break;
             case States.PAUSE_SETTINGS_CONFIRM: settingsConfirm(frameX, frameY); break;
@@ -258,7 +314,7 @@ public class UI {
         graphics2D.drawString(text, textX, textY);
 
         // Fullscreen
-        graphics2D.setFont(graphics2D.getFont().deriveFont(32f));
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 32f));
         textX = frameX + gamePanel.tileSize;
         textY += gamePanel.tileSize * 2;
         graphics2D.drawString("Full Screen", textX, textY);
@@ -266,7 +322,7 @@ public class UI {
             graphics2D.drawString(">", textX - 30, textY);
 
             if (gamePanel.keyHandler.spacePressed) {
-                if (!gamePanel.fullScreen) {
+                if (!gamePanel.fullScreen && !gamePanel.BRendering) {
                     commandNum = 1;
                     subState = States.PAUSE_SETTINGS_CONFIRM;
                     currentDialogue = "Are you sure you wanna /nenter full screen? It won't /nscale without BRendering.";
@@ -276,11 +332,29 @@ public class UI {
                 }
             }
         }
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 32f));
+        textX = frameX + gamePanel.tileSize;
+        textY += gamePanel.tileSize;
+        graphics2D.drawString("BRendering", textX, textY);
+        if (commandNum == 1) {
+            graphics2D.drawString(">", textX - 30, textY);
+
+            if (gamePanel.keyHandler.spacePressed) {
+                if (!gamePanel.BRendering) {
+                    commandNum = 1;
+                    subState = States.PAUSE_SETTINGS_CONFIRM;
+                    currentDialogue = "BRendering is a highly /nexperimental mode that /ncan break the game if on";
+                    actionMethod = "yesBRendering";
+                } else {
+                    yesBRendering();
+                }
+            }
+        }
 
         // Music
         textY += gamePanel.tileSize;
         graphics2D.drawString("Music", textX, textY);
-        if (commandNum == 1) {
+        if (commandNum == 2) {
             graphics2D.drawString(">", textX - 30, textY);
         }
 
@@ -288,7 +362,7 @@ public class UI {
         // Sound Effects
         textY += gamePanel.tileSize;
         graphics2D.drawString("Sounds", textX, textY);
-        if (commandNum == 2) {
+        if (commandNum == 3) {
             graphics2D.drawString(">", textX - 30, textY);
         }
 
@@ -296,7 +370,7 @@ public class UI {
         // Controls
         textY += gamePanel.tileSize;
         graphics2D.drawString("Controls", textX, textY);
-        if (commandNum == 3) {
+        if (commandNum == 4) {
             graphics2D.drawString(">", textX - 30, textY);
 
             if (gamePanel.keyHandler.spacePressed) {
@@ -305,27 +379,16 @@ public class UI {
             }
         }
 
-
-        // End Game
-        textY += gamePanel.tileSize;
-        graphics2D.drawString("End Game", textX, textY);
-        if (commandNum == 4) {
-            graphics2D.drawString(">", textX - 30, textY);
-
-            if (gamePanel.keyHandler.spacePressed) {
-                commandNum = 1;
-                subState = States.PAUSE_SETTINGS_CONFIRM;
-                currentDialogue = "Are you sure you wanna /nend this game? Your data /nwon't be saved.";
-                actionMethod = "yesGameEnd";
-            }
-        }
-
-
         // Close
         textY += gamePanel.tileSize * 2;
         graphics2D.drawString("Close", textX, textY);
         if (commandNum == 5) {
             graphics2D.drawString(">", textX - 30, textY);
+
+            if (gamePanel.keyHandler.spacePressed) {
+                subState = States.PAUSE_STATE_MAIN;
+                commandNum = 0;
+            }
         }
 
         // Full Screen Check Box
@@ -335,6 +398,15 @@ public class UI {
         graphics2D.drawRect(textX, textY, 24 , 24);
 
         if (gamePanel.fullScreen) {
+            graphics2D.fillRect(textX, textY, 24, 24);
+        }
+
+        // BRendering Check Box
+        textY += gamePanel.tileSize;
+        graphics2D.setStroke(new BasicStroke(3));
+        graphics2D.drawRect(textX, textY, 24 , 24);
+
+        if (gamePanel.BRendering) {
             graphics2D.fillRect(textX, textY, 24, 24);
         }
 
@@ -364,7 +436,7 @@ public class UI {
         // Text
         textX = frameX + gamePanel.tileSize / 2;
         textY = frameY + gamePanel.tileSize * 2 + (gamePanel.tileSize / 4);
-        graphics2D.setFont(graphics2D.getFont().deriveFont(28f));
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 28f));
 
         for (String line : currentDialogue.split("/n")) {
             graphics2D.drawString(line, textX, textY);
@@ -393,7 +465,7 @@ public class UI {
         // Text
         textX = frameX + gamePanel.tileSize / 2;
         textY = frameY + gamePanel.tileSize * 2 + (gamePanel.tileSize / 4);
-        graphics2D.setFont(graphics2D.getFont().deriveFont(28f));
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN,28f));
 
         for (String line : currentDialogue.split("/n")) {
             graphics2D.drawString(line, textX, textY);
@@ -439,6 +511,11 @@ public class UI {
         subState = States.PAUSE_SETTINGS_NOTIFICATION;
         currentDialogue = "Full Screen will only be /nenabled/disabled when /nrelaunching the game.";
     }
+    public void yesBRendering() {
+        gamePanel.BRendering = !gamePanel.BRendering;
+        subState = States.PAUSE_SETTINGS_MAIN;
+        commandNum = 1;
+    }
     public void controlsPanel(int frameX, int frameY) {
         int textX;
         int textY;
@@ -452,22 +529,22 @@ public class UI {
         // Control Titles
         textX = frameX + gamePanel.tileSize / 2;
         textY = frameY + gamePanel.tileSize * 2 + (gamePanel.tileSize / 4);
-        graphics2D.setFont(graphics2D.getFont().deriveFont(28f));
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 28f));
 
-        graphics2D.drawString("Move", textX, textY); textY += 40;
-        graphics2D.drawString("Confirm", textX, textY); textY += 40;
-        graphics2D.drawString("Attack", textX, textY); textY += 40;
-        graphics2D.drawString("Interact", textX, textY); textY += 40;
-        graphics2D.drawString("Inventory", textX, textY); textY += 40;
+        graphics2D.drawString("Move", textX, textY); textY += gamePanel.tileSize;
+        graphics2D.drawString("Confirm", textX, textY); textY += gamePanel.tileSize;
+        graphics2D.drawString("Attack", textX, textY); textY += gamePanel.tileSize;
+        graphics2D.drawString("Interact", textX, textY); textY += gamePanel.tileSize;
+        graphics2D.drawString("Inventory", textX, textY); textY += gamePanel.tileSize;
 
         // Control Keys
         textX = frameX + gamePanel.tileSize * 5 + (gamePanel.tileSize / 2);
         textY = frameY + gamePanel.tileSize * 2 + (gamePanel.tileSize / 4);
-        graphics2D.drawString("WASD", textX, textY); textY += 40;
-        graphics2D.drawString("Space", textX, textY); textY += 40;
-        graphics2D.drawString("Space", textX, textY); textY += 40;
-        graphics2D.drawString("      E", textX, textY); textY += 40;
-        graphics2D.drawString("      E", textX, textY); textY += 40;
+        graphics2D.drawString("WASD", textX, textY); textY += gamePanel.tileSize;
+        graphics2D.drawString("Space", textX, textY); textY += gamePanel.tileSize;
+        graphics2D.drawString("Space", textX, textY); textY += gamePanel.tileSize;
+        graphics2D.drawString("      E", textX, textY); textY += gamePanel.tileSize;
+        graphics2D.drawString("      E", textX, textY); textY += gamePanel.tileSize;
 
         // Close
         textY = frameY = gamePanel.tileSize * 10 + (gamePanel.tileSize / 2);

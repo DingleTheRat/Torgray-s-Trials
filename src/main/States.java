@@ -14,6 +14,7 @@ public enum States {
 
     // Pause Sub-States
     PAUSE_SETTINGS_MAIN,
+    PAUSE_STATE_MAIN,
     PAUSE_CONTROLS,
     PAUSE_SETTINGS_NOTIFICATION,
     PAUSE_SETTINGS_CONFIRM

@@ -325,7 +325,6 @@ public class Player extends Entity{
             level++;
             exp = 0;
             nextLevelExp = nextLevelExp * 2;
-            health += level * 2;
             strength++;
             dexterity++;
             attack = getAttack();

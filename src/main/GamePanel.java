@@ -34,6 +34,7 @@ public class GamePanel extends JPanel implements Runnable {
     BufferedImage tempScreen;
     Graphics2D graphics2D;
     public boolean fullScreen = false;
+    public boolean BRendering = false;
 
     // FPS
     int FPS = 60;
@@ -116,9 +117,12 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (delta >= 1) {
                 update();
-                repaint();
-//                drawToTempScreen();
-//                drawToScreen();
+                if (BRendering && gameState != States.STATE_TILE) {
+                    drawToTempScreen();
+                    drawToScreen();
+                } else {
+                    repaint();
+                }
                 delta--;
                 drawCount++;
             }
