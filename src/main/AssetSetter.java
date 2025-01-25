@@ -1,11 +1,11 @@
 package main;
 
-import entity.Entity;
 import entity.NPC_GateKeeper;
 import mob.MOB_Dracore;
-import object.*;
-
-import java.util.HashMap;
+import object.OBJ_Gate;
+import object.OBJ_Key;
+import object.OBJ_Shield_Amethyst;
+import object.OBJ_Sword_Amethyst;
 
 public class AssetSetter {
     GamePanel gp;

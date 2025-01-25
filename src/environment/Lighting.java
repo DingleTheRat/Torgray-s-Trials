@@ -6,22 +6,22 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Lighting {
-    GamePanel gp;
+    GamePanel gamePanel;
     BufferedImage darknessFilter;
 
-    public Lighting(GamePanel gp) {
-        this.gp = gp;
+    public Lighting(GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
         setLightSource();
     }
 
     public void setLightSource() {
         // Make buffered image for darkness filter
-        darknessFilter = new BufferedImage(gp.screenWidth, gp.screenHeight, BufferedImage.TYPE_INT_ARGB);
+        darknessFilter = new BufferedImage(gamePanel.screenWidth, gamePanel.screenHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = (Graphics2D)darknessFilter.getGraphics();
 
         // Calculate the centre of the player
-        int centreX = gp.player.screenX + (gp.tileSize) / 2;
-        int centreY = gp.player.screenY + (gp.tileSize) / 2;
+        int centreX = gamePanel.player.screenX + (gamePanel.tileSize) / 2;
+        int centreY = gamePanel.player.screenY + (gamePanel.tileSize) / 2;
 
         // Create a radial gradient paint
         Color[] color = new Color[12];
@@ -52,22 +52,22 @@ public class Lighting {
         fraction[10] = 0.95f;
         fraction[11] = 1f;
 
-        if (gp.player.currentLight == null) {
+        if (gamePanel.player.currentLight == null) {
             RadialGradientPaint gPaint = new RadialGradientPaint(centreX, centreY, 70, fraction, color);
             g2.setPaint(gPaint);
         } else {
-            RadialGradientPaint gPaint = new RadialGradientPaint(centreX, centreY, gp.player.currentLight.lightRadius, fraction, color);
+            RadialGradientPaint gPaint = new RadialGradientPaint(centreX, centreY, gamePanel.player.currentLight.lightRadius, fraction, color);
             g2.setPaint(gPaint);
         }
 
         // Fill the buffered image with the radial gradient paint
-        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        g2.fillRect(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
         g2.dispose();
     }
     public void update() {
-        if (gp.player.lightUpdated) {
+        if (gamePanel.player.lightUpdated) {
             setLightSource();
-            gp.player.lightUpdated = false;
+            gamePanel.player.lightUpdated = false;
         }
     }
     public void draw(Graphics2D g2) {

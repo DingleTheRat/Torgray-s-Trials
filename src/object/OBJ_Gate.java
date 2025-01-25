@@ -6,14 +6,14 @@ import entity.EntityTypes;
 import main.GamePanel;
 
 public class OBJ_Gate extends Entity {
-    GamePanel gp;
+    GamePanel gamePanel;
 
-    public OBJ_Gate(GamePanel gp) {
-        super(gp);
-        this.gp = gp;
+    public OBJ_Gate(GamePanel gamePanel) {
+        super(gamePanel);
+        this.gamePanel = gamePanel;
 
         name = "Gate";
-        down1 = registerEntitySprite("/objects/gate", gp.tileSize, gp.tileSize);
+        down1 = registerEntitySprite("/objects/gate", gamePanel.tileSize, gamePanel.tileSize);
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_INTERACTABLE);
         collision = true;
@@ -26,12 +26,12 @@ public class OBJ_Gate extends Entity {
         solidAreaDefaultY = solidArea.y;
     }
     public void use(Entity entity, int j) {
-        for (int i = 0; i < gp.player.inventory.size(); i++) {
-            if (gp.player.inventory.get(i).name.equals("Key")) {
-                gp.obj.put(j, null);
-                gp.player.inventory.remove(i);
-                gp.ui.addMessage("-1 Key");
-                gp.playSE(3);
+        for (int i = 0; i < gamePanel.player.inventory.size(); i++) {
+            if (gamePanel.player.inventory.get(i).name.equals("Key")) {
+                gamePanel.obj.put(j, null);
+                gamePanel.player.inventory.remove(i);
+                gamePanel.ui.addMessage("-1 Key");
+                gamePanel.playSound(3);
                 break;
             }
         }

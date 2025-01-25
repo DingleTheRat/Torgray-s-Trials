@@ -39,45 +39,47 @@ public class GamePanel extends JPanel implements Runnable {
     int FPS = 60;
 
     // System
-    TileManager tileM = new TileManager(this);
-    public KeyHandler keyH = new KeyHandler(this);
+    TileManager tileManager = new TileManager(this);
+    public KeyHandler keyHandler = new KeyHandler(this);
     Sound music = new Sound();
     Sound sound = new Sound();
-    EnvironmentManager eManager = new EnvironmentManager(this);
+    EnvironmentManager environmentManager = new EnvironmentManager(this);
     public CollisionChecker cChecker = new CollisionChecker(this);
-    public AssetSetter assetS = new AssetSetter(this);
+    public AssetSetter assetSetter = new AssetSetter(this);
     public UI ui = new UI(this);
-    public EventHandler eHandler = new EventHandler(this);
-    public States gameState;
+    public EventHandler eventHandler = new EventHandler(this);
+    public Config config = new Config(this);
     Thread gameThread;
 
     // Entities and Objects
-    public Player player = new Player(this, keyH);
+    public Player player = new Player(this, keyHandler);
     public HashMap<Integer, Entity> npc = new HashMap<>();
     public HashMap<Integer, Entity> obj = new HashMap<>();
     public HashMap<Integer, Entity> mob = new HashMap<>();
     public ArrayList<Entity> particleList = new ArrayList<>();
     public ArrayList<Entity> entityList = new ArrayList<>();
 
-    // Game States;
+    public States gameState;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
-        this.addKeyListener(keyH);
+        this.addKeyListener(keyHandler);
         this.setFocusable(true);
     }
 
     public void setupGame() {
-        assetS.setObject();
-        assetS.setNPC();
-        assetS.setMonster();
-        eManager.setup();
+        assetSetter.setObject();
+        assetSetter.setNPC();
+        assetSetter.setMonster();
+        environmentManager.setup();
         playMusic(5);
         gameState = States.STATE_TILE;
 
-        //setFullScreen();
+        if (fullScreen) {
+            setFullScreen();
+        }
 
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         graphics2D = (Graphics2D)tempScreen.getGraphics();
@@ -162,7 +164,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
 
-            eManager.update();
+            environmentManager.update();
         }
         if (gameState == States.STATE_PAUSE) {
             // NOTHIN!
@@ -172,7 +174,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void drawToTempScreen() {
         // Debug
         long drawStart = 0;
-        if (keyH.debug) {
+        if (keyHandler.debug) {
             drawStart = System.nanoTime();
         }
 
@@ -181,7 +183,7 @@ public class GamePanel extends JPanel implements Runnable {
             ui.draw(graphics2D);
         } else {
             // Draw :)
-            tileM.draw(graphics2D);
+            tileManager.draw(graphics2D);
 
             // Add entities to list
             entityList.add(player);
@@ -220,12 +222,12 @@ public class GamePanel extends JPanel implements Runnable {
             entityList.clear();
 
             // More  drawing :D
-            eManager.draw(graphics2D);
+            environmentManager.draw(graphics2D);
             ui.draw(graphics2D);
         }
 
         // Debug
-        if (keyH.debug) {
+        if (keyHandler.debug) {
             long drawEnd = System.nanoTime();
             long passed = drawEnd - drawStart;
 
@@ -249,7 +251,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void drawToScreen() {
         Graphics g = getGraphics();
         g.drawImage(tempScreen,0,0,screenWidth2, screenHeight2, null);
-        g.dispose();;
+        g.dispose();
     }
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
@@ -257,7 +259,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         // Debug
         long drawStart = 0;
-        if (keyH.debug) {
+        if (keyHandler.debug) {
             drawStart = System.nanoTime();
         }
 
@@ -266,7 +268,7 @@ public class GamePanel extends JPanel implements Runnable {
             ui.draw(graphics2D);
         } else {
             // Draw :)
-            tileM.draw(graphics2D);
+            tileManager.draw(graphics2D);
 
             // Add entities to list
             entityList.add(player);
@@ -305,12 +307,12 @@ public class GamePanel extends JPanel implements Runnable {
             entityList.clear();
 
             // More  drawing :D
-            eManager.draw(graphics2D);
+            environmentManager.draw(graphics2D);
             ui.draw(graphics2D);
         }
 
         // Debug
-        if (keyH.debug) {
+        if (keyHandler.debug) {
             long drawEnd = System.nanoTime();
             long passed = drawEnd - drawStart;
 
@@ -343,7 +345,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void stopMusic() {
         music.stop();
     }
-    public void playSE(int i) {
+    public void playSound(int i) {
         sound.setFile(i);
         sound.play();
     }

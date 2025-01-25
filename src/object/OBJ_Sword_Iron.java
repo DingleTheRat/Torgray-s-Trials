@@ -6,14 +6,14 @@ import entity.EntityTypes;
 import main.GamePanel;
 
 public class OBJ_Sword_Iron extends Entity {
-    public OBJ_Sword_Iron(GamePanel gp) {
-        super(gp);
+    public OBJ_Sword_Iron(GamePanel gamePanel) {
+        super(gamePanel);
 
         name = "Iron Sword";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_IRON);
         tags.add(EntityTags.TAG_SWORD);
-        down1 = registerEntitySprite("/objects/iron_sword", gp.tileSize, gp.tileSize);
+        down1 = registerEntitySprite("/objects/iron_sword", gamePanel.tileSize, gamePanel.tileSize);
         attackValue = 1;
         attackArea.width = 36;
         attackArea.height = 36;

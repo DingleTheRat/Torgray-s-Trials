@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class UI {
@@ -17,13 +19,13 @@ public class UI {
     public boolean interactable = false;
     ArrayList<String> messages = new ArrayList<>();
     ArrayList<Integer> messageCounter = new ArrayList<>();
-    public boolean gameEnd = false;
     public String currentDialogue = "";
     public int commandNum = 0;
     public States titleScreenState = States.TITLE_STATE_MAIN;
     public States subState = States.PAUSE_SETTINGS_MAIN;
     public int slotCol = 0;
     public int slotRow = 0;
+    public String actionMethod;
 
     public UI(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -243,7 +245,7 @@ public class UI {
             case States.PAUSE_CONTROLS: controlsPanel(frameX, frameY); break;
         }
 
-        gamePanel.keyH.spacePressed = false;
+        gamePanel.keyHandler.spacePressed = false;
     }
     public void settingsMain(int frameX, int frameY) {
         int textX;
@@ -263,10 +265,15 @@ public class UI {
         if (commandNum == 0) {
             graphics2D.drawString(">", textX - 30, textY);
 
-            if (gamePanel.keyH.spacePressed) {
-                gamePanel.fullScreen = !gamePanel.fullScreen;
-                subState = States.PAUSE_SETTINGS_NOTIFICATION;
-                currentDialogue = "Full Screen will only be /nenabled/disabled when /nrelaunching the game.";
+            if (gamePanel.keyHandler.spacePressed) {
+                if (!gamePanel.fullScreen) {
+                    commandNum = 1;
+                    subState = States.PAUSE_SETTINGS_CONFIRM;
+                    currentDialogue = "Are you sure you wanna /nenter full screen? It won't /nscale without BRendering.";
+                    actionMethod = "yesFullScreen";
+                } else {
+                    yesFullScreen();
+                }
             }
         }
 
@@ -292,7 +299,7 @@ public class UI {
         if (commandNum == 3) {
             graphics2D.drawString(">", textX - 30, textY);
 
-            if (gamePanel.keyH.spacePressed) {
+            if (gamePanel.keyHandler.spacePressed) {
                 subState = States.PAUSE_CONTROLS;
                 commandNum = 0;
             }
@@ -305,10 +312,11 @@ public class UI {
         if (commandNum == 4) {
             graphics2D.drawString(">", textX - 30, textY);
 
-            if (gamePanel.keyH.spacePressed) {
+            if (gamePanel.keyHandler.spacePressed) {
                 commandNum = 1;
                 subState = States.PAUSE_SETTINGS_CONFIRM;
                 currentDialogue = "Are you sure you wanna /nend this game? Your data /nwon't be saved.";
+                actionMethod = "yesGameEnd";
             }
         }
 
@@ -342,6 +350,9 @@ public class UI {
         graphics2D.drawRect(textX, textY, 120, 24);
         volumeWidth = 24 * gamePanel.sound.volumeScale;
         graphics2D.fillRect(textX, textY, volumeWidth, 24);
+
+        // Save Data
+        gamePanel.config.saveConfig();
     }
     public void settingsNotification(int frameX, int frameY) {
         // Title
@@ -366,7 +377,7 @@ public class UI {
         graphics2D.drawString("Close", textX, textY);
         if (commandNum == 0) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (gamePanel.keyH.spacePressed) {
+            if (gamePanel.keyHandler.spacePressed) {
                 subState = States.PAUSE_SETTINGS_MAIN;
                 commandNum = 0;
             }
@@ -374,7 +385,7 @@ public class UI {
     }
     public void settingsConfirm(int frameX, int frameY) {
         // Title
-        String text = "You Sure?";
+        String text = "Are You Sure?";
         int textX = getCentreX(text);
         int textY = frameY + gamePanel.tileSize + (gamePanel.tileSize / 4);
         graphics2D.drawString(text, textX, textY);
@@ -395,12 +406,13 @@ public class UI {
         graphics2D.drawString("Yes", textX, textY);
         if (commandNum == 0) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (gamePanel.keyH.spacePressed) {
-                subState = States.PAUSE_SETTINGS_MAIN;
-                gamePanel.gameState = States.STATE_TILE;
-                titleScreenState = States.TITLE_STATE_MAIN;
-                gamePanel.music.stop();
-                gamePanel.playMusic(5);
+            if (gamePanel.keyHandler.spacePressed) {
+                try {
+                    Method method = this.getClass().getMethod(actionMethod);
+                    method.invoke(this);
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -409,11 +421,23 @@ public class UI {
         graphics2D.drawString("No", textX, textY);
         if (commandNum == 1) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (gamePanel.keyH.spacePressed) {
+            if (gamePanel.keyHandler.spacePressed) {
                 subState = States.PAUSE_SETTINGS_MAIN;
                 commandNum = 4;
             }
         }
+    }
+    public void yesGameEnd() {
+        subState = States.PAUSE_SETTINGS_MAIN;
+        gamePanel.gameState = States.STATE_TILE;
+        titleScreenState = States.TITLE_STATE_MAIN;
+        gamePanel.music.stop();
+        gamePanel.playMusic(5);
+    }
+    public void yesFullScreen() {
+        gamePanel.fullScreen = !gamePanel.fullScreen;
+        subState = States.PAUSE_SETTINGS_NOTIFICATION;
+        currentDialogue = "Full Screen will only be /nenabled/disabled when /nrelaunching the game.";
     }
     public void controlsPanel(int frameX, int frameY) {
         int textX;
@@ -451,7 +475,7 @@ public class UI {
         graphics2D.drawString("Close", textX, textY);
         if (commandNum == 0) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (gamePanel.keyH.spacePressed) {
+            if (gamePanel.keyHandler.spacePressed) {
                 subState = States.PAUSE_SETTINGS_MAIN;
                 commandNum = 3;
             }

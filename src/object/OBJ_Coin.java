@@ -8,18 +8,18 @@ import main.GamePanel;
 public class OBJ_Coin extends Entity {
     GamePanel gp;
 
-    public OBJ_Coin(GamePanel gp) {
-        super(gp);
-        this.gp = gp;
+    public OBJ_Coin(GamePanel gamePanel) {
+        super(gamePanel);
+        this.gp = gamePanel;
 
         name = "Coin";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_PICKUPONLY);
-        down1 = registerEntitySprite("/objects/coin", gp.tileSize, gp.tileSize);
+        down1 = registerEntitySprite("/objects/coin", gamePanel.tileSize, gamePanel.tileSize);
     }
 
     public void use(Entity entity) {
-        gp.playSE(1);
+        gp.playSound(1);
         gp.ui.addMessage("+1 Coin");
         gp.player.coins++;
     }

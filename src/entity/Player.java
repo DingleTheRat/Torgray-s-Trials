@@ -24,12 +24,12 @@ public class Player extends Entity{
     public ArrayList<Entity> inventory = new ArrayList<>();
     public final int maxInventorySize = 25;
 
-    public Player(GamePanel gp, KeyHandler keyH) {
-        super(gp);
+    public Player(GamePanel gamePanel, KeyHandler keyH) {
+        super(gamePanel);
         this.keyH = keyH;
 
-        screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
-        screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
+        screenX = this.gamePanel.screenWidth / 2 - (this.gamePanel.tileSize / 2);
+        screenY = this.gamePanel.screenHeight / 2 - (this.gamePanel.tileSize / 2);
 
         // Solid Area
         solidArea = new Rectangle();
@@ -47,38 +47,38 @@ public class Player extends Entity{
     }
 
     public void getImage() {
-        up1 = registerEntitySprite("/player/walking/ghost_up_1", gp.tileSize, gp.tileSize);
-        up2 = registerEntitySprite("/player/walking/ghost_up_2", gp.tileSize, gp.tileSize);
-        up3 = registerEntitySprite("/player/walking/ghost_up_3", gp.tileSize, gp.tileSize);
+        up1 = registerEntitySprite("/player/walking/ghost_up_1", gamePanel.tileSize, gamePanel.tileSize);
+        up2 = registerEntitySprite("/player/walking/ghost_up_2", gamePanel.tileSize, gamePanel.tileSize);
+        up3 = registerEntitySprite("/player/walking/ghost_up_3", gamePanel.tileSize, gamePanel.tileSize);
 
-        down1 = registerEntitySprite("/player/walking/ghost_down_1", gp.tileSize, gp.tileSize);
-        down2 = registerEntitySprite("/player/walking/ghost_down_2", gp.tileSize, gp.tileSize);
-        down3 = registerEntitySprite("/player/walking/ghost_down_3", gp.tileSize, gp.tileSize);
+        down1 = registerEntitySprite("/player/walking/ghost_down_1", gamePanel.tileSize, gamePanel.tileSize);
+        down2 = registerEntitySprite("/player/walking/ghost_down_2", gamePanel.tileSize, gamePanel.tileSize);
+        down3 = registerEntitySprite("/player/walking/ghost_down_3", gamePanel.tileSize, gamePanel.tileSize);
 
-        left1 = registerEntitySprite("/player/walking/ghost_left_1", gp.tileSize, gp.tileSize);
-        left2 = registerEntitySprite("/player/walking/ghost_left_2", gp.tileSize, gp.tileSize);
-        left3 = registerEntitySprite("/player/walking/ghost_left_3", gp.tileSize, gp.tileSize);
+        left1 = registerEntitySprite("/player/walking/ghost_left_1", gamePanel.tileSize, gamePanel.tileSize);
+        left2 = registerEntitySprite("/player/walking/ghost_left_2", gamePanel.tileSize, gamePanel.tileSize);
+        left3 = registerEntitySprite("/player/walking/ghost_left_3", gamePanel.tileSize, gamePanel.tileSize);
 
-        right1 = registerEntitySprite("/player/walking/ghost_right_1", gp.tileSize, gp.tileSize);
-        right2 = registerEntitySprite("/player/walking/ghost_right_2", gp.tileSize, gp.tileSize);
-        right3 = registerEntitySprite("/player/walking/ghost_right_3", gp.tileSize, gp.tileSize);
+        right1 = registerEntitySprite("/player/walking/ghost_right_1", gamePanel.tileSize, gamePanel.tileSize);
+        right2 = registerEntitySprite("/player/walking/ghost_right_2", gamePanel.tileSize, gamePanel.tileSize);
+        right3 = registerEntitySprite("/player/walking/ghost_right_3", gamePanel.tileSize, gamePanel.tileSize);
     }
     public void getAttackImage() {
         if (currentWeapon.tags.contains(EntityTags.TAG_AMETHIST)) {
-            attackUp = registerEntitySprite("/player/attack/torgray_amethist_attack_up", gp.tileSize, gp.tileSize * 2);
-            attackDown = registerEntitySprite("/player/attack/torgray_amethist_attack_down", gp.tileSize, gp.tileSize * 2);
-            attackLeft = registerEntitySprite("/player/attack/torgray_amethist_attack_left", gp.tileSize * 2, gp.tileSize);
-            attackRight = registerEntitySprite("/player/attack/torgray_amethist_attack_right", gp.tileSize * 2, gp.tileSize);
+            attackUp = registerEntitySprite("/player/attack/torgray_amethist_attack_up", gamePanel.tileSize, gamePanel.tileSize * 2);
+            attackDown = registerEntitySprite("/player/attack/torgray_amethist_attack_down", gamePanel.tileSize, gamePanel.tileSize * 2);
+            attackLeft = registerEntitySprite("/player/attack/torgray_amethist_attack_left", gamePanel.tileSize * 2, gamePanel.tileSize);
+            attackRight = registerEntitySprite("/player/attack/torgray_amethist_attack_right", gamePanel.tileSize * 2, gamePanel.tileSize);
         } else if (currentWeapon.tags.contains(EntityTags.TAG_IRON)) {
-            attackUp = registerEntitySprite("/player/attack/torgray_iron_attack_up", gp.tileSize, gp.tileSize * 2);
-            attackDown = registerEntitySprite("/player/attack/torgray_iron_attack_down", gp.tileSize, gp.tileSize * 2);
-            attackLeft = registerEntitySprite("/player/attack/torgray_iron_attack_left", gp.tileSize * 2, gp.tileSize);
-            attackRight = registerEntitySprite("/player/attack/torgray_iron_attack_right", gp.tileSize * 2, gp.tileSize);
+            attackUp = registerEntitySprite("/player/attack/torgray_iron_attack_up", gamePanel.tileSize, gamePanel.tileSize * 2);
+            attackDown = registerEntitySprite("/player/attack/torgray_iron_attack_down", gamePanel.tileSize, gamePanel.tileSize * 2);
+            attackLeft = registerEntitySprite("/player/attack/torgray_iron_attack_left", gamePanel.tileSize * 2, gamePanel.tileSize);
+            attackRight = registerEntitySprite("/player/attack/torgray_iron_attack_right", gamePanel.tileSize * 2, gamePanel.tileSize);
         }
     }
     public void setDefaultValues() {
-        worldX = gp.tileSize * 23;
-        worldY = gp.tileSize * 21;
+        worldX = gamePanel.tileSize * 23;
+        worldY = gamePanel.tileSize * 21;
         speed = 4;
         direction = "down";
 
@@ -91,15 +91,15 @@ public class Player extends Entity{
         exp = 0;
         nextLevelExp = 5;
         coins = 0;
-        currentWeapon = new OBJ_Sword_Iron(gp);
-        currentShield = new OBJ_Shield_Iron(gp);
+        currentWeapon = new OBJ_Sword_Iron(gamePanel);
+        currentShield = new OBJ_Shield_Iron(gamePanel);
         attack = getAttack();
         defence = getDefence();
     }
     public void setItems() {
         inventory.add(currentWeapon);
         inventory.add(currentShield);
-        inventory.add(new OBJ_Lantern(gp));
+        inventory.add(new OBJ_Lantern(gamePanel));
     }
     public int getAttack() {
         attackArea = currentWeapon.attackArea;
@@ -133,21 +133,21 @@ public class Player extends Entity{
 
             // Check tile collision
             collisionOn = false;
-            gp.cChecker.checkTile(this);
+            gamePanel.cChecker.checkTile(this);
 
             // Check OBJ collision
-            int objIndex = gp.cChecker.checkObject(this, true);
+            int objIndex = gamePanel.cChecker.checkObject(this, true);
             pickUpObject(objIndex);
 
             // Check NPC collision
-            int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
+            int npcIndex = gamePanel.cChecker.checkEntity(this, gamePanel.npc);
             interactNPC(npcIndex);
 
             // Check Event
-            gp.eHandler.checkEvent();
+            gamePanel.eventHandler.checkEvent();
 
             // Check Mob Collision
-            int mobIndex = gp.cChecker.checkEntity(this, gp.mob);
+            int mobIndex = gamePanel.cChecker.checkEntity(this, gamePanel.mob);
             contactMob(mobIndex);
 
             if (!collisionOn && !keyH.spacePressed && !keyH.interactKeyPressed) {
@@ -171,12 +171,12 @@ public class Player extends Entity{
 
             // Inventory
             if (keyH.interactKeyPressed && !attackCanceled) {
-                gp.gameState = States.STATE_CHARACTER;
+                gamePanel.gameState = States.STATE_CHARACTER;
             }
 
             attackCanceled = false;
-            gp.keyH.spacePressed = false;
-            gp.keyH.interactKeyPressed = false;
+            gamePanel.keyHandler.spacePressed = false;
+            gamePanel.keyHandler.interactKeyPressed = false;
 
             spriteCounter ++;
             if (spriteCounter > 10) {
@@ -232,7 +232,7 @@ public class Player extends Entity{
             solidArea.height = attackArea.height;
 
             // Check collision with the updates
-            int mobIndex = gp.cChecker.checkEntity(this, gp.mob);
+            int mobIndex = gamePanel.cChecker.checkEntity(this, gamePanel.mob);
             damageMob(mobIndex);
 
             // Restore original data
@@ -249,46 +249,46 @@ public class Player extends Entity{
     }
     public void pickUpObject(int i) {
         if (i != 999) {
-            if (gp.obj.get(i).tags.contains(EntityTags.TAG_INTERACTABLE)) {
-                gp.obj.get(i).use(this, i);
-            } else if (gp.obj.get(i).tags.contains(EntityTags.TAG_PICKUPONLY)) {
-                gp.obj.get(i).use(this);
-                gp.obj.put(i, null);
+            if (gamePanel.obj.get(i).tags.contains(EntityTags.TAG_INTERACTABLE)) {
+                gamePanel.obj.get(i).use(this, i);
+            } else if (gamePanel.obj.get(i).tags.contains(EntityTags.TAG_PICKUPONLY)) {
+                gamePanel.obj.get(i).use(this);
+                gamePanel.obj.put(i, null);
             } else {
                 String text;
                 if (inventory.size() != maxInventorySize) {
-                    inventory.add(gp.obj.get(i));
-                    gp.playSE(1);
-                    text = "+1 " + gp.obj.get(i).name;
+                    inventory.add(gamePanel.obj.get(i));
+                    gamePanel.playSound(1);
+                    text = "+1 " + gamePanel.obj.get(i).name;
                 }
                 else {
                     text = "Inventory Full";
                 }
-                gp.ui.addMessage(text);
-                gp.obj.put(i, null);
+                gamePanel.ui.addMessage(text);
+                gamePanel.obj.put(i, null);
             }
         }
     }
     public void interactNPC(int i) {
-        if (gp.keyH.interactKeyPressed) {
+        if (gamePanel.keyHandler.interactKeyPressed) {
             if (i != 999) {
                 attackCanceled = true;
-                gp.gameState = States.STATE_DIALOGUE;
-                gp.npc.get(i).speak();
+                gamePanel.gameState = States.STATE_DIALOGUE;
+                gamePanel.npc.get(i).speak();
             }
         }
     }
     public void contactMob(int i) {
         if (i != 999) {
-            if (!invincible && !gp.mob.get(i).dying) {
-                gp.playSE(7);
+            if (!invincible && !gamePanel.mob.get(i).dying) {
+                gamePanel.playSound(7);
 
-                int damage = gp.mob.get(i).attack - defence;
+                int damage = gamePanel.mob.get(i).attack - defence;
                 if (damage < 0) {
                     damage = 0;
                 }
                 health -= damage;
-                generateParticles(gp.player, gp.player, damage);
+                generateParticles(gamePanel.player, gamePanel.player, damage);
                 invincible = true;
             }
         }
@@ -296,25 +296,25 @@ public class Player extends Entity{
 
     public void damageMob(int i) {
         if (i != 999) {
-            if (!gp.mob.get(i).invincible) {
-                gp.playSE(6);
+            if (!gamePanel.mob.get(i).invincible) {
+                gamePanel.playSound(6);
 
-                int damage = attack - gp.mob.get(i).defence;
+                int damage = attack - gamePanel.mob.get(i).defence;
                 if (damage < 0) {
                     damage = 0;
                 }
-                gp.mob.get(i).health -= damage;
+                gamePanel.mob.get(i).health -= damage;
 
-                gp.mob.get(i).invincible = true;
-                gp.mob.get(i).damageReaction();
+                gamePanel.mob.get(i).invincible = true;
+                gamePanel.mob.get(i).damageReaction();
 
-                generateParticles(gp.mob.get(i), gp.mob.get(i), damage);
+                generateParticles(gamePanel.mob.get(i), gamePanel.mob.get(i), damage);
 
-                if (gp.mob.get(i).health <= 0) {
-                    gp.mob.get(i).dying = true;
-                    gp.ui.addMessage("Killed " + gp.mob.get(i).name);
-                    gp.ui.addMessage("+" + gp.mob.get(i).exp + " exp");
-                    exp += gp.mob.get(i).exp;
+                if (gamePanel.mob.get(i).health <= 0) {
+                    gamePanel.mob.get(i).dying = true;
+                    gamePanel.ui.addMessage("Killed " + gamePanel.mob.get(i).name);
+                    gamePanel.ui.addMessage("+" + gamePanel.mob.get(i).exp + " exp");
+                    exp += gamePanel.mob.get(i).exp;
                     checkLevelUp();
                 }
             }
@@ -330,7 +330,7 @@ public class Player extends Entity{
             dexterity++;
             attack = getAttack();
             defence = getDefence();
-            gp.ui.addMessage("Level Up!");
+            gamePanel.ui.addMessage("Level Up!");
 
             if (health >= maxHealth) {
                 health = maxHealth;
@@ -338,7 +338,7 @@ public class Player extends Entity{
         }
     }
     public void selectItem() {
-        int itemIndex = gp.ui.getItemIndex();
+        int itemIndex = gamePanel.ui.getItemIndex();
 
         if (itemIndex < inventory.size()) {
             Entity selectedItem = inventory.get(itemIndex);
@@ -379,7 +379,7 @@ public class Player extends Entity{
                     else if (spriteNumber == 2) {image = up2;}
                     else if (spriteNumber == 3) {image = up3;}
                 } if (attacking) {
-                    tempScreenY = screenY - gp.tileSize;
+                    tempScreenY = screenY - gamePanel.tileSize;
                     if (spriteNumber == 1) {image = attackUp;}
                     if (spriteNumber == 2) {image = attackUp;}
                     if (spriteNumber == 3) {image = attackUp;}
@@ -404,7 +404,7 @@ public class Player extends Entity{
                     else if (spriteNumber == 3) {image = left3;}
                 }
                 if (attacking) {
-                    tempScreenX = screenX - gp.tileSize;
+                    tempScreenX = screenX - gamePanel.tileSize;
                     if (spriteNumber == 1) {image = attackLeft;}
                     if (spriteNumber == 2) {image = attackLeft;}
                     if (spriteNumber == 3) {image = attackLeft;}

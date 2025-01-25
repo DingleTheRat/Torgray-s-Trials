@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class Entity {
-    GamePanel gp;
+    GamePanel gamePanel;
     public BufferedImage up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
     public BufferedImage attackUp, attackDown, attackLeft, attackRight;
     public BufferedImage image, image2, image3;
@@ -66,8 +66,8 @@ public abstract class Entity {
     public String description = "";
     public int lightRadius;
 
-    public Entity(GamePanel gp) {
-        this.gp = gp;
+    public Entity(GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
     }
 
     public void setAction() {}
@@ -76,10 +76,10 @@ public abstract class Entity {
         if (dialogues.get(dialogueIndex) == null) {
             dialogueIndex = 0;
         }
-        gp.ui.currentDialogue = dialogues.get(dialogueIndex);
+        gamePanel.ui.currentDialogue = dialogues.get(dialogueIndex);
         dialogueIndex++;
 
-        switch (gp.player.direction) {
+        switch (gamePanel.player.direction) {
             case "up": direction = "down"; break;
             case "down": direction = "up"; break;
             case "left": direction = "right"; break;
@@ -90,11 +90,11 @@ public abstract class Entity {
     public void use(Entity entity, int j) {}
     public void checkDrop() {}
     public void dropItem(Entity droppedItem) {
-        for (int i = 0; i < gp.obj.size(); i++) {
-            if (gp.obj.get(i) == null) {
-                gp.obj.put(i, droppedItem);
-                gp.obj.get(i).worldX = worldX;
-                gp.obj.get(i).worldY = worldY;
+        for (int i = 0; i < gamePanel.obj.size(); i++) {
+            if (gamePanel.obj.get(i) == null) {
+                gamePanel.obj.put(i, droppedItem);
+                gamePanel.obj.get(i).worldX = worldX;
+                gamePanel.obj.get(i).worldY = worldY;
                 break;
             }
         }
@@ -109,24 +109,24 @@ public abstract class Entity {
         int speed = generator.getParticleSpeed();
         int maxHealth = generator.getParticleMaxHealth();
 
-        Particle p1 = new Particle(gp, target, color, size, speed, maxHealth, -2, -1);
-        Particle p2 = new Particle(gp, target, color, size, speed, maxHealth, 2, -1);
-        Particle p3 = new Particle(gp, target, color, size, speed, maxHealth, -2, 1);
-        Particle p4 = new Particle(gp, target, color, size, speed, maxHealth, 2, 1);
-        gp.particleList.add(p1);
-        gp.particleList.add(p2);
-        gp.particleList.add(p3);
-        gp.particleList.add(p4);
+        Particle p1 = new Particle(gamePanel, target, color, size, speed, maxHealth, -2, -1);
+        Particle p2 = new Particle(gamePanel, target, color, size, speed, maxHealth, 2, -1);
+        Particle p3 = new Particle(gamePanel, target, color, size, speed, maxHealth, -2, 1);
+        Particle p4 = new Particle(gamePanel, target, color, size, speed, maxHealth, 2, 1);
+        gamePanel.particleList.add(p1);
+        gamePanel.particleList.add(p2);
+        gamePanel.particleList.add(p3);
+        gamePanel.particleList.add(p4);
     }
 
     public void update() {
         setAction();
         collisionOn = false;
-        gp.cChecker.checkTile(this);
-        gp.cChecker.checkObject(this, false);
-        int npcContact = gp.cChecker.checkEntity(this, gp.npc);
-        gp.cChecker.checkEntity(this, gp.mob);
-        boolean contactPlayer = gp.cChecker.checkPlayer(this);
+        gamePanel.cChecker.checkTile(this);
+        gamePanel.cChecker.checkObject(this, false);
+        int npcContact = gamePanel.cChecker.checkEntity(this, gamePanel.npc);
+        gamePanel.cChecker.checkEntity(this, gamePanel.mob);
+        boolean contactPlayer = gamePanel.cChecker.checkPlayer(this);
 
         if (this.type == EntityTypes.TYPE_MOB && contactPlayer) {
             damagePlayer(attack);
@@ -162,26 +162,26 @@ public abstract class Entity {
         }
     }
     public void damagePlayer(int Attack) {
-        if (!gp.player.invincible) {
-            gp.playSE(7);
+        if (!gamePanel.player.invincible) {
+            gamePanel.playSound(7);
 
-            int damage = attack - gp.player.defence;
+            int damage = attack - gamePanel.player.defence;
             if (damage <= 0) {
                 damage = 1;
             }
-            gp.player.health -= damage;
-            gp.player.invincible = true;
+            gamePanel.player.health -= damage;
+            gamePanel.player.invincible = true;
         }
     }
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
-        int screenX = worldX - gp.player.worldX + gp.player.screenX;
-        int screenY = worldY - gp.player.worldY + gp.player.screenY;
+        int screenX = worldX - gamePanel.player.worldX + gamePanel.player.screenX;
+        int screenY = worldY - gamePanel.player.worldY + gamePanel.player.screenY;
 
-        if (worldX + gp.tileSize > gp.player.worldX - gp.player.screenX &&
-                worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
-                worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
-                worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
+        if (worldX + gamePanel.tileSize > gamePanel.player.worldX - gamePanel.player.screenX &&
+                worldX - gamePanel.tileSize < gamePanel.player.worldX + gamePanel.player.screenX &&
+                worldY + gamePanel.tileSize > gamePanel.player.worldY - gamePanel.player.screenY &&
+                worldY - gamePanel.tileSize < gamePanel.player.worldY + gamePanel.player.screenY) {
             switch (direction) {
                 case "up": if (spriteNumber == 1) {image = up1;} else if (spriteNumber == 2) {image = up2;} else if (spriteNumber == 3) {image = up3;} break;
                 case "down": if (spriteNumber == 1) {image = down1;} else if (spriteNumber == 2) {image = down2;} else if (spriteNumber == 3) {image = down3;} break;
@@ -191,11 +191,11 @@ public abstract class Entity {
 
             // Mob Health Bar
             if (type == EntityTypes.TYPE_MOB && hpBarOn) {
-                double oneScale = (double)gp.tileSize / maxHealth;
+                double oneScale = (double) gamePanel.tileSize / maxHealth;
                 double hpBarValue = oneScale * health;
 
                 g2.setColor(Color.black);
-                g2.fillRect( screenX - 2, screenY - 17, gp.tileSize + 4, 14);
+                g2.fillRect( screenX - 2, screenY - 17, gamePanel.tileSize + 4, 14);
                 g2.setColor(Color.white);
                 g2.fillRect(screenX, screenY - 15, (int)hpBarValue, 10);
 

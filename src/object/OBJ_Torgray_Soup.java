@@ -10,47 +10,47 @@ import java.awt.*;
 import java.util.Random;
 
 public class OBJ_Torgray_Soup extends Entity {
-    GamePanel gp;
+    GamePanel gamePanel;
 
-    public OBJ_Torgray_Soup(GamePanel gp) {
-        super(gp);
-        this.gp = gp;
+    public OBJ_Torgray_Soup(GamePanel gamePanel) {
+        super(gamePanel);
+        this.gamePanel = gamePanel;
 
         name = "Torgray's Soup";
         value = 4;
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_CONSUMABLE);
-        down1 = registerEntitySprite("/objects/torgray_soup", gp.tileSize, gp.tileSize);
+        down1 = registerEntitySprite("/objects/torgray_soup", gamePanel.tileSize, gamePanel.tileSize);
         description = "/nTorgray's wisest soup. /nIt's warm and a bit hearty. /nHealing: +" + value;
     }
     public void use(Entity entity) {
-        gp.gameState = States.STATE_DIALOGUE;
+        gamePanel.gameState = States.STATE_DIALOGUE;
         Random random = new Random();
         int i = random.nextInt(5) + 1;
 
         if (i == 1) {
-            gp.ui.currentDialogue = "Erm a last key is behind the pond. /n+4 health";
+            gamePanel.ui.currentDialogue = "Erm a last key is behind the pond. /n+4 health";
         }
         if (i == 2) {
-            gp.ui.currentDialogue = "Erm healing in the pond respawns mobs. /n+4 health";
+            gamePanel.ui.currentDialogue = "Erm healing in the pond respawns mobs. /n+4 health";
         }
         if (i == 3) {
-            gp.ui.currentDialogue = "Erm the higher level, the more you /nheal when leveling up. /n+4 health";
+            gamePanel.ui.currentDialogue = "Erm the higher level, the more you /nheal when leveling up. /n+4 health";
         }
         if (i == 4) {
-            gp.ui.currentDialogue = "Erm I think you are left handed. /n+4 health";
+            gamePanel.ui.currentDialogue = "Erm I think you are left handed. /n+4 health";
         }
         if (i == 5) {
-            gp.ui.currentDialogue = "Erm after passing all 3 gates you get a /nreward. /n+4 health";
+            gamePanel.ui.currentDialogue = "Erm after passing all 3 gates you get a /nreward. /n+4 health";
         }
 
-        if (gp.player.health + value > gp.player.maxHealth) {
-            gp.player.health = gp.player.maxHealth;
+        if (gamePanel.player.health + value > gamePanel.player.maxHealth) {
+            gamePanel.player.health = gamePanel.player.maxHealth;
         } else {
-            gp.player.health += value;
+            gamePanel.player.health += value;
         }
-        gp.player.generateParticles(this, gp.player, value);
-        gp.playSE(2);
+        gamePanel.player.generateParticles(this, gamePanel.player, value);
+        gamePanel.playSound(2);
     }
 
     // Particles

@@ -11,8 +11,8 @@ public class Particle extends Entity{
     int xd;
     int yd;
 
-    public Particle(GamePanel gp, Entity generator, Color color, int size, int speed, int maxHealth, int xd, int yd) {
-        super(gp);
+    public Particle(GamePanel gamePanel, Entity generator, Color color, int size, int speed, int maxHealth, int xd, int yd) {
+        super(gamePanel);
 
         this.generator = generator;
         this.color = color;
@@ -23,7 +23,7 @@ public class Particle extends Entity{
         this.yd = yd;
 
         health = maxHealth;
-        int offset = (gp.tileSize / 2) - (size / 2);
+        int offset = (gamePanel.tileSize / 2) - (size / 2);
         worldX = generator.worldX + offset;
         worldY = generator.worldY + offset;
     }
@@ -42,8 +42,8 @@ public class Particle extends Entity{
         }
     }
     public void draw(Graphics2D g2) {
-        int screenX = worldX - gp.player.worldX + gp.player.screenX;
-        int screenY = worldY - gp.player.worldY + gp.player.screenY;
+        int screenX = worldX - gamePanel.player.worldX + gamePanel.player.screenX;
+        int screenY = worldY - gamePanel.player.worldY + gamePanel.player.screenY;
 
         g2.setColor(color);
         g2.fillRect(screenX, screenY, size, size);

@@ -5,8 +5,8 @@ import main.GamePanel;
 import java.util.Random;
 
 public class NPC_GateKeeper extends Entity{
-    public NPC_GateKeeper(GamePanel gp) {
-        super(gp);
+    public NPC_GateKeeper(GamePanel gamePanel) {
+        super(gamePanel);
         type = EntityTypes.TYPE_NPC;
         direction = "down";
         speed = 1;
@@ -16,21 +16,21 @@ public class NPC_GateKeeper extends Entity{
     }
 
     public void getImage() {
-        up1 = registerEntitySprite("/npc/gatekeeper_up_1", gp.tileSize, gp.tileSize);
-        up2 = registerEntitySprite("/npc/gatekeeper_up_2", gp.tileSize, gp.tileSize);
-        up3 = registerEntitySprite("/npc/gatekeeper_up_3", gp.tileSize, gp.tileSize);
+        up1 = registerEntitySprite("/npc/gatekeeper_up_1", gamePanel.tileSize, gamePanel.tileSize);
+        up2 = registerEntitySprite("/npc/gatekeeper_up_2", gamePanel.tileSize, gamePanel.tileSize);
+        up3 = registerEntitySprite("/npc/gatekeeper_up_3", gamePanel.tileSize, gamePanel.tileSize);
 
-        down1 = registerEntitySprite("/npc/gatekeeper_down_1", gp.tileSize, gp.tileSize);
-        down2 = registerEntitySprite("/npc/gatekeeper_down_2", gp.tileSize, gp.tileSize);
-        down3 = registerEntitySprite("/npc/gatekeeper_down_3", gp.tileSize, gp.tileSize);
+        down1 = registerEntitySprite("/npc/gatekeeper_down_1", gamePanel.tileSize, gamePanel.tileSize);
+        down2 = registerEntitySprite("/npc/gatekeeper_down_2", gamePanel.tileSize, gamePanel.tileSize);
+        down3 = registerEntitySprite("/npc/gatekeeper_down_3", gamePanel.tileSize, gamePanel.tileSize);
 
-        left1 = registerEntitySprite("/npc/gatekeeper_left_1", gp.tileSize, gp.tileSize);
-        left2 = registerEntitySprite("/npc/gatekeeper_left_2", gp.tileSize, gp.tileSize);
-        left3 = registerEntitySprite("/npc/gatekeeper_left_3", gp.tileSize, gp.tileSize);
+        left1 = registerEntitySprite("/npc/gatekeeper_left_1", gamePanel.tileSize, gamePanel.tileSize);
+        left2 = registerEntitySprite("/npc/gatekeeper_left_2", gamePanel.tileSize, gamePanel.tileSize);
+        left3 = registerEntitySprite("/npc/gatekeeper_left_3", gamePanel.tileSize, gamePanel.tileSize);
 
-        right1 = registerEntitySprite("/npc/gatekeeper_right_1", gp.tileSize, gp.tileSize);
-        right2 = registerEntitySprite("/npc/gatekeeper_right_2", gp.tileSize, gp.tileSize);
-        right3 = registerEntitySprite("/npc/gatekeeper_right_3", gp.tileSize, gp.tileSize);
+        right1 = registerEntitySprite("/npc/gatekeeper_right_1", gamePanel.tileSize, gamePanel.tileSize);
+        right2 = registerEntitySprite("/npc/gatekeeper_right_2", gamePanel.tileSize, gamePanel.tileSize);
+        right3 = registerEntitySprite("/npc/gatekeeper_right_3", gamePanel.tileSize, gamePanel.tileSize);
     }
     public void setDialogue() {
         dialogues.put(0, "Hey there partner!");

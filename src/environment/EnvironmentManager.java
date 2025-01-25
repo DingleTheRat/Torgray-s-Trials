@@ -5,15 +5,15 @@ import main.GamePanel;
 import java.awt.*;
 
 public class EnvironmentManager {
-    GamePanel gp;
+    GamePanel gamePanel;
     Lighting lighting;
 
-    public EnvironmentManager(GamePanel gp) {
-        this.gp = gp;
+    public EnvironmentManager(GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
     }
 
     public void setup() {
-        lighting = new Lighting(gp);
+        lighting = new Lighting(gamePanel);
     }
     public void update() {
         lighting.update();

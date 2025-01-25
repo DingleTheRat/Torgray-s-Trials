@@ -10,11 +10,11 @@ import java.awt.*;
 import java.util.Random;
 
 public class MOB_Dracore extends Entity {
-    GamePanel gp;
+    GamePanel gamePanel;
 
-    public MOB_Dracore(GamePanel gp) {
-        super(gp);
-        this.gp = gp;
+    public MOB_Dracore(GamePanel gamePanel) {
+        super(gamePanel);
+        this.gamePanel = gamePanel;
 
         name = "Dracore";
         type = EntityTypes.TYPE_MOB;
@@ -28,21 +28,21 @@ public class MOB_Dracore extends Entity {
         getImage();
     }
     public void getImage() {
-        up1 = registerEntitySprite("/mob/dracore_1", gp.tileSize, gp.tileSize);
-        up2 = registerEntitySprite("/mob/dracore_2", gp.tileSize, gp.tileSize);
-        up3 = registerEntitySprite("/mob/dracore_3", gp.tileSize, gp.tileSize);
+        up1 = registerEntitySprite("/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
+        up2 = registerEntitySprite("/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
+        up3 = registerEntitySprite("/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
         
-        down1 = registerEntitySprite("/mob/dracore_1", gp.tileSize, gp.tileSize);
-        down2 = registerEntitySprite("/mob/dracore_2", gp.tileSize, gp.tileSize);
-        down3 = registerEntitySprite("/mob/dracore_3", gp.tileSize, gp.tileSize);
+        down1 = registerEntitySprite("/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
+        down2 = registerEntitySprite("/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
+        down3 = registerEntitySprite("/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
         
-        left1 = registerEntitySprite("/mob/dracore_1", gp.tileSize, gp.tileSize);
-        left2 = registerEntitySprite("/mob/dracore_2", gp.tileSize, gp.tileSize);
-        left3 = registerEntitySprite("/mob/dracore_3", gp.tileSize, gp.tileSize);
+        left1 = registerEntitySprite("/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
+        left2 = registerEntitySprite("/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
+        left3 = registerEntitySprite("/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
         
-        right1 = registerEntitySprite("/mob/dracore_1", gp.tileSize, gp.tileSize);
-        right2 = registerEntitySprite("/mob/dracore_2", gp.tileSize, gp.tileSize);
-        right3 = registerEntitySprite("/mob/dracore_3", gp.tileSize, gp.tileSize);
+        right1 = registerEntitySprite("/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
+        right2 = registerEntitySprite("/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
+        right3 = registerEntitySprite("/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
     }
     public void setAction() {
         actionLockCounter++;
@@ -68,7 +68,7 @@ public class MOB_Dracore extends Entity {
     public void damageReaction() {
         actionLockCounter = 0;
 
-        switch (gp.player.direction) {
+        switch (gamePanel.player.direction) {
             case "up": direction = "down"; break;
             case "down": direction = "up"; break;
             case "left": direction = "right"; break;
@@ -80,10 +80,10 @@ public class MOB_Dracore extends Entity {
 
         // Set mob drop
         if (i == 1) {
-            dropItem(new OBJ_Torgray_Soup(gp));
+            dropItem(new OBJ_Torgray_Soup(gamePanel));
         }
         if (i == 2) {
-            dropItem(new OBJ_Coin(gp));
+            dropItem(new OBJ_Coin(gamePanel));
         }
     }
 
