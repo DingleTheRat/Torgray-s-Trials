@@ -27,6 +27,12 @@ public class KeyHandler implements KeyListener {
         else if (gamePanel.gameState == States.STATE_PAUSE) {pauseState(code);}
         else if (gamePanel.gameState == States.STATE_DIALOGUE) {dialogueState(code); playState(code);}
         else if (gamePanel.gameState == States.STATE_CHARACTER) {characterState(code);}
+
+        if (gamePanel.BRendering) {
+            if (code == KeyEvent.VK_U) {
+                gamePanel.BRendering = false;
+            }
+        }
     }
     public void titleState(int code) {
         if (gamePanel.ui.titleScreenState == States.TITLE_STATE_MAIN) {

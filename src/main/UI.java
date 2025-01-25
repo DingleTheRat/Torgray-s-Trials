@@ -513,8 +513,14 @@ public class UI {
     }
     public void yesBRendering() {
         gamePanel.BRendering = !gamePanel.BRendering;
-        subState = States.PAUSE_SETTINGS_MAIN;
-        commandNum = 1;
+        if (gamePanel.BRendering) {
+            commandNum = 0;
+            subState = States.PAUSE_SETTINGS_NOTIFICATION;
+            currentDialogue = "You can emergency /ndisable BRendering by /npressing U.";
+        } else {
+            commandNum = 1;
+            subState = States.PAUSE_SETTINGS_MAIN;
+        }
     }
     public void controlsPanel(int frameX, int frameY) {
         int textX;
