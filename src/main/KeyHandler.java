@@ -6,6 +6,7 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
     GamePanel gamePanel;
     public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, interactKeyPressed;
+    public int maxCommandNumber = 0;
     // Debug
     public boolean debug = false;
 
@@ -27,6 +28,7 @@ public class KeyHandler implements KeyListener {
         else if (gamePanel.gameState == States.STATE_PAUSE) {pauseState(code);}
         else if (gamePanel.gameState == States.STATE_DIALOGUE) {dialogueState(code); playState(code);}
         else if (gamePanel.gameState == States.STATE_CHARACTER) {characterState(code);}
+        else if (gamePanel.gameState == States.STATE_GAME_OVER) {gameOverState(code);}
 
         if (gamePanel.BRendering) {
             if (code == KeyEvent.VK_U) {
@@ -37,48 +39,49 @@ public class KeyHandler implements KeyListener {
     public void titleState(int code) {
         if (gamePanel.ui.titleScreenState == States.TITLE_STATE_MAIN) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
-                gamePanel.ui.commandNum--;
+                gamePanel.ui.commandNumber--;
                 gamePanel.playSound(8);
-                if (gamePanel.ui.commandNum < 0) {
-                    gamePanel.ui.commandNum = 2;
+                if (gamePanel.ui.commandNumber < 0) {
+                    gamePanel.ui.commandNumber = 2;
                 }
             }
             if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
-                gamePanel.ui.commandNum++;
+                gamePanel.ui.commandNumber++;
                 gamePanel.playSound(8);
-                if (gamePanel.ui.commandNum > 2) {
-                    gamePanel.ui.commandNum = 0;
+                if (gamePanel.ui.commandNumber > 2) {
+                    gamePanel.ui.commandNumber = 0;
                 }
             }
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
-                if (gamePanel.ui.commandNum == 0) {
+                if (gamePanel.ui.commandNumber == 0) {
                     gamePanel.ui.titleScreenState = States.TITLE_STATE_MODES;
                 }
-                if (gamePanel.ui.commandNum == 1) {
+                if (gamePanel.ui.commandNumber == 1) {
                     // For later
                 }
-                if (gamePanel.ui.commandNum == 2) {
+                if (gamePanel.ui.commandNumber == 2) {
                     System.exit(0);
                 }
             }
         } else if (gamePanel.ui.titleScreenState == States.TITLE_STATE_MODES) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
-                gamePanel.ui.commandNum--;
+                gamePanel.ui.commandNumber--;
                 gamePanel.playSound(8);
-                if (gamePanel.ui.commandNum < 0) {
-                    gamePanel.ui.commandNum = 3;
+                if (gamePanel.ui.commandNumber < 0) {
+                    gamePanel.ui.commandNumber = 3;
                 }
             }
             if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
-                gamePanel.ui.commandNum++;
+                gamePanel.ui.commandNumber++;
                 gamePanel.playSound(8);
-                if (gamePanel.ui.commandNum > 3) {
-                    gamePanel.ui.commandNum = 0;
+                if (gamePanel.ui.commandNumber > 3) {
+                    gamePanel.ui.commandNumber = 0;
                 }
             }
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
-                if (gamePanel.ui.commandNum == 0) {
+                if (gamePanel.ui.commandNumber == 0) {
                     gamePanel.gameState = States.STATE_PLAY;
+                    gamePanel.gameMode = "Easy";
                     gamePanel.stopMusic();
                     gamePanel.playMusic(0);
                     System.out.println("Imagine Picking Easy");
@@ -90,16 +93,18 @@ public class KeyHandler implements KeyListener {
                     gamePanel.player.attack = gamePanel.player.getAttack();
                     gamePanel.player.defence = gamePanel.player.getDefence();
                 }
-                if (gamePanel.ui.commandNum == 1) {
+                if (gamePanel.ui.commandNumber == 1) {
                     gamePanel.gameState = States.STATE_PLAY;
+                    gamePanel.gameMode = "Medium";
                     gamePanel.stopMusic();
                     gamePanel.playMusic(0);
                     System.out.println("Kinda a mid game mode lol");
 
                     // No modified stats since Medium is the default
                 }
-                if (gamePanel.ui.commandNum == 2) {
+                if (gamePanel.ui.commandNumber == 2) {
                     gamePanel.gameState = States.STATE_PLAY;
+                    gamePanel.gameMode = "Hard";
                     gamePanel.stopMusic();
                     gamePanel.playMusic(0);
                     System.out.println("You really think you are \"hardcore\"?");
@@ -109,7 +114,7 @@ public class KeyHandler implements KeyListener {
                     gamePanel.player.nextLevelExp = 6;
                     gamePanel.player.defence = gamePanel.player.getDefence();
                 }
-                if (gamePanel.ui.commandNum == 3) {
+                if (gamePanel.ui.commandNumber == 3) {
                     gamePanel.ui.titleScreenState = States.TITLE_STATE_MAIN;
                 }
             }
@@ -156,30 +161,29 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_ESCAPE) {
             gamePanel.gameState = States.STATE_PLAY;
             gamePanel.ui.subState = States.PAUSE_STATE_MAIN;
-            gamePanel.ui.commandNum = 0;
+            gamePanel.ui.commandNumber = 0;
         }
 
-        int maxCommandNum = 0;
         switch (gamePanel.ui.subState) {
-            case States.PAUSE_STATE_MAIN: maxCommandNum = 2; break;
-            case States.PAUSE_SETTINGS_MAIN: maxCommandNum = 5; break;
-            case States.PAUSE_SETTINGS_CONFIRM: maxCommandNum = 1; break;
+            case States.PAUSE_STATE_MAIN: maxCommandNumber = 2; break;
+            case States.PAUSE_SETTINGS_MAIN: maxCommandNumber = 5; break;
+            case States.PAUSE_SETTINGS_CONFIRM: maxCommandNumber = 1; break;
         }
 
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
-            gamePanel.ui.commandNum--;
+            gamePanel.ui.commandNumber--;
             gamePanel.playSound(8);
 
-            if (gamePanel.ui.commandNum < 0) {
-                gamePanel.ui.commandNum = maxCommandNum;
+            if (gamePanel.ui.commandNumber < 0) {
+                gamePanel.ui.commandNumber = maxCommandNumber;
             }
         }
         if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
-            gamePanel.ui.commandNum++;
+            gamePanel.ui.commandNumber++;
             gamePanel.playSound(8);
 
-            if (gamePanel.ui.commandNum > maxCommandNum) {
-                gamePanel.ui.commandNum = 0;
+            if (gamePanel.ui.commandNumber > maxCommandNumber) {
+                gamePanel.ui.commandNumber = 0;
             }
         }
         if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
@@ -188,12 +192,12 @@ public class KeyHandler implements KeyListener {
 
         if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
             if (gamePanel.ui.subState == States.PAUSE_SETTINGS_MAIN) {
-                if (gamePanel.ui.commandNum == 2 && gamePanel.music.volumeScale > 0) {
+                if (gamePanel.ui.commandNumber == 2 && gamePanel.music.volumeScale > 0) {
                     gamePanel.music.volumeScale--;
                     gamePanel.music.checkVolume();
                     gamePanel.playSound(8);
                 }
-                if (gamePanel.ui.commandNum == 3 && gamePanel.sound.volumeScale > 0) {
+                if (gamePanel.ui.commandNumber == 3 && gamePanel.sound.volumeScale > 0) {
                     gamePanel.sound.volumeScale--;
                     gamePanel.playSound(8);
                 }
@@ -201,12 +205,12 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
             if (gamePanel.ui.subState == States.PAUSE_SETTINGS_MAIN) {
-                if (gamePanel.ui.commandNum == 2 && gamePanel.music.volumeScale < 5) {
+                if (gamePanel.ui.commandNumber == 2 && gamePanel.music.volumeScale < 5) {
                     gamePanel.music.volumeScale++;
                     gamePanel.music.checkVolume();
                     gamePanel.playSound(8);
                 }
-                if (gamePanel.ui.commandNum == 3 && gamePanel.sound.volumeScale < 5) {
+                if (gamePanel.ui.commandNumber == 3 && gamePanel.sound.volumeScale < 5) {
                     gamePanel.sound.volumeScale++;
                     gamePanel.playSound(8);
                 }
@@ -249,6 +253,40 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
             gamePanel.player.selectItem();
+        }
+    }
+    public void gameOverState(int code) {
+        maxCommandNumber = 1;
+        if (gamePanel.gameMode.equals("Easy")) {
+            maxCommandNumber = 2;
+        }
+
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+            gamePanel.ui.commandNumber--;
+            if (gamePanel.ui.commandNumber < 0) {
+                gamePanel.ui.commandNumber = maxCommandNumber;
+            }
+            gamePanel.playSound(8);
+        }
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+            gamePanel.ui.commandNumber++;
+            if (gamePanel.ui.commandNumber > maxCommandNumber) {
+                gamePanel.ui.commandNumber = 0;
+            }
+            gamePanel.playSound(8);
+        }
+        if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
+            if (gamePanel.ui.commandNumber == 0) {
+                gamePanel.gameState = States.STATE_PLAY;
+                gamePanel.restart();
+            } else if (gamePanel.ui.commandNumber == maxCommandNumber) {
+                gamePanel.gameState = States.STATE_TILE;
+                gamePanel.ui.titleScreenState = States.TITLE_STATE_MAIN;
+                gamePanel.restart();
+            } else if (gamePanel.ui.commandNumber == 1) {
+                gamePanel.gameState = States.STATE_PLAY;
+                gamePanel.respawn();
+            }
         }
     }
 

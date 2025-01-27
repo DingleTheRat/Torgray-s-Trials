@@ -3,7 +3,6 @@ package entity;
 import main.GamePanel;
 import main.KeyHandler;
 import main.States;
-import object.OBJ_Key;
 import object.OBJ_Lantern;
 import object.OBJ_Shield_Iron;
 import object.OBJ_Sword_Iron;
@@ -13,7 +12,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Player extends Entity{
-    KeyHandler keyH;
+    KeyHandler keyHandler;
 
     public final int screenX;
     public final int screenY;
@@ -25,9 +24,9 @@ public class Player extends Entity{
     public ArrayList<Entity> inventory = new ArrayList<>();
     public final int maxInventorySize = 25;
 
-    public Player(GamePanel gamePanel, KeyHandler keyH) {
+    public Player(GamePanel gamePanel, KeyHandler keyHandler) {
         super(gamePanel);
-        this.keyH = keyH;
+        this.keyHandler = keyHandler;
 
         screenX = this.gamePanel.screenWidth / 2 - (this.gamePanel.tileSize / 2);
         screenY = this.gamePanel.screenHeight / 2 - (this.gamePanel.tileSize / 2);
@@ -98,7 +97,17 @@ public class Player extends Entity{
         attack = getAttack();
         defence = getDefence();
     }
+    public void setDefaultPosition() {
+        worldX = gamePanel.tileSize * 23;
+        worldY = gamePanel.tileSize * 21;
+        direction = "down";
+    }
+    public void restoreHealth() {
+        health = maxHealth;
+        invincible = false;
+    }
     public void setItems() {
+        inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(currentLight);
@@ -114,22 +123,22 @@ public class Player extends Entity{
         if (attacking) {
             attack();
             attack();
-        } else if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed || keyH.spacePressed || keyH.interactKeyPressed) {
-            if (keyH.upPressed && keyH.leftPressed) {
+        } else if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed || keyHandler.spacePressed || keyHandler.interactKeyPressed) {
+            if (keyHandler.upPressed && keyHandler.leftPressed) {
                 direction = "up left";
-            } else if (keyH.upPressed && keyH.rightPressed) {
+            } else if (keyHandler.upPressed && keyHandler.rightPressed) {
                 direction = "up right";
-            } else if (keyH.downPressed && keyH.leftPressed) {
+            } else if (keyHandler.downPressed && keyHandler.leftPressed) {
                 direction = "down left";
-            } else if (keyH.downPressed && keyH.rightPressed) {
+            } else if (keyHandler.downPressed && keyHandler.rightPressed) {
                 direction = "down right";
-            } else if (keyH.upPressed) {
+            } else if (keyHandler.upPressed) {
                 direction = "up";
-            } else if (keyH.downPressed) {
+            } else if (keyHandler.downPressed) {
                 direction = "down";
-            } else if (keyH.leftPressed) {
+            } else if (keyHandler.leftPressed) {
                 direction = "left";
-            } else if (keyH.rightPressed) {
+            } else if (keyHandler.rightPressed) {
                 direction = "right";
             }
 
@@ -152,7 +161,7 @@ public class Player extends Entity{
             int mobIndex = gamePanel.cChecker.checkEntity(this, gamePanel.mob);
             contactMob(mobIndex);
 
-            if (!collisionOn && !keyH.spacePressed && !keyH.interactKeyPressed) {
+            if (!collisionOn && !keyHandler.spacePressed && !keyHandler.interactKeyPressed) {
                 switch (direction) {
                     case "up left": worldX -= (speed - 1); worldY -= (speed - 1); break;
                     case "up right": worldX += (speed - 1); worldY -= (speed - 1); break;
@@ -166,13 +175,13 @@ public class Player extends Entity{
             }
 
             // Attacking
-            if (keyH.spacePressed && !attackCanceled) {
+            if (keyHandler.spacePressed && !attackCanceled) {
                 attacking = true;
                 spriteCounter = 0;
             }
 
             // Inventory
-            if (keyH.interactKeyPressed && !attackCanceled) {
+            if (keyHandler.interactKeyPressed && !attackCanceled) {
                 gamePanel.gameState = States.STATE_CHARACTER;
             }
 
@@ -205,6 +214,13 @@ public class Player extends Entity{
                 invincible = false;
                 invincibleCounter = 0;
             }
+        }
+        if (health > maxHealth) {
+            health = maxHealth;
+        }
+        if (health <= 0) {
+            gamePanel.gameState = States.STATE_GAME_OVER;
+            gamePanel.playSound(9);
         }
     }
     public void attack() {
@@ -252,7 +268,7 @@ public class Player extends Entity{
     public void pickUpObject(int i) {
         if (i != 999) {
             if (gamePanel.obj.get(i).tags.contains(EntityTags.TAG_OBSTACLE)) {
-                if (keyH.interactKeyPressed) {
+                if (keyHandler.interactKeyPressed) {
                     gamePanel.obj.get(i).interact();
                 }
             }

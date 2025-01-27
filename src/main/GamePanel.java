@@ -61,6 +61,7 @@ public class GamePanel extends JPanel implements Runnable {
     public ArrayList<Entity> entityList = new ArrayList<>();
 
     public States gameState;
+    public String gameMode;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -84,6 +85,17 @@ public class GamePanel extends JPanel implements Runnable {
 
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         graphics2D = (Graphics2D)tempScreen.getGraphics();
+    }
+    public void respawn() {
+        player.setDefaultPosition();
+        player.restoreHealth();
+    }
+    public void restart() {
+        player.setDefaultValues();
+        player.setItems();
+        assetSetter.setObject();
+        assetSetter.setNPC();
+        assetSetter.setMonster();
     }
     public void setFullScreen() {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -190,7 +202,9 @@ public class GamePanel extends JPanel implements Runnable {
             tileManager.draw(graphics2D);
 
             // Add entities to list
-            entityList.add(player);
+            if (gameState != States.STATE_GAME_OVER) {
+                entityList.add(player);
+            }
             for (int i = 0; i < npc.size(); i++) {
                 if (npc.get(i) != null) {
                     entityList.add(npc.get(i));
@@ -275,7 +289,9 @@ public class GamePanel extends JPanel implements Runnable {
             tileManager.draw(graphics2D);
 
             // Add entities to list
-            entityList.add(player);
+            if (gameState != States.STATE_GAME_OVER) {
+                entityList.add(player);
+            }
             for (int i = 0; i < npc.size(); i++) {
                 if (npc.get(i) != null) {
                     entityList.add(npc.get(i));
