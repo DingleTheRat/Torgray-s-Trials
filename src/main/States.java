@@ -7,6 +7,7 @@ public enum States {
     STATE_PAUSE,
     STATE_DIALOGUE,
     STATE_CHARACTER,
+    STATE_GAME_OVER,
 
     // Title Sub-States
     TITLE_STATE_MAIN,

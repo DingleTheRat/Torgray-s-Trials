@@ -22,8 +22,9 @@ public class OBJ_Torgray_Soup extends Entity {
         tags.add(EntityTags.TAG_CONSUMABLE);
         down1 = registerEntitySprite("/objects/torgray_soup", gamePanel.tileSize, gamePanel.tileSize);
         description = "/nTorgray's wisest soup. /nIt's warm and a bit hearty. /nHealing: +" + value;
+        stackable = true;
     }
-    public void use(Entity entity) {
+    public boolean use(Entity entity) {
         gamePanel.gameState = States.STATE_DIALOGUE;
         Random random = new Random();
         int i = random.nextInt(5) + 1;
@@ -32,7 +33,7 @@ public class OBJ_Torgray_Soup extends Entity {
             gamePanel.ui.currentDialogue = "Erm a last key is behind the pond. /n+4 health";
         }
         if (i == 2) {
-            gamePanel.ui.currentDialogue = "Erm healing in the pond respawns mobs. /n+4 health";
+            gamePanel.ui.currentDialogue = "Erm healing in the pond respawns /nmobs. /n+4 health";
         }
         if (i == 3) {
             gamePanel.ui.currentDialogue = "Erm the higher level, the more you /nheal when leveling up. /n+4 health";
@@ -41,7 +42,7 @@ public class OBJ_Torgray_Soup extends Entity {
             gamePanel.ui.currentDialogue = "Erm I think you are left handed. /n+4 health";
         }
         if (i == 5) {
-            gamePanel.ui.currentDialogue = "Erm after passing all 3 gates you get a /nreward. /n+4 health";
+            gamePanel.ui.currentDialogue = "Erm after passing all 3 gates you get /na reward. /n+4 health";
         }
 
         if (gamePanel.player.health + value > gamePanel.player.maxHealth) {
@@ -51,6 +52,7 @@ public class OBJ_Torgray_Soup extends Entity {
         }
         gamePanel.player.generateParticles(this, gamePanel.player, value);
         gamePanel.playSound(2);
+        return true;
     }
 
     // Particles

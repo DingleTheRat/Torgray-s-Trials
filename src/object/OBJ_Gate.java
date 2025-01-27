@@ -4,6 +4,7 @@ import entity.Entity;
 import entity.EntityTags;
 import entity.EntityTypes;
 import main.GamePanel;
+import main.States;
 
 public class OBJ_Gate extends Entity {
     GamePanel gamePanel;
@@ -15,7 +16,7 @@ public class OBJ_Gate extends Entity {
         name = "Gate";
         down1 = registerEntitySprite("/objects/gate", gamePanel.tileSize, gamePanel.tileSize);
         type = EntityTypes.TYPE_OBJECT;
-        tags.add(EntityTags.TAG_INTERACTABLE);
+        tags.add(EntityTags.TAG_OBSTACLE);
         collision = true;
 
         solidArea.x = 0;
@@ -24,16 +25,5 @@ public class OBJ_Gate extends Entity {
         solidArea.height = 32;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-    }
-    public void use(Entity entity, int j) {
-        for (int i = 0; i < gamePanel.player.inventory.size(); i++) {
-            if (gamePanel.player.inventory.get(i).name.equals("Key")) {
-                gamePanel.obj.put(j, null);
-                gamePanel.player.inventory.remove(i);
-                gamePanel.ui.addMessage("-1 Key");
-                gamePanel.playSound(3);
-                break;
-            }
-        }
     }
 }

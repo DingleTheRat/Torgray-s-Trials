@@ -2,104 +2,96 @@ package main;
 
 import entity.NPC_GateKeeper;
 import mob.MOB_Dracore;
-import object.OBJ_Gate;
-import object.OBJ_Key;
-import object.OBJ_Shield_Amethyst;
-import object.OBJ_Sword_Amethyst;
+import object.*;
 
 public class AssetSetter {
-    GamePanel gp;
+    GamePanel gamePanel;
     private static int i = 0;
 
-    public AssetSetter(GamePanel gp) {this.gp = gp;}
+    public AssetSetter(GamePanel gamePanel) {this.gamePanel = gamePanel;}
 
     public void setObject() {
         int i = 0;
-        gp.obj.put(i, new OBJ_Key(gp));
-        gp.obj.get(i).worldX = 23 * gp.tileSize;
-        gp.obj.get(i).worldY = 7 * gp.tileSize;
+        gamePanel.obj.put(i, new OBJ_Key(gamePanel));
+        gamePanel.obj.get(i).worldX = 23 * gamePanel.tileSize;
+        gamePanel.obj.get(i).worldY = 7 * gamePanel.tileSize;
         i++;
-        gp.obj.put(i, new OBJ_Key(gp));
-        gp.obj.get(i).worldX = 23 * gp.tileSize;
-        gp.obj.get(i).worldY = 40 * gp.tileSize;
+        gamePanel.obj.put(i, new OBJ_Key(gamePanel));
+        gamePanel.obj.get(i).worldX = 23 * gamePanel.tileSize;
+        gamePanel.obj.get(i).worldY = 40 * gamePanel.tileSize;
         i++;
-        gp.obj.put(i, new OBJ_Key(gp));
-        gp.obj.get(i).worldX = 38 * gp.tileSize;
-        gp.obj.get(i).worldY = 8 * gp.tileSize;
-        i++;
-
-        // Weapons
-        gp.obj.put(i, new OBJ_Shield_Amethyst(gp));
-        gp.obj.get(i).worldX = gp.tileSize * 9;
-        gp.obj.get(i).worldY = gp.tileSize * 10;
-        i++;
-        gp.obj.put(i, new OBJ_Sword_Amethyst(gp));
-        gp.obj.get(i).worldX = gp.tileSize * 11;
-        gp.obj.get(i).worldY = gp.tileSize * 10;
+        gamePanel.obj.put(i, new OBJ_Key(gamePanel));
+        gamePanel.obj.get(i).worldX = 38 * gamePanel.tileSize;
+        gamePanel.obj.get(i).worldY = 8 * gamePanel.tileSize;
         i++;
 
         // Gates
-        gp.obj.put(i, new OBJ_Gate(gp));
-        gp.obj.get(i).worldX = 10 * gp.tileSize;
-        gp.obj.get(i).worldY = 12 * gp.tileSize;
+        gamePanel.obj.put(i, new OBJ_Gate(gamePanel));
+        gamePanel.obj.get(i).worldX = 10 * gamePanel.tileSize;
+        gamePanel.obj.get(i).worldY = 12 * gamePanel.tileSize;
         i++;
-        gp.obj.put(i, new OBJ_Gate(gp));
-        gp.obj.get(i).worldX = 8 * gp.tileSize;
-        gp.obj.get(i).worldY = 28 * gp.tileSize;
+        gamePanel.obj.put(i, new OBJ_Gate(gamePanel));
+        gamePanel.obj.get(i).worldX = 8 * gamePanel.tileSize;
+        gamePanel.obj.get(i).worldY = 28 * gamePanel.tileSize;
         i++;
-        gp.obj.put(i, new OBJ_Gate(gp));
-        gp.obj.get(i).worldX = 12 * gp.tileSize;
-        gp.obj.get(i).worldY = 23 * gp.tileSize;
+        gamePanel.obj.put(i, new OBJ_Gate(gamePanel));
+        gamePanel.obj.get(i).worldX = 12 * gamePanel.tileSize;
+        gamePanel.obj.get(i).worldY = 23 * gamePanel.tileSize;
         i++;
 
+        // Chest
+        gamePanel.obj.put(i, new OBJ_Chest(gamePanel, new OBJ_Sword_Amethyst(gamePanel), new OBJ_Shield_Amethyst(gamePanel)));
+        gamePanel.obj.get(i).worldX = 10 * gamePanel.tileSize;
+        gamePanel.obj.get(i).worldY = 10 * gamePanel.tileSize;
+        i++;
     }
     public void setNPC() {
-        gp.npc.put(0, new NPC_GateKeeper(gp));
-        gp.npc.get(0).worldX = gp.tileSize * 21;
-        gp.npc.get(0).worldY = gp.tileSize * 21;
+        gamePanel.npc.put(0, new NPC_GateKeeper(gamePanel));
+        gamePanel.npc.get(0).worldX = gamePanel.tileSize * 21;
+        gamePanel.npc.get(0).worldY = gamePanel.tileSize * 21;
     }
     public void setMonster() {
         int i = 0;
 
         // In grass thing
-        gp.mob.put(i, new MOB_Dracore(gp));
-        gp.mob.get(i).worldX = gp.tileSize * 23;
-        gp.mob.get(i).worldY = gp.tileSize * 36;
+        gamePanel.mob.put(i, new MOB_Dracore(gamePanel));
+        gamePanel.mob.get(i).worldX = gamePanel.tileSize * 23;
+        gamePanel.mob.get(i).worldY = gamePanel.tileSize * 36;
         i++;
-        gp.mob.put(i, new MOB_Dracore(gp));
-        gp.mob.get(i).worldX = gp.tileSize * 23;
-        gp.mob.get(i).worldY = gp.tileSize * 37;
+        gamePanel.mob.put(i, new MOB_Dracore(gamePanel));
+        gamePanel.mob.get(i).worldX = gamePanel.tileSize * 23;
+        gamePanel.mob.get(i).worldY = gamePanel.tileSize * 37;
         i++;
-        gp.mob.put(i, new MOB_Dracore(gp));
-        gp.mob.get(i).worldX = gp.tileSize * 23;
-        gp.mob.get(i).worldY = gp.tileSize * 38;
+        gamePanel.mob.put(i, new MOB_Dracore(gamePanel));
+        gamePanel.mob.get(i).worldX = gamePanel.tileSize * 23;
+        gamePanel.mob.get(i).worldY = gamePanel.tileSize * 38;
         i++;
 
         // In path thing
-        gp.mob.put(i, new MOB_Dracore(gp));
-        gp.mob.get(i).worldX = gp.tileSize * 35;
-        gp.mob.get(i).worldY = gp.tileSize * 10;
+        gamePanel.mob.put(i, new MOB_Dracore(gamePanel));
+        gamePanel.mob.get(i).worldX = gamePanel.tileSize * 35;
+        gamePanel.mob.get(i).worldY = gamePanel.tileSize * 10;
         i++;
-        gp.mob.put(i, new MOB_Dracore(gp));
-        gp.mob.get(i).worldX = gp.tileSize * 37;
-        gp.mob.get(i).worldY = gp.tileSize * 8;
+        gamePanel.mob.put(i, new MOB_Dracore(gamePanel));
+        gamePanel.mob.get(i).worldX = gamePanel.tileSize * 37;
+        gamePanel.mob.get(i).worldY = gamePanel.tileSize * 8;
         i++;
-        gp.mob.put(i, new MOB_Dracore(gp));
-        gp.mob.get(i).worldX = gp.tileSize * 39;
-        gp.mob.get(i).worldY = gp.tileSize * 10;
+        gamePanel.mob.put(i, new MOB_Dracore(gamePanel));
+        gamePanel.mob.get(i).worldX = gamePanel.tileSize * 39;
+        gamePanel.mob.get(i).worldY = gamePanel.tileSize * 10;
         i++;
 
         // In gate thing
-        gp.mob.put(i, new MOB_Dracore(gp));
-        gp.mob.get(i).worldX = gp.tileSize * 10;
-        gp.mob.get(i).worldY = gp.tileSize * 29;
+        gamePanel.mob.put(i, new MOB_Dracore(gamePanel));
+        gamePanel.mob.get(i).worldX = gamePanel.tileSize * 10;
+        gamePanel.mob.get(i).worldY = gamePanel.tileSize * 29;
         i++;
-        gp.mob.put(i, new MOB_Dracore(gp));
-        gp.mob.get(i).worldX = gp.tileSize * 11;
-        gp.mob.get(i).worldY = gp.tileSize * 29;
+        gamePanel.mob.put(i, new MOB_Dracore(gamePanel));
+        gamePanel.mob.get(i).worldX = gamePanel.tileSize * 11;
+        gamePanel.mob.get(i).worldY = gamePanel.tileSize * 29;
         i++;
-        gp.mob.put(i, new MOB_Dracore(gp));
-        gp.mob.get(i).worldX = gp.tileSize * 12;
-        gp.mob.get(i).worldY = gp.tileSize * 29;
+        gamePanel.mob.put(i, new MOB_Dracore(gamePanel));
+        gamePanel.mob.get(i).worldX = gamePanel.tileSize * 12;
+        gamePanel.mob.get(i).worldY = gamePanel.tileSize * 29;
     }
 }

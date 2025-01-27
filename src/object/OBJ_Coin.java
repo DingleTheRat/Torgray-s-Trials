@@ -18,9 +18,10 @@ public class OBJ_Coin extends Entity {
         down1 = registerEntitySprite("/objects/coin", gamePanel.tileSize, gamePanel.tileSize);
     }
 
-    public void use(Entity entity) {
+    public boolean use(Entity entity) {
         gp.playSound(1);
         gp.ui.addMessage("+1 Coin");
         gp.player.coins++;
+        return true;
     }
 }

@@ -50,8 +50,7 @@ public class EventHandler {
             if (hit(37, 34, "any")) {damagePit(37, 34, States.STATE_DIALOGUE);}
             if (hit(35, 38, "any")) {damagePit(35, 38, States.STATE_DIALOGUE);}
             if (hit(9, 30, "any")) {damagePit(9, 30, States.STATE_DIALOGUE);}
-            if (hit(23, 12, "up")) {healingPond(23, 12, States.STATE_DIALOGUE);} else {
-                gamePanel.ui.interactable = false;}
+            if (hit(23, 12, "up")) {healingPond(23, 12, States.STATE_DIALOGUE);}
         }
     }
     public boolean hit(int col, int row, String reqDirection) {
@@ -84,14 +83,11 @@ public class EventHandler {
     }
     public void healingPond(int col, int row, States gameState) {
         if (gamePanel.keyHandler.interactKeyPressed) {
-            gamePanel.ui.interactable = false;
             gamePanel.gameState = gameState;
             gamePanel.player.attackCanceled = true;
             gamePanel.ui.currentDialogue = "*Drinks water* /nYay, the pond of healing healed me!";
             gamePanel.player.health = gamePanel.player.maxHealth;
             gamePanel.assetSetter.setMonster();
-        } else {
-            gamePanel.ui.interactable = true;
         }
     }
 }

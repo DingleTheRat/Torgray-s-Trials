@@ -65,10 +65,19 @@ public abstract class Entity {
     public int defenceValue;
     public String description = "";
     public int lightRadius;
+    public boolean stackable = false;
+    public int amount = 1;
 
     public Entity(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
     }
+
+    public int getLeftX() {return worldX + solidArea.x;}
+    public int getRightX() {return worldX + solidArea.x + solidArea.width;}
+    public int getTopY() {return worldY + solidArea.y;}
+    public int getBottomY() {return worldY + solidArea.y + solidArea.height;}
+    public int getCol() {return (worldX + solidArea.x) / gamePanel.tileSize;}
+    public int getRow() {return (worldY + solidArea.y) / gamePanel.tileSize;}
 
     public void setAction() {}
     public void damageReaction() {}
@@ -86,8 +95,8 @@ public abstract class Entity {
             case "right": direction = "left"; break;
         }
     }
-    public void use(Entity entity) {}
-    public void use(Entity entity, int j) {}
+    public void interact() {}
+    public boolean use(Entity entity) {return false;}
     public void checkDrop() {}
     public void dropItem(Entity droppedItem) {
         for (int i = 0; i < gamePanel.obj.size(); i++) {
@@ -244,5 +253,34 @@ public abstract class Entity {
             e.printStackTrace();
         }
         return image;
+    }
+
+    public int getDetected(Entity user, HashMap<Integer, Entity> target, String targetName) {
+        int index = 999;
+
+        // Check surrounding objects
+        int nextWorldX = user.getLeftX();
+        int nextWorldY = user.getTopY();
+
+        switch (user.direction) {
+            case "up": nextWorldY = user.getTopY() - 10; break;
+            case "down": nextWorldY = user.getBottomY() + 10; break;
+            case "left": nextWorldX = user.getLeftX() - 10; break;
+            case "right": nextWorldY = user.getRightX() + 10; break;
+        }
+        int col = nextWorldX / gamePanel.tileSize;
+        int row = nextWorldY / gamePanel.tileSize;
+
+        for (int i = 0; i < target.size(); i++) {
+            if (target.get(i) != null) {
+                if (target.get(i).getCol() == col
+                        && target.get(i).getRow() == row
+                        && target.get(i).name.equals(targetName)) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+        return index;
     }
 }

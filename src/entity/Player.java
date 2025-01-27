@@ -3,6 +3,7 @@ package entity;
 import main.GamePanel;
 import main.KeyHandler;
 import main.States;
+import object.OBJ_Key;
 import object.OBJ_Lantern;
 import object.OBJ_Shield_Iron;
 import object.OBJ_Sword_Iron;
@@ -93,13 +94,14 @@ public class Player extends Entity{
         coins = 0;
         currentWeapon = new OBJ_Sword_Iron(gamePanel);
         currentShield = new OBJ_Shield_Iron(gamePanel);
+        currentLight = new OBJ_Lantern(gamePanel);
         attack = getAttack();
         defence = getDefence();
     }
     public void setItems() {
         inventory.add(currentWeapon);
         inventory.add(currentShield);
-        inventory.add(new OBJ_Lantern(gamePanel));
+        inventory.add(currentLight);
     }
     public int getAttack() {
         attackArea = currentWeapon.attackArea;
@@ -249,15 +251,18 @@ public class Player extends Entity{
     }
     public void pickUpObject(int i) {
         if (i != 999) {
-            if (gamePanel.obj.get(i).tags.contains(EntityTags.TAG_INTERACTABLE)) {
-                gamePanel.obj.get(i).use(this, i);
-            } else if (gamePanel.obj.get(i).tags.contains(EntityTags.TAG_PICKUPONLY)) {
+            if (gamePanel.obj.get(i).tags.contains(EntityTags.TAG_OBSTACLE)) {
+                if (keyH.interactKeyPressed) {
+                    gamePanel.obj.get(i).interact();
+                }
+            }
+            else if (gamePanel.obj.get(i).tags.contains(EntityTags.TAG_PICKUPONLY)) {
                 gamePanel.obj.get(i).use(this);
                 gamePanel.obj.put(i, null);
             } else {
                 String text;
-                if (inventory.size() != maxInventorySize) {
-                    inventory.add(gamePanel.obj.get(i));
+
+                if (canObtainItem(gamePanel.obj.get(i))) {
                     gamePanel.playSound(1);
                     text = "+1 " + gamePanel.obj.get(i).name;
                 }
@@ -360,11 +365,51 @@ public class Player extends Entity{
                 lightUpdated = true;
             }
             if (selectedItem.tags.contains(EntityTags.TAG_CONSUMABLE)) {
-                selectedItem.use(this);
-                inventory.remove(itemIndex);
+                if (selectedItem.use(this)) {
+                    if (selectedItem.amount > 1) {
+                        selectedItem.amount--;
+                    } else {
+                        inventory.remove(itemIndex);
+                    }
+                }
             }
         }
     }
+    public int searchInInventory(String itemName) {
+        int itemIndex = 999;
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.get(i).name.equals(itemName)) {
+                itemIndex = i;
+                break;
+            }
+        }
+        return itemIndex;
+    }
+    public boolean canObtainItem(Entity item) {
+        boolean canObtain = false;
+
+        // Check if stackable
+        if (item.stackable) {
+            int index = searchInInventory(item.name);
+
+            if (index != 999) {
+                inventory.get(index).amount++;
+                canObtain = true;
+            }
+            else { // New item, so check vacancy
+                if (inventory.size() != maxInventorySize) {
+                    inventory.add(item);
+                    canObtain = true;
+                }
+            }
+        } else { // Not stackable, so check vacancy
+            if (inventory.size() != maxInventorySize) {
+                inventory.add(item);
+                canObtain = true;
+            }
+        }
+        return canObtain;
+     }
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;

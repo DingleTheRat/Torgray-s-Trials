@@ -16,7 +16,6 @@ public class UI {
     Graphics2D graphics2D;
     Font maruMonica;
     BufferedImage heart, half_heart, lost_heart;
-    public boolean interactable = false;
     ArrayList<String> messages = new ArrayList<>();
     ArrayList<Integer> messageCounter = new ArrayList<>();
     public String currentDialogue = "";
@@ -61,9 +60,6 @@ public class UI {
         if (gamePanel.gameState == States.STATE_PLAY) {
             drawPlayerHealth();
             drawMessage();
-            if (interactable) {
-                drawInteractScreen();
-            }
         }
         if (gamePanel.gameState == States.STATE_PAUSE) {
             drawPauseScreen();
@@ -565,20 +561,6 @@ public class UI {
         }
 
     }
-
-    public void drawInteractScreen() {
-        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 35f));
-        String text = "Press E to interact";
-        int x = gamePanel.screenWidth / 3;
-        int y = gamePanel.tileSize / 2 + (gamePanel.tileSize * 8);
-
-        int width = gamePanel.tileSize * 7;
-        int height = gamePanel.tileSize * 2 - 13;
-        drawSubWindow(x, y, width, height);
-        y += 52;
-        x += 16;
-        graphics2D.drawString(text, x, y);
-    }
     public void drawDialogueScreen() {
         int x = gamePanel.tileSize * 4;
         int y = gamePanel.tileSize / 2 + (gamePanel.tileSize * 7);
@@ -720,6 +702,26 @@ public class UI {
             }
 
             graphics2D.drawImage(gamePanel.player.inventory.get(i).down1, slotX, slotY, null);
+
+            // Draw Amount
+            if (gamePanel.player.inventory.get(i).amount > 1) {
+                graphics2D.setFont(graphics2D.getFont().deriveFont(28f));
+                int amountX;
+                int amountY;
+
+                String s = "" + gamePanel.player.inventory.get(i).amount;
+                amountX = alignXToRight(s, slotX + 44);
+                amountY = slotY + gamePanel.tileSize;
+
+                // Shadow
+                graphics2D.setColor(new Color(60, 60, 60));
+                graphics2D.drawString(s, amountX, amountY);
+
+                // Text
+                graphics2D.setColor(Color.white);
+                graphics2D.drawString(s, amountX - 3, amountY - 3);
+            }
+
             slotX += slotSize;
 
             if (i == 4 || i == 9 || i == 14 || i == 19) {

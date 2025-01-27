@@ -188,12 +188,12 @@ public class KeyHandler implements KeyListener {
 
         if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
             if (gamePanel.ui.subState == States.PAUSE_SETTINGS_MAIN) {
-                if (gamePanel.ui.commandNum == 1 && gamePanel.music.volumeScale > 0) {
+                if (gamePanel.ui.commandNum == 2 && gamePanel.music.volumeScale > 0) {
                     gamePanel.music.volumeScale--;
                     gamePanel.music.checkVolume();
                     gamePanel.playSound(8);
                 }
-                if (gamePanel.ui.commandNum == 2 && gamePanel.sound.volumeScale > 0) {
+                if (gamePanel.ui.commandNum == 3 && gamePanel.sound.volumeScale > 0) {
                     gamePanel.sound.volumeScale--;
                     gamePanel.playSound(8);
                 }
@@ -201,12 +201,12 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
             if (gamePanel.ui.subState == States.PAUSE_SETTINGS_MAIN) {
-                if (gamePanel.ui.commandNum == 1 && gamePanel.music.volumeScale < 5) {
+                if (gamePanel.ui.commandNum == 2 && gamePanel.music.volumeScale < 5) {
                     gamePanel.music.volumeScale++;
                     gamePanel.music.checkVolume();
                     gamePanel.playSound(8);
                 }
-                if (gamePanel.ui.commandNum == 2 && gamePanel.sound.volumeScale < 5) {
+                if (gamePanel.ui.commandNum == 3 && gamePanel.sound.volumeScale < 5) {
                     gamePanel.sound.volumeScale++;
                     gamePanel.playSound(8);
                 }

@@ -127,14 +127,10 @@ public class CollisionChecker {
                 gamePanel.obj.get(i).solidArea.y = gamePanel.obj.get(i).worldY + gamePanel.obj.get(i).solidArea.y;
 
                 switch (entity.direction) {
-                    case "up":
-                        entity.solidArea.y -= entity.speed; break;
-                    case "down":
-                        entity.solidArea.y += entity.speed; break;
-                    case "left":
-                        entity.solidArea.x -= entity.speed; break;
-                    case "right":
-                        entity.solidArea.x += entity.speed; break;
+                    case "up": entity.solidArea.y -= entity.speed; break;
+                    case "down": entity.solidArea.y += entity.speed; break;
+                    case "left": entity.solidArea.x -= entity.speed; break;
+                    case "right": entity.solidArea.x += entity.speed; break;
                 }
                 if (entity.solidArea.intersects(gamePanel.obj.get(i).solidArea)) {
                     if (gamePanel.obj.get(i).collision) {
