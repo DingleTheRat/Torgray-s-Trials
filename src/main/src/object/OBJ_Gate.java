@@ -4,7 +4,6 @@ import entity.Entity;
 import entity.EntityTags;
 import entity.EntityTypes;
 import main.GamePanel;
-import main.States;
 
 public class OBJ_Gate extends Entity {
     GamePanel gamePanel;
@@ -14,7 +13,7 @@ public class OBJ_Gate extends Entity {
         this.gamePanel = gamePanel;
 
         name = "Gate";
-        down1 = registerEntitySprite("/objects/gate", gamePanel.tileSize, gamePanel.tileSize);
+        down1 = registerEntitySprite("/drawable/objects/gate", gamePanel.tileSize, gamePanel.tileSize);
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_OBSTACLE);
         collision = true;

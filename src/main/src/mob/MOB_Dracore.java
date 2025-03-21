@@ -28,21 +28,21 @@ public class MOB_Dracore extends Entity {
         getImage();
     }
     public void getImage() {
-        up1 = registerEntitySprite("/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
-        up2 = registerEntitySprite("/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
-        up3 = registerEntitySprite("/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
+        up1 = registerEntitySprite("/drawable/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
+        up2 = registerEntitySprite("/drawable/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
+        up3 = registerEntitySprite("/drawable/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
         
-        down1 = registerEntitySprite("/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
-        down2 = registerEntitySprite("/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
-        down3 = registerEntitySprite("/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
+        down1 = registerEntitySprite("/drawable/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
+        down2 = registerEntitySprite("/drawable/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
+        down3 = registerEntitySprite("/drawable/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
         
-        left1 = registerEntitySprite("/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
-        left2 = registerEntitySprite("/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
-        left3 = registerEntitySprite("/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
+        left1 = registerEntitySprite("/drawable/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
+        left2 = registerEntitySprite("/drawable/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
+        left3 = registerEntitySprite("/drawable/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
         
-        right1 = registerEntitySprite("/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
-        right2 = registerEntitySprite("/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
-        right3 = registerEntitySprite("/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
+        right1 = registerEntitySprite("/drawable/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
+        right2 = registerEntitySprite("/drawable/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
+        right3 = registerEntitySprite("/drawable/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
     }
     public void setAction() {
         actionLockCounter++;

@@ -16,7 +16,7 @@ public class OBJ_Lantern extends Entity {
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_LIGHT);
         lightRadius = 150;
-        down1 = registerEntitySprite("/objects/lantern", gamePanel.tileSize, gamePanel.tileSize);
+        down1 = registerEntitySprite("/drawable/objects/lantern", gamePanel.tileSize, gamePanel.tileSize);
         description = "/nSHINE BRIGHTTTTTT /nTONIGHTTTTTT /lyr /nLight Radius: " + lightRadius;
     }
 }

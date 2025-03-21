@@ -10,6 +10,6 @@ public class OBJ_Boots extends Entity {
 
         name = "Boots";
         type = EntityTypes.TYPE_OBJECT;
-        down1 = registerEntitySprite("/objects/boots", gamePanel.tileSize, gamePanel.tileSize);
+        down1 = registerEntitySprite("/drawable/objects/boots", gamePanel.tileSize, gamePanel.tileSize);
     }
 }

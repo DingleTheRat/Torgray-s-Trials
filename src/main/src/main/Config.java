@@ -11,7 +11,13 @@ public class Config {
 
     public void saveConfig() {
         try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("config.txt"));
+            String userHome = System.getProperty("user.home");
+            File configFile = new File(userHome, "torgrays-trials-config.txt");
+            
+            BufferedWriter bufferedWriter =
+                    new BufferedWriter(
+                            new FileWriter(configFile)
+                    );
 
             // Full screen
             if (gamePanel.fullScreen) {
@@ -45,7 +51,17 @@ public class Config {
     }
     public void loadConfig() {
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader("config.txt"));
+            String userHome = System.getProperty("user.home");
+            File configFile = new File(userHome, "torgrays-trials-config.txt");
+            if (configFile.createNewFile()) {
+                FileWriter fileWriter = new FileWriter(configFile);
+                fileWriter.write("false\n");
+                fileWriter.write("true\n");
+                fileWriter.write("3\n");
+                fileWriter.write("3\n");
+                fileWriter.close();
+            }
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(configFile));
             String s = bufferedReader.readLine();
 
             // Full screen
