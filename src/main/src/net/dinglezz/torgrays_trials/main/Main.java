@@ -7,7 +7,6 @@ public class Main {
     public static JFrame window;
 
     public static void main(String[] args) {
-        System.out.println(System.getProperty("user.home"));
         window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);

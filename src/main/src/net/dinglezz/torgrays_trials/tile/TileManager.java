@@ -21,7 +21,7 @@ public class TileManager {
         tile = new HashMap<>();
         mapTileNum = new int[game.maxWorldCol][game.maxWorldRow];
         getTileImage();
-        loadMap("/maps/world02.txt");
+        loadMap("/values/maps/world02.txt");
     }
 
     public void getTileImage() {
@@ -80,10 +80,11 @@ public class TileManager {
         try {
             tile.put(i, new Tile());
             try {
-                tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/tiles/" + imageName + ".png"));
+                System.out.println(getClass().getResource("/drawable/tiles/" + imageName + ".png"));
+                tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/drawable/tiles/" + imageName + ".png"));
             } catch (IllegalArgumentException e) {
                 System.out.println("\"" + imageName + "\" is not a valid path.");
-                tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/tiles/disabled.png"));
+                tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/drawable/tiles/disabled.png"));
             }
             tile.get(i).image = uTool.scaleImage(tile.get(i).image, game.tileSize, game.tileSize);
             tile.get(i).collision = collision;
