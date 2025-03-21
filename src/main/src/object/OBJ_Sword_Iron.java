@@ -13,7 +13,7 @@ public class OBJ_Sword_Iron extends Entity {
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_IRON);
         tags.add(EntityTags.TAG_SWORD);
-        down1 = registerEntitySprite("/objects/iron_sword", gamePanel.tileSize, gamePanel.tileSize);
+        down1 = registerEntitySprite("/drawable/objects/iron_sword", gamePanel.tileSize, gamePanel.tileSize);
         attackValue = 1;
         attackArea.width = 36;
         attackArea.height = 36;

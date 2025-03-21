@@ -21,7 +21,7 @@ public class TileManager {
         tile = new HashMap<>();
         mapTileNum = new int[gamePanel.maxWorldCol][gamePanel.maxWorldRow];
         getTileImage();
-        loadMap("/maps/world02.txt");
+        loadMap("/values/maps/world02.txt");
     }
 
     public void getTileImage() {
@@ -80,7 +80,7 @@ public class TileManager {
 
         try {
             tile.put(i, new Tile());
-            tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/tiles/" + imageName + ".png"));
+            tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/drawable/tiles/" + imageName + ".png"));
             tile.get(i).image = uTool.scaleImage(tile.get(i).image, gamePanel.tileSize, gamePanel.tileSize);
             tile.get(i).collision = collision;
         } catch (IOException e) {

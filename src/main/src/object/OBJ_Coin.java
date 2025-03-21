@@ -15,7 +15,7 @@ public class OBJ_Coin extends Entity {
         name = "Coin";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_PICKUPONLY);
-        down1 = registerEntitySprite("/objects/coin", gamePanel.tileSize, gamePanel.tileSize);
+        down1 = registerEntitySprite("/drawable/objects/coin", gamePanel.tileSize, gamePanel.tileSize);
     }
 
     public boolean use(Entity entity) {

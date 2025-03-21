@@ -4,7 +4,6 @@ import entity.Entity;
 import entity.EntityTags;
 import entity.EntityTypes;
 import main.GamePanel;
-import main.States;
 
 public class OBJ_Key extends Entity {
     GamePanel gamePanel;
@@ -16,7 +15,7 @@ public class OBJ_Key extends Entity {
         name = "Key";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_CONSUMABLE);
-        down1 = registerEntitySprite("/objects/key", gamePanel.tileSize, gamePanel.tileSize);
+        down1 = registerEntitySprite("/drawable/objects/key", gamePanel.tileSize, gamePanel.tileSize);
         description = "/n Probably opens a gate";
         stackable = true;
     }
