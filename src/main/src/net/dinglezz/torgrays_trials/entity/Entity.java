@@ -249,7 +249,7 @@ public abstract class Entity {
             try {
                 image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
             } catch (IllegalArgumentException e) {
-                image = ImageIO.read(getClass().getResourceAsStream("/tiles/disabled.png"));
+                image = ImageIO.read(getClass().getResourceAsStream("drawable/tiles/disabled.png"));
             }
             image = uTool.scaleImage(image, game.tileSize, game.tileSize);
         } catch (IOException e) {
@@ -265,7 +265,7 @@ public abstract class Entity {
                 image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
             } catch (IllegalArgumentException e) {
                 System.out.println("\"" + imagePath + "\" is not a valid path.");
-                image = ImageIO.read(getClass().getResourceAsStream("/tiles/disabled.png"));
+                image = ImageIO.read(getClass().getResourceAsStream("/drawable/tiles/disabled.png"));
             }
             image = uTool.scaleImage(image, width, height);
         } catch (IOException e) {

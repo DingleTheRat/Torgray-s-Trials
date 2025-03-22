@@ -32,13 +32,8 @@ public class OBJ_Chest extends Entity {
         name = "Chest";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_OBSTACLE);
-<<<<<<<< HEAD:src/main/src/object/OBJ_Chest.java
-        image = registerEntitySprite("/drawable/objects/chest_closed", gamePanel.tileSize, gamePanel.tileSize);
-        image2 = registerEntitySprite("/drawable/objects/chest_open", gamePanel.tileSize, gamePanel.tileSize);
-========
-        image = registerEntitySprite("/objects/chest_closed", game.tileSize, game.tileSize);
-        image2 = registerEntitySprite("/objects/chest_open", game.tileSize, game.tileSize);
->>>>>>>> origin/main:src/main/src/net/dinglezz/torgrays_trials/object/OBJ_Chest.java
+        image = registerEntitySprite("/drawable/objects/chest_closed", game.tileSize, game.tileSize);
+        image2 = registerEntitySprite("/drawable/objects/chest_open", game.tileSize, game.tileSize);
         down1 = image;
         collision = true;
 

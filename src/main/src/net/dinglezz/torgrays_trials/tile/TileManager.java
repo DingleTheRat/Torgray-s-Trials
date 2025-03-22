@@ -80,7 +80,6 @@ public class TileManager {
         try {
             tile.put(i, new Tile());
             try {
-                System.out.println(getClass().getResource("/drawable/tiles/" + imageName + ".png"));
                 tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/drawable/tiles/" + imageName + ".png"));
             } catch (IllegalArgumentException e) {
                 System.out.println("\"" + imageName + "\" is not a valid path.");

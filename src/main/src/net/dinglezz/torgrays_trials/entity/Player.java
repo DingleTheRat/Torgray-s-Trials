@@ -47,63 +47,33 @@ public class Player extends Entity{
     }
 
     public void getImage() {
-<<<<<<<< HEAD:src/main/src/entity/Player.java
-        up1 = registerEntitySprite("/drawable/player/walking/ghost_up_1", gamePanel.tileSize, gamePanel.tileSize);
-        up2 = registerEntitySprite("/drawable/player/walking/ghost_up_2", gamePanel.tileSize, gamePanel.tileSize);
-        up3 = registerEntitySprite("/drawable/player/walking/ghost_up_3", gamePanel.tileSize, gamePanel.tileSize);
+        up1 = registerEntitySprite("/drawable/player/walking/ghost_up_1", game.tileSize, game.tileSize);
+        up2 = registerEntitySprite("/drawable/player/walking/ghost_up_2", game.tileSize, game.tileSize);
+        up3 = registerEntitySprite("/drawable/player/walking/ghost_up_3", game.tileSize, game.tileSize);
 
-        down1 = registerEntitySprite("/drawable/player/walking/ghost_down_1", gamePanel.tileSize, gamePanel.tileSize);
-        down2 = registerEntitySprite("/drawable/player/walking/ghost_down_2", gamePanel.tileSize, gamePanel.tileSize);
-        down3 = registerEntitySprite("/drawable/player/walking/ghost_down_3", gamePanel.tileSize, gamePanel.tileSize);
+        down1 = registerEntitySprite("/drawable/player/walking/ghost_down_1", game.tileSize, game.tileSize);
+        down2 = registerEntitySprite("/drawable/player/walking/ghost_down_2", game.tileSize, game.tileSize);
+        down3 = registerEntitySprite("/drawable/player/walking/ghost_down_3", game.tileSize, game.tileSize);
 
-        left1 = registerEntitySprite("/drawable/player/walking/ghost_left_1", gamePanel.tileSize, gamePanel.tileSize);
-        left2 = registerEntitySprite("/drawable/player/walking/ghost_left_2", gamePanel.tileSize, gamePanel.tileSize);
-        left3 = registerEntitySprite("/drawable/player/walking/ghost_left_3", gamePanel.tileSize, gamePanel.tileSize);
+        left1 = registerEntitySprite("/drawable/player/walking/ghost_left_1", game.tileSize, game.tileSize);
+        left2 = registerEntitySprite("/drawable/player/walking/ghost_left_2", game.tileSize, game.tileSize);
+        left3 = registerEntitySprite("/drawable/player/walking/ghost_left_3", game.tileSize, game.tileSize);
 
-        right1 = registerEntitySprite("/drawable/player/walking/ghost_right_1", gamePanel.tileSize, gamePanel.tileSize);
-        right2 = registerEntitySprite("/drawable/player/walking/ghost_right_2", gamePanel.tileSize, gamePanel.tileSize);
-        right3 = registerEntitySprite("/drawable/player/walking/ghost_right_3", gamePanel.tileSize, gamePanel.tileSize);
+        right1 = registerEntitySprite("/drawable/player/walking/ghost_right_1", game.tileSize, game.tileSize);
+        right2 = registerEntitySprite("/drawable/player/walking/ghost_right_2", game.tileSize, game.tileSize);
+        right3 = registerEntitySprite("/drawable/player/walking/ghost_right_3", game.tileSize, game.tileSize);
     }
     public void getAttackImage() {
         if (currentWeapon.tags.contains(EntityTags.TAG_AMETHIST)) {
-            attackUp = registerEntitySprite("/drawable/player/attack/torgray_amethist_attack_up", gamePanel.tileSize, gamePanel.tileSize * 2);
-            attackDown = registerEntitySprite("/drawable/player/attack/torgray_amethist_attack_down", gamePanel.tileSize, gamePanel.tileSize * 2);
-            attackLeft = registerEntitySprite("/drawable/player/attack/torgray_amethist_attack_left", gamePanel.tileSize * 2, gamePanel.tileSize);
-            attackRight = registerEntitySprite("/drawable/player/attack/torgray_amethist_attack_right", gamePanel.tileSize * 2, gamePanel.tileSize);
+            attackUp = registerEntitySprite("/drawable/player/attack/torgray_amethist_attack_up", game.tileSize, game.tileSize * 2);
+            attackDown = registerEntitySprite("/drawable/player/attack/torgray_amethist_attack_down", game.tileSize, game.tileSize * 2);
+            attackLeft = registerEntitySprite("/drawable/player/attack/torgray_amethist_attack_left", game.tileSize * 2, game.tileSize);
+            attackRight = registerEntitySprite("/drawable/player/attack/torgray_amethist_attack_right", game.tileSize * 2, game.tileSize);
         } else if (currentWeapon.tags.contains(EntityTags.TAG_IRON)) {
-            attackUp = registerEntitySprite("/drawable/player/attack/torgray_iron_attack_up", gamePanel.tileSize, gamePanel.tileSize * 2);
-            attackDown = registerEntitySprite("/drawable/player/attack/torgray_iron_attack_down", gamePanel.tileSize, gamePanel.tileSize * 2);
-            attackLeft = registerEntitySprite("/drawable/player/attack/torgray_iron_attack_left", gamePanel.tileSize * 2, gamePanel.tileSize);
-            attackRight = registerEntitySprite("/drawable/player/attack/torgray_iron_attack_right", gamePanel.tileSize * 2, gamePanel.tileSize);
-========
-        up1 = registerEntitySprite("/player/walking/ghost_up_1", game.tileSize, game.tileSize);
-        up2 = registerEntitySprite("/player/walking/ghost_up_2", game.tileSize, game.tileSize);
-        up3 = registerEntitySprite("/player/walking/ghost_up_3", game.tileSize, game.tileSize);
-
-        down1 = registerEntitySprite("/player/walking/ghost_down_1", game.tileSize, game.tileSize);
-        down2 = registerEntitySprite("/player/walking/ghost_down_2", game.tileSize, game.tileSize);
-        down3 = registerEntitySprite("/player/walking/ghost_down_3", game.tileSize, game.tileSize);
-
-        left1 = registerEntitySprite("/player/walking/ghost_left_1", game.tileSize, game.tileSize);
-        left2 = registerEntitySprite("/player/walking/ghost_left_2", game.tileSize, game.tileSize);
-        left3 = registerEntitySprite("/player/walking/ghost_left_3", game.tileSize, game.tileSize);
-
-        right1 = registerEntitySprite("/player/walking/ghost_right_1", game.tileSize, game.tileSize);
-        right2 = registerEntitySprite("/player/walking/ghost_right_2", game.tileSize, game.tileSize);
-        right3 = registerEntitySprite("/player/walking/ghost_right_3", game.tileSize, game.tileSize);
-    }
-    public void getAttackImage() {
-        if (currentWeapon.tags.contains(EntityTags.TAG_AMETHIST)) {
-            attackUp = registerEntitySprite("/player/attack/torgray_amethist_attack_up", game.tileSize, game.tileSize * 2);
-            attackDown = registerEntitySprite("/player/attack/torgray_amethist_attack_down", game.tileSize, game.tileSize * 2);
-            attackLeft = registerEntitySprite("/player/attack/torgray_amethist_attack_left", game.tileSize * 2, game.tileSize);
-            attackRight = registerEntitySprite("/player/attack/torgray_amethist_attack_right", game.tileSize * 2, game.tileSize);
-        } else if (currentWeapon.tags.contains(EntityTags.TAG_IRON)) {
-            attackUp = registerEntitySprite("/player/attack/torgray_iron_attack_up", game.tileSize, game.tileSize * 2);
-            attackDown = registerEntitySprite("/player/attack/torgray_iron_attack_down", game.tileSize, game.tileSize * 2);
-            attackLeft = registerEntitySprite("/player/attack/torgray_iron_attack_left", game.tileSize * 2, game.tileSize);
-            attackRight = registerEntitySprite("/player/attack/torgray_iron_attack_right", game.tileSize * 2, game.tileSize);
->>>>>>>> origin/main:src/main/src/net/dinglezz/torgrays_trials/entity/Player.java
+            attackUp = registerEntitySprite("/drawable/player/attack/torgray_iron_attack_up", game.tileSize, game.tileSize * 2);
+            attackDown = registerEntitySprite("/drawable/player/attack/torgray_iron_attack_down", game.tileSize, game.tileSize * 2);
+            attackLeft = registerEntitySprite("/drawable/player/attack/torgray_iron_attack_left", game.tileSize * 2, game.tileSize);
+            attackRight = registerEntitySprite("/drawable/player/attack/torgray_iron_attack_right", game.tileSize * 2, game.tileSize);
         }
     }
     public void setDefaultValues() {

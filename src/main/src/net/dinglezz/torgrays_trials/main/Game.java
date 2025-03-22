@@ -60,7 +60,7 @@ public class Game extends JPanel implements Runnable {
     public ArrayList<Entity> particleList = new ArrayList<>();
     public ArrayList<Entity> entityList = new ArrayList<>();
 
-    public States gameState;
+    public States gameState = States.STATE_TITLE;
     public String gameMode;
 
     public Game() {

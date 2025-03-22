@@ -28,39 +28,21 @@ public class MOB_Dracore extends Entity {
         getImage();
     }
     public void getImage() {
-<<<<<<<< HEAD:src/main/src/mob/MOB_Dracore.java
-        up1 = registerEntitySprite("/drawable/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
-        up2 = registerEntitySprite("/drawable/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
-        up3 = registerEntitySprite("/drawable/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
+        up1 = registerEntitySprite("/drawable/mob/dracore_1", game.tileSize, game.tileSize);
+        up2 = registerEntitySprite("/drawable/mob/dracore_2", game.tileSize, game.tileSize);
+        up3 = registerEntitySprite("/drawable/mob/dracore_3", game.tileSize, game.tileSize);
         
-        down1 = registerEntitySprite("/drawable/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
-        down2 = registerEntitySprite("/drawable/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
-        down3 = registerEntitySprite("/drawable/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
+        down1 = registerEntitySprite("/drawable/mob/dracore_1", game.tileSize, game.tileSize);
+        down2 = registerEntitySprite("/drawable/mob/dracore_2", game.tileSize, game.tileSize);
+        down3 = registerEntitySprite("/drawable/mob/dracore_3", game.tileSize, game.tileSize);
         
-        left1 = registerEntitySprite("/drawable/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
-        left2 = registerEntitySprite("/drawable/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
-        left3 = registerEntitySprite("/drawable/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
+        left1 = registerEntitySprite("/drawable/mob/dracore_1", game.tileSize, game.tileSize);
+        left2 = registerEntitySprite("/drawable/mob/dracore_2", game.tileSize, game.tileSize);
+        left3 = registerEntitySprite("/drawable/mob/dracore_3", game.tileSize, game.tileSize);
         
-        right1 = registerEntitySprite("/drawable/mob/dracore_1", gamePanel.tileSize, gamePanel.tileSize);
-        right2 = registerEntitySprite("/drawable/mob/dracore_2", gamePanel.tileSize, gamePanel.tileSize);
-        right3 = registerEntitySprite("/drawable/mob/dracore_3", gamePanel.tileSize, gamePanel.tileSize);
-========
-        up1 = registerEntitySprite("/mob/dracore_1", game.tileSize, game.tileSize);
-        up2 = registerEntitySprite("/mob/dracore_2", game.tileSize, game.tileSize);
-        up3 = registerEntitySprite("/mob/dracore_3", game.tileSize, game.tileSize);
-        
-        down1 = registerEntitySprite("/mob/dracore_1", game.tileSize, game.tileSize);
-        down2 = registerEntitySprite("/mob/dracore_2", game.tileSize, game.tileSize);
-        down3 = registerEntitySprite("/mob/dracore_3", game.tileSize, game.tileSize);
-        
-        left1 = registerEntitySprite("/mob/dracore_1", game.tileSize, game.tileSize);
-        left2 = registerEntitySprite("/mob/dracore_2", game.tileSize, game.tileSize);
-        left3 = registerEntitySprite("/mob/dracore_3", game.tileSize, game.tileSize);
-        
-        right1 = registerEntitySprite("/mob/dracore_1", game.tileSize, game.tileSize);
-        right2 = registerEntitySprite("/mob/dracore_2", game.tileSize, game.tileSize);
-        right3 = registerEntitySprite("/mob/dracore_3", game.tileSize, game.tileSize);
->>>>>>>> origin/main:src/main/src/net/dinglezz/torgrays_trials/mob/MOB_Dracore.java
+        right1 = registerEntitySprite("/drawable/mob/dracore_1", game.tileSize, game.tileSize);
+        right2 = registerEntitySprite("/drawable/mob/dracore_2", game.tileSize, game.tileSize);
+        right3 = registerEntitySprite("/drawable/mob/dracore_3", game.tileSize, game.tileSize);
     }
     public void setAction() {
         actionLockCounter++;

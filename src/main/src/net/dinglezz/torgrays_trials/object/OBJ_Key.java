@@ -15,7 +15,7 @@ public class OBJ_Key extends Entity {
         name = "Key";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_CONSUMABLE);
-        down1 = registerEntitySprite("/objects/key", game.tileSize, game.tileSize);
+        down1 = registerEntitySprite("/drawable/objects/key", game.tileSize, game.tileSize);
         description = "/n Probably opens a gate";
         stackable = true;
     }
