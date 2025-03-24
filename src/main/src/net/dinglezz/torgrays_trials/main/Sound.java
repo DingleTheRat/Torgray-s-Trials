@@ -5,30 +5,31 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import java.net.URL;
+import java.util.HashMap;
 
 public class Sound {
     Clip clip;
-    URL[] soundURL = new URL[30];
+    public HashMap<String, URL> soundLibrary = new HashMap<>();
     FloatControl fc;
     int volumeScale = 3;
     float volume;
 
     public Sound() {
-        soundURL[0] = getClass().getResource("/sound/Journey.wav");
-        soundURL[1] = getClass().getResource("/sound/coin.wav");
-        soundURL[2] = getClass().getResource("/sound/powerup.wav");
-        soundURL[3] = getClass().getResource("/sound/unlock.wav");
-        soundURL[4] = getClass().getResource("/sound/way.wav");
-        soundURL[5] = getClass().getResource("/sound/TechGeek.wav");
-        soundURL[6] = getClass().getResource("/sound/hitmob.wav");
-        soundURL[7] = getClass().getResource("/sound/receivedamage.wav");
-        soundURL[8] = getClass().getResource("/sound/cursor.wav");
-        soundURL[9] = getClass().getResource("/sound/game_over.wav");
+        soundLibrary.put("Journey", getClass().getResource("/sound/journey.wav"));
+        soundLibrary.put("Coin", getClass().getResource("/sound/coin.wav"));
+        soundLibrary.put("Power Up", getClass().getResource("/sound/power_up.wav"));
+        soundLibrary.put("Unlock", getClass().getResource("/sound/unlock.wav"));
+        soundLibrary.put("Way", getClass().getResource("/sound/way.wav"));
+        soundLibrary.put("Tech Geek", getClass().getResource("/sound/tech_geek.wav"));
+        soundLibrary.put("Hit Mob", getClass().getResource("/sound/hit_mob.wav"));
+        soundLibrary.put("Receive Damage", getClass().getResource("/sound/receive_damage.wav"));
+        soundLibrary.put("Cursor", getClass().getResource("/sound/cursor.wav"));
+        soundLibrary.put("Game Over", getClass().getResource("/sound/game_over.wav"));
     }
 
-    public void setFile(int i) {
+    public void getFile(String soundName) {
         try {
-            AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
+            AudioInputStream ais = AudioSystem.getAudioInputStream(soundLibrary.get(soundName));
             clip = AudioSystem.getClip();
             clip.open(ais);
             fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);

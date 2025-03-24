@@ -13,22 +13,26 @@ import java.util.HashMap;
 
 public class TileManager {
     Game game;
-    public HashMap<Integer, Tile> tile;
-    public int[][] mapTileNum;
+    public HashMap<Integer, Tile> tile = new HashMap<>();
+    public HashMap<Integer, String> mapStrings = new HashMap<>();
+    public HashMap<String , Integer> mapNumbers = new HashMap<>();
+    public int[][][] mapTileNum;
 
     public TileManager(Game game) {
         this.game = game;
-        tile = new HashMap<>();
-        mapTileNum = new int[game.maxWorldCol][game.maxWorldRow];
+        mapTileNum = new int[game.maxMaps][game.maxWorldCol][game.maxWorldRow];
         getTileImage();
-        loadMap("/values/maps/world02.txt");
+        registerMap("Disabled", 0);
+        registerMap("Main Island", 1);
+        registerMap("Coiner's Shop", 2);
     }
 
     public void getTileImage() {
+        registerTile(1, "disabled", false);
 
         // Grass
-        registerTile(10, "grass_1", false);
-        registerTile(11, "grass_2", false);
+        registerTile(10, "/grass/grass_1", false);
+        registerTile(11, "/grass/grass_2", false);
 
         // Water
         registerTile(12, "/water/water", true);
@@ -61,19 +65,19 @@ public class TileManager {
         registerTile(37, "/path/path_outer_corner_3", false);
         registerTile(38, "/path/path_outer_corner_4", false);
 
-        // Dirt
-        registerTile(39, "dirt", false);
-
-        // Wall
-        registerTile(40, "wall", true);
+        // Building Stuff
+        registerTile(39, "floor", false);
+        registerTile(40, "planks", true);
 
         // Tree
         registerTile(41, "tree", true);
 
-        // Event Ties
+        // Event Tiles
         registerTile(42, "/path/path_pit", false);
-        registerTile(43, "grass_pit", false);
-        registerTile(44, "grass_healing", false);
+        registerTile(43, "/grass/grass_pit", false);
+        registerTile(44, "/grass/grass_healing", false);
+
+        registerTile(45, "lil_hut", true);
     }
     public void registerTile(int i, String imageName, boolean collision) {
         UtilityTool uTool = new UtilityTool();
@@ -91,19 +95,23 @@ public class TileManager {
             e.printStackTrace();
         }
     }
-    public void loadMap(String filePath) {
+    public void registerMap(String mapName, int mapNumber) {
         try {
-            InputStream is = getClass().getResourceAsStream(filePath);
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            InputStream inputStream = getClass().getResourceAsStream("/values/maps/" + mapName + ".txt");
+            if (inputStream == null) {
+                inputStream = getClass().getResourceAsStream("/values/maps/Disabled.txt");
+                System.out.println("\"" + mapName + "\" is not a valid path.");
+            }
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             int col = 0;
             int row = 0;
 
             while (col < game.maxWorldCol && row < game.maxWorldRow) {
-                String line = br.readLine();
+                String line = bufferedReader.readLine();
                 while (col < game.maxWorldCol) {
                     String[] numbers = line.split(" ");
                     int num = Integer.parseInt(numbers[col]);
-                    mapTileNum[col][row] = num;
+                    mapTileNum[mapNumber][col][row] = num;
                     col++;
                 }
                 if (col == game.maxWorldCol) {
@@ -111,18 +119,20 @@ public class TileManager {
                     row++;
                 }
             }
-            br.close();
+            bufferedReader.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        mapStrings.put(mapNumber, mapName);
+        mapNumbers.put(mapName, mapNumber);
     }
 
-    public void draw(Graphics2D g2) {
+    public void draw(Graphics2D graphics2D) {
         int worldCol = 0;
         int worldRow = 0;
 
         while (worldCol < game.maxWorldCol && worldRow < game.maxWorldRow) {
-            int tileNum = mapTileNum[worldCol][worldRow];
+            int tileNum = mapTileNum[mapNumbers.get(game.currentMap)][worldCol][worldRow];
             int worldX = worldCol * game.tileSize;
             int worldY = worldRow * game.tileSize;
             int screenX = worldX - game.player.worldX + game.player.screenX;
@@ -132,7 +142,7 @@ public class TileManager {
                     worldX - game.tileSize < game.player.worldX + game.player.screenX &&
                     worldY + game.tileSize > game.player.worldY - game.player.screenY &&
                     worldY - game.tileSize < game.player.worldY + game.player.screenY) {
-                g2.drawImage(tile.get(tileNum).image, screenX, screenY, null);
+                graphics2D.drawImage(tile.get(tileNum).image, screenX, screenY, null);
             }
             worldCol++;
             if (worldCol == game.maxWorldCol) {

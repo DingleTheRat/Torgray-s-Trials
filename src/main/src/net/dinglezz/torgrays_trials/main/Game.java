@@ -27,6 +27,7 @@ public class Game extends JPanel implements Runnable {
     // Word Settings
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
+    public final int maxMaps = 10;
 
     // Full Screen
     int screenWidth2 = screenWidth;
@@ -40,12 +41,12 @@ public class Game extends JPanel implements Runnable {
     int FPS = 60;
 
     // System
-    TileManager tileManager = new TileManager(this);
+    public TileManager tileManager = new TileManager(this);
     public KeyHandler keyHandler = new KeyHandler(this);
     Sound music = new Sound();
     Sound sound = new Sound();
     EnvironmentManager environmentManager = new EnvironmentManager(this);
-    public CollisionChecker cChecker = new CollisionChecker(this);
+    public CollisionChecker collisionChecker = new CollisionChecker(this);
     public AssetSetter assetSetter = new AssetSetter(this);
     public UI ui = new UI(this);
     public EventHandler eventHandler = new EventHandler(this);
@@ -54,13 +55,14 @@ public class Game extends JPanel implements Runnable {
 
     // Entities and Objects
     public Player player = new Player(this, keyHandler);
-    public HashMap<Integer, Entity> npc = new HashMap<>();
-    public HashMap<Integer, Entity> obj = new HashMap<>();
-    public HashMap<Integer, Entity> mob = new HashMap<>();
+    public HashMap<String, HashMap<Integer, Entity>> npc = new HashMap<>();
+    public HashMap<String, HashMap<Integer, Entity>> obj = new HashMap<>();
+    public HashMap<String, HashMap<Integer, Entity>> mob = new HashMap<>();
     public ArrayList<Entity> particleList = new ArrayList<>();
     public ArrayList<Entity> entityList = new ArrayList<>();
 
     public States gameState = States.STATE_TITLE;
+    public String currentMap = "Main Island";
     public String gameMode;
 
     public Game() {
@@ -76,7 +78,7 @@ public class Game extends JPanel implements Runnable {
         assetSetter.setNPC();
         assetSetter.setMonster();
         environmentManager.setup();
-        playMusic(5);
+        playMusic("Tech Geek");
         gameState = States.STATE_TITLE;
 
         if (fullScreen) {
@@ -113,7 +115,7 @@ public class Game extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        double drawInterval = 1000000000 / FPS;
+        double drawInterval = (double) 1000000000 / FPS;
         double delta = 0;
         long lastTime = System.nanoTime();
         long currentTime;
@@ -150,20 +152,20 @@ public class Game extends JPanel implements Runnable {
             player.update();
 
             // NPCs
-            for (int i = 0; i < npc.size(); i++) {
-                if (npc.get(i) != null) {
-                    npc.get(i).update();
+            for (int i = 0; i < npc.get(currentMap).size(); i++) {
+                if (npc.get(currentMap).get(i) != null) {
+                    npc.get(currentMap).get(i).update();
                 }
             }
             // Mobs
-            for (int i = 0; i < mob.size(); i++) {
-                if (mob.get(i) != null) {
-                    if (mob.get(i).alive && !mob.get(i).dying) {
-                        mob.get(i).update();
+            for (int i = 0; i < mob.get(currentMap).size(); i++) {
+                if (mob.get(currentMap).get(i) != null) {
+                    if (mob.get(currentMap).get(i).alive && !mob.get(currentMap).get(i).dying) {
+                        mob.get(currentMap).get(i).update();
                     }
-                    if (!mob.get(i).alive) {
-                        mob.get(i).checkDrop();
-                        mob.put(i, null);
+                    if (!mob.get(currentMap).get(i).alive) {
+                        mob.get(currentMap).get(i).checkDrop();
+                        mob.get(currentMap).put(i, null);
                     }
                 }
             }
@@ -201,24 +203,24 @@ public class Game extends JPanel implements Runnable {
             if (gameState != States.STATE_GAME_OVER) {
                 entityList.add(player);
             }
-            for (int i = 0; i < npc.size(); i++) {
-                if (npc.get(i) != null) {
-                    entityList.add(npc.get(i));
+            for (int i = 0; i < npc.get(currentMap).size(); i++) {
+                if (npc.get(currentMap).get(i) != null) {
+                    entityList.add(npc.get(currentMap).get(i));
                 }
             }
-            for (int i = 0; i < obj.size(); i++) {
-                if (obj.get(i) != null) {
-                    entityList.add(obj.get(i));
+            for (int i = 0; i < obj.get(currentMap).size(); i++) {
+                if (obj.get(currentMap).get(i) != null) {
+                    entityList.add(obj.get(currentMap).get(i));
                 }
             }
-            for (int i = 0; i < mob.size(); i++) {
-                if (mob.get(i) != null) {
-                    entityList.add(mob.get(i));
+            for (int i = 0; i < mob.get(currentMap).size(); i++) {
+                if (mob.get(currentMap).get(i) != null) {
+                    entityList.add(mob.get(currentMap).get(i));
                 }
             }
-            for (int i = 0; i < particleList.size(); i++) {
-                if (particleList.get(i) != null) {
-                    entityList.add(particleList.get(i));
+            for (Entity value : particleList) {
+                if (value != null) {
+                    entityList.add(value);
                 }
             }
 
@@ -229,8 +231,8 @@ public class Game extends JPanel implements Runnable {
             });
 
             // Draw Entities
-            for (int i = 0; i < entityList.size(); i++) {
-                entityList.get(i).draw(graphics2D);
+            for (Entity entity : entityList) {
+                entity.draw(graphics2D);
             }
             // Empty Entity List
             entityList.clear();
@@ -288,24 +290,24 @@ public class Game extends JPanel implements Runnable {
             if (gameState != States.STATE_GAME_OVER) {
                 entityList.add(player);
             }
-            for (int i = 0; i < npc.size(); i++) {
-                if (npc.get(i) != null) {
-                    entityList.add(npc.get(i));
+            for (int i = 0; i < npc.get(currentMap).size(); i++) {
+                if (npc.get(currentMap).get(i) != null) {
+                    entityList.add(npc.get(currentMap).get(i));
                 }
             }
-            for (int i = 0; i < obj.size(); i++) {
-                if (obj.get(i) != null) {
-                    entityList.add(obj.get(i));
+            for (int i = 0; i < obj.get(currentMap).size(); i++) {
+                if (obj.get(currentMap).get(i) != null) {
+                    entityList.add(obj.get(currentMap).get(i));
                 }
             }
-            for (int i = 0; i < mob.size(); i++) {
-                if (mob.get(i) != null) {
-                    entityList.add(mob.get(i));
+            for (int i = 0; i < mob.get(currentMap).size(); i++) {
+                if (mob.get(currentMap).get(i) != null) {
+                    entityList.add(mob.get(currentMap).get(i));
                 }
             }
-            for (int i = 0; i < particleList.size(); i++) {
-                if (particleList.get(i) != null) {
-                    entityList.add(particleList.get(i));
+            for (Entity value : particleList) {
+                if (value != null) {
+                    entityList.add(value);
                 }
             }
 
@@ -316,8 +318,8 @@ public class Game extends JPanel implements Runnable {
             });
 
             // Draw Entities
-            for (int i = 0; i < entityList.size(); i++) {
-                entityList.get(i).draw(graphics2D);
+            for (Entity entity : entityList) {
+                entity.draw(graphics2D);
             }
             // Empty Entity List
             entityList.clear();
@@ -353,16 +355,16 @@ public class Game extends JPanel implements Runnable {
     }
 
     // Sounds
-    public void playMusic(int i) {
-        music.setFile(i);
+    public void playMusic(String songName) {
+        music.getFile(songName);
         music.play();
         music.loop();
     }
     public void stopMusic() {
         music.stop();
     }
-    public void playSound(int i) {
-        sound.setFile(i);
+    public void playSound(String soundName) {
+        sound.getFile(soundName);
         sound.play();
     }
  }

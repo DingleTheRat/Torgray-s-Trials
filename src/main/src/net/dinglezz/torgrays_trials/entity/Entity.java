@@ -100,10 +100,10 @@ public abstract class Entity {
     public void checkDrop() {}
     public void dropItem(Entity droppedItem) {
         for (int i = 0; i < game.obj.size(); i++) {
-            if (game.obj.get(i) == null) {
-                game.obj.put(i, droppedItem);
-                game.obj.get(i).worldX = worldX;
-                game.obj.get(i).worldY = worldY;
+            if (game.obj.get(game.currentMap).get(i) == null) {
+                game.obj.get(game.currentMap).put(i, droppedItem);
+                game.obj.get(game.currentMap).get(i).worldX = worldX;
+                game.obj.get(game.currentMap).get(i).worldY = worldY;
                 break;
             }
         }
@@ -131,11 +131,11 @@ public abstract class Entity {
     public void update() {
         setAction();
         collisionOn = false;
-        game.cChecker.checkTile(this);
-        game.cChecker.checkObject(this, false);
-        int npcContact = game.cChecker.checkEntity(this, game.npc);
-        game.cChecker.checkEntity(this, game.mob);
-        boolean contactPlayer = game.cChecker.checkPlayer(this);
+        game.collisionChecker.checkTile(this);
+        game.collisionChecker.checkObject(this, false);
+        int npcContact = game.collisionChecker.checkEntity(this, game.npc);
+        game.collisionChecker.checkEntity(this, game.mob);
+        boolean contactPlayer = game.collisionChecker.checkPlayer(this);
 
         if (this.type == EntityTypes.TYPE_MOB && contactPlayer) {
             damagePlayer(attack);
@@ -172,7 +172,7 @@ public abstract class Entity {
     }
     public void damagePlayer(int Attack) {
         if (!game.player.invincible) {
-            game.playSound(7);
+            game.playSound("Receive Damage");
 
             int damage = attack - game.player.defence;
             if (damage <= 0) {

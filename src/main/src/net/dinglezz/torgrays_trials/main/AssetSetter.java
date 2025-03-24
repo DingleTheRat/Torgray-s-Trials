@@ -1,97 +1,88 @@
 package net.dinglezz.torgrays_trials.main;
 
+import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.npc.NPC_GateKeeper;
 import net.dinglezz.torgrays_trials.mob.MOB_Dracore;
 import net.dinglezz.torgrays_trials.object.*;
 
+import java.util.HashMap;
+
 public class AssetSetter {
     Game game;
-    private static int i = 0;
+    public int i = 0;
+    public HashMap<Integer, Entity> assetMap = new HashMap<>();
 
     public AssetSetter(Game game) {this.game = game;}
 
     public void setObject() {
-        int i = 0;
-        game.obj.put(i, new OBJ_Key(game));
-        game.obj.get(i).worldX = 23 * game.tileSize;
-        game.obj.get(i).worldY = 7 * game.tileSize;
-        i++;
-        game.obj.put(i, new OBJ_Key(game));
-        game.obj.get(i).worldX = 23 * game.tileSize;
-        game.obj.get(i).worldY = 40 * game.tileSize;
-        i++;
-        game.obj.put(i, new OBJ_Key(game));
-        game.obj.get(i).worldX = 38 * game.tileSize;
-        game.obj.get(i).worldY = 8 * game.tileSize;
-        i++;
+        // Disabled Map
+            assetMap.put(0, null);
+            game.obj.put("Disabled", assetMap);
+            assetMap = new HashMap<>();
 
-        // Gates
-        game.obj.put(i, new OBJ_Gate(game));
-        game.obj.get(i).worldX = 10 * game.tileSize;
-        game.obj.get(i).worldY = 12 * game.tileSize;
-        i++;
-        game.obj.put(i, new OBJ_Gate(game));
-        game.obj.get(i).worldX = 8 * game.tileSize;
-        game.obj.get(i).worldY = 28 * game.tileSize;
-        i++;
-        game.obj.put(i, new OBJ_Gate(game));
-        game.obj.get(i).worldX = 12 * game.tileSize;
-        game.obj.get(i).worldY = 23 * game.tileSize;
-        i++;
+        // Main Island Map
+            // Keys
+            setAsset(new OBJ_Key(game), 23, 7);
+            setAsset(new OBJ_Key(game), 23, 40);
+            setAsset(new OBJ_Key(game), 38, 8);
 
-        // Chest
-        game.obj.put(i, new OBJ_Chest(game, new OBJ_Sword_Amethyst(game), new OBJ_Shield_Amethyst(game)));
-        game.obj.get(i).worldX = 10 * game.tileSize;
-        game.obj.get(i).worldY = 10 * game.tileSize;
-        i++;
+            // Gates
+            setAsset(new OBJ_Gate(game), 10, 12);
+            setAsset(new OBJ_Gate(game), 8, 28);
+            setAsset(new OBJ_Gate(game), 12, 23);
+
+            // Other
+            setAsset(new OBJ_Chest(game, new OBJ_Sword_Amethyst(game), new OBJ_Shield_Amethyst(game)), 10, 10);
+
+            game.obj.put("Main Island", assetMap);
+            assetMap = new HashMap<>();
+            i = 0;
     }
     public void setNPC() {
-        game.npc.put(0, new NPC_GateKeeper(game));
-        game.npc.get(0).worldX = game.tileSize * 21;
-        game.npc.get(0).worldY = game.tileSize * 21;
+        // Disabled Map
+            assetMap.put(0, null);
+            game.npc.put("Disabled", assetMap);
+            assetMap = new HashMap<>();
+
+        // Main Island Map
+            setAsset(new NPC_GateKeeper(game), 21, 21);
+
+            game.npc.put("Main Island", assetMap);
+            assetMap = new HashMap<>();
+            i = 0;
     }
     public void setMonster() {
-        int i = 0;
+        // Disabled Map
+            assetMap.put(0, null);
+            game.mob.put("Disabled", assetMap);
+            assetMap = new HashMap<>();
 
-        // In grass thing
-        game.mob.put(i, new MOB_Dracore(game));
-        game.mob.get(i).worldX = game.tileSize * 23;
-        game.mob.get(i).worldY = game.tileSize * 36;
-        i++;
-        game.mob.put(i, new MOB_Dracore(game));
-        game.mob.get(i).worldX = game.tileSize * 23;
-        game.mob.get(i).worldY = game.tileSize * 37;
-        i++;
-        game.mob.put(i, new MOB_Dracore(game));
-        game.mob.get(i).worldX = game.tileSize * 23;
-        game.mob.get(i).worldY = game.tileSize * 38;
-        i++;
+        // Main Island Map
+            // In grass thing
+            setAsset(new MOB_Dracore(game), 23, 36);
+            setAsset(new MOB_Dracore(game), 23, 37);
+            setAsset(new MOB_Dracore(game), 23, 38);
 
-        // In path thing
-        game.mob.put(i, new MOB_Dracore(game));
-        game.mob.get(i).worldX = game.tileSize * 35;
-        game.mob.get(i).worldY = game.tileSize * 10;
-        i++;
-        game.mob.put(i, new MOB_Dracore(game));
-        game.mob.get(i).worldX = game.tileSize * 37;
-        game.mob.get(i).worldY = game.tileSize * 8;
-        i++;
-        game.mob.put(i, new MOB_Dracore(game));
-        game.mob.get(i).worldX = game.tileSize * 39;
-        game.mob.get(i).worldY = game.tileSize * 10;
-        i++;
+            // In path thing
+            setAsset(new MOB_Dracore(game), 35, 10);
+            setAsset(new MOB_Dracore(game), 37, 8);
+            setAsset(new MOB_Dracore(game), 39, 10);
 
-        // In gate thing
-        game.mob.put(i, new MOB_Dracore(game));
-        game.mob.get(i).worldX = game.tileSize * 10;
-        game.mob.get(i).worldY = game.tileSize * 29;
+            // In gate thing
+            setAsset(new MOB_Dracore(game), 10, 29);
+            setAsset(new MOB_Dracore(game), 11, 29);
+
+            setAsset(new MOB_Dracore(game), 12, 29);
+
+            game.mob.put("Main Island", assetMap);
+            assetMap = new HashMap<>();
+            i = 0;
+    }
+
+    public void setAsset(Entity asset, int worldX, int worldY) {
+        assetMap.put(i, asset);
+        assetMap.get(i).worldX = game.tileSize * worldX;
+        assetMap.get(i).worldY = game.tileSize * worldY;
         i++;
-        game.mob.put(i, new MOB_Dracore(game));
-        game.mob.get(i).worldX = game.tileSize * 11;
-        game.mob.get(i).worldY = game.tileSize * 29;
-        i++;
-        game.mob.put(i, new MOB_Dracore(game));
-        game.mob.get(i).worldX = game.tileSize * 12;
-        game.mob.get(i).worldY = game.tileSize * 29;
     }
 }

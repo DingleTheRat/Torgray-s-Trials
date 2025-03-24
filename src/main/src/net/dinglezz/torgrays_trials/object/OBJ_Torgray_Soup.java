@@ -26,23 +26,15 @@ public class OBJ_Torgray_Soup extends Entity {
     }
     public boolean use(Entity entity) {
         game.gameState = States.STATE_DIALOGUE;
-        Random random = new Random();
-        int i = random.nextInt(5) + 1;
+        int random = new Random().nextInt(6) + 1;
 
-        if (i == 1) {
-            game.ui.currentDialogue = "Erm a last key is behind the pond. /n+4 health";
-        }
-        if (i == 2) {
-            game.ui.currentDialogue = "Erm healing in the pond respawns /nmobs. /n+4 health";
-        }
-        if (i == 3) {
-            game.ui.currentDialogue = "Erm the higher level, the more you /nheal when leveling up. /n+4 health";
-        }
-        if (i == 4) {
-            game.ui.currentDialogue = "Erm I think you are left handed. /n+4 health";
-        }
-        if (i == 5) {
-            game.ui.currentDialogue = "Erm after passing all 3 gates you get /na reward. /n+4 health";
+        switch (random) {
+            case 1: game.ui.currentDialogue = "Erm a last key is behind the pond. /n+4 health";break;
+            case 2: game.ui.currentDialogue = "Erm healing in the pond respawns /nmobs. /n+4 health";break;
+            case 3: game.ui.currentDialogue = "Erm the higher level, the more you /nheal when leveling up. /n+4 health";break;
+            case 4: game.ui.currentDialogue = "Erm I think you are left handed. /n+4 health";break;
+            case 5: game.ui.currentDialogue = "Erm after passing all 3 gates you get /na reward. /n+4 health";break;
+            case 6: game.ui.currentDialogue = "Erm the pond is a good place to /nheal. /n+4 health";break;
         }
 
         if (game.player.health + value > game.player.maxHealth) {
@@ -51,7 +43,7 @@ public class OBJ_Torgray_Soup extends Entity {
             game.player.health += value;
         }
         game.player.generateParticles(this, game.player, value);
-        game.playSound(2);
+        game.playSound("Power Up");
         return true;
     }
 

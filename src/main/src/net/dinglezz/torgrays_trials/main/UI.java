@@ -131,7 +131,7 @@ public class UI {
 
             // Torgray Image
             x = game.screenWidth / 2 - (game.tileSize * 2) / 2;
-            y += game.tileSize * 1.5;
+            y += game.tileSize + (game.tileSize / 2);
             graphics2D.drawImage(game.player.down1, x, y, game.tileSize * 2, game.tileSize * 2, null);
 
             // Menu
@@ -140,7 +140,7 @@ public class UI {
             graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 48f));
             text = "New Game";
             x = getCentreX(text);
-            y += game.tileSize * 3.5;
+            y += (game.tileSize * 3) + (game.tileSize / 2);
             graphics2D.drawString(text, x, y);
             if (commandNumber == 0) {
                 graphics2D.drawString(">", x - game.tileSize,  y);
@@ -485,19 +485,22 @@ public class UI {
             }
         }
     }
+    @SuppressWarnings("unused")
     public void yesGameEnd() {
         subState = States.PAUSE_SETTINGS_MAIN;
         game.gameState = States.STATE_TITLE;
         titleScreenState = States.TITLE_STATE_MAIN;
         game.music.stop();
-        game.playMusic(5);
+        game.playMusic("Tech Geek");
         game.restart();
     }
+    @SuppressWarnings("unused")
     public void yesFullScreen() {
         game.fullScreen = !game.fullScreen;
         subState = States.PAUSE_SETTINGS_NOTIFICATION;
         currentDialogue = "Full Screen will only be /nenabled/disabled when /nrelaunching the game.";
     }
+    @SuppressWarnings("unused")
     public void yesBRendering() {
         game.BRendering = !game.BRendering;
         if (game.BRendering) {
@@ -733,19 +736,17 @@ public class UI {
         graphics2D.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
 
         // Description Frame
-        int dFrameX = frameX;
         int dFrameY = frameY + frameHeight;
-        int dFrameWidth = frameWidth;
         int dFrameHeight = game.tileSize * 4 - (game.tileSize / 2);
 
         // Description Text
-        int textX = dFrameX + 20;
+        int textX = frameX + 20;
         int textY = dFrameY + game.tileSize;
 
         int itemIndex = getItemIndex();
         if (itemIndex < game.player.inventory.size()) {
             // Window + Title
-            drawSubWindow(dFrameX, dFrameY, dFrameWidth, dFrameHeight);
+            drawSubWindow(frameX, dFrameY, frameWidth, dFrameHeight);
             graphics2D.setFont(graphics2D.getFont().deriveFont(30f));
             graphics2D.drawString(game.player.inventory.get(itemIndex).name, textX, textY);
             textY += 10;
@@ -812,8 +813,7 @@ public class UI {
     }
 
     public int getItemIndex() {
-        int itemIndex = slotCol + (slotRow * 5);
-        return itemIndex;
+        return slotCol + (slotRow * 5);
     }
     public void drawSubWindow(int x, int y, int width, int height) {
         Color c = new Color(0,0,0, 210);
@@ -828,12 +828,10 @@ public class UI {
 
     public int getCentreX(String text) {
         int length = (int) graphics2D.getFontMetrics().getStringBounds(text, graphics2D).getWidth();
-        int x = game.screenWidth / 2 - length / 2;
-        return x;
+        return game.screenWidth / 2 - length / 2;
 
     }    public int alignXToRight(String text, int tailX) {
         int length = (int) graphics2D.getFontMetrics().getStringBounds(text, graphics2D).getWidth();
-        int x = tailX - length;
-        return x;
+        return tailX - length;
     }
 }

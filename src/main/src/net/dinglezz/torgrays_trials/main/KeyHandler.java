@@ -32,24 +32,22 @@ public class KeyHandler implements KeyListener {
             case States.STATE_GAME_OVER: gameOverState(code); break;
         }
 
-        if (game.BRendering) {
-            if (code == KeyEvent.VK_U) {
-                game.BRendering = false;
-            }
+        if (code == KeyEvent.VK_U && game.BRendering) {
+            game.BRendering = false;
         }
     }
     public void titleState(int code) {
         if (game.ui.titleScreenState == States.TITLE_STATE_MAIN) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 game.ui.commandNumber--;
-                game.playSound(8);
+                game.playSound("Cursor");
                 if (game.ui.commandNumber < 0) {
                     game.ui.commandNumber = 2;
                 }
             }
             if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
                 game.ui.commandNumber++;
-                game.playSound(8);
+                game.playSound("Cursor");
                 if (game.ui.commandNumber > 2) {
                     game.ui.commandNumber = 0;
                 }
@@ -68,14 +66,14 @@ public class KeyHandler implements KeyListener {
         } else if (game.ui.titleScreenState == States.TITLE_STATE_MODES) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 game.ui.commandNumber--;
-                game.playSound(8);
+                game.playSound("Cursor");
                 if (game.ui.commandNumber < 0) {
                     game.ui.commandNumber = 3;
                 }
             }
             if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
                 game.ui.commandNumber++;
-                game.playSound(8);
+                game.playSound("Cursor");
                 if (game.ui.commandNumber > 3) {
                     game.ui.commandNumber = 0;
                 }
@@ -85,7 +83,7 @@ public class KeyHandler implements KeyListener {
                     game.gameState = States.STATE_PLAY;
                     game.gameMode = "Easy";
                     game.stopMusic();
-                    game.playMusic(0);
+                    game.playMusic("Journey");
                     System.out.println("Imagine Picking Easy");
 
                     // Modified Stats
@@ -99,7 +97,7 @@ public class KeyHandler implements KeyListener {
                     game.gameState = States.STATE_PLAY;
                     game.gameMode = "Medium";
                     game.stopMusic();
-                    game.playMusic(0);
+                    game.playMusic("Journey");
                     System.out.println("Kinda a mid game mode lol");
 
                     // No modified stats since Medium is the default
@@ -108,7 +106,7 @@ public class KeyHandler implements KeyListener {
                     game.gameState = States.STATE_PLAY;
                     game.gameMode = "Hard";
                     game.stopMusic();
-                    game.playMusic(0);
+                    game.playMusic("Journey");
                     System.out.println("You really think you are \"hardcore\"?");
 
                     // Modified Stats
@@ -123,29 +121,14 @@ public class KeyHandler implements KeyListener {
         }
     }
     public void playState(int code) {
-        if (code == KeyEvent.VK_W) {
-            upPressed = true;
-        }
-        if (code == KeyEvent.VK_A) {
-            leftPressed = true;
-        }
-        if (code == KeyEvent.VK_S) {
-            downPressed = true;
-        }
-        if (code == KeyEvent.VK_D) {
-            rightPressed = true;
-        }
-        if (code == KeyEvent.VK_ESCAPE) {
-            game.gameState = States.STATE_PAUSE;
-        }
-        if (code == KeyEvent.VK_E) {
-            interactKeyPressed = true;
-        }
-        if (code == KeyEvent.VK_E) {
-            interactKeyPressed = true;
-        }
-        if (code == KeyEvent.VK_SPACE) {
-            spacePressed = true;
+        switch (code) {
+            case KeyEvent.VK_W: upPressed = true; break;
+            case KeyEvent.VK_A: leftPressed = true; break;
+            case KeyEvent.VK_S: downPressed = true; break;
+            case KeyEvent.VK_D: rightPressed = true; break;
+            case KeyEvent.VK_E: interactKeyPressed = true; break;
+            case KeyEvent.VK_SPACE: spacePressed = true; break;
+            case KeyEvent.VK_ESCAPE: game.gameState = States.STATE_PAUSE; break;
         }
 
         // Debug
@@ -153,7 +136,7 @@ public class KeyHandler implements KeyListener {
             if (!debug) {
                 System.out.println("Debugging Enabled");
                 debug = true;
-            } else if (debug) {
+            } else {
                 System.out.println("Debugging Disabled");
                 debug = false;
             }
@@ -161,7 +144,9 @@ public class KeyHandler implements KeyListener {
     }
     public void pauseState(int code) {
         if (code == KeyEvent.VK_ESCAPE) {
-            game.gameState = States.STATE_PLAY;
+            if (game.ui.subState == States.PAUSE_STATE_MAIN) {
+                game.gameState = States.STATE_PLAY;
+            }
             game.ui.subState = States.PAUSE_STATE_MAIN;
             game.ui.commandNumber = 0;
         }
@@ -174,7 +159,7 @@ public class KeyHandler implements KeyListener {
 
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
             game.ui.commandNumber--;
-            game.playSound(8);
+            game.playSound("Cursor");
 
             if (game.ui.commandNumber < 0) {
                 game.ui.commandNumber = maxCommandNumber;
@@ -182,7 +167,7 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
             game.ui.commandNumber++;
-            game.playSound(8);
+            game.playSound("Cursor");
 
             if (game.ui.commandNumber > maxCommandNumber) {
                 game.ui.commandNumber = 0;
@@ -197,11 +182,11 @@ public class KeyHandler implements KeyListener {
                 if (game.ui.commandNumber == 2 && game.music.volumeScale > 0) {
                     game.music.volumeScale--;
                     game.music.checkVolume();
-                    game.playSound(8);
+                    game.playSound("Cursor");
                 }
                 if (game.ui.commandNumber == 3 && game.sound.volumeScale > 0) {
                     game.sound.volumeScale--;
-                    game.playSound(8);
+                    game.playSound("Cursor");
                 }
             }
         }
@@ -210,11 +195,11 @@ public class KeyHandler implements KeyListener {
                 if (game.ui.commandNumber == 2 && game.music.volumeScale < 5) {
                     game.music.volumeScale++;
                     game.music.checkVolume();
-                    game.playSound(8);
+                    game.playSound("Cursor");
                 }
                 if (game.ui.commandNumber == 3 && game.sound.volumeScale < 5) {
                     game.sound.volumeScale++;
-                    game.playSound(8);
+                    game.playSound("Cursor");
                 }
             }
         }
@@ -232,25 +217,25 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
             if (game.ui.slotRow != 0) {
                 game.ui.slotRow --;
-                game.playSound(8);
+                game.playSound("Cursor");
             }
         }
         if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
             if (game.ui.slotCol != 0) {
                 game.ui.slotCol --;
-                game.playSound(8);
+                game.playSound("Cursor");
             }
         }
         if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
             if (game.ui.slotRow != 4) {
                 game.ui.slotRow ++;
-                game.playSound(8);
+                game.playSound("Cursor");
             }
         }
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
             if (game.ui.slotCol != 4) {
                 game.ui.slotCol ++;
-                game.playSound(8);
+                game.playSound("Cursor");
             }
         }
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
@@ -258,9 +243,10 @@ public class KeyHandler implements KeyListener {
         }
     }
     public void gameOverState(int code) {
-        maxCommandNumber = 1;
         if (game.gameMode.equals("Easy")) {
             maxCommandNumber = 2;
+        } else {
+            maxCommandNumber = 1;
         }
 
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
@@ -268,26 +254,29 @@ public class KeyHandler implements KeyListener {
             if (game.ui.commandNumber < 0) {
                 game.ui.commandNumber = maxCommandNumber;
             }
-            game.playSound(8);
+            game.playSound("Cursor");
         }
         if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
             game.ui.commandNumber++;
             if (game.ui.commandNumber > maxCommandNumber) {
                 game.ui.commandNumber = 0;
             }
-            game.playSound(8);
+            game.playSound("Cursor");
         }
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
             if (game.ui.commandNumber == 0) {
                 game.gameState = States.STATE_PLAY;
                 game.restart();
+                game.playMusic("Journey");
             } else if (game.ui.commandNumber == maxCommandNumber) {
                 game.gameState = States.STATE_TITLE;
                 game.ui.titleScreenState = States.TITLE_STATE_MAIN;
                 game.restart();
+                game.playMusic("Tech Geek");
             } else if (game.ui.commandNumber == 1) {
                 game.gameState = States.STATE_PLAY;
                 game.respawn();
+                game.playMusic("Journey");
             }
         }
     }
@@ -296,17 +285,11 @@ public class KeyHandler implements KeyListener {
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
 
-        if (code == KeyEvent.VK_W) {
-            upPressed = false;
-        }
-        if (code == KeyEvent.VK_A) {
-            leftPressed = false;
-        }
-        if (code == KeyEvent.VK_S) {
-            downPressed = false;
-        }
-        if (code == KeyEvent.VK_D) {
-            rightPressed = false;
+        switch (code) {
+            case KeyEvent.VK_W: upPressed = false; break;
+            case KeyEvent.VK_A: leftPressed = false; break;
+            case KeyEvent.VK_S: downPressed = false; break;
+            case KeyEvent.VK_D: rightPressed = false; break;
         }
     }
 }

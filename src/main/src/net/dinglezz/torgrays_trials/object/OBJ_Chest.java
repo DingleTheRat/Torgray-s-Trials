@@ -51,7 +51,7 @@ public class OBJ_Chest extends Entity {
         game.gameState = States.STATE_DIALOGUE;
         game.player.attackCanceled = true;
         if (!opened) {
-            game.playSound(3);
+            game.playSound("Unlock");
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("Woah, this chest is so shinny! /n+1 " + loot.name);
 

@@ -21,11 +21,11 @@ public class OBJ_Key extends Entity {
     }
     public boolean use(Entity entity) {
 
-        int objIndex = getDetected(entity, game.obj, "Gate");
+        int objIndex = getDetected(entity, game.obj.get(game.currentMap), "Gate");
         if (objIndex != 999) {
             game.ui.addMessage("-1 Key");
-            game.playSound(3);
-            game.obj.put(objIndex, null);
+            game.playSound("Unlock");
+            game.obj.get(game.currentMap).put(objIndex, null);
             return true;
         } else {
             return false;

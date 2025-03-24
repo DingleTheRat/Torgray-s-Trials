@@ -56,7 +56,7 @@ public class Config {
             if (configFile.createNewFile()) {
                 FileWriter fileWriter = new FileWriter(configFile);
                 fileWriter.write("false\n");
-                fileWriter.write("true\n");
+                fileWriter.write("false\n");
                 fileWriter.write("3\n");
                 fileWriter.write("3\n");
                 fileWriter.close();
@@ -65,19 +65,11 @@ public class Config {
             String s = bufferedReader.readLine();
 
             // Full screen
-            if (s.equals("true")) {
-                game.fullScreen = true;
-            } else {
-                game.fullScreen = false;
-            }
+            game.fullScreen = s.equals("true");
 
             // BRendering
             s = bufferedReader.readLine();
-            if (s.equals("true")) {
-                game.BRendering = true;
-            } else {
-                game.BRendering = false;
-            }
+            game.BRendering = s.equals("true");
 
 
             // Music Volume

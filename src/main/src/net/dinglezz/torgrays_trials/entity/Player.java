@@ -47,21 +47,21 @@ public class Player extends Entity{
     }
 
     public void getImage() {
-        up1 = registerEntitySprite("/drawable/player/walking/ghost_up_1", game.tileSize, game.tileSize);
-        up2 = registerEntitySprite("/drawable/player/walking/ghost_up_2", game.tileSize, game.tileSize);
-        up3 = registerEntitySprite("/drawable/player/walking/ghost_up_3", game.tileSize, game.tileSize);
+        up1 = registerEntitySprite("/drawable/player/walking/torgray_up_1", game.tileSize, game.tileSize);
+        up2 = registerEntitySprite("/drawable/player/walking/torgray_up_2", game.tileSize, game.tileSize);
+        up3 = registerEntitySprite("/drawable/player/walking/torgray_up_3", game.tileSize, game.tileSize);
 
-        down1 = registerEntitySprite("/drawable/player/walking/ghost_down_1", game.tileSize, game.tileSize);
-        down2 = registerEntitySprite("/drawable/player/walking/ghost_down_2", game.tileSize, game.tileSize);
-        down3 = registerEntitySprite("/drawable/player/walking/ghost_down_3", game.tileSize, game.tileSize);
+        down1 = registerEntitySprite("/drawable/player/walking/torgray_down_1", game.tileSize, game.tileSize);
+        down2 = registerEntitySprite("/drawable/player/walking/torgray_down_2", game.tileSize, game.tileSize);
+        down3 = registerEntitySprite("/drawable/player/walking/torgray_down_3", game.tileSize, game.tileSize);
 
-        left1 = registerEntitySprite("/drawable/player/walking/ghost_left_1", game.tileSize, game.tileSize);
-        left2 = registerEntitySprite("/drawable/player/walking/ghost_left_2", game.tileSize, game.tileSize);
-        left3 = registerEntitySprite("/drawable/player/walking/ghost_left_3", game.tileSize, game.tileSize);
+        left1 = registerEntitySprite("/drawable/player/walking/torgray_left_1", game.tileSize, game.tileSize);
+        left2 = registerEntitySprite("/drawable/player/walking/torgray_left_2", game.tileSize, game.tileSize);
+        left3 = registerEntitySprite("/drawable/player/walking/torgray_left_3", game.tileSize, game.tileSize);
 
-        right1 = registerEntitySprite("/drawable/player/walking/ghost_right_1", game.tileSize, game.tileSize);
-        right2 = registerEntitySprite("/drawable/player/walking/ghost_right_2", game.tileSize, game.tileSize);
-        right3 = registerEntitySprite("/drawable/player/walking/ghost_right_3", game.tileSize, game.tileSize);
+        right1 = registerEntitySprite("/drawable/player/walking/torgray_right_1", game.tileSize, game.tileSize);
+        right2 = registerEntitySprite("/drawable/player/walking/torgray_right_2", game.tileSize, game.tileSize);
+        right3 = registerEntitySprite("/drawable/player/walking/torgray_right_3", game.tileSize, game.tileSize);
     }
     public void getAttackImage() {
         if (currentWeapon.tags.contains(EntityTags.TAG_AMETHIST)) {
@@ -144,21 +144,21 @@ public class Player extends Entity{
 
             // Check tile collision
             collisionOn = false;
-            game.cChecker.checkTile(this);
+            game.collisionChecker.checkTile(this);
 
             // Check OBJ collision
-            int objIndex = game.cChecker.checkObject(this, true);
+            int objIndex = game.collisionChecker.checkObject(this, true);
             pickUpObject(objIndex);
 
             // Check NPC collision
-            int npcIndex = game.cChecker.checkEntity(this, game.npc);
+            int npcIndex = game.collisionChecker.checkEntity(this, game.npc);
             interactNPC(npcIndex);
 
             // Check Event
             game.eventHandler.checkEvent();
 
             // Check Mob Collision
-            int mobIndex = game.cChecker.checkEntity(this, game.mob);
+            int mobIndex = game.collisionChecker.checkEntity(this, game.mob);
             contactMob(mobIndex);
 
             if (!collisionOn && !keyHandler.spacePressed && !keyHandler.interactKeyPressed) {
@@ -220,7 +220,9 @@ public class Player extends Entity{
         }
         if (health <= 0) {
             game.gameState = States.STATE_GAME_OVER;
-            game.playSound(9);
+            game.playSound("Game Over");
+            game.ui.commandNumber = -1;
+            game.stopMusic();
         }
     }
     public void attack() {
@@ -250,7 +252,7 @@ public class Player extends Entity{
             solidArea.height = attackArea.height;
 
             // Check collision with the updates
-            int mobIndex = game.cChecker.checkEntity(this, game.mob);
+            int mobIndex = game.collisionChecker.checkEntity(this, game.mob);
             damageMob(mobIndex);
 
             // Restore original data
@@ -267,26 +269,26 @@ public class Player extends Entity{
     }
     public void pickUpObject(int i) {
         if (i != 999) {
-            if (game.obj.get(i).tags.contains(EntityTags.TAG_OBSTACLE)) {
+            if (game.obj.get(game.currentMap).get(i).tags.contains(EntityTags.TAG_OBSTACLE)) {
                 if (keyHandler.interactKeyPressed) {
-                    game.obj.get(i).interact();
+                    game.obj.get(game.currentMap).get(i).interact();
                 }
             }
-            else if (game.obj.get(i).tags.contains(EntityTags.TAG_PICKUPONLY)) {
-                game.obj.get(i).use(this);
-                game.obj.put(i, null);
+            else if (game.obj.get(game.currentMap).get(i).tags.contains(EntityTags.TAG_PICKUPONLY)) {
+                game.obj.get(game.currentMap).get(i).use(this);
+                game.obj.get(game.currentMap).put(i, null);
             } else {
                 String text;
 
-                if (canObtainItem(game.obj.get(i))) {
-                    game.playSound(1);
-                    text = "+1 " + game.obj.get(i).name;
+                if (canObtainItem(game.obj.get(game.currentMap).get(i))) {
+                    game.playSound("Coin");
+                    text = "+1 " + game.obj.get(game.currentMap).get(i).name;
                 }
                 else {
                     text = "Inventory Full";
                 }
                 game.ui.addMessage(text);
-                game.obj.put(i, null);
+                game.obj.get(game.currentMap).put(i, null);
             }
         }
     }
@@ -295,16 +297,16 @@ public class Player extends Entity{
             if (i != 999) {
                 attackCanceled = true;
                 game.gameState = States.STATE_DIALOGUE;
-                game.npc.get(i).speak();
+                game.npc.get(game.currentMap).get(i).speak();
             }
         }
     }
     public void contactMob(int i) {
         if (i != 999) {
-            if (!invincible && !game.mob.get(i).dying) {
-                game.playSound(7);
+            if (!invincible && !game.mob.get(game.currentMap).get(i).dying) {
+                game.playSound("Receive Damage");
 
-                int damage = game.mob.get(i).attack - defence;
+                int damage = game.mob.get(game.currentMap).get(i).attack - defence;
                 if (damage < 0) {
                     damage = 0;
                 }
@@ -317,25 +319,25 @@ public class Player extends Entity{
 
     public void damageMob(int i) {
         if (i != 999) {
-            if (!game.mob.get(i).invincible) {
-                game.playSound(6);
+            if (!game.mob.get(game.currentMap).get(i).invincible) {
+                game.playSound("Hit Mob");
 
-                int damage = attack - game.mob.get(i).defence;
+                int damage = attack - game.mob.get(game.currentMap).get(i).defence;
                 if (damage < 0) {
                     damage = 0;
                 }
-                game.mob.get(i).health -= damage;
+                game.mob.get(game.currentMap).get(i).health -= damage;
 
-                game.mob.get(i).invincible = true;
-                game.mob.get(i).damageReaction();
+                game.mob.get(game.currentMap).get(i).invincible = true;
+                game.mob.get(game.currentMap).get(i).damageReaction();
 
-                generateParticles(game.mob.get(i), game.mob.get(i), damage);
+                generateParticles(game.mob.get(game.currentMap).get(i), game.mob.get(game.currentMap).get(i), damage);
 
-                if (game.mob.get(i).health <= 0) {
-                    game.mob.get(i).dying = true;
-                    game.ui.addMessage("Killed " + game.mob.get(i).name);
-                    game.ui.addMessage("+" + game.mob.get(i).exp + " exp");
-                    exp += game.mob.get(i).exp;
+                if (game.mob.get(game.currentMap).get(i).health <= 0) {
+                    game.mob.get(game.currentMap).get(i).dying = true;
+                    game.ui.addMessage("Killed " + game.mob.get(game.currentMap).get(i).name);
+                    game.ui.addMessage("+" + game.mob.get(game.currentMap).get(i).exp + " exp");
+                    exp += game.mob.get(game.currentMap).get(i).exp;
                     checkLevelUp();
                 }
             }
