@@ -27,7 +27,7 @@ public class KeyHandler implements KeyListener {
             case States.STATE_TITLE: titleState(code); break;
             case States.STATE_PLAY: playState(code); break;
             case States.STATE_PAUSE: pauseState(code); break;
-            case States.STATE_DIALOGUE: dialogueState(code); break;
+            case States.STATE_DIALOGUE: dialogueState(code); playState(code); break;
             case States.STATE_CHARACTER: characterState(code); break;
             case States.STATE_GAME_OVER: gameOverState(code); break;
         }

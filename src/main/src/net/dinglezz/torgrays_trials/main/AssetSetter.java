@@ -2,7 +2,7 @@ package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.npc.NPC_GateKeeper;
-import net.dinglezz.torgrays_trials.mob.MOB_Dracore;
+import net.dinglezz.torgrays_trials.monster.MON_Dracore;
 import net.dinglezz.torgrays_trials.object.*;
 
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public class AssetSetter {
 
     public AssetSetter(Game game) {this.game = game;}
 
-    public void setObject() {
+    public void setObjects() {
         // Disabled Map
             assetMap.put(0, null);
             game.obj.put("Disabled", assetMap);
@@ -37,8 +37,15 @@ public class AssetSetter {
             game.obj.put("Main Island", assetMap);
             assetMap = new HashMap<>();
             i = 0;
+
+        // Coiner's Shop Map
+            setAsset(new OBJ_Table(game), 12, 10);
+
+            game.obj.put("Coiner's Shop", assetMap);
+            assetMap = new HashMap<>();
+            i = 0;
     }
-    public void setNPC() {
+    public void setNPCs() {
         // Disabled Map
             assetMap.put(0, null);
             game.npc.put("Disabled", assetMap);
@@ -50,39 +57,51 @@ public class AssetSetter {
             game.npc.put("Main Island", assetMap);
             assetMap = new HashMap<>();
             i = 0;
+
+        // Coiner's Shop Map
+            assetMap.put(0, null);
+            game.npc.put("Coiner's Shop", assetMap);
+            assetMap = new HashMap<>();
+            i = 0;
     }
-    public void setMonster() {
+    public void setMonsters() {
         // Disabled Map
             assetMap.put(0, null);
-            game.mob.put("Disabled", assetMap);
+            game.monster.put("Disabled", assetMap);
             assetMap = new HashMap<>();
 
         // Main Island Map
             // In grass thing
-            setAsset(new MOB_Dracore(game), 23, 36);
-            setAsset(new MOB_Dracore(game), 23, 37);
-            setAsset(new MOB_Dracore(game), 23, 38);
+            setAsset(new MON_Dracore(game), 23, 36);
+            setAsset(new MON_Dracore(game), 23, 37);
+            setAsset(new MON_Dracore(game), 23, 38);
 
             // In path thing
-            setAsset(new MOB_Dracore(game), 35, 10);
-            setAsset(new MOB_Dracore(game), 37, 8);
-            setAsset(new MOB_Dracore(game), 39, 10);
+            setAsset(new MON_Dracore(game), 35, 10);
+            setAsset(new MON_Dracore(game), 37, 8);
+            setAsset(new MON_Dracore(game), 39, 10);
 
             // In gate thing
-            setAsset(new MOB_Dracore(game), 10, 29);
-            setAsset(new MOB_Dracore(game), 11, 29);
+            setAsset(new MON_Dracore(game), 10, 29);
+            setAsset(new MON_Dracore(game), 11, 29);
 
-            setAsset(new MOB_Dracore(game), 12, 29);
+            setAsset(new MON_Dracore(game), 12, 29);
 
-            game.mob.put("Main Island", assetMap);
+            game.monster.put("Main Island", assetMap);
+            assetMap = new HashMap<>();
+            i = 0;
+
+        // Coiner's Shop Map
+            assetMap.put(0, null);
+            game.monster.put("Coiner's Shop", assetMap);
             assetMap = new HashMap<>();
             i = 0;
     }
 
-    public void setAsset(Entity asset, int worldX, int worldY) {
+    public void setAsset(Entity asset, int col, int row) {
         assetMap.put(i, asset);
-        assetMap.get(i).worldX = game.tileSize * worldX;
-        assetMap.get(i).worldY = game.tileSize * worldY;
+        assetMap.get(i).worldX = game.tileSize * col;
+        assetMap.get(i).worldY = game.tileSize * row;
         i++;
     }
 }

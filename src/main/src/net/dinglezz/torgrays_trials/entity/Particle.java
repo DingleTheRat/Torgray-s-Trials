@@ -41,11 +41,11 @@ public class Particle extends Entity{
             alive = false;
         }
     }
-    public void draw(Graphics2D g2) {
+    public void draw(Graphics2D graphics2D) {
         int screenX = worldX - game.player.worldX + game.player.screenX;
         int screenY = worldY - game.player.worldY + game.player.screenY;
 
-        g2.setColor(color);
-        g2.fillRect(screenX, screenY, size, size);
+        graphics2D.setColor(color);
+        graphics2D.fillRect(screenX, screenY, size, size);
     }
 }

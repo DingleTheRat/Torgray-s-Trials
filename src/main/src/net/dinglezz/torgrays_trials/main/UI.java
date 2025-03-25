@@ -25,6 +25,8 @@ public class UI {
     public int slotCol = 0;
     public int slotRow = 0;
     public String actionMethod;
+    public float transitionCounter = 0f;
+    public boolean fadeBack = false;
 
     public UI(Game game) {
         this.game = game;
@@ -60,6 +62,7 @@ public class UI {
             case STATE_DIALOGUE: drawDialogueScreen(); drawPlayerHealth(); break;
             case STATE_CHARACTER: drawCharacterScreen(); drawInventory(); break;
             case STATE_GAME_OVER: drawGameOverScreen(); break;
+            case STATE_TRANSITION: drawTransitionScreen(); break;
         }
     }
 
@@ -810,6 +813,38 @@ public class UI {
         if (commandNumber == game.keyHandler.maxCommandNumber) {
             graphics2D.drawString(">", x - 40, y);
         }
+    }
+    public void drawTransitionScreen() {
+        // Main
+        if (!fadeBack && transitionCounter < 1f) {
+            transitionCounter += 0.02f;
+        } else if (fadeBack && transitionCounter > 0f) {
+            transitionCounter -= 0.02f;
+        }
+        // Switch to next stage (if needed)
+        else if (transitionCounter == 1f) {
+            // Teleport
+            game.currentMap = game.eventHandler.nextMap;
+            game.player.worldX = game.eventHandler.nextCol;
+            game.player.worldY = game.eventHandler.nextRow;
+            game.player.lightUpdated = true;
+
+            fadeBack = true;
+        } else if (transitionCounter == 0f) {
+            game.gameState = States.STATE_PLAY;
+            fadeBack = false;
+        }
+
+        // Corrections (just in case)
+        if (transitionCounter > 1f) {
+            transitionCounter = 1f;
+        } else if (transitionCounter < 0f) {
+            transitionCounter = 0f;
+        }
+
+        // Draw Transition
+        graphics2D.setColor(new Color(0, 0, 0, transitionCounter));
+        graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
     }
 
     public int getItemIndex() {

@@ -47,21 +47,21 @@ public class Player extends Entity{
     }
 
     public void getImage() {
-        up1 = registerEntitySprite("/drawable/player/walking/torgray_up_1", game.tileSize, game.tileSize);
-        up2 = registerEntitySprite("/drawable/player/walking/torgray_up_2", game.tileSize, game.tileSize);
-        up3 = registerEntitySprite("/drawable/player/walking/torgray_up_3", game.tileSize, game.tileSize);
+        up1 = registerEntitySprite("/drawable/player/walking/torgray_up_1");
+        up2 = registerEntitySprite("/drawable/player/walking/torgray_up_2");
+        up3 = registerEntitySprite("/drawable/player/walking/torgray_up_3");
 
-        down1 = registerEntitySprite("/drawable/player/walking/torgray_down_1", game.tileSize, game.tileSize);
-        down2 = registerEntitySprite("/drawable/player/walking/torgray_down_2", game.tileSize, game.tileSize);
-        down3 = registerEntitySprite("/drawable/player/walking/torgray_down_3", game.tileSize, game.tileSize);
+        down1 = registerEntitySprite("/drawable/player/walking/torgray_down_1");
+        down2 = registerEntitySprite("/drawable/player/walking/torgray_down_2");
+        down3 = registerEntitySprite("/drawable/player/walking/torgray_down_3");
 
-        left1 = registerEntitySprite("/drawable/player/walking/torgray_left_1", game.tileSize, game.tileSize);
-        left2 = registerEntitySprite("/drawable/player/walking/torgray_left_2", game.tileSize, game.tileSize);
-        left3 = registerEntitySprite("/drawable/player/walking/torgray_left_3", game.tileSize, game.tileSize);
+        left1 = registerEntitySprite("/drawable/player/walking/torgray_left_1");
+        left2 = registerEntitySprite("/drawable/player/walking/torgray_left_2");
+        left3 = registerEntitySprite("/drawable/player/walking/torgray_left_3");
 
-        right1 = registerEntitySprite("/drawable/player/walking/torgray_right_1", game.tileSize, game.tileSize);
-        right2 = registerEntitySprite("/drawable/player/walking/torgray_right_2", game.tileSize, game.tileSize);
-        right3 = registerEntitySprite("/drawable/player/walking/torgray_right_3", game.tileSize, game.tileSize);
+        right1 = registerEntitySprite("/drawable/player/walking/torgray_right_1");
+        right2 = registerEntitySprite("/drawable/player/walking/torgray_right_2");
+        right3 = registerEntitySprite("/drawable/player/walking/torgray_right_3");
     }
     public void getAttackImage() {
         if (currentWeapon.tags.contains(EntityTags.TAG_AMETHIST)) {
@@ -158,7 +158,7 @@ public class Player extends Entity{
             game.eventHandler.checkEvent();
 
             // Check Mob Collision
-            int mobIndex = game.collisionChecker.checkEntity(this, game.mob);
+            int mobIndex = game.collisionChecker.checkEntity(this, game.monster);
             contactMob(mobIndex);
 
             if (!collisionOn && !keyHandler.spacePressed && !keyHandler.interactKeyPressed) {
@@ -252,7 +252,7 @@ public class Player extends Entity{
             solidArea.height = attackArea.height;
 
             // Check collision with the updates
-            int mobIndex = game.collisionChecker.checkEntity(this, game.mob);
+            int mobIndex = game.collisionChecker.checkEntity(this, game.monster);
             damageMob(mobIndex);
 
             // Restore original data
@@ -303,15 +303,15 @@ public class Player extends Entity{
     }
     public void contactMob(int i) {
         if (i != 999) {
-            if (!invincible && !game.mob.get(game.currentMap).get(i).dying) {
+            if (!invincible && !game.monster.get(game.currentMap).get(i).dying) {
                 game.playSound("Receive Damage");
 
-                int damage = game.mob.get(game.currentMap).get(i).attack - defence;
+                int damage = game.monster.get(game.currentMap).get(i).attack - defence;
                 if (damage < 0) {
                     damage = 0;
                 }
                 health -= damage;
-                generateParticles(game.player, game.player, damage);
+                generateParticles(game.player, game.player);
                 invincible = true;
             }
         }
@@ -319,25 +319,25 @@ public class Player extends Entity{
 
     public void damageMob(int i) {
         if (i != 999) {
-            if (!game.mob.get(game.currentMap).get(i).invincible) {
+            if (!game.monster.get(game.currentMap).get(i).invincible) {
                 game.playSound("Hit Mob");
 
-                int damage = attack - game.mob.get(game.currentMap).get(i).defence;
+                int damage = attack - game.monster.get(game.currentMap).get(i).defence;
                 if (damage < 0) {
                     damage = 0;
                 }
-                game.mob.get(game.currentMap).get(i).health -= damage;
+                game.monster.get(game.currentMap).get(i).health -= damage;
 
-                game.mob.get(game.currentMap).get(i).invincible = true;
-                game.mob.get(game.currentMap).get(i).damageReaction();
+                game.monster.get(game.currentMap).get(i).invincible = true;
+                game.monster.get(game.currentMap).get(i).damageReaction();
 
-                generateParticles(game.mob.get(game.currentMap).get(i), game.mob.get(game.currentMap).get(i), damage);
+                generateParticles(game.monster.get(game.currentMap).get(i), game.monster.get(game.currentMap).get(i));
 
-                if (game.mob.get(game.currentMap).get(i).health <= 0) {
-                    game.mob.get(game.currentMap).get(i).dying = true;
-                    game.ui.addMessage("Killed " + game.mob.get(game.currentMap).get(i).name);
-                    game.ui.addMessage("+" + game.mob.get(game.currentMap).get(i).exp + " exp");
-                    exp += game.mob.get(game.currentMap).get(i).exp;
+                if (game.monster.get(game.currentMap).get(i).health <= 0) {
+                    game.monster.get(game.currentMap).get(i).dying = true;
+                    game.ui.addMessage("Killed " + game.monster.get(game.currentMap).get(i).name);
+                    game.ui.addMessage("+" + game.monster.get(game.currentMap).get(i).exp + " exp");
+                    exp += game.monster.get(game.currentMap).get(i).exp;
                     checkLevelUp();
                 }
             }
@@ -429,7 +429,7 @@ public class Player extends Entity{
         return canObtain;
      }
 
-    public void draw(Graphics2D g2) {
+    public void draw(Graphics2D graphics2D) {
         BufferedImage image = null;
         int tempScreenX = screenX;
         int tempScreenY = screenY;
@@ -486,11 +486,11 @@ public class Player extends Entity{
             break;
         }
         if (invincible) {
-            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
         }
 
-        g2.drawImage(image, tempScreenX, tempScreenY, null);
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        graphics2D.drawImage(image, tempScreenX, tempScreenY, null);
+        graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
 
     // Particles

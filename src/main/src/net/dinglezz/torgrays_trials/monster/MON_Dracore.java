@@ -1,4 +1,4 @@
-package net.dinglezz.torgrays_trials.mob;
+package net.dinglezz.torgrays_trials.monster;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
@@ -9,15 +9,15 @@ import net.dinglezz.torgrays_trials.object.OBJ_Torgray_Soup;
 import java.awt.*;
 import java.util.Random;
 
-public class MOB_Dracore extends Entity {
+public class MON_Dracore extends Entity {
     Game game;
 
-    public MOB_Dracore(Game game) {
+    public MON_Dracore(Game game) {
         super(game);
         this.game = game;
 
         name = "Dracore";
-        type = EntityTypes.TYPE_MOB;
+        type = EntityTypes.TYPE_MONSTER;
         speed = 1;
         maxHealth = 5;
         health = maxHealth;
@@ -78,7 +78,7 @@ public class MOB_Dracore extends Entity {
     public void checkDrop() {
         int i = new Random().nextInt(3) + 1;
 
-        // Set mob drop
+        // Set monster drop
         if (i == 1) {
             dropItem(new OBJ_Torgray_Soup(game));
         }

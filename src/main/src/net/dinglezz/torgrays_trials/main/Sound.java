@@ -25,15 +25,20 @@ public class Sound {
         soundLibrary.put("Receive Damage", getClass().getResource("/sound/receive_damage.wav"));
         soundLibrary.put("Cursor", getClass().getResource("/sound/cursor.wav"));
         soundLibrary.put("Game Over", getClass().getResource("/sound/game_over.wav"));
+        soundLibrary.put("Teleport", getClass().getResource("/sound/teleport.wav"));
     }
 
     public void getFile(String soundName) {
         try {
-            AudioInputStream ais = AudioSystem.getAudioInputStream(soundLibrary.get(soundName));
-            clip = AudioSystem.getClip();
-            clip.open(ais);
-            fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            checkVolume();
+            if (soundLibrary.get(soundName) != null) {
+                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundLibrary.get(soundName));
+                clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+                fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                checkVolume();
+            } else {
+                System.out.println("Warning: \"" + soundName + "\" is not a valid sound.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

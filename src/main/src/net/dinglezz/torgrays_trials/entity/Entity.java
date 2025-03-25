@@ -112,7 +112,7 @@ public abstract class Entity {
     public int getParticleSize() {return 0;}
     public int getParticleSpeed() {return 0;}
     public int getParticleMaxHealth() {return 0;}
-    public void generateParticles(Entity generator, Entity target, int amount) {
+    public void generateParticles(Entity generator, Entity target) {
         Color color = generator.getParticleColor();
         int size = generator.getParticleSize();
         int speed = generator.getParticleSpeed();
@@ -134,10 +134,10 @@ public abstract class Entity {
         game.collisionChecker.checkTile(this);
         game.collisionChecker.checkObject(this, false);
         int npcContact = game.collisionChecker.checkEntity(this, game.npc);
-        game.collisionChecker.checkEntity(this, game.mob);
+        game.collisionChecker.checkEntity(this, game.monster);
         boolean contactPlayer = game.collisionChecker.checkPlayer(this);
 
-        if (this.type == EntityTypes.TYPE_MOB && contactPlayer) {
+        if (this.type == EntityTypes.TYPE_MONSTER && contactPlayer) {
             damagePlayer(attack);
         }
 
@@ -170,7 +170,7 @@ public abstract class Entity {
             }
         }
     }
-    public void damagePlayer(int Attack) {
+    public void damagePlayer(int attack) {
         if (!game.player.invincible) {
             game.playSound("Receive Damage");
 
@@ -182,7 +182,7 @@ public abstract class Entity {
             game.player.invincible = true;
         }
     }
-    public void draw(Graphics2D g2) {
+    public void draw(Graphics2D graphics2D) {
         BufferedImage image = null;
         int screenX = worldX - game.player.worldX + game.player.screenX;
         int screenY = worldY - game.player.worldY + game.player.screenY;
@@ -199,14 +199,14 @@ public abstract class Entity {
             }
 
             // Mob Health Bar
-            if (type == EntityTypes.TYPE_MOB && hpBarOn) {
+            if (type == EntityTypes.TYPE_MONSTER && hpBarOn) {
                 double oneScale = (double) game.tileSize / maxHealth;
                 double hpBarValue = oneScale * health;
 
-                g2.setColor(Color.black);
-                g2.fillRect( screenX - 2, screenY - 17, game.tileSize + 4, 14);
-                g2.setColor(Color.white);
-                g2.fillRect(screenX, screenY - 15, (int)hpBarValue, 10);
+                graphics2D.setColor(Color.black);
+                graphics2D.fillRect( screenX - 2, screenY - 17, game.tileSize + 4, 14);
+                graphics2D.setColor(Color.white);
+                graphics2D.fillRect(screenX, screenY - 15, (int)hpBarValue, 10);
 
                 hpBarCounter++;
                 if (hpBarCounter > 100) {
@@ -218,12 +218,12 @@ public abstract class Entity {
             if (invincible) {
                 hpBarOn = true;
                 hpBarCounter = 0;
-                changeAlpha(g2, 0.4f);
+                changeAlpha(graphics2D, 0.4f);
             }
-            if (dying) {dyingAnimation(g2, 5);}
+            if (dying) {dyingAnimation(graphics2D, 5);}
 
-            g2.drawImage(image, screenX, screenY, null);
-            changeAlpha(g2, 1f);
+            graphics2D.drawImage(image, screenX, screenY, null);
+            changeAlpha(graphics2D, 1f);
         }
     }
     public void dyingAnimation(Graphics2D g2, int i) {
@@ -264,7 +264,7 @@ public abstract class Entity {
             try {
                 image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
             } catch (IllegalArgumentException e) {
-                System.out.println("\"" + imagePath + "\" is not a valid path.");
+                System.out.println("Warning: \"" + imagePath + "\" is not a valid path.");
                 image = ImageIO.read(getClass().getResourceAsStream("/drawable/tiles/disabled.png"));
             }
             image = uTool.scaleImage(image, width, height);

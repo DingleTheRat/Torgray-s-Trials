@@ -77,7 +77,7 @@ public class TileManager {
         registerTile(43, "/grass/grass_pit", false);
         registerTile(44, "/grass/grass_healing", false);
 
-        registerTile(45, "lil_hut", true);
+        registerTile(45, "lil_hut", false);
     }
     public void registerTile(int i, String imageName, boolean collision) {
         UtilityTool uTool = new UtilityTool();
@@ -86,7 +86,7 @@ public class TileManager {
             try {
                 tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/drawable/tiles/" + imageName + ".png"));
             } catch (IllegalArgumentException e) {
-                System.out.println("\"" + imageName + "\" is not a valid path.");
+                System.out.println("Warning: \"" + imageName + "\" is not a valid path.");
                 tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/drawable/tiles/disabled.png"));
             }
             tile.get(i).image = uTool.scaleImage(tile.get(i).image, game.tileSize, game.tileSize);
@@ -100,7 +100,7 @@ public class TileManager {
             InputStream inputStream = getClass().getResourceAsStream("/values/maps/" + mapName + ".txt");
             if (inputStream == null) {
                 inputStream = getClass().getResourceAsStream("/values/maps/Disabled.txt");
-                System.out.println("\"" + mapName + "\" is not a valid path.");
+                System.out.println("Warning: \"" + mapName + "\" is not a valid path.");
             }
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             int col = 0;
@@ -132,17 +132,18 @@ public class TileManager {
         int worldRow = 0;
 
         while (worldCol < game.maxWorldCol && worldRow < game.maxWorldRow) {
-            int tileNum = mapTileNum[mapNumbers.get(game.currentMap)][worldCol][worldRow];
+            int tileNumber = mapTileNum[mapNumbers.get(game.currentMap)][worldCol][worldRow];
             int worldX = worldCol * game.tileSize;
             int worldY = worldRow * game.tileSize;
             int screenX = worldX - game.player.worldX + game.player.screenX;
             int screenY = worldY - game.player.worldY + game.player.screenY;
 
+            // Draw Tiles
             if (worldX + game.tileSize > game.player.worldX - game.player.screenX &&
                     worldX - game.tileSize < game.player.worldX + game.player.screenX &&
                     worldY + game.tileSize > game.player.worldY - game.player.screenY &&
                     worldY - game.tileSize < game.player.worldY + game.player.screenY) {
-                graphics2D.drawImage(tile.get(tileNum).image, screenX, screenY, null);
+                graphics2D.drawImage(tile.get(tileNumber).image, screenX, screenY, null);
             }
             worldCol++;
             if (worldCol == game.maxWorldCol) {

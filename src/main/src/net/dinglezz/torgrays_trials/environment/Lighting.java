@@ -52,7 +52,10 @@ public class Lighting {
         fraction[10] = 0.95f;
         fraction[11] = 1f;
 
-        if (game.player.currentLight == null) {
+        if (game.currentMap.equals("Coiner's Shop")) {
+            RadialGradientPaint gPaint = new RadialGradientPaint(centreX, centreY, 500, fraction, color);
+            g2.setPaint(gPaint);
+        } else if (game.player.currentLight == null) {
             RadialGradientPaint gPaint = new RadialGradientPaint(centreX, centreY, 70, fraction, color);
             g2.setPaint(gPaint);
         } else {

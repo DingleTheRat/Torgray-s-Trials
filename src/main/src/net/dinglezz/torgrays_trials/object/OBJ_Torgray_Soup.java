@@ -20,7 +20,7 @@ public class OBJ_Torgray_Soup extends Entity {
         value = 4;
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_CONSUMABLE);
-        down1 = registerEntitySprite("/drawable/objects/torgray_soup", game.tileSize, game.tileSize);
+        down1 = registerEntitySprite("/drawable/objects/torgray_soup");
         description = "/nTorgray's wisest soup. /nIt's warm and a bit hearty. /nHealing: +" + value;
         stackable = true;
     }
@@ -28,21 +28,22 @@ public class OBJ_Torgray_Soup extends Entity {
         game.gameState = States.STATE_DIALOGUE;
         int random = new Random().nextInt(6) + 1;
 
-        switch (random) {
-            case 1: game.ui.currentDialogue = "Erm a last key is behind the pond. /n+4 health";break;
-            case 2: game.ui.currentDialogue = "Erm healing in the pond respawns /nmobs. /n+4 health";break;
-            case 3: game.ui.currentDialogue = "Erm the higher level, the more you /nheal when leveling up. /n+4 health";break;
-            case 4: game.ui.currentDialogue = "Erm I think you are left handed. /n+4 health";break;
-            case 5: game.ui.currentDialogue = "Erm after passing all 3 gates you get /na reward. /n+4 health";break;
-            case 6: game.ui.currentDialogue = "Erm the pond is a good place to /nheal. /n+4 health";break;
-        }
+        game.ui.currentDialogue = switch (random) {
+            case 1 -> "Erm a last key is behind the pond. /n+4 health";
+            case 2 -> "Erm healing in the pond respawns /nmobs. /n+4 health";
+            case 3 -> "Erm the higher level, the more you /nheal when leveling up. /n+4 health";
+            case 4 -> "Erm I think you are left handed. /n+4 health";
+            case 5 -> "Erm after passing all 3 gates you get /na reward. /n+4 health";
+            case 6 -> "Erm the pond is a good place to /nheal. /n+4 health";
+            default -> "Erm something went wrong. /n+4 health";
+        };
 
         if (game.player.health + value > game.player.maxHealth) {
             game.player.health = game.player.maxHealth;
         } else {
             game.player.health += value;
         }
-        game.player.generateParticles(this, game.player, value);
+        game.player.generateParticles(this, game.player);
         game.playSound("Power Up");
         return true;
     }

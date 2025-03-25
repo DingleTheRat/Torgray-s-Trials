@@ -27,6 +27,8 @@ public class Game extends JPanel implements Runnable {
     // Word Settings
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
+    public final int worldWidth = tileSize * maxWorldCol;
+    public final int worldHeight = tileSize * maxWorldRow;
     public final int maxMaps = 10;
 
     // Full Screen
@@ -45,7 +47,7 @@ public class Game extends JPanel implements Runnable {
     public KeyHandler keyHandler = new KeyHandler(this);
     Sound music = new Sound();
     Sound sound = new Sound();
-    EnvironmentManager environmentManager = new EnvironmentManager(this);
+    public EnvironmentManager environmentManager = new EnvironmentManager(this);
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public AssetSetter assetSetter = new AssetSetter(this);
     public UI ui = new UI(this);
@@ -57,7 +59,7 @@ public class Game extends JPanel implements Runnable {
     public Player player = new Player(this, keyHandler);
     public HashMap<String, HashMap<Integer, Entity>> npc = new HashMap<>();
     public HashMap<String, HashMap<Integer, Entity>> obj = new HashMap<>();
-    public HashMap<String, HashMap<Integer, Entity>> mob = new HashMap<>();
+    public HashMap<String, HashMap<Integer, Entity>> monster = new HashMap<>();
     public ArrayList<Entity> particleList = new ArrayList<>();
     public ArrayList<Entity> entityList = new ArrayList<>();
 
@@ -74,9 +76,9 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void setupGame() {
-        assetSetter.setObject();
-        assetSetter.setNPC();
-        assetSetter.setMonster();
+        assetSetter.setObjects();
+        assetSetter.setNPCs();
+        assetSetter.setMonsters();
         environmentManager.setup();
         playMusic("Tech Geek");
         gameState = States.STATE_TITLE;
@@ -95,14 +97,14 @@ public class Game extends JPanel implements Runnable {
     public void restart() {
         player.setDefaultValues();
         player.setItems();
-        assetSetter.setObject();
-        assetSetter.setNPC();
-        assetSetter.setMonster();
+        assetSetter.setObjects();
+        assetSetter.setNPCs();
+        assetSetter.setMonsters();
     }
     public void setFullScreen() {
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = ge.getDefaultScreenDevice();
-        gd.setFullScreenWindow(Main.window);
+        GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice graphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
+        graphicsDevice.setFullScreenWindow(Main.window);
 
         screenWidth2 = Main.window.getWidth();
         screenHeight2 = Main.window.getHeight();
@@ -148,7 +150,7 @@ public class Game extends JPanel implements Runnable {
         }
     }
     public void update() {
-        if (gameState == States.STATE_PLAY || gameState == States.STATE_CHARACTER || gameState == States.STATE_DIALOGUE) {
+        if (gameState == States.STATE_PLAY || gameState == States.STATE_CHARACTER || gameState == States.STATE_DIALOGUE || gameState == States.STATE_TRANSITION) {
             player.update();
 
             // NPCs
@@ -158,14 +160,14 @@ public class Game extends JPanel implements Runnable {
                 }
             }
             // Mobs
-            for (int i = 0; i < mob.get(currentMap).size(); i++) {
-                if (mob.get(currentMap).get(i) != null) {
-                    if (mob.get(currentMap).get(i).alive && !mob.get(currentMap).get(i).dying) {
-                        mob.get(currentMap).get(i).update();
+            for (int i = 0; i < monster.get(currentMap).size(); i++) {
+                if (monster.get(currentMap).get(i) != null) {
+                    if (monster.get(currentMap).get(i).alive && !monster.get(currentMap).get(i).dying) {
+                        monster.get(currentMap).get(i).update();
                     }
-                    if (!mob.get(currentMap).get(i).alive) {
-                        mob.get(currentMap).get(i).checkDrop();
-                        mob.get(currentMap).put(i, null);
+                    if (!monster.get(currentMap).get(i).alive) {
+                        monster.get(currentMap).get(i).checkDrop();
+                        monster.get(currentMap).put(i, null);
                     }
                 }
             }
@@ -213,9 +215,9 @@ public class Game extends JPanel implements Runnable {
                     entityList.add(obj.get(currentMap).get(i));
                 }
             }
-            for (int i = 0; i < mob.get(currentMap).size(); i++) {
-                if (mob.get(currentMap).get(i) != null) {
-                    entityList.add(mob.get(currentMap).get(i));
+            for (int i = 0; i < monster.get(currentMap).size(); i++) {
+                if (monster.get(currentMap).get(i) != null) {
+                    entityList.add(monster.get(currentMap).get(i));
                 }
             }
             for (Entity value : particleList) {
@@ -265,9 +267,9 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void drawToScreen() {
-        Graphics g = getGraphics();
-        g.drawImage(tempScreen,0,0,screenWidth2, screenHeight2, null);
-        g.dispose();
+        Graphics graphics = getGraphics();
+        graphics.drawImage(tempScreen,0,0,screenWidth2, screenHeight2, null);
+        graphics.dispose();
     }
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
@@ -300,9 +302,9 @@ public class Game extends JPanel implements Runnable {
                     entityList.add(obj.get(currentMap).get(i));
                 }
             }
-            for (int i = 0; i < mob.get(currentMap).size(); i++) {
-                if (mob.get(currentMap).get(i) != null) {
-                    entityList.add(mob.get(currentMap).get(i));
+            for (int i = 0; i < monster.get(currentMap).size(); i++) {
+                if (monster.get(currentMap).get(i) != null) {
+                    entityList.add(monster.get(currentMap).get(i));
                 }
             }
             for (Entity value : particleList) {
