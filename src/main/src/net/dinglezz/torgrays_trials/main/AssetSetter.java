@@ -1,6 +1,7 @@
 package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
+import net.dinglezz.torgrays_trials.npc.NPC_Coiner;
 import net.dinglezz.torgrays_trials.npc.NPC_GateKeeper;
 import net.dinglezz.torgrays_trials.monster.MON_Dracore;
 import net.dinglezz.torgrays_trials.object.*;
@@ -59,7 +60,8 @@ public class AssetSetter {
             i = 0;
 
         // Coiner's Shop Map
-            assetMap.put(0, null);
+            setAsset(new NPC_Coiner(game), 12, 9);
+
             game.npc.put("Coiner's Shop", assetMap);
             assetMap = new HashMap<>();
             i = 0;

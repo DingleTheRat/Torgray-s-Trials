@@ -9,7 +9,6 @@ import net.dinglezz.torgrays_trials.object.OBJ_Sword_Iron;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class Player extends Entity{
     KeyHandler keyHandler;
@@ -19,10 +18,6 @@ public class Player extends Entity{
     int standCounter = 0;
     public boolean attackCanceled = false;
     public boolean lightUpdated = false;
-
-
-    public ArrayList<Entity> inventory = new ArrayList<>();
-    public final int maxInventorySize = 25;
 
     public Player(Game game, KeyHandler keyHandler) {
         super(game);
@@ -297,7 +292,7 @@ public class Player extends Entity{
             if (i != 999) {
                 attackCanceled = true;
                 game.gameState = States.STATE_DIALOGUE;
-                game.npc.get(game.currentMap).get(i).speak();
+                game.npc.get(game.currentMap).get(i).speak(false);
             }
         }
     }

@@ -35,6 +35,7 @@ public abstract class Entity {
 
     // Counters
     public int spriteCounter = 0;
+    public int spriteSpeed = 10;
     public int actionLockCounter = 0;
     public int invincibleCounter = 0;
     int dyingCounter = 0;
@@ -58,6 +59,8 @@ public abstract class Entity {
     public Entity currentWeapon;
     public Entity currentShield;
     public Entity currentLight;
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public final int maxInventorySize = 25;
 
     // Item Attributes
     public int value;
@@ -70,6 +73,27 @@ public abstract class Entity {
 
     public Entity(Game game) {
         this.game = game;
+        down1 = registerEntitySprite("/drawable/disabled");
+        down2 = registerEntitySprite("/drawable/disabled");
+        down3 = registerEntitySprite("/drawable/disabled");
+        up1 = registerEntitySprite("/drawable/disabled");
+        up2 = registerEntitySprite("/drawable/disabled");
+        up3 = registerEntitySprite("/drawable/disabled");
+        left1 = registerEntitySprite("/drawable/disabled");
+        left2 = registerEntitySprite("/drawable/disabled");
+        left3 = registerEntitySprite("/drawable/disabled");
+        right1 = registerEntitySprite("/drawable/disabled");
+        right2 = registerEntitySprite("/drawable/disabled");
+        right3 = registerEntitySprite("/drawable/disabled");
+
+        attackUp = registerEntitySprite("/drawable/disabled");
+        attackDown = registerEntitySprite("/drawable/disabled");
+        attackLeft = registerEntitySprite("/drawable/disabled");
+        right3 = registerEntitySprite("/drawable/disabled");
+
+        image = registerEntitySprite("/drawable/disabled");
+        image2 = registerEntitySprite("/drawable/disabled");
+        image3 = registerEntitySprite("/drawable/disabled");
     }
 
     public int getLeftX() {return worldX + solidArea.x;}
@@ -81,18 +105,20 @@ public abstract class Entity {
 
     public void setAction() {}
     public void damageReaction() {}
-    public void speak() {
+    public void speak(boolean facePlayer) {
         if (dialogues.get(dialogueIndex) == null) {
             dialogueIndex = 0;
         }
         game.ui.currentDialogue = dialogues.get(dialogueIndex);
         dialogueIndex++;
 
-        switch (game.player.direction) {
-            case "up": direction = "down"; break;
-            case "down": direction = "up"; break;
-            case "left": direction = "right"; break;
-            case "right": direction = "left"; break;
+        if (facePlayer) {
+            switch (game.player.direction) {
+                case "up": direction = "down"; break;
+                case "down": direction = "up"; break;
+                case "left": direction = "right"; break;
+                case "right": direction = "left"; break;
+            }
         }
     }
     public void interact() {}
@@ -151,7 +177,7 @@ public abstract class Entity {
         }
 
         spriteCounter ++;
-        if (spriteCounter > 10) {
+        if (spriteCounter > spriteSpeed) {
             if (spriteNumber == 1) {
                 spriteNumber = 2;
             } else if (spriteNumber == 2) {
@@ -249,7 +275,8 @@ public abstract class Entity {
             try {
                 image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
             } catch (IllegalArgumentException e) {
-                image = ImageIO.read(getClass().getResourceAsStream("drawable/tiles/disabled.png"));
+                System.out.println("Warning: \"" + imagePath + "\" is not a valid path.");
+                image = ImageIO.read(getClass().getResourceAsStream("/drawable/disabled.png"));
             }
             image = uTool.scaleImage(image, game.tileSize, game.tileSize);
         } catch (IOException e) {
@@ -265,7 +292,7 @@ public abstract class Entity {
                 image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
             } catch (IllegalArgumentException e) {
                 System.out.println("Warning: \"" + imagePath + "\" is not a valid path.");
-                image = ImageIO.read(getClass().getResourceAsStream("/drawable/tiles/disabled.png"));
+                image = ImageIO.read(getClass().getResourceAsStream("/drawable/disabled.png"));
             }
             image = uTool.scaleImage(image, width, height);
         } catch (IOException e) {

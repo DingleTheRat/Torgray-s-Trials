@@ -11,9 +11,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.logging.Logger;
 
 public class Game extends JPanel implements Runnable {
-
     // Screen settings
     final int originalTileSize = 16; // 16x16 tile
     final int scale = 3;
@@ -159,7 +160,7 @@ public class Game extends JPanel implements Runnable {
                     npc.get(currentMap).get(i).update();
                 }
             }
-            // Mobs
+            // Monsters
             for (int i = 0; i < monster.get(currentMap).size(); i++) {
                 if (monster.get(currentMap).get(i) != null) {
                     if (monster.get(currentMap).get(i).alive && !monster.get(currentMap).get(i).dying) {
@@ -168,6 +169,11 @@ public class Game extends JPanel implements Runnable {
                     if (!monster.get(currentMap).get(i).alive) {
                         monster.get(currentMap).get(i).checkDrop();
                         monster.get(currentMap).put(i, null);
+
+                        // Respawn if all monsters are dead
+                        if (monster.get(currentMap).values().stream().allMatch(Objects::isNull)) {
+                            assetSetter.setMonsters();
+                        }
                     }
                 }
             }
@@ -176,8 +182,7 @@ public class Game extends JPanel implements Runnable {
                 if (particleList.get(i) != null) {
                     if (particleList.get(i).alive) {
                         particleList.get(i).update();
-                    }
-                    if (!particleList.get(i).alive) {
+                    } else {
                         particleList.remove(i);
                     }
                 }

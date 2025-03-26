@@ -21,21 +21,21 @@ public class NPC_GateKeeper extends Entity {
     }
 
     public void getImage() {
-        up1 = registerEntitySprite("/drawable/npc/gatekeeper_up_1", game.tileSize, game.tileSize);
-        up2 = registerEntitySprite("/drawable/npc/gatekeeper_up_2", game.tileSize, game.tileSize);
-        up3 = registerEntitySprite("/drawable/npc/gatekeeper_up_3", game.tileSize, game.tileSize);
+        up1 = registerEntitySprite("/drawable/npc/gatekeeper/gatekeeper_up_1");
+        up2 = registerEntitySprite("/drawable/npc/gatekeeper/gatekeeper_up_2");
+        up3 = registerEntitySprite("/drawable/npc/gatekeeper/gatekeeper_up_3");
 
-        down1 = registerEntitySprite("/drawable/npc/gatekeeper_down_1", game.tileSize, game.tileSize);
-        down2 = registerEntitySprite("/drawable/npc/gatekeeper_down_2", game.tileSize, game.tileSize);
-        down3 = registerEntitySprite("/drawable/npc/gatekeeper_down_3", game.tileSize, game.tileSize);
+        down1 = registerEntitySprite("/drawable/npc/gatekeeper/gatekeeper_down_1");
+        down2 = registerEntitySprite("/drawable/npc/gatekeeper/gatekeeper_down_2");
+        down3 = registerEntitySprite("/drawable/npc/gatekeeper/gatekeeper_down_3");
 
-        left1 = registerEntitySprite("/drawable/npc/gatekeeper_left_1", game.tileSize, game.tileSize);
-        left2 = registerEntitySprite("/drawable/npc/gatekeeper_left_2", game.tileSize, game.tileSize);
-        left3 = registerEntitySprite("/drawable/npc/gatekeeper_left_3", game.tileSize, game.tileSize);
+        left1 = registerEntitySprite("/drawable/npc/gatekeeper/gatekeeper_left_1");
+        left2 = registerEntitySprite("/drawable/npc/gatekeeper/gatekeeper_left_2");
+        left3 = registerEntitySprite("/drawable/npc/gatekeeper/gatekeeper_left_3");
 
-        right1 = registerEntitySprite("/drawable/npc/gatekeeper_right_1", game.tileSize, game.tileSize);
-        right2 = registerEntitySprite("/drawable/npc/gatekeeper_right_2", game.tileSize, game.tileSize);
-        right3 = registerEntitySprite("/drawable/npc/gatekeeper_right_3", game.tileSize, game.tileSize);
+        right1 = registerEntitySprite("/drawable/npc/gatekeeper/gatekeeper_right_1");
+        right2 = registerEntitySprite("/drawable/npc/gatekeeper/gatekeeper_right_2");
+        right3 = registerEntitySprite("/drawable/npc/gatekeeper/gatekeeper_right_3");
     }
     public void setDialogue() {
         dialogues.put(0, "Hey there partner!");
@@ -64,9 +64,9 @@ public class NPC_GateKeeper extends Entity {
             actionLockCounter = 0;
         }
     }
-    public void speak() {
+    @Override
+    public void speak(boolean facePlayer) {
         // make this character do specific stuff
-
-        super.speak();
+        super.speak(true);
     }
 }
