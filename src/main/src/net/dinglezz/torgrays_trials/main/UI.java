@@ -1,6 +1,7 @@
 package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
+import net.dinglezz.torgrays_trials.object.OBJ_Coin;
 import net.dinglezz.torgrays_trials.object.OBJ_Heart;
 
 import java.awt.*;
@@ -15,18 +16,21 @@ public class UI {
     Game game;
     Graphics2D graphics2D;
     Font maruMonica;
-    BufferedImage heart, half_heart, lost_heart;
+    BufferedImage heart, half_heart, lost_heart, coin;
     ArrayList<String> messages = new ArrayList<>();
     ArrayList<Integer> messageCounter = new ArrayList<>();
     public String currentDialogue = "";
     public int commandNumber = 0;
     public States titleScreenState = States.TITLE_STATE_MAIN;
     public States subState = States.PAUSE_STATE_MAIN;
-    public int slotCol = 0;
-    public int slotRow = 0;
+    public int playerSlotCol = 0;
+    public int playerSlotRow = 0;
+    public int entitySlotCol = 0;
+    public int entitySlotRow = 0;
     public String actionMethod;
     public float transitionCounter = 0f;
     public boolean fadeBack = false;
+    public Entity npc;
 
     public UI(Game game) {
         this.game = game;
@@ -43,6 +47,8 @@ public class UI {
         heart = obj_heart.image;
         half_heart = obj_heart.image2;
         lost_heart = obj_heart.image3;
+        Entity Coin = new OBJ_Coin(game, 1);
+        coin = Coin.down1;
     }
 
     public void addMessage(String message) {
@@ -60,9 +66,10 @@ public class UI {
             case STATE_PLAY: drawPlayerHealth(); drawMessage(); break;
             case STATE_PAUSE: drawPauseScreen(); break;
             case STATE_DIALOGUE: drawDialogueScreen(); drawPlayerHealth(); break;
-            case STATE_CHARACTER: drawCharacterScreen(); drawInventory(); break;
+            case STATE_CHARACTER: drawCharacterScreen(); drawInventory(game.player, true); break;
             case STATE_GAME_OVER: drawGameOverScreen(); break;
             case STATE_TRANSITION: drawTransitionScreen(); break;
+            case STATE_TRADE: drawTradeScreen(); break;
         }
     }
 
@@ -220,11 +227,11 @@ public class UI {
         int frameWidth = game.tileSize * 8;
         int frameHeight = game.tileSize * 2;
 
-        if (subState == States.PAUSE_SETTINGS_MAIN || subState == States.PAUSE_CONTROLS) {
+        if (subState == States.PAUSE_STATE_SETTINGS_MAIN || subState == States.PAUSE_STATE_CONTROLS) {
             frameY = game.tileSize;
             frameHeight = game.tileSize * 10;
         }
-        else if (subState == States.PAUSE_SETTINGS_NOTIFICATION || subState == States.PAUSE_SETTINGS_CONFIRM) {
+        else if (subState == States.PAUSE_STATE_NOTIFICATION || subState == States.PAUSE_STATE_CONFIRM) {
             frameY = game.tileSize * 3;
             frameHeight = game.tileSize * 6;
         }
@@ -251,8 +258,8 @@ public class UI {
                 if (commandNumber == 0) {
                     graphics2D.drawString(">", x - game.tileSize, y);
 
-                    if (game.keyHandler.spacePressed) {
-                        subState = States.PAUSE_SETTINGS_MAIN;
+                    if (game.inputHandler.spacePressed) {
+                        subState = States.PAUSE_STATE_SETTINGS_MAIN;
                         commandNumber = 0;
                     }
                 }
@@ -263,9 +270,9 @@ public class UI {
                 if (commandNumber == 1) {
                     graphics2D.drawString(">", x - game.tileSize, y);
 
-                    if (game.keyHandler.spacePressed) {
+                    if (game.inputHandler.spacePressed) {
                         commandNumber = 1;
-                        subState = States.PAUSE_SETTINGS_CONFIRM;
+                        subState = States.PAUSE_STATE_CONFIRM;
                         currentDialogue = "Are you sure you wanna /nend this game? Your data /nwon't be saved.";
                         actionMethod = "yesGameEnd";
                     }
@@ -277,19 +284,19 @@ public class UI {
                 if (commandNumber == 2) {
                     graphics2D.drawString(">", x - game.tileSize, y);
 
-                    if (game.keyHandler.spacePressed) {
+                    if (game.inputHandler.spacePressed) {
                         game.gameState = States.STATE_PLAY;
                         commandNumber = 0;
                     }
                 }
                 break;
-            case States.PAUSE_SETTINGS_MAIN: settingsMain(frameX, frameY); break;
-            case States.PAUSE_SETTINGS_NOTIFICATION: settingsNotification(frameX, frameY); break;
-            case States.PAUSE_SETTINGS_CONFIRM: settingsConfirm(frameX, frameY); break;
-            case States.PAUSE_CONTROLS: controlsPanel(frameX, frameY); break;
+            case States.PAUSE_STATE_SETTINGS_MAIN: settingsMain(frameX, frameY); break;
+            case States.PAUSE_STATE_NOTIFICATION: settingsNotification(frameX, frameY); break;
+            case States.PAUSE_STATE_CONFIRM: settingsConfirm(frameX, frameY); break;
+            case States.PAUSE_STATE_CONTROLS: controlsPanel(frameX, frameY); break;
         }
 
-        game.keyHandler.spacePressed = false;
+        game.inputHandler.spacePressed = false;
     }
 
     public void settingsMain(int frameX, int frameY) {
@@ -310,10 +317,10 @@ public class UI {
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
 
-            if (game.keyHandler.spacePressed) {
+            if (game.inputHandler.spacePressed) {
                 if (!game.fullScreen && !game.BRendering) {
                     commandNumber = 1;
-                    subState = States.PAUSE_SETTINGS_CONFIRM;
+                    subState = States.PAUSE_STATE_CONFIRM;
                     currentDialogue = "Are you sure you wanna /nenter full screen? It won't /nscale without BRendering.";
                     actionMethod = "yesFullScreen";
                 } else {
@@ -328,10 +335,10 @@ public class UI {
         if (commandNumber == 1) {
             graphics2D.drawString(">", textX - 30, textY);
 
-            if (game.keyHandler.spacePressed) {
+            if (game.inputHandler.spacePressed) {
                 if (!game.BRendering) {
                     commandNumber = 1;
-                    subState = States.PAUSE_SETTINGS_CONFIRM;
+                    subState = States.PAUSE_STATE_CONFIRM;
                     currentDialogue = "BRendering is a highly /nexperimental mode that /ncan break the game if on";
                     actionMethod = "yesBRendering";
                 } else {
@@ -362,8 +369,8 @@ public class UI {
         if (commandNumber == 4) {
             graphics2D.drawString(">", textX - 30, textY);
 
-            if (game.keyHandler.spacePressed) {
-                subState = States.PAUSE_CONTROLS;
+            if (game.inputHandler.spacePressed) {
+                subState = States.PAUSE_STATE_CONTROLS;
                 commandNumber = 0;
             }
         }
@@ -374,7 +381,7 @@ public class UI {
         if (commandNumber == 5) {
             graphics2D.drawString(">", textX - 30, textY);
 
-            if (game.keyHandler.spacePressed) {
+            if (game.inputHandler.spacePressed) {
                 subState = States.PAUSE_STATE_MAIN;
                 commandNumber = 0;
             }
@@ -438,8 +445,8 @@ public class UI {
         graphics2D.drawString("Close", textX, textY);
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (game.keyHandler.spacePressed) {
-                subState = States.PAUSE_SETTINGS_MAIN;
+            if (game.inputHandler.spacePressed) {
+                subState = States.PAUSE_STATE_SETTINGS_MAIN;
                 commandNumber = 0;
             }
         }
@@ -467,7 +474,7 @@ public class UI {
         graphics2D.drawString("Yes", textX, textY);
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (game.keyHandler.spacePressed) {
+            if (game.inputHandler.spacePressed) {
                 try {
                     Method method = this.getClass().getMethod(actionMethod);
                     method.invoke(this);
@@ -482,15 +489,15 @@ public class UI {
         graphics2D.drawString("No", textX, textY);
         if (commandNumber == 1) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (game.keyHandler.spacePressed) {
-                subState = States.PAUSE_SETTINGS_MAIN;
+            if (game.inputHandler.spacePressed) {
+                subState = States.PAUSE_STATE_SETTINGS_MAIN;
                 commandNumber = 4;
             }
         }
     }
     @SuppressWarnings("unused")
     public void yesGameEnd() {
-        subState = States.PAUSE_SETTINGS_MAIN;
+        subState = States.PAUSE_STATE_SETTINGS_MAIN;
         game.gameState = States.STATE_TITLE;
         titleScreenState = States.TITLE_STATE_MAIN;
         game.music.stop();
@@ -500,7 +507,7 @@ public class UI {
     @SuppressWarnings("unused")
     public void yesFullScreen() {
         game.fullScreen = !game.fullScreen;
-        subState = States.PAUSE_SETTINGS_NOTIFICATION;
+        subState = States.PAUSE_STATE_NOTIFICATION;
         currentDialogue = "Full Screen will only be /nenabled/disabled when /nrelaunching the game.";
     }
     @SuppressWarnings("unused")
@@ -508,11 +515,11 @@ public class UI {
         game.BRendering = !game.BRendering;
         if (game.BRendering) {
             commandNumber = 0;
-            subState = States.PAUSE_SETTINGS_NOTIFICATION;
+            subState = States.PAUSE_STATE_NOTIFICATION;
             currentDialogue = "You can emergency /ndisable BRendering by /npressing U.";
         } else {
             commandNumber = 1;
-            subState = States.PAUSE_SETTINGS_MAIN;
+            subState = States.PAUSE_STATE_SETTINGS_MAIN;
         }
     }
     public void controlsPanel(int frameX, int frameY) {
@@ -532,6 +539,7 @@ public class UI {
 
         graphics2D.drawString("Move", textX, textY); textY += game.tileSize;
         graphics2D.drawString("Confirm", textX, textY); textY += game.tileSize;
+        graphics2D.drawString("Exit", textX, textY); textY += game.tileSize;
         graphics2D.drawString("Attack", textX, textY); textY += game.tileSize;
         graphics2D.drawString("Interact", textX, textY); textY += game.tileSize;
         graphics2D.drawString("Inventory", textX, textY); textY += game.tileSize;
@@ -541,9 +549,10 @@ public class UI {
         textY = frameY + game.tileSize * 2 + (game.tileSize / 4);
         graphics2D.drawString("WASD", textX, textY); textY += game.tileSize;
         graphics2D.drawString("Space", textX, textY); textY += game.tileSize;
+        graphics2D.drawString("    Esc", textX, textY); textY += game.tileSize;
         graphics2D.drawString("Space", textX, textY); textY += game.tileSize;
-        graphics2D.drawString("      E", textX, textY); textY += game.tileSize;
-        graphics2D.drawString("      E", textX, textY); textY += game.tileSize;
+        graphics2D.drawString("       E", textX, textY); textY += game.tileSize;
+        graphics2D.drawString("       E", textX, textY); textY += game.tileSize;
 
         // Close
         textY = frameY = game.tileSize * 10 + (game.tileSize / 2);
@@ -551,8 +560,8 @@ public class UI {
         graphics2D.drawString("Close", textX, textY);
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (game.keyHandler.spacePressed) {
-                subState = States.PAUSE_SETTINGS_MAIN;
+            if (game.inputHandler.spacePressed) {
+                subState = States.PAUSE_STATE_SETTINGS_MAIN;
                 commandNumber = 3;
             }
         }
@@ -673,12 +682,29 @@ public class UI {
        textY += game.tileSize;
        graphics2D.drawImage(game.player.currentShield.down1, tailX - game.tileSize, textY - 37, null);
     }
-    public void drawInventory() {
+    public void drawInventory(Entity entity, boolean cursor) {
         // Frame
-        int frameX = game.tileSize / 2 + game.tileSize * 13;
-        int frameY = game.tileSize / 2;
-        int frameWidth = game.tileSize * 6;
-        int frameHeight = game.tileSize * 6;
+        int frameX;
+        int frameY;
+        int frameWidth;
+        int frameHeight;
+        int slotCol;
+        int slotRow;
+        if (entity == game.player) {
+            frameX = game.tileSize / 2 + game.tileSize * 13;
+            frameY = game.tileSize / 2;
+            frameWidth = game.tileSize * 6;
+            frameHeight = game.tileSize * 6;
+            slotCol = playerSlotCol;
+            slotRow = playerSlotRow;
+        } else {
+            frameX = game.tileSize * 2;
+            frameY = game.tileSize / 2;
+            frameWidth = game.tileSize * 6;
+            frameHeight = game.tileSize * 6;
+            slotCol = entitySlotCol;
+            slotRow = entitySlotRow;
+        }
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
         // Slots
@@ -689,24 +715,24 @@ public class UI {
         int slotSize = game.tileSize + 3;
 
         // Draw Items
-        for (int i = 0; i < game.player.inventory.size(); i++) {
+        for (int i = 0; i < entity.inventory.size(); i++) {
             // Equip Cursor
-            if (game.player.inventory.get(i) == game.player.currentWeapon ||
-                    game.player.inventory.get(i) == game.player.currentShield ||
-                    game.player.inventory.get(i) == game.player.currentLight) {
+            if (entity.inventory.get(i) == entity.currentWeapon ||
+                    entity.inventory.get(i) == entity.currentShield ||
+                    entity.inventory.get(i) == entity.currentLight) {
                 graphics2D.setColor(new Color(240, 190, 90));
                 graphics2D.fillRoundRect(slotX, slotY, game.tileSize, game.tileSize, 10, 10);
             }
 
-            graphics2D.drawImage(game.player.inventory.get(i).down1, slotX, slotY, null);
+            graphics2D.drawImage(entity.inventory.get(i).down1, slotX, slotY, null);
 
             // Draw Amount
-            if (game.player.inventory.get(i).amount > 1) {
+            if (entity.inventory.get(i).amount > 1) {
                 graphics2D.setFont(graphics2D.getFont().deriveFont(28f));
                 int amountX;
                 int amountY;
 
-                String s = "" + game.player.inventory.get(i).amount;
+                String s = "" + entity.inventory.get(i).amount;
                 amountX = alignXToRight(s, slotX + 44);
                 amountY = slotY + game.tileSize;
 
@@ -728,37 +754,39 @@ public class UI {
         }
 
         // Cursor
-        int cursorX = slotXStart + (slotSize * slotCol);
-        int cursorY = slotYStart + (slotSize * slotRow);
-        int cursorWidth = game.tileSize;
-        int cursorHeight = game.tileSize;
+        if (cursor) {
+            int cursorX = slotXStart + (slotSize * slotCol);
+            int cursorY = slotYStart + (slotSize * slotRow);
+            int cursorWidth = game.tileSize;
+            int cursorHeight = game.tileSize;
 
-        // Draw Cursor
-        graphics2D.setColor(Color.white);
-        graphics2D.setStroke(new BasicStroke(3));
-        graphics2D.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+            // Draw Cursor
+            graphics2D.setColor(Color.white);
+            graphics2D.setStroke(new BasicStroke(3));
+            graphics2D.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
 
-        // Description Frame
-        int dFrameY = frameY + frameHeight;
-        int dFrameHeight = game.tileSize * 4 - (game.tileSize / 2);
+            // Description Frame
+            int dFrameY = frameY + frameHeight;
+            int dFrameHeight = game.tileSize * 4 - (game.tileSize / 2);
 
-        // Description Text
-        int textX = frameX + 20;
-        int textY = dFrameY + game.tileSize;
+            // Description Text
+            int textX = frameX + 20;
+            int textY = dFrameY + game.tileSize;
 
-        int itemIndex = getItemIndex();
-        if (itemIndex < game.player.inventory.size()) {
-            // Window + Title
-            drawSubWindow(frameX, dFrameY, frameWidth, dFrameHeight);
-            graphics2D.setFont(graphics2D.getFont().deriveFont(30f));
-            graphics2D.drawString(game.player.inventory.get(itemIndex).name, textX, textY);
-            textY += 10;
+            int itemIndex = getItemIndex(slotCol, slotRow);
+            if (itemIndex < entity.inventory.size()) {
+                // Window + Title
+                drawSubWindow(frameX, dFrameY, frameWidth, dFrameHeight);
+                graphics2D.setFont(graphics2D.getFont().deriveFont(30f));
+                graphics2D.drawString(entity.inventory.get(itemIndex).name, textX, textY);
+                textY += 10;
 
-            // Description
-            graphics2D.setFont(graphics2D.getFont().deriveFont(20f));
-            for (String line : game.player.inventory.get(itemIndex).description.split("/n")) {
-                graphics2D.drawString(line, textX, textY);
-                textY += 30;
+                // Description
+                graphics2D.setFont(graphics2D.getFont().deriveFont(20f));
+                for (String line : entity.inventory.get(itemIndex).description.split("/n")) {
+                    graphics2D.drawString(line, textX, textY);
+                    textY += 30;
+                }
             }
         }
     }
@@ -810,7 +838,7 @@ public class UI {
         x = getCentreX(text);
         y += 55;
         graphics2D.drawString(text, x, y);
-        if (commandNumber == game.keyHandler.maxCommandNumber) {
+        if (commandNumber == game.inputHandler.maxCommandNumber) {
             graphics2D.drawString(">", x - 40, y);
         }
     }
@@ -846,8 +874,89 @@ public class UI {
         graphics2D.setColor(new Color(0, 0, 0, transitionCounter));
         graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
     }
+    public void drawTradeScreen() {
+        switch (subState) {
+            case TRADE_STATE_SELECT: drawTradeSelectScreen(); break;
+            case TRADE_STATE_BUY: drawTradeBuyScreen(); break;
+            case TRADE_STATE_SELL: drawTradeSellScreen(); break;
+        }
+        game.inputHandler.spacePressed = false;
+    }
+    public void drawTradeSelectScreen() {
+        drawDialogueScreen();
 
-    public int getItemIndex() {
+        // Draw Window
+        int x = game.tileSize * 15;
+        int y = (game.tileSize * 8) - (game.tileSize / 4);
+        int width = game.tileSize * 3;
+        int height = (game.tileSize * 3) + (game.tileSize / 2);
+        drawSubWindow(x, y, width, height);
+
+        // Buy Text
+        x += game.tileSize;
+        y += game.tileSize;
+        graphics2D.drawString("Buy", x, y);
+        if (commandNumber == 0) {
+            graphics2D.drawString(">", x - 24, y);
+            if (game.inputHandler.spacePressed) {
+                game.ui.subState = States.TRADE_STATE_BUY;
+            }
+        }
+
+        // Sell Text
+        y += game.tileSize;
+        graphics2D.drawString("Sell", x, y);
+        if (commandNumber == 1) {
+            graphics2D.drawString(">", x - 24, y);
+            if (game.inputHandler.spacePressed) {
+                game.ui.subState = States.TRADE_STATE_SELL;
+            }
+        }
+
+        // Leave Text
+        y += game.tileSize;
+        graphics2D.drawString("Leave", x, y);
+        if (commandNumber == 2) {
+            graphics2D.drawString(">", x - 24, y);
+            if (game.inputHandler.spacePressed) {
+                game.gameState = States.STATE_PLAY;
+                game.ui.subState = States.PAUSE_STATE_MAIN;
+                game.ui.commandNumber = 0;
+            }
+        }
+    }
+    public void drawTradeBuyScreen() {
+        // Inventories
+        drawInventory(game.player, false);
+        drawInventory(npc, true);
+
+        // Hint Window
+        int x = game.tileSize * 14;
+        int y = game.tileSize * 9;
+        int width = game.tileSize * 6;
+        int height = game.tileSize * 2;
+        drawSubWindow(x, y, width, height);
+        graphics2D.drawString("[ESC] to Exit", x + 24, y + 60);
+
+        // Price Window
+        int itemIndex = getItemIndex(entitySlotCol, entitySlotRow);
+        if (itemIndex < npc.inventory.size()) {
+            x = game.tileSize * 6;
+            y = game.tileSize * 6;
+            width = (game.tileSize * 2) + (game.tileSize / 2);
+            height = game.tileSize;
+            drawSubWindow(x, y, width, height);
+            graphics2D.drawImage(coin, y + 10, x + 10, 32, 32, null);
+
+            int price = npc.inventory.get(itemIndex).price;
+            String text = String.valueOf(price);
+            x = alignXToRight(text, game.tileSize * 8 - 20);
+            graphics2D.drawString(text, x, y + 34);
+        }
+    }
+    public void drawTradeSellScreen() {}
+
+    public int getItemIndex(int slotCol, int slotRow) {
         return slotCol + (slotRow * 5);
     }
     public void drawSubWindow(int x, int y, int width, int height) {
@@ -865,7 +974,8 @@ public class UI {
         int length = (int) graphics2D.getFontMetrics().getStringBounds(text, graphics2D).getWidth();
         return game.screenWidth / 2 - length / 2;
 
-    }    public int alignXToRight(String text, int tailX) {
+    }
+    public int alignXToRight(String text, int tailX) {
         int length = (int) graphics2D.getFontMetrics().getStringBounds(text, graphics2D).getWidth();
         return tailX - length;
     }

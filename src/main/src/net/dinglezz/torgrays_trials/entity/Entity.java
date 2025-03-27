@@ -70,6 +70,7 @@ public abstract class Entity {
     public int lightRadius;
     public boolean stackable = false;
     public int amount = 1;
+    public int price = 0;
 
     public Entity(Game game) {
         this.game = game;
@@ -123,6 +124,7 @@ public abstract class Entity {
     }
     public void interact() {}
     public boolean use(Entity entity) {return false;}
+    public void pickup(Entity entity, int i) {}
     public void checkDrop() {}
     public void dropItem(Entity droppedItem) {
         for (int i = 0; i < game.obj.size(); i++) {

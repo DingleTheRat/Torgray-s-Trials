@@ -18,6 +18,7 @@ public class OBJ_Key extends Entity {
         down1 = registerEntitySprite("/drawable/objects/key", game.tileSize, game.tileSize);
         description = "/n Probably opens a gate";
         stackable = true;
+        price = 6;
     }
     public boolean use(Entity entity) {
 

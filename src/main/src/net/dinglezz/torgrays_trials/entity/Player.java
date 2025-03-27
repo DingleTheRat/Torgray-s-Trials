@@ -1,7 +1,7 @@
 package net.dinglezz.torgrays_trials.entity;
 
 import net.dinglezz.torgrays_trials.main.Game;
-import net.dinglezz.torgrays_trials.main.KeyHandler;
+import net.dinglezz.torgrays_trials.main.InputHandler;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.object.OBJ_Lantern;
 import net.dinglezz.torgrays_trials.object.OBJ_Shield_Iron;
@@ -11,7 +11,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Player extends Entity{
-    KeyHandler keyHandler;
+    InputHandler inputHandler;
 
     public final int screenX;
     public final int screenY;
@@ -19,9 +19,9 @@ public class Player extends Entity{
     public boolean attackCanceled = false;
     public boolean lightUpdated = false;
 
-    public Player(Game game, KeyHandler keyHandler) {
+    public Player(Game game, InputHandler inputHandler) {
         super(game);
-        this.keyHandler = keyHandler;
+        this.inputHandler = inputHandler;
 
         screenX = this.game.screenWidth / 2 - (this.game.tileSize / 2);
         screenY = this.game.screenHeight / 2 - (this.game.tileSize / 2);
@@ -118,22 +118,22 @@ public class Player extends Entity{
         if (attacking) {
             attack();
             attack();
-        } else if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed || keyHandler.spacePressed || keyHandler.interactKeyPressed) {
-            if (keyHandler.upPressed && keyHandler.leftPressed) {
+        } else if (inputHandler.upPressed || inputHandler.downPressed || inputHandler.leftPressed || inputHandler.rightPressed || inputHandler.spacePressed || inputHandler.interactKeyPressed) {
+            if (inputHandler.upPressed && inputHandler.leftPressed) {
                 direction = "up left";
-            } else if (keyHandler.upPressed && keyHandler.rightPressed) {
+            } else if (inputHandler.upPressed && inputHandler.rightPressed) {
                 direction = "up right";
-            } else if (keyHandler.downPressed && keyHandler.leftPressed) {
+            } else if (inputHandler.downPressed && inputHandler.leftPressed) {
                 direction = "down left";
-            } else if (keyHandler.downPressed && keyHandler.rightPressed) {
+            } else if (inputHandler.downPressed && inputHandler.rightPressed) {
                 direction = "down right";
-            } else if (keyHandler.upPressed) {
+            } else if (inputHandler.upPressed) {
                 direction = "up";
-            } else if (keyHandler.downPressed) {
+            } else if (inputHandler.downPressed) {
                 direction = "down";
-            } else if (keyHandler.leftPressed) {
+            } else if (inputHandler.leftPressed) {
                 direction = "left";
-            } else if (keyHandler.rightPressed) {
+            } else if (inputHandler.rightPressed) {
                 direction = "right";
             }
 
@@ -156,7 +156,7 @@ public class Player extends Entity{
             int mobIndex = game.collisionChecker.checkEntity(this, game.monster);
             contactMob(mobIndex);
 
-            if (!collisionOn && !keyHandler.spacePressed && !keyHandler.interactKeyPressed) {
+            if (!collisionOn && !inputHandler.spacePressed && !inputHandler.interactKeyPressed) {
                 switch (direction) {
                     case "up left": worldX -= (speed - 1); worldY -= (speed - 1); break;
                     case "up right": worldX += (speed - 1); worldY -= (speed - 1); break;
@@ -170,19 +170,19 @@ public class Player extends Entity{
             }
 
             // Attacking
-            if (keyHandler.spacePressed && !attackCanceled) {
+            if (inputHandler.spacePressed && !attackCanceled) {
                 attacking = true;
                 spriteCounter = 0;
             }
 
             // Inventory
-            if (keyHandler.interactKeyPressed && !attackCanceled) {
+            if (inputHandler.interactKeyPressed && !attackCanceled) {
                 game.gameState = States.STATE_CHARACTER;
             }
 
             attackCanceled = false;
-            game.keyHandler.spacePressed = false;
-            game.keyHandler.interactKeyPressed = false;
+            game.inputHandler.spacePressed = false;
+            game.inputHandler.interactKeyPressed = false;
 
             spriteCounter ++;
             if (spriteCounter > 10) {
@@ -265,30 +265,24 @@ public class Player extends Entity{
     public void pickUpObject(int i) {
         if (i != 999) {
             if (game.obj.get(game.currentMap).get(i).tags.contains(EntityTags.TAG_OBSTACLE)) {
-                if (keyHandler.interactKeyPressed) {
+                if (inputHandler.interactKeyPressed) {
                     game.obj.get(game.currentMap).get(i).interact();
                 }
             }
             else if (game.obj.get(game.currentMap).get(i).tags.contains(EntityTags.TAG_PICKUPONLY)) {
-                game.obj.get(game.currentMap).get(i).use(this);
+                game.obj.get(game.currentMap).get(i).pickup(this, i);
                 game.obj.get(game.currentMap).put(i, null);
-            } else {
-                String text;
-
-                if (canObtainItem(game.obj.get(game.currentMap).get(i))) {
-                    game.playSound("Coin");
-                    text = "+1 " + game.obj.get(game.currentMap).get(i).name;
-                }
-                else {
-                    text = "Inventory Full";
-                }
+            }
+            else if (canObtainItem(game.obj.get(game.currentMap).get(i))) {
+                game.playSound("Coin");
+                String text = "+1 " + game.obj.get(game.currentMap).get(i).name;
                 game.ui.addMessage(text);
                 game.obj.get(game.currentMap).put(i, null);
             }
         }
     }
     public void interactNPC(int i) {
-        if (game.keyHandler.interactKeyPressed) {
+        if (game.inputHandler.interactKeyPressed) {
             if (i != 999) {
                 attackCanceled = true;
                 game.gameState = States.STATE_DIALOGUE;
@@ -355,7 +349,7 @@ public class Player extends Entity{
         }
     }
     public void selectItem() {
-        int itemIndex = game.ui.getItemIndex();
+        int itemIndex = game.ui.getItemIndex(game.ui.playerSlotCol, game.ui.playerSlotRow);
 
         if (itemIndex < inventory.size()) {
             Entity selectedItem = inventory.get(itemIndex);

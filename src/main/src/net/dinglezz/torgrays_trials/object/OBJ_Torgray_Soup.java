@@ -23,6 +23,7 @@ public class OBJ_Torgray_Soup extends Entity {
         down1 = registerEntitySprite("/drawable/objects/torgray_soup");
         description = "/nTorgray's wisest soup. /nIt's warm and a bit hearty. /nHealing: +" + value;
         stackable = true;
+        price = 1;
     }
     public boolean use(Entity entity) {
         game.gameState = States.STATE_DIALOGUE;

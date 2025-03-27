@@ -3,6 +3,7 @@ package net.dinglezz.torgrays_trials.npc;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.object.OBJ_Key;
 import net.dinglezz.torgrays_trials.object.OBJ_Torgray_Soup;
 
@@ -33,5 +34,12 @@ public class NPC_Coiner extends Entity {
     public void setItem() {
         inventory.add(new OBJ_Torgray_Soup(game));
         inventory.add(new OBJ_Key(game));
+    }
+    @Override
+    public void speak(boolean facePlayer) {
+        super.speak(false);
+        game.gameState = States.STATE_TRADE;
+        game.ui.npc = this;
+        game.ui.subState = States.TRADE_STATE_SELECT;
     }
 }

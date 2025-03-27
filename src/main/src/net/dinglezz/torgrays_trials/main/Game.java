@@ -5,6 +5,8 @@ import net.dinglezz.torgrays_trials.entity.Player;
 import net.dinglezz.torgrays_trials.environment.EnvironmentManager;
 import net.dinglezz.torgrays_trials.events.EventHandler;
 import net.dinglezz.torgrays_trials.tile.TileManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,9 +14,10 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 public class Game extends JPanel implements Runnable {
+    public static final Logger LOGGER = LoggerFactory.getLogger("Torgray's Trials");
+
     // Screen settings
     final int originalTileSize = 16; // 16x16 tile
     final int scale = 3;
@@ -45,7 +48,7 @@ public class Game extends JPanel implements Runnable {
 
     // System
     public TileManager tileManager = new TileManager(this);
-    public KeyHandler keyHandler = new KeyHandler(this);
+    public InputHandler inputHandler = new InputHandler(this);
     Sound music = new Sound();
     Sound sound = new Sound();
     public EnvironmentManager environmentManager = new EnvironmentManager(this);
@@ -57,7 +60,7 @@ public class Game extends JPanel implements Runnable {
     Thread gameThread;
 
     // Entities and Objects
-    public Player player = new Player(this, keyHandler);
+    public Player player = new Player(this, inputHandler);
     public HashMap<String, HashMap<Integer, Entity>> npc = new HashMap<>();
     public HashMap<String, HashMap<Integer, Entity>> obj = new HashMap<>();
     public HashMap<String, HashMap<Integer, Entity>> monster = new HashMap<>();
@@ -72,7 +75,7 @@ public class Game extends JPanel implements Runnable {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
-        this.addKeyListener(keyHandler);
+        this.addKeyListener(inputHandler);
         this.setFocusable(true);
     }
 
@@ -195,7 +198,7 @@ public class Game extends JPanel implements Runnable {
     public void drawToTempScreen() {
         // Debug
         long drawStart = 0;
-        if (keyHandler.debug) {
+        if (inputHandler.debug) {
             drawStart = System.nanoTime();
         }
 
@@ -250,7 +253,7 @@ public class Game extends JPanel implements Runnable {
         }
 
         // Debug
-        if (keyHandler.debug) {
+        if (inputHandler.debug) {
             long drawEnd = System.nanoTime();
             long passed = drawEnd - drawStart;
 
@@ -282,7 +285,7 @@ public class Game extends JPanel implements Runnable {
 
         // Debug
         long drawStart = 0;
-        if (keyHandler.debug) {
+        if (inputHandler.debug) {
             drawStart = System.nanoTime();
         }
 
@@ -337,7 +340,7 @@ public class Game extends JPanel implements Runnable {
         }
 
         // Debug
-        if (keyHandler.debug) {
+        if (inputHandler.debug) {
             long drawEnd = System.nanoTime();
             long passed = drawEnd - drawStart;
 

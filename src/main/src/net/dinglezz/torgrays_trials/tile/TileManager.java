@@ -2,6 +2,7 @@ package net.dinglezz.torgrays_trials.tile;
 
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.UtilityTool;
+import org.slf4j.event.Level;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -86,7 +87,7 @@ public class TileManager {
             try {
                 tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/drawable/tiles/" + imageName + ".png"));
             } catch (IllegalArgumentException e) {
-                System.out.println(" \"" + imageName + "\" is not a valid path.");
+                System.out.println("\"" + imageName + "\" is not a valid path.");
                 tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/drawable/disabled.png"));
             }
             tile.get(i).image = uTool.scaleImage(tile.get(i).image, game.tileSize, game.tileSize);

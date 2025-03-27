@@ -1,5 +1,6 @@
 package net.dinglezz.torgrays_trials.events;
 
+import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.States;
 
@@ -63,6 +64,7 @@ public class EventHandler {
 
             // Coiner's Shop Map
                 if (hit("Coiner's Shop", 12, 13, "down")) {teleport("Main Island", 10, 39);}
+                if (hit("Coiner's Shop", 12, 11, "up")) {speak(game.npc.get(game.currentMap).get(0));}
         }
     }
     public boolean hit(String map, int col, int row) {
@@ -118,7 +120,7 @@ public class EventHandler {
         canTouchEvent = false;
     }
     public void healingPond() {
-        if (game.keyHandler.interactKeyPressed) {
+        if (game.inputHandler.interactKeyPressed) {
             game.gameState = States.STATE_DIALOGUE;
             game.player.attackCanceled = true;
             game.ui.currentDialogue = "*Drinks water* /nHuh, nothing happened :/";
@@ -134,5 +136,12 @@ public class EventHandler {
         nextCol = game.tileSize * col;
         nextRow = game.tileSize * row;
         game.gameState = States.STATE_TRANSITION;
+    }
+    public void speak(Entity entity) {
+        if (game.inputHandler.interactKeyPressed) {
+            game.gameState = States.STATE_DIALOGUE;
+            game.player.attackCanceled = true;
+            entity.speak(false);
+        }
     }
 }

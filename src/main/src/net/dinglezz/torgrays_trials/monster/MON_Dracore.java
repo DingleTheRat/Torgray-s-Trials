@@ -76,12 +76,12 @@ public class MON_Dracore extends Entity {
         }
     }
     public void checkDrop() {
-        int random = new Random().nextInt(3) + 1;
+        int random = new Random().nextInt(2) + 1;
 
         switch (random) {
             // No zero since there is supposed to be a chance for no drop
             case 1 -> dropItem(new OBJ_Torgray_Soup(game));
-            case 2 -> dropItem(new OBJ_Coin(game));
+            case 2 -> dropItem(new OBJ_Coin(game, 1));
         }
     }
 
