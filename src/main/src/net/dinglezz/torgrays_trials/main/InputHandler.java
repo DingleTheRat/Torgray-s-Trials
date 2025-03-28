@@ -343,6 +343,12 @@ public class InputHandler implements KeyListener {
             if (code == KeyEvent.VK_ESCAPE) {
                 game.ui.subState = States.TRADE_STATE_SELECT;
             }
+        } else if (game.ui.subState == States.TRADE_STATE_SELL) {
+            playerInventory(code);
+
+            if (code == KeyEvent.VK_ESCAPE) {
+                game.ui.subState = States.TRADE_STATE_SELECT;
+            }
         }
     }
 

@@ -97,6 +97,8 @@ public class Game extends JPanel implements Runnable {
     public void respawn() {
         player.setDefaultPosition();
         player.restoreHealth();
+        currentMap = "Main Island";
+        player.lightUpdated = true;
     }
     public void restart() {
         player.setDefaultValues();
@@ -104,6 +106,8 @@ public class Game extends JPanel implements Runnable {
         assetSetter.setObjects();
         assetSetter.setNPCs();
         assetSetter.setMonsters();
+        currentMap = "Main Island";
+        player.lightUpdated = true;
     }
     public void setFullScreen() {
         GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();

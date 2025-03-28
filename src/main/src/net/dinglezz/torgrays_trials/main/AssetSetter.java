@@ -23,12 +23,12 @@ public class AssetSetter {
 
         // Main Island Map
             // Keys
-            setAsset(new OBJ_Key(game), 23, 7);
             setAsset(new OBJ_Key(game), 23, 40);
             setAsset(new OBJ_Key(game), 38, 8);
 
             // Gates
             setAsset(new OBJ_Gate(game), 10, 12);
+            setAsset(new OBJ_Gate(game), 14, 28);
             setAsset(new OBJ_Gate(game), 8, 28);
             setAsset(new OBJ_Gate(game), 12, 23);
 

@@ -80,8 +80,17 @@ public class MON_Dracore extends Entity {
 
         switch (random) {
             // No zero since there is supposed to be a chance for no drop
-            case 1 -> dropItem(new OBJ_Torgray_Soup(game));
-            case 2 -> dropItem(new OBJ_Coin(game, 1));
+            case 1: dropItem(new OBJ_Torgray_Soup(game)); break;
+            case 2:
+                int amount = new Random().nextInt(100) + 1;
+                if (amount <= 15) {
+                    dropItem(new OBJ_Coin(game, 3));
+                } else if (amount <= 35) {
+                    dropItem(new OBJ_Coin(game, 2));
+                } else {
+                    dropItem(new OBJ_Coin(game, 1));
+                }
+            break;
         }
     }
 

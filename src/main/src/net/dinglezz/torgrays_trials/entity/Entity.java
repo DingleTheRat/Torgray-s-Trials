@@ -124,7 +124,6 @@ public abstract class Entity {
     }
     public void interact() {}
     public boolean use(Entity entity) {return false;}
-    public void pickup(Entity entity, int i) {}
     public void checkDrop() {}
     public void dropItem(Entity droppedItem) {
         for (int i = 0; i < game.obj.size(); i++) {

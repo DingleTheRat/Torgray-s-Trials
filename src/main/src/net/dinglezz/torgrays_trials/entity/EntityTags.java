@@ -8,5 +8,6 @@ public enum EntityTags {
     TAG_SWORD,
     TAG_SHIELD,
     TAG_CONSUMABLE,
-    TAG_PICKUPONLY,
+    TAG_PICKUP_ONLY,
+    TAG_NON_SELLABLE,
 }

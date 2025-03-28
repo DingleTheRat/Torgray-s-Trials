@@ -7,32 +7,32 @@ import net.dinglezz.torgrays_trials.main.Game;
 
 public class OBJ_Coin extends Entity {
     Game game;
-    int value;
 
-    public OBJ_Coin(Game game, int value) {
+    public OBJ_Coin(Game game, int amount) {
         super(game);
         this.game = game;
-        this.value = value;
+        this.amount = amount;
 
-        name = "Coin";
+        name = "Coins";
         stackable = true;
         type = EntityTypes.TYPE_OBJECT;
-        tags.add(EntityTags.TAG_PICKUPONLY);
-        down1 = registerEntitySprite("/drawable/objects/coin", game.tileSize, game.tileSize);
-        description = "/nA precious piece of gold";
+        tags.add(EntityTags.TAG_PICKUP_ONLY);
+        tags.add(EntityTags.TAG_NON_SELLABLE);
+        down1 = registerEntitySprite("/drawable/objects/coin");
+        description = "/nPrecious pieces of gold";
     }
 
     @Override
-    public void pickup(Entity entity, int i) {
-        coins += value;
-        game.ui.addMessage("+1 Coin");
-//        if (game.player.canObtainItem(game.obj.get(game.currentMap).get(i))) {
-//            game.playSound("Coin");
-//            if (value == 1) {
-//                game.ui.addMessage("+" + value + " Coin");
-//            } else {
-//                game.ui.addMessage("+" + value + " Coins");
-//            }
-//        }
+    public boolean use(Entity entity) {
+        game.player.coins += amount;
+        game.playSound("Coin");
+
+        // Grammar check
+        if (amount == 1) {
+            game.ui.addMessage("+" + amount + " Coin");
+        } else {
+            game.ui.addMessage("+" + amount + " Coins");
+        }
+        return true;
     }
 }

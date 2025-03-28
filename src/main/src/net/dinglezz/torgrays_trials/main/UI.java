@@ -1,6 +1,7 @@
 package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
+import net.dinglezz.torgrays_trials.entity.EntityTags;
 import net.dinglezz.torgrays_trials.object.OBJ_Coin;
 import net.dinglezz.torgrays_trials.object.OBJ_Heart;
 
@@ -11,6 +12,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class UI {
     Game game;
@@ -698,7 +700,7 @@ public class UI {
             slotCol = playerSlotCol;
             slotRow = playerSlotRow;
         } else {
-            frameX = game.tileSize * 2;
+            frameX = game.tileSize / 2;
             frameY = game.tileSize / 2;
             frameWidth = game.tileSize * 6;
             frameHeight = game.tileSize * 6;
@@ -732,17 +734,22 @@ public class UI {
                 int amountX;
                 int amountY;
 
-                String s = "" + entity.inventory.get(i).amount;
-                amountX = alignXToRight(s, slotX + 44);
+                String string;
+                if (Objects.equals(entity.inventory.get(i).name, "Coins")) {
+                    string = "" + entity.coins;
+                } else {
+                    string = "" + entity.inventory.get(i).amount;
+                }
+                amountX = alignXToRight(string, slotX + 44);
                 amountY = slotY + game.tileSize;
 
                 // Shadow
                 graphics2D.setColor(new Color(60, 60, 60));
-                graphics2D.drawString(s, amountX, amountY);
+                graphics2D.drawString(string, amountX, amountY);
 
                 // Text
                 graphics2D.setColor(Color.white);
-                graphics2D.drawString(s, amountX - 3, amountY - 3);
+                graphics2D.drawString(string, amountX - 3, amountY - 3);
             }
 
             slotX += slotSize;
@@ -931,30 +938,102 @@ public class UI {
         drawInventory(npc, true);
 
         // Hint Window
-        int x = game.tileSize * 14;
-        int y = game.tileSize * 9;
+        graphics2D.setFont(graphics2D.getFont().deriveFont(30f));
+        int x = (game.tileSize * 13) + (game.tileSize / 2);
+        int y = (game.tileSize * 9) + (game.tileSize / 2);
         int width = game.tileSize * 6;
         int height = game.tileSize * 2;
         drawSubWindow(x, y, width, height);
         graphics2D.drawString("[ESC] to Exit", x + 24, y + 60);
 
         // Price Window
+        graphics2D.setFont(graphics2D.getFont().deriveFont(27f));
         int itemIndex = getItemIndex(entitySlotCol, entitySlotRow);
         if (itemIndex < npc.inventory.size()) {
-            x = game.tileSize * 6;
+            x = game.tileSize * 5;
             y = game.tileSize * 6;
             width = (game.tileSize * 2) + (game.tileSize / 2);
             height = game.tileSize;
             drawSubWindow(x, y, width, height);
-            graphics2D.drawImage(coin, y + 10, x + 10, 32, 32, null);
+            graphics2D.drawImage(coin, x + 10, y + 8, 32, 32, null);
 
             int price = npc.inventory.get(itemIndex).price;
             String text = String.valueOf(price);
-            x = alignXToRight(text, game.tileSize * 8 - 20);
+            x = alignXToRight(text, game.tileSize * 7 - 20);
             graphics2D.drawString(text, x, y + 34);
+
+            // Buy an item
+            if (game.inputHandler.spacePressed) {
+                if (npc.inventory.get(itemIndex).price > game.player.coins) {
+                    currentDialogue = "Sorry partner, your wallet declined :(";
+                    game.gameState = States.STATE_DIALOGUE;
+                    game.ui.subState = States.PAUSE_STATE_MAIN;
+                    game.ui.commandNumber = 0;
+                } else if (game.player.canObtainItem(npc.inventory.get(itemIndex))) {
+                    game.player.coins -= price;
+                } else {
+                    currentDialogue = "Sorry partner, I don't think you can /ncarry this :(";
+                    game.gameState = States.STATE_DIALOGUE;
+                    game.ui.subState = States.PAUSE_STATE_MAIN;
+                    game.ui.commandNumber = 0;
+                }
+            }
         }
     }
-    public void drawTradeSellScreen() {}
+    public void drawTradeSellScreen() {
+        // Inventory
+        drawInventory(game.player, true);
+
+        // Hint Window
+        graphics2D.setFont(graphics2D.getFont().deriveFont(30f));
+        int x = game.tileSize / 2;
+        int y = (game.tileSize * 9) + (game.tileSize / 2);
+        int width = game.tileSize * 6;
+        int height = game.tileSize * 2;
+        drawSubWindow(x, y, width, height);
+        graphics2D.drawString("[ESC] to Exit", x + 24, y + 60);
+
+        // Price Window
+        graphics2D.setFont(graphics2D.getFont().deriveFont(27f));
+        int itemIndex = getItemIndex(playerSlotCol, playerSlotRow);
+        if (itemIndex < game.player.inventory.size()) {
+            x = game.tileSize * 13;
+            y = game.tileSize * 6;
+            width = (game.tileSize * 2) + (game.tileSize / 2);
+            height = game.tileSize;
+            drawSubWindow(x, y, width, height);
+            graphics2D.drawImage(coin, x + 10, y + 8, 32, 32, null);
+
+            int price = game.player.inventory.get(itemIndex).price / 2;
+            String text = String.valueOf(price);
+            x = alignXToRight(text, game.tileSize * 15 - 20);
+            graphics2D.drawString(text, x, y + 34);
+
+            // Sell an item
+            if (game.inputHandler.spacePressed) {
+                if (game.player.inventory.get(itemIndex) == game.player.currentWeapon ||
+                        game.player.inventory.get(itemIndex) == game.player.currentShield ||
+                        game.player.inventory.get(itemIndex) == game.player.currentLight) {
+                    currentDialogue = "Sorry partner, I can't buy equipped /nitems :(";
+                    game.gameState = States.STATE_DIALOGUE;
+                    game.ui.subState = States.PAUSE_STATE_MAIN;
+                    game.ui.commandNumber = 0;
+                } else if (game.player.inventory.get(itemIndex).tags.contains(EntityTags.TAG_NON_SELLABLE)) {
+                    currentDialogue = "Sorry partner, I can't buy this item :(";
+                    game.gameState = States.STATE_DIALOGUE;
+                    game.ui.subState = States.PAUSE_STATE_MAIN;
+                    game.ui.commandNumber = 0;
+                } else {
+                    game.player.coins += price;
+                    if (game.player.inventory.get(itemIndex).amount > 1) {
+                        game.player.inventory.get(itemIndex).amount--;
+                    } else {
+                        game.player.inventory.remove(itemIndex);
+                    }
+                }
+            }
+        }
+    }
 
     public int getItemIndex(int slotCol, int slotRow) {
         return slotCol + (slotRow * 5);

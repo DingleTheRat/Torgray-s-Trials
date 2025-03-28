@@ -16,5 +16,6 @@ public class OBJ_Shield_Iron extends Entity {
         down1 = registerEntitySprite("/drawable/objects/iron_shield", game.tileSize, game.tileSize);
         defenceValue = 1;
         description = "/n A shiny iron shield /n Defence: +" + defenceValue;
+        price = 4;
     }
 }

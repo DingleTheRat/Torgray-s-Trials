@@ -18,5 +18,6 @@ public class OBJ_Sword_Iron extends Entity {
         attackArea.width = 36;
         attackArea.height = 36;
         description = "/n A shiny iron shield /n Attack: +" + attackValue;
+        price = 4;
     }
 }

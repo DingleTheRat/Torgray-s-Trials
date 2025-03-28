@@ -16,5 +16,6 @@ public class OBJ_Shield_Amethyst extends Entity {
         down1 = registerEntitySprite("/drawable/objects/amethyst_shield", game.tileSize, game.tileSize);
         defenceValue = 2;
         description = "/n A majestic purple shield /n Defence: +" + defenceValue;
+        price = 6;
     }
 }

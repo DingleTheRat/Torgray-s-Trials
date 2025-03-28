@@ -3,6 +3,7 @@ package net.dinglezz.torgrays_trials.entity;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.InputHandler;
 import net.dinglezz.torgrays_trials.main.States;
+import net.dinglezz.torgrays_trials.object.OBJ_Coin;
 import net.dinglezz.torgrays_trials.object.OBJ_Lantern;
 import net.dinglezz.torgrays_trials.object.OBJ_Shield_Iron;
 import net.dinglezz.torgrays_trials.object.OBJ_Sword_Iron;
@@ -103,6 +104,7 @@ public class Player extends Entity{
     }
     public void setItems() {
         inventory.clear();
+        inventory.add(new OBJ_Coin(game, 2));
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(currentLight);
@@ -269,8 +271,8 @@ public class Player extends Entity{
                     game.obj.get(game.currentMap).get(i).interact();
                 }
             }
-            else if (game.obj.get(game.currentMap).get(i).tags.contains(EntityTags.TAG_PICKUPONLY)) {
-                game.obj.get(game.currentMap).get(i).pickup(this, i);
+            else if (game.obj.get(game.currentMap).get(i).tags.contains(EntityTags.TAG_PICKUP_ONLY)) {
+                game.obj.get(game.currentMap).get(i).use(this);
                 game.obj.get(game.currentMap).put(i, null);
             }
             else if (canObtainItem(game.obj.get(game.currentMap).get(i))) {
