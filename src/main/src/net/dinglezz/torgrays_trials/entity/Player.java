@@ -60,17 +60,11 @@ public class Player extends Entity{
         right3 = registerEntitySprite("/drawable/player/walking/torgray_right_3");
     }
     public void getAttackImage() {
-        if (currentWeapon.tags.contains(EntityTags.TAG_AMETHIST)) {
-            attackUp = registerEntitySprite("/drawable/player/attack/torgray_amethist_attack_up", game.tileSize, game.tileSize * 2);
-            attackDown = registerEntitySprite("/drawable/player/attack/torgray_amethist_attack_down", game.tileSize, game.tileSize * 2);
-            attackLeft = registerEntitySprite("/drawable/player/attack/torgray_amethist_attack_left", game.tileSize * 2, game.tileSize);
-            attackRight = registerEntitySprite("/drawable/player/attack/torgray_amethist_attack_right", game.tileSize * 2, game.tileSize);
-        } else if (currentWeapon.tags.contains(EntityTags.TAG_IRON)) {
-            attackUp = registerEntitySprite("/drawable/player/attack/torgray_iron_attack_up", game.tileSize, game.tileSize * 2);
-            attackDown = registerEntitySprite("/drawable/player/attack/torgray_iron_attack_down", game.tileSize, game.tileSize * 2);
-            attackLeft = registerEntitySprite("/drawable/player/attack/torgray_iron_attack_left", game.tileSize * 2, game.tileSize);
-            attackRight = registerEntitySprite("/drawable/player/attack/torgray_iron_attack_right", game.tileSize * 2, game.tileSize);
-        }
+        String modifiedName = currentWeapon.name.toLowerCase().replace(" sword", "").replace(" ", "_");
+        attackUp = registerEntitySprite("/drawable/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_up", game.tileSize, game.tileSize * 2);
+        attackDown = registerEntitySprite("/drawable/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_down", game.tileSize, game.tileSize * 2);
+        attackLeft = registerEntitySprite("/drawable/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_left", game.tileSize * 2, game.tileSize);
+        attackRight = registerEntitySprite("/drawable/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_right", game.tileSize * 2, game.tileSize);
     }
     public void setDefaultValues() {
         type = EntityTypes.TYPE_PLAYER;

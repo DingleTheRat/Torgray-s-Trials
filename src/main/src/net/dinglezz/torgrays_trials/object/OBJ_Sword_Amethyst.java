@@ -11,7 +11,6 @@ public class OBJ_Sword_Amethyst extends Entity {
 
         name = "Amethyst Sword";
         type = EntityTypes.TYPE_OBJECT;
-        tags.add(EntityTags.TAG_AMETHIST);
         tags.add(EntityTags.TAG_SWORD);
         down1 = registerEntitySprite("/drawable/objects/amethyst_sword", game.tileSize, game.tileSize);
         attackValue = 2;

@@ -2,7 +2,6 @@ package net.dinglezz.torgrays_trials.tile;
 
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.UtilityTool;
-import org.slf4j.event.Level;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -107,12 +106,12 @@ public class TileManager {
             int col = 0;
             int row = 0;
 
-            while (col < game.maxWorldCol && row < game.maxWorldRow) {
+            while (row < game.maxWorldRow) {
                 String line = bufferedReader.readLine();
                 while (col < game.maxWorldCol) {
                     String[] numbers = line.split(" ");
-                    int num = Integer.parseInt(numbers[col]);
-                    mapTileNum[mapNumber][col][row] = num;
+                    int number = Integer.parseInt(numbers[col]);
+                    mapTileNum[mapNumber][col][row] = number;
                     col++;
                 }
                 if (col == game.maxWorldCol) {
@@ -144,7 +143,11 @@ public class TileManager {
                     worldX - game.tileSize < game.player.worldX + game.player.screenX &&
                     worldY + game.tileSize > game.player.worldY - game.player.screenY &&
                     worldY - game.tileSize < game.player.worldY + game.player.screenY) {
-                graphics2D.drawImage(tile.get(tileNumber).image, screenX, screenY, null);
+                if (tile.get(tileNumber) != null) {
+                    graphics2D.drawImage(tile.get(tileNumber).image, screenX, screenY, null);
+                } else {
+                    System.out.println("Index " + tileNumber + " is not a valid tile.");
+                }
             }
             worldCol++;
             if (worldCol == game.maxWorldCol) {

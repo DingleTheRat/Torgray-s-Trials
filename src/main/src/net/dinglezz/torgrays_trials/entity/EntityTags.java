@@ -1,8 +1,6 @@
 package net.dinglezz.torgrays_trials.entity;
 
 public enum EntityTags {
-    TAG_AMETHIST,
-    TAG_IRON,
     TAG_OBSTACLE,
     TAG_LIGHT,
     TAG_SWORD,

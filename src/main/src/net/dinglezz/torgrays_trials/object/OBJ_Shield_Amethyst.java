@@ -11,7 +11,6 @@ public class OBJ_Shield_Amethyst extends Entity {
 
         name = "Amethyst Shield";
         type = EntityTypes.TYPE_OBJECT;
-        tags.add(EntityTags.TAG_AMETHIST);
         tags.add(EntityTags.TAG_SHIELD);
         down1 = registerEntitySprite("/drawable/objects/amethyst_shield", game.tileSize, game.tileSize);
         defenceValue = 2;

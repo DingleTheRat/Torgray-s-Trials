@@ -11,7 +11,6 @@ public class OBJ_Sword_Iron extends Entity {
 
         name = "Iron Sword";
         type = EntityTypes.TYPE_OBJECT;
-        tags.add(EntityTags.TAG_IRON);
         tags.add(EntityTags.TAG_SWORD);
         down1 = registerEntitySprite("/drawable/objects/iron_sword", game.tileSize, game.tileSize);
         attackValue = 1;

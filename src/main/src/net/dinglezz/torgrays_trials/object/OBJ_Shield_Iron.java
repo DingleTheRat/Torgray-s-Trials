@@ -11,7 +11,6 @@ public class OBJ_Shield_Iron extends Entity {
 
         name = "Iron Shield";
         type = EntityTypes.TYPE_OBJECT;
-        tags.add(EntityTags.TAG_IRON);
         tags.add(EntityTags.TAG_SHIELD);
         down1 = registerEntitySprite("/drawable/objects/iron_shield", game.tileSize, game.tileSize);
         defenceValue = 1;
