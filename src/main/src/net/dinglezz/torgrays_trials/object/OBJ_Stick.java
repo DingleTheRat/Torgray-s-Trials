@@ -5,19 +5,18 @@ import net.dinglezz.torgrays_trials.entity.EntityTags;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
 
-public class OBJ_Sword_Iron extends Entity {
-    public OBJ_Sword_Iron(Game game) {
+public class OBJ_Stick extends Entity {
+    public OBJ_Stick(Game game) {
         super(game);
 
-        name = "Iron Sword";
+        name = "Stick";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_WEAPON);
-        down1 = registerEntitySprite("/drawable/objects/iron_sword", game.tileSize, game.tileSize);
-        attackValue = 1;
-        knockBackPower = 1;
+        down1 = registerEntitySprite("/drawable/objects/stick");
+        knockBackPower = 5;
         attackArea.width = 36;
         attackArea.height = 36;
-        description = "/n A shiny iron shield /n Attack: +" + attackValue + "/n Knockback: +" + knockBackPower;
-        price = 4;
+        description = "/n Knockback > Damage /n Attack: +" + attackValue + "/n Knockback: +" + knockBackPower;
+        price = 3;
     }
 }

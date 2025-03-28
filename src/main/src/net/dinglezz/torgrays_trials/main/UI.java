@@ -448,7 +448,7 @@ public class UI {
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
             if (game.inputHandler.spacePressed) {
-                subState = States.PAUSE_STATE_SETTINGS_MAIN;
+                subState = States.PAUSE_STATE_MAIN;
                 commandNumber = 0;
             }
         }
@@ -492,14 +492,14 @@ public class UI {
         if (commandNumber == 1) {
             graphics2D.drawString(">", textX - 30, textY);
             if (game.inputHandler.spacePressed) {
-                subState = States.PAUSE_STATE_SETTINGS_MAIN;
-                commandNumber = 4;
+                subState = States.PAUSE_STATE_MAIN;
+                commandNumber = 0;
             }
         }
     }
     @SuppressWarnings("unused")
     public void yesGameEnd() {
-        subState = States.PAUSE_STATE_SETTINGS_MAIN;
+        subState = States.PAUSE_STATE_MAIN;
         game.gameState = States.STATE_TITLE;
         titleScreenState = States.TITLE_STATE_MAIN;
         game.music.stop();

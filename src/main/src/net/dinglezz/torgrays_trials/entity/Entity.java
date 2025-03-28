@@ -71,7 +71,7 @@ public abstract class Entity {
     public int attackValue;
     public int knockBackPower = 0;
     public int defenceValue;
-    public String description = "";
+    public String description = "/nNothing Here :(";
     public int lightRadius;
     public boolean stackable = false;
     public int amount = 1;
@@ -95,7 +95,6 @@ public abstract class Entity {
         attackUp = registerEntitySprite("/drawable/disabled");
         attackDown = registerEntitySprite("/drawable/disabled");
         attackLeft = registerEntitySprite("/drawable/disabled");
-        right3 = registerEntitySprite("/drawable/disabled");
 
         image = registerEntitySprite("/drawable/disabled");
         image2 = registerEntitySprite("/drawable/disabled");

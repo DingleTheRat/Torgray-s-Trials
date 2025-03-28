@@ -5,6 +5,7 @@ import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.object.OBJ_Key;
+import net.dinglezz.torgrays_trials.object.OBJ_Stick;
 import net.dinglezz.torgrays_trials.object.OBJ_Torgray_Soup;
 
 public class NPC_Coiner extends Entity {
@@ -34,6 +35,7 @@ public class NPC_Coiner extends Entity {
     public void setItem() {
         inventory.add(new OBJ_Torgray_Soup(game));
         inventory.add(new OBJ_Key(game));
+        inventory.add(new OBJ_Stick(game));
     }
     @Override
     public void speak(boolean facePlayer) {

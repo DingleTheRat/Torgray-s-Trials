@@ -362,7 +362,7 @@ public class Player extends Entity{
         if (itemIndex < inventory.size()) {
             Entity selectedItem = inventory.get(itemIndex);
 
-            if (selectedItem.tags.contains(EntityTags.TAG_SWORD)) {
+            if (selectedItem.tags.contains(EntityTags.TAG_WEAPON)) {
                 currentWeapon = selectedItem;
                 attack = getAttack();
                 getAttackImage();
