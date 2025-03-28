@@ -15,9 +15,10 @@ public class OBJ_Sword_Amethyst extends Entity {
         tags.add(EntityTags.TAG_SWORD);
         down1 = registerEntitySprite("/drawable/objects/amethyst_sword", game.tileSize, game.tileSize);
         attackValue = 2;
+        knockBackPower = 2;
         attackArea.width = 36;
         attackArea.height = 36;
-        description = "/n A majestic purple sword /n Attack: +" + attackValue;
+        description = "/n A majestic purple sword /n Attack: +" + attackValue + "/n Knockback: " + knockBackPower;
         price = 6;
     }
 }

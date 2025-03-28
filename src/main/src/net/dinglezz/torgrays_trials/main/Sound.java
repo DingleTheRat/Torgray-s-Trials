@@ -21,7 +21,7 @@ public class Sound {
         soundLibrary.put("Unlock", getClass().getResource("/sound/unlock.wav"));
         soundLibrary.put("Way", getClass().getResource("/sound/way.wav"));
         soundLibrary.put("Tech Geek", getClass().getResource("/sound/tech_geek.wav"));
-        soundLibrary.put("Hit Mob", getClass().getResource("/sound/hit_mob.wav"));
+        soundLibrary.put("Hit Monster", getClass().getResource("/sound/hit_monster.wav"));
         soundLibrary.put("Receive Damage", getClass().getResource("/sound/receive_damage.wav"));
         soundLibrary.put("Cursor", getClass().getResource("/sound/cursor.wav"));
         soundLibrary.put("Game Over", getClass().getResource("/sound/game_over.wav"));

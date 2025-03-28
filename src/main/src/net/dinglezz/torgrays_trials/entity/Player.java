@@ -73,12 +73,14 @@ public class Player extends Entity{
         }
     }
     public void setDefaultValues() {
+        type = EntityTypes.TYPE_PLAYER;
         worldX = game.tileSize * 23;
         worldY = game.tileSize * 21;
-        speed = 4;
+        defaultSpeed = 4;
+        speed = defaultSpeed;
         direction = "down";
 
-        // Player Status
+        // Player Stats
         level = 1;
         maxHealth = 12;
         health = maxHealth;
@@ -86,7 +88,7 @@ public class Player extends Entity{
         dexterity = 1;
         exp = 0;
         nextLevelExp = 5;
-        coins = 0;
+        coins = 2;
         currentWeapon = new OBJ_Sword_Iron(game);
         currentShield = new OBJ_Shield_Iron(game);
         currentLight = new OBJ_Lantern(game);
@@ -156,7 +158,7 @@ public class Player extends Entity{
 
             // Check Mob Collision
             int mobIndex = game.collisionChecker.checkEntity(this, game.monster);
-            contactMob(mobIndex);
+            contactMonster(mobIndex);
 
             if (!collisionOn && !inputHandler.spacePressed && !inputHandler.interactKeyPressed) {
                 switch (direction) {
@@ -206,10 +208,10 @@ public class Player extends Entity{
             }
         }
         if (invincible) {
-            invincibleCounter++;
-            if (invincibleCounter > 60) {
+            invincibilityCounter++;
+            if (invincibilityCounter > 60) {
                 invincible = false;
-                invincibleCounter = 0;
+                invincibilityCounter = 0;
             }
         }
         if (health > maxHealth) {
@@ -249,8 +251,8 @@ public class Player extends Entity{
             solidArea.height = attackArea.height;
 
             // Check collision with the updates
-            int mobIndex = game.collisionChecker.checkEntity(this, game.monster);
-            damageMob(mobIndex);
+            int monsterIndex = game.collisionChecker.checkEntity(this, game.monster);
+            damageMonster(monsterIndex, currentWeapon.knockBackPower);
 
             // Restore original data
             worldX = currentWorldX;
@@ -292,7 +294,7 @@ public class Player extends Entity{
             }
         }
     }
-    public void contactMob(int i) {
+    public void contactMonster(int i) {
         if (i != 999) {
             if (!invincible && !game.monster.get(game.currentMap).get(i).dying) {
                 game.playSound("Receive Damage");
@@ -308,10 +310,15 @@ public class Player extends Entity{
         }
     }
 
-    public void damageMob(int i) {
+    public void damageMonster(int i, int knockBackPower) {
         if (i != 999) {
             if (!game.monster.get(game.currentMap).get(i).invincible) {
-                game.playSound("Hit Mob");
+                game.playSound("Hit Monster");
+
+                // KnockBack :D
+                if (knockBackPower > 0) {
+                    knockBack(game.monster.get(game.currentMap).get(i), knockBackPower);
+                }
 
                 int damage = attack - game.monster.get(game.currentMap).get(i).defence;
                 if (damage < 0) {
@@ -333,6 +340,11 @@ public class Player extends Entity{
                 }
             }
         }
+    }
+    public void knockBack(Entity entity, int knockBackPower) {
+        entity.direction = direction;
+        entity.speed += knockBackPower;
+        entity.knockBack = true;
     }
     public void checkLevelUp() {
         if (exp >= nextLevelExp) {

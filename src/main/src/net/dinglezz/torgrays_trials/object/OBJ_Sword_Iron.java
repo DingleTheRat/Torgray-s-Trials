@@ -15,9 +15,10 @@ public class OBJ_Sword_Iron extends Entity {
         tags.add(EntityTags.TAG_SWORD);
         down1 = registerEntitySprite("/drawable/objects/iron_sword", game.tileSize, game.tileSize);
         attackValue = 1;
+        knockBackPower = 1;
         attackArea.width = 36;
         attackArea.height = 36;
-        description = "/n A shiny iron shield /n Attack: +" + attackValue;
+        description = "/n A shiny iron shield /n Attack: +" + attackValue + "/n Knockback: " + knockBackPower;
         price = 4;
     }
 }

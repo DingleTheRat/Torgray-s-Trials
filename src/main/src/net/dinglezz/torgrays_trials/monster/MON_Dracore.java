@@ -18,7 +18,8 @@ public class MON_Dracore extends Entity {
 
         name = "Dracore";
         type = EntityTypes.TYPE_MONSTER;
-        speed = 1;
+        defaultSpeed = 1;
+        speed = defaultSpeed;
         maxHealth = 5;
         health = maxHealth;
         attack = 4;
@@ -28,21 +29,21 @@ public class MON_Dracore extends Entity {
         getImage();
     }
     public void getImage() {
-        up1 = registerEntitySprite("/drawable/mob/dracore/dracore_1", game.tileSize, game.tileSize);
-        up2 = registerEntitySprite("/drawable/mob/dracore/dracore_2", game.tileSize, game.tileSize);
-        up3 = registerEntitySprite("/drawable/mob/dracore/dracore_3", game.tileSize, game.tileSize);
+        up1 = registerEntitySprite("/drawable/monster/dracore/dracore_1", game.tileSize, game.tileSize);
+        up2 = registerEntitySprite("/drawable/monster/dracore/dracore_2", game.tileSize, game.tileSize);
+        up3 = registerEntitySprite("/drawable/monster/dracore/dracore_3", game.tileSize, game.tileSize);
         
-        down1 = registerEntitySprite("/drawable/mob/dracore/dracore_1", game.tileSize, game.tileSize);
-        down2 = registerEntitySprite("/drawable/mob/dracore/dracore_2", game.tileSize, game.tileSize);
-        down3 = registerEntitySprite("/drawable/mob/dracore/dracore_3", game.tileSize, game.tileSize);
+        down1 = registerEntitySprite("/drawable/monster/dracore/dracore_1", game.tileSize, game.tileSize);
+        down2 = registerEntitySprite("/drawable/monster/dracore/dracore_2", game.tileSize, game.tileSize);
+        down3 = registerEntitySprite("/drawable/monster/dracore/dracore_3", game.tileSize, game.tileSize);
         
-        left1 = registerEntitySprite("/drawable/mob/dracore/dracore_1", game.tileSize, game.tileSize);
-        left2 = registerEntitySprite("/drawable/mob/dracore/dracore_2", game.tileSize, game.tileSize);
-        left3 = registerEntitySprite("/drawable/mob/dracore/dracore_3", game.tileSize, game.tileSize);
+        left1 = registerEntitySprite("/drawable/monster/dracore/dracore_1", game.tileSize, game.tileSize);
+        left2 = registerEntitySprite("/drawable/monster/dracore/dracore_2", game.tileSize, game.tileSize);
+        left3 = registerEntitySprite("/drawable/monster/dracore/dracore_3", game.tileSize, game.tileSize);
         
-        right1 = registerEntitySprite("/drawable/mob/dracore/dracore_1", game.tileSize, game.tileSize);
-        right2 = registerEntitySprite("/drawable/mob/dracore/dracore_2", game.tileSize, game.tileSize);
-        right3 = registerEntitySprite("/drawable/mob/dracore/dracore_3", game.tileSize, game.tileSize);
+        right1 = registerEntitySprite("/drawable/monster/dracore/dracore_1", game.tileSize, game.tileSize);
+        right2 = registerEntitySprite("/drawable/monster/dracore/dracore_2", game.tileSize, game.tileSize);
+        right3 = registerEntitySprite("/drawable/monster/dracore/dracore_3", game.tileSize, game.tileSize);
     }
     public void setAction() {
         actionLockCounter++;

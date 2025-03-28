@@ -31,25 +31,29 @@ public abstract class Entity {
     public boolean attacking = false;
     public boolean alive = true;
     public boolean dying = false;
-    boolean hpBarOn = false;
+    boolean healthBarOn = false;
+    public boolean knockBack = false;
+
 
     // Counters
     public int spriteCounter = 0;
     public int spriteSpeed = 10;
     public int actionLockCounter = 0;
-    public int invincibleCounter = 0;
+    public int invincibilityCounter = 0;
     int dyingCounter = 0;
-    int hpBarCounter = 0;
+    int healthBarCounter = 0;
+    int knockBackCounter = 0;
 
     // Attributes
     public String name;
     public EntityTypes type;
     public ArrayList<EntityTags> tags = new ArrayList<>();
+    public int defaultSpeed;
     public int speed;
     public int maxHealth;
     public int health;
     public int level;
-    public  int strength;
+    public int strength;
     public int dexterity;
     public int attack;
     public int defence;
@@ -65,6 +69,7 @@ public abstract class Entity {
     // Item Attributes
     public int value;
     public int attackValue;
+    public int knockBackPower = 0;
     public int defenceValue;
     public String description = "";
     public int lightRadius;
@@ -154,9 +159,7 @@ public abstract class Entity {
         game.particleList.add(p3);
         game.particleList.add(p4);
     }
-
-    public void update() {
-        setAction();
+    public void checkCollision() {
         collisionOn = false;
         game.collisionChecker.checkTile(this);
         game.collisionChecker.checkObject(this, false);
@@ -167,13 +170,43 @@ public abstract class Entity {
         if (this.type == EntityTypes.TYPE_MONSTER && contactPlayer) {
             damagePlayer(attack);
         }
+    }
 
-        if (!collisionOn) {
-            switch (direction) {
-                case "up": worldY -= speed; break;
-                case "down": worldY += speed; break;
-                case "left": worldX -= speed; break;
-                case "right": worldX += speed; break;
+    public void update() {
+        if (knockBack) {
+            checkCollision();
+
+            if (collisionOn) {
+                knockBackCounter = 0;
+                knockBack = false;
+                speed = defaultSpeed;
+            } else {
+                switch (game.player.direction)  {
+                    case "up": worldY -= speed; break;
+                    case "down": worldY += speed; break;
+                    case "left": worldX -= speed; break;
+                    case "right": worldX += speed; break;
+                }
+            }
+
+            knockBackCounter++;
+            if (knockBackCounter == 10) {
+                knockBackCounter = 0;
+                knockBack = false;
+                speed = defaultSpeed;
+            }
+        } else {
+            setAction();
+            checkCollision();
+
+            // If collisionOn is false, move the entity
+            if (!collisionOn) {
+                switch (direction) {
+                    case "up": worldY -= speed; break;
+                    case "down": worldY += speed; break;
+                    case "left": worldX -= speed; break;
+                    case "right": worldX += speed; break;
+                }
             }
         }
 
@@ -190,10 +223,10 @@ public abstract class Entity {
         }
 
         if (invincible) {
-            invincibleCounter++;
-            if (invincibleCounter > 40) {
+            invincibilityCounter++;
+            if (invincibilityCounter > 40) {
                 invincible = false;
-                invincibleCounter = 0;
+                invincibilityCounter = 0;
             }
         }
     }
@@ -226,7 +259,7 @@ public abstract class Entity {
             }
 
             // Mob Health Bar
-            if (type == EntityTypes.TYPE_MONSTER && hpBarOn) {
+            if (type == EntityTypes.TYPE_MONSTER && healthBarOn) {
                 double oneScale = (double) game.tileSize / maxHealth;
                 double hpBarValue = oneScale * health;
 
@@ -235,16 +268,16 @@ public abstract class Entity {
                 graphics2D.setColor(Color.white);
                 graphics2D.fillRect(screenX, screenY - 15, (int)hpBarValue, 10);
 
-                hpBarCounter++;
-                if (hpBarCounter > 100) {
-                    hpBarCounter = 0;
-                    hpBarOn = false;
+                healthBarCounter++;
+                if (healthBarCounter > 100) {
+                    healthBarCounter = 0;
+                    healthBarOn = false;
                 }
             }
 
             if (invincible) {
-                hpBarOn = true;
-                hpBarCounter = 0;
+                healthBarOn = true;
+                healthBarCounter = 0;
                 changeAlpha(graphics2D, 0.4f);
             }
             if (dying) {dyingAnimation(graphics2D, 5);}

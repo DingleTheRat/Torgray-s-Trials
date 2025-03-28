@@ -274,7 +274,7 @@ public class Game extends JPanel implements Runnable {
             graphics2D.drawString("Row: " + (player.worldY + player.solidArea.y) / tileSize, x, y); y += lineHeight;
 
             graphics2D.drawString("Draw Time: " + passed, x ,y); y += lineHeight;
-            graphics2D.drawString("Invincibility: " + player.invincibleCounter, x, y);
+            graphics2D.drawString("Invincibility: " + player.invincibilityCounter, x, y);
         }
     }
 
@@ -361,7 +361,7 @@ public class Game extends JPanel implements Runnable {
             graphics2D.drawString("Row: " + (player.worldY + player.solidArea.y) / tileSize, x, y); y += lineHeight;
 
             graphics2D.drawString("Draw Time: " + passed, x ,y); y += lineHeight;
-            graphics2D.drawString("Invincibility: " + player.invincibleCounter, x, y);
+            graphics2D.drawString("Invincibility: " + player.invincibilityCounter, x, y);
         }
 
         // Toxic Waste
