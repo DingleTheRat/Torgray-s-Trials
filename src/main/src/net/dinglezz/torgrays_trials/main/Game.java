@@ -158,8 +158,17 @@ public class Game extends JPanel implements Runnable {
         }
     }
     public void update() {
-        if (gameState == States.STATE_PLAY || gameState == States.STATE_CHARACTER || gameState == States.STATE_DIALOGUE || gameState == States.STATE_TRANSITION) {
-            player.update();
+        if (gameState == States.STATE_PLAY ||
+                gameState == States.STATE_CHARACTER ||
+                gameState == States.STATE_DIALOGUE ||
+                gameState == States.STATE_TRANSITION ||
+                gameState == States.STATE_TRADE ||
+                gameState == States.STATE_MAP) {
+
+            // Player
+            if (gameState != States.STATE_TRADE) {
+                player.update();
+            }
 
             // NPCs
             for (int i = 0; i < npc.get(currentMap).size(); i++) {

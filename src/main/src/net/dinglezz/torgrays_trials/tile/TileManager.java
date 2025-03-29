@@ -5,6 +5,7 @@ import net.dinglezz.torgrays_trials.main.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +19,9 @@ public class TileManager {
     public HashMap<String , Integer> mapNumbers = new HashMap<>();
     public int[][][] mapTileNum;
 
+    // Map Screen
+    public HashMap<String, BufferedImage> worldMap = new HashMap<>();
+
     public TileManager(Game game) {
         this.game = game;
         mapTileNum = new int[game.maxMaps][game.maxWorldCol][game.maxWorldRow];
@@ -25,6 +29,8 @@ public class TileManager {
         registerMap("Disabled", 0);
         registerMap("Main Island", 1);
         registerMap("Coiner's Shop", 2);
+
+        createWorldMap();
     }
 
     public void getTileImage() {
@@ -153,6 +159,34 @@ public class TileManager {
             if (worldCol == game.maxWorldCol) {
                 worldCol = 0;
                 worldRow++;
+            }
+        }
+    }
+
+    public void createWorldMap() {
+        int worldMapWidth = game.tileSize * game.maxWorldCol;
+        int worldMapHeight = game.tileSize * game.maxWorldRow;
+
+        for (String map : mapStrings.values()) {
+            worldMap.put(map, new BufferedImage(worldMapWidth, worldMapHeight, BufferedImage.TYPE_INT_ARGB));
+            Graphics2D graphics2D = worldMap.get(map).createGraphics();
+
+            int col = 0;
+            int row = 0;
+            while (col < game.maxWorldCol && row < game.maxWorldRow) {
+                int tileNumber = mapTileNum[mapNumbers.get(map)][col][row];
+                int x = col * game.tileSize;
+                int y = row * game.tileSize;
+
+                // Draw Tiles
+                if (tile.get(tileNumber) != null) {
+                    graphics2D.drawImage(tile.get(tileNumber).image, x, y, null);
+                }
+                col++;
+                if (col == game.maxWorldCol) {
+                    col = 0;
+                    row++;
+                }
             }
         }
     }

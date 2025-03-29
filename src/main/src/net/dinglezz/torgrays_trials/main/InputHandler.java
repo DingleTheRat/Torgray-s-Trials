@@ -31,6 +31,7 @@ public class InputHandler implements KeyListener {
             case States.STATE_CHARACTER: characterState(code); break;
             case States.STATE_GAME_OVER: gameOverState(code); break;
             case States.STATE_TRADE: tradeState(code); break;
+            case States.STATE_MAP: mapState(code); break;
         }
 
         if (code == KeyEvent.VK_U && game.BRendering) {
@@ -349,6 +350,11 @@ public class InputHandler implements KeyListener {
             if (code == KeyEvent.VK_ESCAPE) {
                 game.ui.subState = States.TRADE_STATE_SELECT;
             }
+        }
+    }
+    public void mapState(int code) {
+        if (code == KeyEvent.VK_ESCAPE) {
+            game.gameState = States.STATE_CHARACTER;
         }
     }
 

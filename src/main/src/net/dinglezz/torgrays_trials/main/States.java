@@ -10,6 +10,7 @@ public enum States {
     STATE_GAME_OVER,
     STATE_TRANSITION,
     STATE_TRADE,
+    STATE_MAP,
 
     // Title Sub-States
     TITLE_STATE_MAIN,

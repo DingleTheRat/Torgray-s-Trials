@@ -72,6 +72,7 @@ public class UI {
             case STATE_GAME_OVER: drawGameOverScreen(); break;
             case STATE_TRANSITION: drawTransitionScreen(); break;
             case STATE_TRADE: drawTradeScreen(); break;
+            case STATE_MAP: drawMapScreen(); break;
         }
     }
 
@@ -1033,6 +1034,14 @@ public class UI {
                 }
             }
         }
+    }
+    public void drawMapScreen() {
+int width = 500;
+int height = 500;
+int x = game.screenWidth / 2 - width / 2;
+int y = game.screenHeight / 2 - height / 2;
+drawSubWindow(x - 20, y - 20, width + 40, height + 40);
+graphics2D.drawImage(game.tileManager.worldMap.get(game.currentMap), x, y, width, height, null);
     }
 
     public int getItemIndex(int slotCol, int slotRow) {
