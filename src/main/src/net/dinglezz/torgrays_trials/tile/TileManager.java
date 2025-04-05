@@ -34,8 +34,6 @@ public class TileManager {
     }
 
     public void getTileImage() {
-        registerTile(1, "disabled", false);
-
         // Grass
         registerTile(10, "/grass/grass_1", false);
         registerTile(11, "/grass/grass_2", false);
@@ -152,13 +150,26 @@ public class TileManager {
                 if (tile.get(tileNumber) != null) {
                     graphics2D.drawImage(tile.get(tileNumber).image, screenX, screenY, null);
                 } else {
-                    System.out.println("Index " + tileNumber + " is not a valid tile.");
+                    System.err.println("Index " + tileNumber + " is not a valid tile.");
+                    registerTile(tileNumber, "", false);
                 }
             }
             worldCol++;
             if (worldCol == game.maxWorldCol) {
                 worldCol = 0;
                 worldRow++;
+            }
+        }
+        if (game.debugPathfinding) {
+            graphics2D.setColor(new Color(255, 0, 0, 70));
+
+            for (int i = 0; i < game.pathFinder.pathList.size(); i++) {
+                int worldX = game.pathFinder.pathList.get(i).col * game.tileSize;
+                int worldY = game.pathFinder.pathList.get(i).row * game.tileSize;
+                int screenX = worldX - game.player.worldX + game.player.screenX;
+                int screenY = worldY - game.player.worldY + game.player.screenY;
+
+                graphics2D.fillRect(screenX, screenY, game.tileSize, game.tileSize);
             }
         }
     }

@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class InputHandler implements KeyListener {
     Game game;
-    public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, interactKeyPressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, interactKeyPressed, f3Pressed;
     public int maxCommandNumber = 0;
     // Debug
     public boolean debug = false;
@@ -134,14 +134,13 @@ public class InputHandler implements KeyListener {
         }
 
         // Debug
-        if (code == KeyEvent.VK_F3) {
-            if (!debug) {
-                System.out.println("Debugging Enabled");
-                debug = true;
-            } else {
-                System.out.println("Debugging Disabled");
-                debug = false;
-            }
+        if (f3Pressed && code == KeyEvent.VK_P) {
+            game.debugPathfinding = !game.debugPathfinding;
+            game.ui.addMessage("Debug Pathfinding: " + game.debugPathfinding);
+            debug = false;
+        } else if (code == KeyEvent.VK_F3) {
+            f3Pressed = true;
+            debug = true;
         }
     }
     public void pauseState(int code) {
@@ -367,6 +366,13 @@ public class InputHandler implements KeyListener {
             case KeyEvent.VK_A: leftPressed = false; break;
             case KeyEvent.VK_S: downPressed = false; break;
             case KeyEvent.VK_D: rightPressed = false; break;
+            case KeyEvent.VK_F3: f3Pressed = false;
+            if (debug) {
+                game.debug = !game.debug;
+                game.ui.addMessage("Debug: " + game.debug);
+                debug = false;
+            }
+            break;
         }
     }
 }

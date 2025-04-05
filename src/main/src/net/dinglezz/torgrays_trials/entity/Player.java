@@ -100,10 +100,10 @@ public class Player extends Entity{
     }
     public void setItems() {
         inventory.clear();
+        inventory.add(new OBJ_Coin(game, 2));
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(currentLight);
-        inventory.add(new OBJ_Coin(game, 2));
     }
     public int getAttack() {
         attackArea = currentWeapon.attackArea;

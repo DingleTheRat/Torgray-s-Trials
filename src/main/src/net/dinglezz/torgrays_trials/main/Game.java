@@ -41,8 +41,12 @@ public class Game extends JPanel implements Runnable {
     int screenHeight2 = screenHeight;
     BufferedImage tempScreen;
     Graphics2D graphics2D;
+    
+    // Settings
     public boolean fullScreen = false;
     public boolean BRendering = false;
+    public boolean debug = false;
+    public boolean debugPathfinding = false;
 
     // FPS
     int FPS = 60;
@@ -213,7 +217,7 @@ public class Game extends JPanel implements Runnable {
     public void drawToTempScreen() {
         // Debug
         long drawStart = 0;
-        if (inputHandler.debug) {
+        if (debug) {
             drawStart = System.nanoTime();
         }
 
@@ -268,7 +272,7 @@ public class Game extends JPanel implements Runnable {
         }
 
         // Debug
-        if (inputHandler.debug) {
+        if (debug) {
             long drawEnd = System.nanoTime();
             long passed = drawEnd - drawStart;
 
@@ -300,7 +304,7 @@ public class Game extends JPanel implements Runnable {
 
         // Debug
         long drawStart = 0;
-        if (inputHandler.debug) {
+        if (debug) {
             drawStart = System.nanoTime();
         }
 
@@ -355,7 +359,7 @@ public class Game extends JPanel implements Runnable {
         }
 
         // Debug
-        if (inputHandler.debug) {
+        if (debug) {
             long drawEnd = System.nanoTime();
             long passed = drawEnd - drawStart;
 
