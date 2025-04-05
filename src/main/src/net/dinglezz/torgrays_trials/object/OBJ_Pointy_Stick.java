@@ -12,7 +12,7 @@ public class OBJ_Pointy_Stick extends Entity {
         name = "Stick";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_WEAPON);
-        down1 = registerEntitySprite("/drawable/objects/pointy_stick");
+        down1 = registerEntitySprite("/objects/pointy_stick");
         attackValue = 1;
         knockBackPower = 3;
         attackArea.width = 36;

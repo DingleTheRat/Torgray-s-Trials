@@ -92,7 +92,7 @@ public class TileManager {
             try {
                 tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/drawable/tiles/" + imageName + ".png"));
             } catch (IllegalArgumentException e) {
-                System.out.println("\"" + imageName + "\" is not a valid path.");
+                System.err.println("\"" + imageName + "\" is not a valid path.");
                 tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/drawable/disabled.png"));
             }
             tile.get(i).image = uTool.scaleImage(tile.get(i).image, game.tileSize, game.tileSize);

@@ -32,8 +32,8 @@ public class OBJ_Chest extends Entity {
         name = "Chest";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_OBSTACLE);
-        image = registerEntitySprite("/drawable/objects/chest_closed", game.tileSize, game.tileSize);
-        image2 = registerEntitySprite("/drawable/objects/chest_open", game.tileSize, game.tileSize);
+        image = registerEntitySprite("/objects/chest_closed");
+        image2 = registerEntitySprite("/objects/chest_open");
         down1 = image;
         collision = true;
 

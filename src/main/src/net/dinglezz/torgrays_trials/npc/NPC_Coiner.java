@@ -26,9 +26,9 @@ public class NPC_Coiner extends Entity {
     }
 
     public void getImage() {
-        down1 = registerEntitySprite("/drawable/npc/coiner/coiner_1");
-        down2 = registerEntitySprite("/drawable/npc/coiner/coiner_2");
-        down3 = registerEntitySprite("/drawable/npc/coiner/coiner_3");
+        down1 = registerEntitySprite("/npc/coiner/coiner_1");
+        down2 = registerEntitySprite("/npc/coiner/coiner_2");
+        down3 = registerEntitySprite("/npc/coiner/coiner_3");
     }
     public void setDialogue() {
         dialogues.put(0, "Hey there partner, I'm Coiner! /nWanna Trade? :D");

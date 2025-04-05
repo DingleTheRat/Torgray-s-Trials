@@ -10,8 +10,8 @@ public class OBJ_Heart extends Entity {
         name = "Heart";
         type = EntityTypes.TYPE_OBJECT;
 
-        image = registerEntitySprite("/drawable/objects/heart/heart", game.tileSize, game.tileSize);
-        image2 = registerEntitySprite("/drawable/objects/heart/half_heart", game.tileSize, game.tileSize);
-        image3 = registerEntitySprite("/drawable/objects/heart/lost_heart", game.tileSize, game.tileSize);
+        image = registerEntitySprite("/objects/heart/heart");
+        image2 = registerEntitySprite("/objects/heart/half_heart");
+        image3 = registerEntitySprite("/objects/heart/lost_heart");
     }
 }

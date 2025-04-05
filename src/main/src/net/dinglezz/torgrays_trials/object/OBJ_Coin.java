@@ -18,7 +18,7 @@ public class OBJ_Coin extends Entity {
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_PICKUP_ONLY);
         tags.add(EntityTags.TAG_NON_SELLABLE);
-        down1 = registerEntitySprite("/drawable/objects/coin");
+        down1 = registerEntitySprite("/objects/coin");
         description = "/nPrecious pieces of gold";
     }
 

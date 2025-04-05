@@ -20,7 +20,7 @@ public class OBJ_Torgray_Soup extends Entity {
         value = 4;
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_CONSUMABLE);
-        down1 = registerEntitySprite("/drawable/objects/torgray_soup");
+        down1 = registerEntitySprite("/objects/torgray_soup");
         description = "/nTorgray's wisest soup. /nIt's warm and a bit hearty. /nHealing: +" + value;
         stackable = true;
         price = 2;

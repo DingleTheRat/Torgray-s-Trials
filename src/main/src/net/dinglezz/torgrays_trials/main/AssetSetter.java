@@ -18,7 +18,7 @@ public class AssetSetter {
     public void setObjects() {
         // Disabled Map
             assetMap.put(0, null);
-            game.obj.put("Disabled", assetMap);
+            game.object.put("Disabled", assetMap);
             assetMap = new HashMap<>();
 
         // Main Island Map
@@ -35,14 +35,14 @@ public class AssetSetter {
             // Other
             setAsset(new OBJ_Chest(game, new OBJ_Sword_Amethyst(game), new OBJ_Shield_Amethyst(game)), 10, 10);
 
-            game.obj.put("Main Island", assetMap);
+            game.object.put("Main Island", assetMap);
             assetMap = new HashMap<>();
             i = 0;
 
         // Coiner's Shop Map
             setAsset(new OBJ_Table(game), 12, 10);
 
-            game.obj.put("Coiner's Shop", assetMap);
+            game.object.put("Coiner's Shop", assetMap);
             assetMap = new HashMap<>();
             i = 0;
     }

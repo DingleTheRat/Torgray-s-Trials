@@ -29,21 +29,21 @@ public class MON_Dracore extends Entity {
         getImage();
     }
     public void getImage() {
-        up1 = registerEntitySprite("/drawable/monster/dracore/dracore_1", game.tileSize, game.tileSize);
-        up2 = registerEntitySprite("/drawable/monster/dracore/dracore_2", game.tileSize, game.tileSize);
-        up3 = registerEntitySprite("/drawable/monster/dracore/dracore_3", game.tileSize, game.tileSize);
+        up1 = registerEntitySprite("/monster/dracore/dracore_1");
+        up2 = registerEntitySprite("/monster/dracore/dracore_2");
+        up3 = registerEntitySprite("/monster/dracore/dracore_3");
         
-        down1 = registerEntitySprite("/drawable/monster/dracore/dracore_1", game.tileSize, game.tileSize);
-        down2 = registerEntitySprite("/drawable/monster/dracore/dracore_2", game.tileSize, game.tileSize);
-        down3 = registerEntitySprite("/drawable/monster/dracore/dracore_3", game.tileSize, game.tileSize);
+        down1 = registerEntitySprite("/monster/dracore/dracore_1");
+        down2 = registerEntitySprite("/monster/dracore/dracore_2");
+        down3 = registerEntitySprite("/monster/dracore/dracore_3");
         
-        left1 = registerEntitySprite("/drawable/monster/dracore/dracore_1", game.tileSize, game.tileSize);
-        left2 = registerEntitySprite("/drawable/monster/dracore/dracore_2", game.tileSize, game.tileSize);
-        left3 = registerEntitySprite("/drawable/monster/dracore/dracore_3", game.tileSize, game.tileSize);
+        left1 = registerEntitySprite("/monster/dracore/dracore_1");
+        left2 = registerEntitySprite("/monster/dracore/dracore_2");
+        left3 = registerEntitySprite("/monster/dracore/dracore_3");
         
-        right1 = registerEntitySprite("/drawable/monster/dracore/dracore_1", game.tileSize, game.tileSize);
-        right2 = registerEntitySprite("/drawable/monster/dracore/dracore_2", game.tileSize, game.tileSize);
-        right3 = registerEntitySprite("/drawable/monster/dracore/dracore_3", game.tileSize, game.tileSize);
+        right1 = registerEntitySprite("/monster/dracore/dracore_1");
+        right2 = registerEntitySprite("/monster/dracore/dracore_2");
+        right3 = registerEntitySprite("/monster/dracore/dracore_3");
     }
     public void setAction() {
         actionLockCounter++;

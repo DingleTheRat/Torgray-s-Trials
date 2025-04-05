@@ -32,6 +32,7 @@ public abstract class Entity {
     public boolean alive = true;
     public boolean dying = false;
     boolean healthBarOn = false;
+    public boolean onPath = false;
     public boolean knockBack = false;
 
 
@@ -79,26 +80,26 @@ public abstract class Entity {
 
     public Entity(Game game) {
         this.game = game;
-        down1 = registerEntitySprite("/drawable/disabled");
-        down2 = registerEntitySprite("/drawable/disabled");
-        down3 = registerEntitySprite("/drawable/disabled");
-        up1 = registerEntitySprite("/drawable/disabled");
-        up2 = registerEntitySprite("/drawable/disabled");
-        up3 = registerEntitySprite("/drawable/disabled");
-        left1 = registerEntitySprite("/drawable/disabled");
-        left2 = registerEntitySprite("/drawable/disabled");
-        left3 = registerEntitySprite("/drawable/disabled");
-        right1 = registerEntitySprite("/drawable/disabled");
-        right2 = registerEntitySprite("/drawable/disabled");
-        right3 = registerEntitySprite("/drawable/disabled");
+        down1 = registerEntitySprite("/disabled");
+        down2 = registerEntitySprite("/disabled");
+        down3 = registerEntitySprite("/disabled");
+        up1 = registerEntitySprite("/disabled");
+        up2 = registerEntitySprite("/disabled");
+        up3 = registerEntitySprite("/disabled");
+        left1 = registerEntitySprite("/disabled");
+        left2 = registerEntitySprite("/disabled");
+        left3 = registerEntitySprite("/disabled");
+        right1 = registerEntitySprite("/disabled");
+        right2 = registerEntitySprite("/disabled");
+        right3 = registerEntitySprite("/disabled");
 
-        attackUp = registerEntitySprite("/drawable/disabled");
-        attackDown = registerEntitySprite("/drawable/disabled");
-        attackLeft = registerEntitySprite("/drawable/disabled");
+        attackUp = registerEntitySprite("/disabled");
+        attackDown = registerEntitySprite("/disabled");
+        attackLeft = registerEntitySprite("/disabled");
 
-        image = registerEntitySprite("/drawable/disabled");
-        image2 = registerEntitySprite("/drawable/disabled");
-        image3 = registerEntitySprite("/drawable/disabled");
+        image = registerEntitySprite("/disabled");
+        image2 = registerEntitySprite("/disabled");
+        image3 = registerEntitySprite("/disabled");
     }
 
     public int getLeftX() {return worldX + solidArea.x;}
@@ -130,11 +131,11 @@ public abstract class Entity {
     public boolean use(Entity entity) {return false;}
     public void checkDrop() {}
     public void dropItem(Entity droppedItem) {
-        for (int i = 0; i < game.obj.size(); i++) {
-            if (game.obj.get(game.currentMap).get(i) == null) {
-                game.obj.get(game.currentMap).put(i, droppedItem);
-                game.obj.get(game.currentMap).get(i).worldX = worldX;
-                game.obj.get(game.currentMap).get(i).worldY = worldY;
+        for (int i = 0; i < game.object.size(); i++) {
+            if (game.object.get(game.currentMap).get(i) == null) {
+                game.object.get(game.currentMap).put(i, droppedItem);
+                game.object.get(game.currentMap).get(i).worldX = worldX;
+                game.object.get(game.currentMap).get(i).worldY = worldY;
                 break;
             }
         }
@@ -306,9 +307,9 @@ public abstract class Entity {
         BufferedImage image = null;
         try {
             try {
-                image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
+                image = ImageIO.read(getClass().getResourceAsStream("/drawable" + imagePath + ".png"));
             } catch (IllegalArgumentException e) {
-                System.out.println("Warning: \"" + imagePath + "\" is not a valid path.");
+                System.err.println("Warning: \"" + imagePath + "\" is not a valid path.");
                 image = ImageIO.read(getClass().getResourceAsStream("/drawable/disabled.png"));
             }
             image = uTool.scaleImage(image, game.tileSize, game.tileSize);
@@ -322,9 +323,9 @@ public abstract class Entity {
         BufferedImage image = null;
         try {
             try {
-                image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
+                image = ImageIO.read(getClass().getResourceAsStream("/drawable" + imagePath + ".png"));
             } catch (IllegalArgumentException e) {
-                System.out.println("Warning: \"" + imagePath + "\" is not a valid path.");
+                System.err.println("Warning: \"" + imagePath + "\" is not a valid path.");
                 image = ImageIO.read(getClass().getResourceAsStream("/drawable/disabled.png"));
             }
             image = uTool.scaleImage(image, width, height);
@@ -361,5 +362,79 @@ public abstract class Entity {
             }
         }
         return index;
+    }
+    public void searchPath(int goalCol, int goalRow, boolean endSearch) {
+        int startCol = (worldX + solidArea.x) / game.tileSize;
+        int startRow = (worldY + solidArea.y) / game.tileSize;
+        game.pathFinder.setNodes(startCol, startRow, goalCol, goalRow);
+
+        if (game.pathFinder.search()) {
+            // Next worldX & worldY
+            int nextX = game.pathFinder.pathList.getFirst().col * game.tileSize;
+            int nextY = game.pathFinder.pathList.getFirst().row * game.tileSize;
+
+            // Entity's solidArea position
+            int enLeftX = worldX + solidArea.x;
+            int enRightX = worldX + solidArea.x + solidArea.width;
+            int enTopY = worldY + solidArea.y;
+            int enBottomY = worldY + solidArea.y + solidArea.height;
+
+            if (enTopY > nextY && enLeftX >= nextX && enRightX < nextX + game.tileSize) {
+                direction = "up";
+            }
+            else if (enTopY < nextY && enLeftX >= nextX && enRightX < nextX + game.tileSize) {
+                direction = "down";
+            }
+            else if (enTopY >= nextY && enBottomY < nextY + game.tileSize) {
+                // Left or r=Right
+                if (enLeftX > nextX) {
+                    direction = "left";
+                }
+                if (enLeftX < nextX) {
+                    direction = "right";
+                }
+            }
+            else if (enTopY > nextY && enLeftX > nextX) {
+                // Up or Left
+                direction = "up";
+                checkCollision();
+                if (collisionOn) {
+                    direction = "left";
+                }
+            }
+            else if (enTopY > nextY && enLeftX < nextX) {
+                // Up or Right
+                direction = "up";
+                checkCollision();
+                if (collisionOn) {
+                    direction = "right";
+                }
+            }
+            else if (enTopY < nextY && enLeftX > nextX) {
+                // Down or Left
+                direction = "down";
+                checkCollision();
+                if (collisionOn) {
+                    direction = "left";
+                }
+            }
+            else if (enTopY < nextY && enLeftX < nextX) {
+                // Down or Right
+                direction = "down";
+                checkCollision();
+                if (collisionOn) {
+                    direction = "right";
+                }
+            }
+
+            if (endSearch) {
+                int nextCol = game.pathFinder.pathList.getFirst().col;
+                int nextRow = game.pathFinder.pathList.getFirst().row;
+                if (nextCol == goalCol && nextRow == goalRow) {
+                    System.out.println("OVER");
+                    onPath = false;
+                }
+            }
+        }
     }
 }

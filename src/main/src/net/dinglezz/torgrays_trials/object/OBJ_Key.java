@@ -15,18 +15,18 @@ public class OBJ_Key extends Entity {
         name = "Key";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_CONSUMABLE);
-        down1 = registerEntitySprite("/drawable/objects/key", game.tileSize, game.tileSize);
+        down1 = registerEntitySprite("/objects/key");
         description = "/n Probably opens a gate";
         stackable = true;
         price = 6;
     }
     public boolean use(Entity entity) {
 
-        int objIndex = getDetected(entity, game.obj.get(game.currentMap), "Gate");
+        int objIndex = getDetected(entity, game.object.get(game.currentMap), "Gate");
         if (objIndex != 999) {
             game.ui.addMessage("-1 Key");
             game.playSound("Unlock");
-            game.obj.get(game.currentMap).put(objIndex, null);
+            game.object.get(game.currentMap).put(objIndex, null);
             return true;
         } else {
             return false;

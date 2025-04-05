@@ -4,6 +4,7 @@ import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.Player;
 import net.dinglezz.torgrays_trials.environment.EnvironmentManager;
 import net.dinglezz.torgrays_trials.events.EventHandler;
+import net.dinglezz.torgrays_trials.pathfinding.Pathfinder;
 import net.dinglezz.torgrays_trials.tile.TileManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,13 +57,14 @@ public class Game extends JPanel implements Runnable {
     public AssetSetter assetSetter = new AssetSetter(this);
     public UI ui = new UI(this);
     public EventHandler eventHandler = new EventHandler(this);
+    public Pathfinder pathFinder = new Pathfinder(this);
     public Config config = new Config(this);
     Thread gameThread;
 
     // Entities and Objects
     public Player player = new Player(this, inputHandler);
     public HashMap<String, HashMap<Integer, Entity>> npc = new HashMap<>();
-    public HashMap<String, HashMap<Integer, Entity>> obj = new HashMap<>();
+    public HashMap<String, HashMap<Integer, Entity>> object = new HashMap<>();
     public HashMap<String, HashMap<Integer, Entity>> monster = new HashMap<>();
     public ArrayList<Entity> particleList = new ArrayList<>();
     public ArrayList<Entity> entityList = new ArrayList<>();
@@ -231,9 +233,9 @@ public class Game extends JPanel implements Runnable {
                     entityList.add(npc.get(currentMap).get(i));
                 }
             }
-            for (int i = 0; i < obj.get(currentMap).size(); i++) {
-                if (obj.get(currentMap).get(i) != null) {
-                    entityList.add(obj.get(currentMap).get(i));
+            for (int i = 0; i < object.get(currentMap).size(); i++) {
+                if (object.get(currentMap).get(i) != null) {
+                    entityList.add(object.get(currentMap).get(i));
                 }
             }
             for (int i = 0; i < monster.get(currentMap).size(); i++) {
@@ -318,9 +320,9 @@ public class Game extends JPanel implements Runnable {
                     entityList.add(npc.get(currentMap).get(i));
                 }
             }
-            for (int i = 0; i < obj.get(currentMap).size(); i++) {
-                if (obj.get(currentMap).get(i) != null) {
-                    entityList.add(obj.get(currentMap).get(i));
+            for (int i = 0; i < object.get(currentMap).size(); i++) {
+                if (object.get(currentMap).get(i) != null) {
+                    entityList.add(object.get(currentMap).get(i));
                 }
             }
             for (int i = 0; i < monster.get(currentMap).size(); i++) {

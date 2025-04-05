@@ -16,13 +16,14 @@ public class Pathfinder {
 
     public Pathfinder(Game game) {
         this.game = game;
+        placeNodes();
     }
+
     public void placeNodes() {
         int col = 0;
         int row = 0;
         while (col < game.maxWorldCol && row < game.maxWorldRow) {
-            node.put(col, new HashMap<>());
-            node.get(col).put(row, new Node(col, row));
+            node.computeIfAbsent(col, k -> new HashMap<>()).put(row, new Node(col, row));
 
             col++;
             if (col == game.maxWorldCol) {
@@ -111,18 +112,18 @@ public class Pathfinder {
             }
 
             // Open the node on the bottom
-            if (row + 1 >= 0) {
+            if (row + 1 < game.maxWorldRow) {
                 openNode(node.get(col).get(row + 1));
             }
 
             // Open the node on the left
             if (col - 1 >= 0) {
-                openNode(node.get(col).get(row - 1));
+                openNode(node.get(col - 1).get(row));
             }
 
             // Open the node on the right
-            if (col + 1 >= 0) {
-                openNode(node.get(col).get(row + 1));
+            if (col + 1 < game.maxWorldCol) {
+                openNode(node.get(col + 1).get(row));
             }
 
             // Find the best Node
@@ -140,10 +141,7 @@ public class Pathfinder {
                 }
             }
 
-            if (openList.isEmpty()) {
-                break;
-            }
-
+            if (openList.isEmpty()) {break;}
             currentNode = openList.get(bestNodeIndex);
 
             if (currentNode == goalNode) {
@@ -164,7 +162,7 @@ public class Pathfinder {
     public void trackPath() {
         Node current = goalNode;
 
-        while (currentNode != startNode) {
+        while (current != startNode) {
             pathList.add(0, current);
             current = current.parent;
         }

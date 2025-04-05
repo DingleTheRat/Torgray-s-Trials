@@ -119,12 +119,12 @@ public class CollisionChecker {
 public int checkObject(Entity entity, boolean player) {
     int index = 999;
 
-    for (int i = 0; i < game.obj.get(game.currentMap).size(); i++) {
-        if (game.obj.get(game.currentMap).get(i) != null) {
+    for (int i = 0; i < game.object.get(game.currentMap).size(); i++) {
+        if (game.object.get(game.currentMap).get(i) != null) {
             entity.solidArea.x = entity.worldX + entity.solidAreaDefaultX;
             entity.solidArea.y = entity.worldY + entity.solidAreaDefaultY;
-            game.obj.get(game.currentMap).get(i).solidArea.x = game.obj.get(game.currentMap).get(i).worldX + game.obj.get(game.currentMap).get(i).solidAreaDefaultX;
-            game.obj.get(game.currentMap).get(i).solidArea.y = game.obj.get(game.currentMap).get(i).worldY + game.obj.get(game.currentMap).get(i).solidAreaDefaultY;
+            game.object.get(game.currentMap).get(i).solidArea.x = game.object.get(game.currentMap).get(i).worldX + game.object.get(game.currentMap).get(i).solidAreaDefaultX;
+            game.object.get(game.currentMap).get(i).solidArea.y = game.object.get(game.currentMap).get(i).worldY + game.object.get(game.currentMap).get(i).solidAreaDefaultY;
 
             switch (entity.direction) {
                 case "up": entity.solidArea.y -= entity.speed; break;
@@ -132,8 +132,8 @@ public int checkObject(Entity entity, boolean player) {
                 case "left": entity.solidArea.x -= entity.speed; break;
                 case "right": entity.solidArea.x += entity.speed; break;
             }
-            if (entity.solidArea.intersects(game.obj.get(game.currentMap).get(i).solidArea)) {
-                if (game.obj.get(game.currentMap).get(i).collision) {
+            if (entity.solidArea.intersects(game.object.get(game.currentMap).get(i).solidArea)) {
+                if (game.object.get(game.currentMap).get(i).collision) {
                     entity.collisionOn = true;
                 }
                 if (player) {
@@ -143,8 +143,8 @@ public int checkObject(Entity entity, boolean player) {
 
             entity.solidArea.x = entity.solidAreaDefaultX;
             entity.solidArea.y = entity.solidAreaDefaultY;
-            game.obj.get(game.currentMap).get(i).solidArea.x = game.obj.get(game.currentMap).get(i).solidAreaDefaultX;
-            game.obj.get(game.currentMap).get(i).solidArea.y = game.obj.get(game.currentMap).get(i).solidAreaDefaultY;
+            game.object.get(game.currentMap).get(i).solidArea.x = game.object.get(game.currentMap).get(i).solidAreaDefaultX;
+            game.object.get(game.currentMap).get(i).solidArea.y = game.object.get(game.currentMap).get(i).solidAreaDefaultY;
         }
     }
 

@@ -12,7 +12,7 @@ public class OBJ_Shield_Amethyst extends Entity {
         name = "Amethyst Shield";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_SHIELD);
-        down1 = registerEntitySprite("/drawable/objects/amethyst_shield", game.tileSize, game.tileSize);
+        down1 = registerEntitySprite("/objects/amethyst_shield");
         defenceValue = 2;
         description = "/n A majestic purple shield /n Defence: +" + defenceValue;
         price = 6;

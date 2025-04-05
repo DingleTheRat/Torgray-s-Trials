@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class Sound {
     Clip clip;
     public HashMap<String, URL> soundLibrary = new HashMap<>();
-    FloatControl fc;
+    FloatControl floatControl;
     int volumeScale = 3;
     float volume;
 
@@ -34,10 +34,10 @@ public class Sound {
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundLibrary.get(soundName));
                 clip = AudioSystem.getClip();
                 clip.open(audioInputStream);
-                fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
                 checkVolume();
             } else {
-                System.out.println("Warning: \"" + soundName + "\" is not a valid sound.");
+                System.err.println("Warning: \"" + soundName + "\" is not a valid sound.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,6 +61,6 @@ public class Sound {
             case 4: volume = 1f; break;
             case 5: volume = 6f; break;
         }
-        fc.setValue(volume);
+        floatControl.setValue(volume);
     }
 }

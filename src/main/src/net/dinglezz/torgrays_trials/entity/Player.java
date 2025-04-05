@@ -43,28 +43,28 @@ public class Player extends Entity{
     }
 
     public void getImage() {
-        up1 = registerEntitySprite("/drawable/player/walking/torgray_up_1");
-        up2 = registerEntitySprite("/drawable/player/walking/torgray_up_2");
-        up3 = registerEntitySprite("/drawable/player/walking/torgray_up_3");
+        up1 = registerEntitySprite("/player/walking/torgray_up_1");
+        up2 = registerEntitySprite("/player/walking/torgray_up_2");
+        up3 = registerEntitySprite("/player/walking/torgray_up_3");
 
-        down1 = registerEntitySprite("/drawable/player/walking/torgray_down_1");
-        down2 = registerEntitySprite("/drawable/player/walking/torgray_down_2");
-        down3 = registerEntitySprite("/drawable/player/walking/torgray_down_3");
+        down1 = registerEntitySprite("/player/walking/torgray_down_1");
+        down2 = registerEntitySprite("/player/walking/torgray_down_2");
+        down3 = registerEntitySprite("/player/walking/torgray_down_3");
 
-        left1 = registerEntitySprite("/drawable/player/walking/torgray_left_1");
-        left2 = registerEntitySprite("/drawable/player/walking/torgray_left_2");
-        left3 = registerEntitySprite("/drawable/player/walking/torgray_left_3");
+        left1 = registerEntitySprite("/player/walking/torgray_left_1");
+        left2 = registerEntitySprite("/player/walking/torgray_left_2");
+        left3 = registerEntitySprite("/player/walking/torgray_left_3");
 
-        right1 = registerEntitySprite("/drawable/player/walking/torgray_right_1");
-        right2 = registerEntitySprite("/drawable/player/walking/torgray_right_2");
-        right3 = registerEntitySprite("/drawable/player/walking/torgray_right_3");
+        right1 = registerEntitySprite("/player/walking/torgray_right_1");
+        right2 = registerEntitySprite("/player/walking/torgray_right_2");
+        right3 = registerEntitySprite("/player/walking/torgray_right_3");
     }
     public void getAttackImage() {
         String modifiedName = currentWeapon.name.toLowerCase().replace(" sword", "").replace(" ", "_");
-        attackUp = registerEntitySprite("/drawable/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_up", game.tileSize, game.tileSize * 2);
-        attackDown = registerEntitySprite("/drawable/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_down", game.tileSize, game.tileSize * 2);
-        attackLeft = registerEntitySprite("/drawable/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_left", game.tileSize * 2, game.tileSize);
-        attackRight = registerEntitySprite("/drawable/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_right", game.tileSize * 2, game.tileSize);
+        attackUp = registerEntitySprite("/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_up", game.tileSize, game.tileSize * 2);
+        attackDown = registerEntitySprite("/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_down", game.tileSize, game.tileSize * 2);
+        attackLeft = registerEntitySprite("/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_left", game.tileSize * 2, game.tileSize);
+        attackRight = registerEntitySprite("/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_right", game.tileSize * 2, game.tileSize);
     }
     public void setDefaultValues() {
         type = EntityTypes.TYPE_PLAYER;
@@ -100,10 +100,10 @@ public class Player extends Entity{
     }
     public void setItems() {
         inventory.clear();
-        inventory.add(new OBJ_Coin(game, 2));
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(currentLight);
+        inventory.add(new OBJ_Coin(game, 2));
     }
     public int getAttack() {
         attackArea = currentWeapon.attackArea;
@@ -262,20 +262,20 @@ public class Player extends Entity{
     }
     public void pickUpObject(int i) {
         if (i != 999) {
-            if (game.obj.get(game.currentMap).get(i).tags.contains(EntityTags.TAG_OBSTACLE)) {
+            if (game.object.get(game.currentMap).get(i).tags.contains(EntityTags.TAG_OBSTACLE)) {
                 if (inputHandler.interactKeyPressed) {
-                    game.obj.get(game.currentMap).get(i).interact();
+                    game.object.get(game.currentMap).get(i).interact();
                 }
             }
-            else if (game.obj.get(game.currentMap).get(i).tags.contains(EntityTags.TAG_PICKUP_ONLY)) {
-                game.obj.get(game.currentMap).get(i).use(this);
-                game.obj.get(game.currentMap).put(i, null);
+            else if (game.object.get(game.currentMap).get(i).tags.contains(EntityTags.TAG_PICKUP_ONLY)) {
+                game.object.get(game.currentMap).get(i).use(this);
+                game.object.get(game.currentMap).put(i, null);
             }
-            else if (canObtainItem(game.obj.get(game.currentMap).get(i))) {
+            else if (canObtainItem(game.object.get(game.currentMap).get(i))) {
                 game.playSound("Coin");
-                String text = "+1 " + game.obj.get(game.currentMap).get(i).name;
+                String text = "+1 " + game.object.get(game.currentMap).get(i).name;
                 game.ui.addMessage(text);
-                game.obj.get(game.currentMap).put(i, null);
+                game.object.get(game.currentMap).put(i, null);
             }
         }
     }
