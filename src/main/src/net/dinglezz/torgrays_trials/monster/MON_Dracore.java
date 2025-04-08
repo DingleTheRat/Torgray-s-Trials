@@ -45,37 +45,64 @@ public class MON_Dracore extends Entity {
         right2 = registerEntitySprite("/monster/dracore/dracore_2");
         right3 = registerEntitySprite("/monster/dracore/dracore_3");
     }
-    public void setAction() {
-        actionLockCounter++;
-        if (actionLockCounter == 120) {
-            Random random = new Random();
-            int i = random.nextInt(100) + 1; // Pick a number from 1 to 100
 
-            if (i <= 25) {
-                direction = "up";
+    @Override
+    public void update() {
+        super.update();
+        int xDistance = Math.abs(worldX - game.player.worldX);
+        int yDistance = Math.abs(worldY - game.player.worldY);
+        int tileDistance = (xDistance + yDistance) / game.tileSize;
+
+        if (!onPath && tileDistance < 5) {
+            int random = new Random().nextInt(2);
+            if (random == 1) {
+                onPath = true;
             }
-            if (i > 25 && i <= 50) {
-                direction = "down";
-            }
-            if (i > 50 && i <= 75) {
-                direction = "left";
-            }
-            if (i > 75 && i <= 100) {
-                direction = "right";
-            }
-            actionLockCounter = 0;
+        } else if (tileDistance > 20) {
+            onPath = false;
         }
     }
+
+    @Override
+    public void setAction() {
+        if (onPath) {
+            int goalCol = (game.player.worldX + game.player.solidArea.x) / game.tileSize;
+            int goalRow = (game.player.worldY + game.player.solidArea.y) / game.tileSize;
+
+            searchPath(goalCol, goalRow, false);
+        } else {
+            actionLockCounter++;
+            if (actionLockCounter == 120) {
+                int random = new Random().nextInt(100);
+
+                if (random <= 25) {
+                    direction = "up";
+                } else if (random <= 50) {
+                    direction = "down";
+                } else if ( random <= 75) {
+                    direction = "left";
+                } else {
+                    direction = "right";
+                }
+                actionLockCounter = 0;
+            }
+        }
+    }
+
+    @Override
     public void damageReaction() {
         actionLockCounter = 0;
+        onPath = true;
 
-        switch (game.player.direction) {
-            case "up": direction = "down"; break;
-            case "down": direction = "up"; break;
-            case "left": direction = "right"; break;
-            case "right": direction = "left"; break;
-        }
+//        switch (game.player.direction) {
+//            case "up": direction = "down"; break;
+//            case "down": direction = "up"; break;
+//            case "left": direction = "right"; break;
+//            case "right": direction = "left"; break;
+//        }
     }
+
+    @Override
     public void checkDrop() {
         int random = new Random().nextInt(2) + 1;
 
@@ -97,8 +124,8 @@ public class MON_Dracore extends Entity {
 
 
     // Particles
-    public Color getParticleColor() {return new Color(63, 6, 5);}
-    public int getParticleSize() {return 6;} // 6 pixels
-    public int getParticleSpeed() {return 1;}
-    public int getParticleMaxHealth() {return 20;}
+    @Override public Color getParticleColor() {return new Color(63, 6, 5);}
+    @Override public int getParticleSize() {return 6;} // 6 pixels
+    @Override public int getParticleSpeed() {return 1;}
+    @Override public int getParticleMaxHealth() {return 20;}
 }

@@ -1,4 +1,4 @@
-package net.dinglezz.torgrays_trials.object;
+package net.dinglezz.torgrays_trials.object.weapon;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTags;

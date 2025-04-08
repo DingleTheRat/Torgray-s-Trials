@@ -43,28 +43,26 @@ public class NPC_GateKeeper extends Entity {
         dialogues.put(2, "This game is for a science fair");
         dialogues.put(3, "The person who made this game, /nDingle, is actually super screwed for /nthe science fair");
     }
+
+    @Override
     public void setAction() {
         if (onPath) {
-            int goalCol = 23;
-            int goalRow = 21;
+            int goalCol = (game.player.worldX + game.player.solidArea.x) / game.tileSize;
+            int goalRow = (game.player.worldY + game.player.solidArea.y) / game.tileSize;
 
-            searchPath(goalCol, goalRow, true);
+            searchPath(goalCol, goalRow, false);
         } else {
             actionLockCounter++;
             if (actionLockCounter == 120) {
-                Random random = new Random();
-                int i = random.nextInt(100) + 1; // Pick a number from 1 to 100
+                int random = new Random().nextInt(100);
 
-                if (i <= 25) {
+                if (random <= 25) {
                     direction = "up";
-                }
-                if (i > 25 && i <= 50) {
+                } else if (random <= 50) {
                     direction = "down";
-                }
-                if (i > 50 && i <= 75) {
+                } else if ( random <= 75) {
                     direction = "left";
-                }
-                if (i > 75 && i <= 100) {
+                } else {
                     direction = "right";
                 }
                 actionLockCounter = 0;

@@ -5,8 +5,8 @@ import net.dinglezz.torgrays_trials.main.InputHandler;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.object.OBJ_Coin;
 import net.dinglezz.torgrays_trials.object.OBJ_Lantern;
-import net.dinglezz.torgrays_trials.object.OBJ_Shield_Iron;
-import net.dinglezz.torgrays_trials.object.OBJ_Sword_Iron;
+import net.dinglezz.torgrays_trials.object.shield.OBJ_Shield_Iron;
+import net.dinglezz.torgrays_trials.object.weapon.OBJ_Sword_Iron;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -60,6 +60,7 @@ public class Player extends Entity{
         right3 = registerEntitySprite("/player/walking/torgray_right_3");
     }
     public void getAttackImage() {
+        // It takes the weapon name, removes "Sword" and replaces spaces for "_" to get the path for the sprite
         String modifiedName = currentWeapon.name.toLowerCase().replace(" sword", "").replace(" ", "_");
         attackUp = registerEntitySprite("/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_up", game.tileSize, game.tileSize * 2);
         attackDown = registerEntitySprite("/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_down", game.tileSize, game.tileSize * 2);
@@ -491,8 +492,8 @@ public class Player extends Entity{
     }
 
     // Particles
-    public Color getParticleColor() {return new Color(178, 29, 29);}
-    public int getParticleSize() {return 6;} // 6 pixels
-    public int getParticleSpeed() {return 1;}
-    public int getParticleMaxHealth() {return 20;}
+    @Override public Color getParticleColor() {return new Color(178, 29, 29);}
+    @Override public int getParticleSize() {return 6;} // 6 pixels
+    @Override public int getParticleSpeed() {return 1;}
+    @Override public int getParticleMaxHealth() {return 20;}
 }

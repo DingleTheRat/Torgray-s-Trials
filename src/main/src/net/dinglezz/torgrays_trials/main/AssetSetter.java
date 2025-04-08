@@ -5,6 +5,8 @@ import net.dinglezz.torgrays_trials.npc.NPC_Coiner;
 import net.dinglezz.torgrays_trials.npc.NPC_GateKeeper;
 import net.dinglezz.torgrays_trials.monster.MON_Dracore;
 import net.dinglezz.torgrays_trials.object.*;
+import net.dinglezz.torgrays_trials.object.shield.OBJ_Shield_Amethyst;
+import net.dinglezz.torgrays_trials.object.weapon.OBJ_Sword_Amethyst;
 
 import java.util.HashMap;
 

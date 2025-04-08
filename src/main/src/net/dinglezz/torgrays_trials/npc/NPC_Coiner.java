@@ -6,7 +6,7 @@ import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.object.OBJ_Key;
 import net.dinglezz.torgrays_trials.object.OBJ_Map;
-import net.dinglezz.torgrays_trials.object.OBJ_Stick;
+import net.dinglezz.torgrays_trials.object.weapon.OBJ_Stick;
 import net.dinglezz.torgrays_trials.object.OBJ_Torgray_Soup;
 
 public class NPC_Coiner extends Entity {
