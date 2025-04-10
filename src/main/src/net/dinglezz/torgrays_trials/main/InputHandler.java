@@ -3,7 +3,7 @@ package net.dinglezz.torgrays_trials.main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class InputHandler implements KeyListener {
+public class   InputHandler implements KeyListener {
     Game game;
     public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, interactKeyPressed, f3Pressed;
     public int maxCommandNumber = 0;
@@ -34,8 +34,20 @@ public class InputHandler implements KeyListener {
             case States.STATE_MAP: mapState(code); break;
         }
 
-        if (code == KeyEvent.VK_U && game.BRendering) {
-            game.BRendering = false;
+        // F3 Stuff
+        if (f3Pressed && code == KeyEvent.VK_P) {
+            game.debugPathfinding = !game.debugPathfinding;
+            game.ui.addMessage("Debug Pathfinding: " + game.debugPathfinding);
+            debug = false;
+
+        } else if (f3Pressed && code == KeyEvent.VK_B) {
+            if (game.BRendering) {
+                game.BRendering = false;
+                game.ui.addMessage("BRendering: " + game.BRendering);
+            }
+        } else if (code == KeyEvent.VK_F3) {
+            f3Pressed = true;
+            debug = true;
         }
     }
     public void titleState(int code) {
@@ -132,16 +144,6 @@ public class InputHandler implements KeyListener {
             case KeyEvent.VK_SPACE: spacePressed = true; break;
             case KeyEvent.VK_ESCAPE: game.gameState = States.STATE_PAUSE; game.ui.subState = States.STATE_PAUSE; break;
         }
-
-        // Debug
-        if (f3Pressed && code == KeyEvent.VK_P) {
-            game.debugPathfinding = !game.debugPathfinding;
-            game.ui.addMessage("Debug Pathfinding: " + game.debugPathfinding);
-            debug = false;
-        } else if (code == KeyEvent.VK_F3) {
-            f3Pressed = true;
-            debug = true;
-        }
     }
     public void pauseState(int code) {
         if (code == KeyEvent.VK_ESCAPE) {
@@ -180,12 +182,12 @@ public class InputHandler implements KeyListener {
 
         if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
             if (game.ui.subState == States.PAUSE_STATE_SETTINGS_MAIN) {
-                if (game.ui.commandNumber == 2 && game.music.volumeScale > 0) {
+                if (game.ui.commandNumber == 0 && game.music.volumeScale > 0) {
                     game.music.volumeScale--;
                     game.music.checkVolume();
                     game.playSound("Cursor");
                 }
-                if (game.ui.commandNumber == 3 && game.sound.volumeScale > 0) {
+                if (game.ui.commandNumber == 1 && game.sound.volumeScale > 0) {
                     game.sound.volumeScale--;
                     game.playSound("Cursor");
                 }
@@ -193,12 +195,12 @@ public class InputHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
             if (game.ui.subState == States.PAUSE_STATE_SETTINGS_MAIN) {
-                if (game.ui.commandNumber == 2 && game.music.volumeScale < 5) {
+                if (game.ui.commandNumber == 0 && game.music.volumeScale < 5) {
                     game.music.volumeScale++;
                     game.music.checkVolume();
                     game.playSound("Cursor");
                 }
-                if (game.ui.commandNumber == 3 && game.sound.volumeScale < 5) {
+                if (game.ui.commandNumber == 1 && game.sound.volumeScale < 5) {
                     game.sound.volumeScale++;
                     game.playSound("Cursor");
                 }

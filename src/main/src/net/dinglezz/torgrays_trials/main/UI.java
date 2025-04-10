@@ -324,12 +324,27 @@ public class UI {
         textY = frameY + game.tileSize + (game.tileSize / 4);
         graphics2D.drawString(text, textX, textY);
 
-        // Fullscreen
+        // Music
         graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 32f));
         textX = frameX + game.tileSize;
         textY += game.tileSize * 2;
-        graphics2D.drawString("Full Screen", textX, textY);
+        graphics2D.drawString("Music", textX, textY);
         if (commandNumber == 0) {
+            graphics2D.drawString(">", textX - 30, textY);
+        }
+
+
+        // Sound Effects
+        textY += game.tileSize;
+        graphics2D.drawString("Sounds", textX, textY);
+        if (commandNumber == 1) {
+            graphics2D.drawString(">", textX - 30, textY);
+        }
+
+        // Fullscreen
+        textY += game.tileSize;
+        graphics2D.drawString("Full Screen", textX, textY);
+        if (commandNumber == 2) {
             graphics2D.drawString(">", textX - 30, textY);
 
             if (game.inputHandler.spacePressed) {
@@ -343,11 +358,11 @@ public class UI {
                 }
             }
         }
-        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 32f));
-        textX = frameX + game.tileSize;
+
+        //BRendering
         textY += game.tileSize;
         graphics2D.drawString("BRendering", textX, textY);
-        if (commandNumber == 1) {
+        if (commandNumber == 3) {
             graphics2D.drawString(">", textX - 30, textY);
 
             if (game.inputHandler.spacePressed) {
@@ -361,22 +376,6 @@ public class UI {
                 }
             }
         }
-
-        // Music
-        textY += game.tileSize;
-        graphics2D.drawString("Music", textX, textY);
-        if (commandNumber == 2) {
-            graphics2D.drawString(">", textX - 30, textY);
-        }
-
-
-        // Sound Effects
-        textY += game.tileSize;
-        graphics2D.drawString("Sounds", textX, textY);
-        if (commandNumber == 3) {
-            graphics2D.drawString(">", textX - 30, textY);
-        }
-
 
         textY += game.tileSize;
 
@@ -392,9 +391,23 @@ public class UI {
             }
         }
 
-        // Full Screen Check Box
-        textX = frameX + game.tileSize * 5;
+        // Music Slider
+        textX = frameX + game.tileSize * 4;
         textY = frameY + game.tileSize * 2 + (game.tileSize / 2) + 14;
+        graphics2D.drawRect(textX, textY, 120, 24);
+        int volumeWidth = 24 * game.music.volumeScale;
+        graphics2D.fillRect(textX, textY, volumeWidth, 24);
+
+        // Sound Slider
+        textY += game.tileSize;
+        graphics2D.drawRect(textX, textY, 120, 24);
+        volumeWidth = 24 * game.sound.volumeScale;
+        graphics2D.fillRect(textX, textY, volumeWidth, 24);
+        graphics2D.fillRect(textX, textY, 24, 24);
+
+        // Full Screen Check Box
+        textX += game.tileSize;
+        textY += game.tileSize;
         graphics2D.setStroke(new BasicStroke(3));
         graphics2D.drawRect(textX, textY, 24 , 24);
 
@@ -410,19 +423,6 @@ public class UI {
         if (game.BRendering) {
             graphics2D.fillRect(textX, textY, 24, 24);
         }
-
-        // Music Slider
-        textY += game.tileSize;
-        textX -= game.tileSize;
-        graphics2D.drawRect(textX, textY, 120, 24);
-        int volumeWidth = 24 * game.music.volumeScale;
-        graphics2D.fillRect(textX, textY, volumeWidth, 24);
-
-        // Sound Slider
-        textY += game.tileSize;
-        graphics2D.drawRect(textX, textY, 120, 24);
-        volumeWidth = 24 * game.sound.volumeScale;
-        graphics2D.fillRect(textX, textY, volumeWidth, 24);
 
         // Save Data
         game.config.saveConfig();
@@ -452,7 +452,6 @@ public class UI {
             graphics2D.drawString(">", textX - 30, textY);
             if (game.inputHandler.spacePressed) {
                 subState = States.STATE_PAUSE;
-                commandNumber = 0;
             }
         }
     }
@@ -512,6 +511,7 @@ public class UI {
     @SuppressWarnings("unused")
     public void yesFullScreen() {
         game.fullScreen = !game.fullScreen;
+        commandNumber = 0;
         subState = States.PAUSE_STATE_NOTIFICATION;
         currentDialogue = "Full Screen will only be /nenabled/disabled when /nrelaunching the game.";
     }
@@ -521,7 +521,7 @@ public class UI {
         if (game.BRendering) {
             commandNumber = 0;
             subState = States.PAUSE_STATE_NOTIFICATION;
-            currentDialogue = "You can emergency /ndisable BRendering by /npressing U.";
+            currentDialogue = "You can emergency /ndisable BRendering by /npressing F3 and B.";
         } else {
             commandNumber = 1;
             subState = States.PAUSE_STATE_SETTINGS_MAIN;
