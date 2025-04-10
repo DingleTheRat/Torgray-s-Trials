@@ -24,7 +24,7 @@ public class UI {
     public String currentDialogue = "";
     public int commandNumber = 0;
     public States titleScreenState = States.TITLE_STATE_MAIN;
-    public States subState = States.PAUSE_STATE_MAIN;
+    public States subState;
     public int playerSlotCol = 0;
     public int playerSlotRow = 0;
     public int entitySlotCol = 0;
@@ -44,7 +44,7 @@ public class UI {
             e.printStackTrace();
         }
 
-        // Make a HUD object
+        // Make some HUD objects
         Entity obj_heart = new OBJ_Heart(game);
         heart = obj_heart.image;
         half_heart = obj_heart.image2;
@@ -241,7 +241,7 @@ public class UI {
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
         switch (subState) {
-            case States.PAUSE_STATE_MAIN:
+            case States.STATE_PAUSE:
                 // Title
                 String text = "Game Paused";
                 int x = getCentreX(text);
@@ -251,7 +251,7 @@ public class UI {
                 // Options Frame
                 x = frameX + game.tileSize;
                 y = frameY + (game.tileSize * 2) + (game.tileSize / 4);
-                drawSubWindow(x, y, frameWidth - (game.tileSize * 2), frameHeight + game.tileSize + (game.tileSize / 2));
+                drawSubWindow(x, y, frameWidth - (game.tileSize * 2), frameHeight + (game.tileSize * 2) + (game.tileSize / 2));
 
                 // Settings
                 graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 32f));
@@ -267,10 +267,22 @@ public class UI {
                     }
                 }
 
+                // Controls
+                y += game.tileSize;
+                graphics2D.drawString("Controls", x, y);
+                if (commandNumber == 1) {
+                    graphics2D.drawString(">", x - game.tileSize, y);
+
+                    if (game.inputHandler.spacePressed) {
+                        subState = States.PAUSE_STATE_CONTROLS;
+                        commandNumber = 0;
+                    }
+                }
+
                 // End Game
                 y += game.tileSize;
                 graphics2D.drawString("End Game", x, y);
-                if (commandNumber == 1) {
+                if (commandNumber == 2) {
                     graphics2D.drawString(">", x - game.tileSize, y);
 
                     if (game.inputHandler.spacePressed) {
@@ -284,7 +296,7 @@ public class UI {
                 // Resume
                 y += game.tileSize;
                 graphics2D.drawString("Resume", x, y);
-                if (commandNumber == 2) {
+                if (commandNumber == 3) {
                     graphics2D.drawString(">", x - game.tileSize, y);
 
                     if (game.inputHandler.spacePressed) {
@@ -366,17 +378,7 @@ public class UI {
         }
 
 
-        // Controls
         textY += game.tileSize;
-        graphics2D.drawString("Controls", textX, textY);
-        if (commandNumber == 4) {
-            graphics2D.drawString(">", textX - 30, textY);
-
-            if (game.inputHandler.spacePressed) {
-                subState = States.PAUSE_STATE_CONTROLS;
-                commandNumber = 0;
-            }
-        }
 
         // Close
         textY += game.tileSize * 2;
@@ -385,7 +387,7 @@ public class UI {
             graphics2D.drawString(">", textX - 30, textY);
 
             if (game.inputHandler.spacePressed) {
-                subState = States.PAUSE_STATE_MAIN;
+                subState = States.STATE_PAUSE;
                 commandNumber = 0;
             }
         }
@@ -449,7 +451,7 @@ public class UI {
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
             if (game.inputHandler.spacePressed) {
-                subState = States.PAUSE_STATE_MAIN;
+                subState = States.STATE_PAUSE;
                 commandNumber = 0;
             }
         }
@@ -493,14 +495,14 @@ public class UI {
         if (commandNumber == 1) {
             graphics2D.drawString(">", textX - 30, textY);
             if (game.inputHandler.spacePressed) {
-                subState = States.PAUSE_STATE_MAIN;
+                subState = States.STATE_PAUSE;
                 commandNumber = 0;
             }
         }
     }
     @SuppressWarnings("unused")
     public void yesGameEnd() {
-        subState = States.PAUSE_STATE_MAIN;
+        subState = States.STATE_PAUSE;
         game.gameState = States.STATE_TITLE;
         titleScreenState = States.TITLE_STATE_MAIN;
         game.music.stop();
@@ -558,14 +560,14 @@ public class UI {
         graphics2D.drawString("       E", textX, textY); textY += game.tileSize;
 
         // Close
-        textY = frameY = game.tileSize * 10 + (game.tileSize / 2);
+        textY = game.tileSize * 10 + (game.tileSize / 2);
         textX = frameX + game.tileSize;
         graphics2D.drawString("Close", textX, textY);
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
             if (game.inputHandler.spacePressed) {
-                subState = States.PAUSE_STATE_SETTINGS_MAIN;
-                commandNumber = 3;
+                subState = States.STATE_PAUSE;
+                commandNumber = 0;
             }
         }
 
@@ -928,7 +930,6 @@ public class UI {
             graphics2D.drawString(">", x - 24, y);
             if (game.inputHandler.spacePressed) {
                 game.gameState = States.STATE_PLAY;
-                game.ui.subState = States.PAUSE_STATE_MAIN;
                 game.ui.commandNumber = 0;
             }
         }
@@ -968,14 +969,12 @@ public class UI {
                 if (npc.inventory.get(itemIndex).price > game.player.coins) {
                     currentDialogue = "Sorry partner, your wallet declined :(";
                     game.gameState = States.STATE_DIALOGUE;
-                    game.ui.subState = States.PAUSE_STATE_MAIN;
                     game.ui.commandNumber = 0;
                 } else if (game.player.canObtainItem(npc.inventory.get(itemIndex))) {
                     game.player.coins -= price;
                 } else {
                     currentDialogue = "Sorry partner, I don't think you can /ncarry this :(";
                     game.gameState = States.STATE_DIALOGUE;
-                    game.ui.subState = States.PAUSE_STATE_MAIN;
                     game.ui.commandNumber = 0;
                 }
             }
@@ -1017,12 +1016,10 @@ public class UI {
                         game.player.inventory.get(itemIndex) == game.player.currentLight) {
                     currentDialogue = "Sorry partner, I can't buy equipped /nitems :(";
                     game.gameState = States.STATE_DIALOGUE;
-                    game.ui.subState = States.PAUSE_STATE_MAIN;
                     game.ui.commandNumber = 0;
                 } else if (game.player.inventory.get(itemIndex).tags.contains(EntityTags.TAG_NON_SELLABLE)) {
                     currentDialogue = "Sorry partner, I can't buy this item :(";
                     game.gameState = States.STATE_DIALOGUE;
-                    game.ui.subState = States.PAUSE_STATE_MAIN;
                     game.ui.commandNumber = 0;
                 } else {
                     game.player.coins += price;

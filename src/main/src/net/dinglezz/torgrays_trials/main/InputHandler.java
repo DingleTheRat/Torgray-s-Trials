@@ -130,7 +130,7 @@ public class InputHandler implements KeyListener {
             case KeyEvent.VK_D: rightPressed = true; break;
             case KeyEvent.VK_E: interactKeyPressed = true; break;
             case KeyEvent.VK_SPACE: spacePressed = true; break;
-            case KeyEvent.VK_ESCAPE: game.gameState = States.STATE_PAUSE; break;
+            case KeyEvent.VK_ESCAPE: game.gameState = States.STATE_PAUSE; game.ui.subState = States.STATE_PAUSE; break;
         }
 
         // Debug
@@ -145,15 +145,15 @@ public class InputHandler implements KeyListener {
     }
     public void pauseState(int code) {
         if (code == KeyEvent.VK_ESCAPE) {
-            if (game.ui.subState == States.PAUSE_STATE_MAIN) {
+            if (game.ui.subState == States.STATE_PAUSE) {
                 game.gameState = States.STATE_PLAY;
             }
-            game.ui.subState = States.PAUSE_STATE_MAIN;
+            game.ui.subState = States.STATE_PAUSE;
             game.ui.commandNumber = 0;
         }
 
         switch (game.ui.subState) {
-            case States.PAUSE_STATE_MAIN: maxCommandNumber = 2; break;
+            case States.STATE_PAUSE: maxCommandNumber = 3; break;
             case States.PAUSE_STATE_SETTINGS_MAIN: maxCommandNumber = 5; break;
             case States.PAUSE_STATE_CONFIRM: maxCommandNumber = 1; break;
         }
@@ -319,7 +319,6 @@ public class InputHandler implements KeyListener {
         if (game.ui.subState == States.TRADE_STATE_SELECT) {
             if (code == KeyEvent.VK_ESCAPE) {
                 game.gameState = States.STATE_PLAY;
-                game.ui.subState = States.PAUSE_STATE_MAIN;
                 game.ui.commandNumber = 0;
             }
 

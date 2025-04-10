@@ -32,10 +32,10 @@ public class AssetSetter {
             setAsset(new OBJ_Key(game), 38, 8);
 
             // Gates
-//            setAsset(new OBJ_Gate(game), 10, 12);
-//            setAsset(new OBJ_Gate(game), 14, 28);
-//            setAsset(new OBJ_Gate(game), 8, 28);
-//            setAsset(new OBJ_Gate(game), 12, 23);
+            setAsset(new OBJ_Gate(game), 10, 12);
+            setAsset(new OBJ_Gate(game), 14, 28);
+            setAsset(new OBJ_Gate(game), 8, 28);
+            setAsset(new OBJ_Gate(game), 12, 23);
 
             // Other
             setAsset(new OBJ_Chest(game, new ArrayList<>(
