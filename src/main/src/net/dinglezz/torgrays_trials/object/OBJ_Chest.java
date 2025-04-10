@@ -6,24 +6,18 @@ import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.States;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 public class OBJ_Chest extends Entity {
     Game game;
-    Entity loot;
-    Entity loot2;
+    ArrayList<Entity> loot;
     boolean opened = false;
 
-    public OBJ_Chest(Game game, Entity loot) {
+    public OBJ_Chest(Game game, ArrayList<Entity> loot) {
         super(game);
         this.game = game;
         this.loot = loot;
-
-        setDefaultValues();
-    }
-    public OBJ_Chest(Game game, Entity loot, Entity loot2) {
-        super(game);
-        this.game = game;
-        this.loot = loot;
-        this.loot2 = loot2;
 
         setDefaultValues();
     }
@@ -33,7 +27,7 @@ public class OBJ_Chest extends Entity {
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_OBSTACLE);
         image = registerEntitySprite("/objects/chest_closed");
-        image2 = registerEntitySprite("/objects/chest_open");
+        image2 = registerEntitySprite("/objects/chest_opened");
         down1 = image;
         collision = true;
 
@@ -48,35 +42,27 @@ public class OBJ_Chest extends Entity {
 
     @Override
     public void interact() {
-        game.gameState = States.STATE_DIALOGUE;
-        game.player.attackCanceled = true;
         if (!opened) {
             game.playSound("Unlock");
+            game.gameState = States.STATE_DIALOGUE;
+            game.player.attackCanceled = true;
+
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Woah, this chest is so shinny! /n+1 " + loot.name);
+            stringBuilder.append("Woah, this chest is shiny!");
 
-            if (loot2 != null) {
-                stringBuilder.append("/n+1 " + loot2.name);
-            }
-
-            if (loot2 != null) {
-                if (!game.player.canObtainItem(loot) || !game.player.canObtainItem(loot2)) {
-                    stringBuilder.append("/n... But I can't carry all this!");
+            for (Entity reward : loot) {
+                if (Objects.equals(reward.name, "Coins")) {
+                    game.player.coins += reward.amount;
+                    stringBuilder.append("/n+").append(reward.amount).append(" ").append(reward.name);
+                } else if (game.player.canObtainItem(reward)) {
+                    stringBuilder.append("/n+1 ").append(reward.name);
                 } else {
-                    down1 = image2;
-                    opened = true;
-                }
-            } else {
-                if (!game.player.canObtainItem(loot)) {
-                    stringBuilder.append("/n... But I can't carry all this!");
-                } else {
-                    down1 = image2;
-                    opened = true;
+                    stringBuilder.append("I can't carry all this loot :(");
                 }
             }
             game.ui.currentDialogue = stringBuilder.toString();
-        } else {
-            game.ui.currentDialogue = "There's nothing in here anymore :(";
+            opened = true;
+            down1 = image2;
         }
     }
 }

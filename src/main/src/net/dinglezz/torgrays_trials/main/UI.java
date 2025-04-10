@@ -2,7 +2,7 @@ package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTags;
-import net.dinglezz.torgrays_trials.object.OBJ_Coin;
+import net.dinglezz.torgrays_trials.object.OBJ_Coins;
 import net.dinglezz.torgrays_trials.object.OBJ_Heart;
 
 import java.awt.*;
@@ -49,7 +49,7 @@ public class UI {
         heart = obj_heart.image;
         half_heart = obj_heart.image2;
         lost_heart = obj_heart.image3;
-        Entity Coin = new OBJ_Coin(game, 1);
+        Entity Coin = new OBJ_Coins(game, 1);
         coin = Coin.down1;
     }
 

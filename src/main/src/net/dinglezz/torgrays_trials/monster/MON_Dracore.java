@@ -3,7 +3,7 @@ package net.dinglezz.torgrays_trials.monster;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
-import net.dinglezz.torgrays_trials.object.OBJ_Coin;
+import net.dinglezz.torgrays_trials.object.OBJ_Coins;
 import net.dinglezz.torgrays_trials.object.OBJ_Torgray_Soup;
 
 import java.awt.*;
@@ -112,11 +112,11 @@ public class MON_Dracore extends Entity {
             case 2:
                 int amount = new Random().nextInt(100) + 1;
                 if (amount <= 15) {
-                    dropItem(new OBJ_Coin(game, 3));
+                    dropItem(new OBJ_Coins(game, 3));
                 } else if (amount <= 35) {
-                    dropItem(new OBJ_Coin(game, 2));
+                    dropItem(new OBJ_Coins(game, 2));
                 } else {
-                    dropItem(new OBJ_Coin(game, 1));
+                    dropItem(new OBJ_Coins(game, 1));
                 }
             break;
         }

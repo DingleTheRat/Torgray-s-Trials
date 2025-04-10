@@ -3,7 +3,7 @@ package net.dinglezz.torgrays_trials.entity;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.InputHandler;
 import net.dinglezz.torgrays_trials.main.States;
-import net.dinglezz.torgrays_trials.object.OBJ_Coin;
+import net.dinglezz.torgrays_trials.object.OBJ_Coins;
 import net.dinglezz.torgrays_trials.object.OBJ_Lantern;
 import net.dinglezz.torgrays_trials.object.shield.OBJ_Shield_Iron;
 import net.dinglezz.torgrays_trials.object.weapon.OBJ_Sword_Iron;
@@ -60,8 +60,8 @@ public class Player extends Entity{
         right3 = registerEntitySprite("/player/walking/torgray_right_3");
     }
     public void getAttackImage() {
-        // It takes the weapon name, removes "Sword" and replaces spaces for "_" to get the path for the sprite
-        String modifiedName = currentWeapon.name.toLowerCase().replace(" sword", "").replace(" ", "_");
+        // It takes the weapon name and replaces spaces for "_" to get the path for the sprite
+        String modifiedName = currentWeapon.name.toLowerCase().replace(" ", "_");
         attackUp = registerEntitySprite("/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_up", game.tileSize, game.tileSize * 2);
         attackDown = registerEntitySprite("/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_down", game.tileSize, game.tileSize * 2);
         attackLeft = registerEntitySprite("/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_left", game.tileSize * 2, game.tileSize);
@@ -101,7 +101,7 @@ public class Player extends Entity{
     }
     public void setItems() {
         inventory.clear();
-        inventory.add(new OBJ_Coin(game, 2));
+        inventory.add(new OBJ_Coins(game, 2));
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(currentLight);

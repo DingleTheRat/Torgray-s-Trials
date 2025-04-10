@@ -5,10 +5,10 @@ import net.dinglezz.torgrays_trials.entity.EntityTags;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
 
-public class OBJ_Coin extends Entity {
+public class OBJ_Coins extends Entity {
     Game game;
 
-    public OBJ_Coin(Game game, int amount) {
+    public OBJ_Coins(Game game, int amount) {
         super(game);
         this.game = game;
         this.amount = amount;

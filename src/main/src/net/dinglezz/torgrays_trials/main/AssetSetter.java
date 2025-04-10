@@ -6,9 +6,12 @@ import net.dinglezz.torgrays_trials.npc.NPC_GateKeeper;
 import net.dinglezz.torgrays_trials.monster.MON_Dracore;
 import net.dinglezz.torgrays_trials.object.*;
 import net.dinglezz.torgrays_trials.object.shield.OBJ_Shield_Amethyst;
+import net.dinglezz.torgrays_trials.object.weapon.OBJ_Stick;
 import net.dinglezz.torgrays_trials.object.weapon.OBJ_Sword_Amethyst;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class AssetSetter {
     Game game;
@@ -29,13 +32,17 @@ public class AssetSetter {
             setAsset(new OBJ_Key(game), 38, 8);
 
             // Gates
-            setAsset(new OBJ_Gate(game), 10, 12);
-            setAsset(new OBJ_Gate(game), 14, 28);
-            setAsset(new OBJ_Gate(game), 8, 28);
-            setAsset(new OBJ_Gate(game), 12, 23);
+//            setAsset(new OBJ_Gate(game), 10, 12);
+//            setAsset(new OBJ_Gate(game), 14, 28);
+//            setAsset(new OBJ_Gate(game), 8, 28);
+//            setAsset(new OBJ_Gate(game), 12, 23);
 
             // Other
-            setAsset(new OBJ_Chest(game, new OBJ_Sword_Amethyst(game), new OBJ_Shield_Amethyst(game)), 10, 10);
+            setAsset(new OBJ_Chest(game, new ArrayList<>(
+                List.of(new OBJ_Sword_Amethyst(game),
+                        new OBJ_Shield_Amethyst(game),
+                        new OBJ_Coins(game, 4)
+                ))), 10, 10);
 
             game.object.put("Main Island", assetMap);
             assetMap = new HashMap<>();
