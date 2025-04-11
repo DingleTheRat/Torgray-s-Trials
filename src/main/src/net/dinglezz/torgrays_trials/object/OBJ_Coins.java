@@ -19,7 +19,7 @@ public class OBJ_Coins extends Entity {
         tags.add(EntityTags.TAG_PICKUP_ONLY);
         tags.add(EntityTags.TAG_NON_SELLABLE);
         down1 = registerEntitySprite("/objects/coin");
-        description = "/nPrecious pieces of gold";
+        description = "Precious pieces of gold";
     }
 
     @Override

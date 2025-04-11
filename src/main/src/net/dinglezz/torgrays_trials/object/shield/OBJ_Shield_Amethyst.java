@@ -14,7 +14,7 @@ public class OBJ_Shield_Amethyst extends Entity {
         tags.add(EntityTags.TAG_SHIELD);
         down1 = registerEntitySprite("/objects/amethyst_shield");
         defenceValue = 2;
-        description = "/n A majestic purple shield /n Defence: +" + defenceValue;
+        description = "A majestic purple shield \nDefence: +" + defenceValue;
         price = 6;
     }
 }

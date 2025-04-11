@@ -17,7 +17,7 @@ public class OBJ_Sword_Iron extends Entity {
         knockBackPower = 1;
         attackArea.width = 36;
         attackArea.height = 36;
-        description = "/n A shiny iron shield /n Attack: +" + attackValue + "/n Knockback: +" + knockBackPower;
+        description = "A shiny iron sword \nAttack: +" + attackValue + "\nKnockback: +" + knockBackPower;
         price = 4;
     }
 }

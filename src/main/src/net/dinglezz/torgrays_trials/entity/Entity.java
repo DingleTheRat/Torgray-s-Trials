@@ -72,7 +72,7 @@ public abstract class Entity {
     public int attackValue;
     public int knockBackPower = 0;
     public int defenceValue;
-    public String description = "/nNothing Here :(";
+    public String description = "Nothing Here :(";
     public int lightRadius;
     public boolean stackable = false;
     public int amount = 1;

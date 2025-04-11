@@ -21,7 +21,7 @@ public class OBJ_Torgray_Soup extends Entity {
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_CONSUMABLE);
         down1 = registerEntitySprite("/objects/torgray_soup");
-        description = "/nTorgray's wisest soup. /nIt's warm and a bit hearty. /nHealing: +" + value;
+        description = "Torgray's wisest soup. \nIt's warm and a bit hearty. \nHealing: +" + value;
         stackable = true;
         price = 2;
     }
@@ -30,13 +30,13 @@ public class OBJ_Torgray_Soup extends Entity {
         int random = new Random().nextInt(6) + 1;
 
         game.ui.currentDialogue = switch (random) {
-            case 1 -> "Erm a last key is behind the pond. /n+4 health";
-            case 2 -> "Erm healing in the pond respawns /nmobs. /n+4 health";
-            case 3 -> "Erm the higher level, the more you /nheal when leveling up. /n+4 health";
-            case 4 -> "Erm I think you are left handed. /n+4 health";
-            case 5 -> "Erm after passing all 3 gates you get /na reward. /n+4 health";
-            case 6 -> "Erm the pond is a good place to /nheal. /n+4 health";
-            default -> "Erm something went wrong. /n+4 health";
+            case 1 -> "Erm a last key is behind the pond. \n+4 health";
+            case 2 -> "Erm healing in the pond respawns \nmobs. \n+4 health";
+            case 3 -> "Erm the higher level, the more you \nheal when leveling up. \n+4 health";
+            case 4 -> "Erm I think you are left handed. \n+4 health";
+            case 5 -> "Erm after passing all 3 gates you get \na reward. \n+4 health";
+            case 6 -> "Erm the pond is a good place to \nheal. \n+4 health";
+            default -> "Erm something went wrong. \n+4 health";
         };
 
         if (game.player.health + value > game.player.maxHealth) {

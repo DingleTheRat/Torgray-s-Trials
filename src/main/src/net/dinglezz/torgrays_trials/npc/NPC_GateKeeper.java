@@ -41,7 +41,7 @@ public class NPC_GateKeeper extends Entity {
         dialogues.put(0, "Hey there partner!");
         dialogues.put(1, "Let me tell you a very special secret");
         dialogues.put(2, "This game is for a science fair");
-        dialogues.put(3, "The person who made this game, /nDingle, is actually super screwed for /nthe science fair");
+        dialogues.put(3, "The person who made this game, \nDingle, is actually super screwed for \nthe science fair");
     }
 
     @Override
@@ -72,6 +72,10 @@ public class NPC_GateKeeper extends Entity {
     @Override
     public void speak(boolean facePlayer) {
         super.speak(true);
-        onPath = true;
+
+        // Pathfinding
+        if (game.pathFinding) {
+            onPath = true;
+        }
     }
 }

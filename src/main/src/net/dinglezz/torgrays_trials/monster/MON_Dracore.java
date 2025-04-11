@@ -49,17 +49,21 @@ public class MON_Dracore extends Entity {
     @Override
     public void update() {
         super.update();
-        int xDistance = Math.abs(worldX - game.player.worldX);
-        int yDistance = Math.abs(worldY - game.player.worldY);
-        int tileDistance = (xDistance + yDistance) / game.tileSize;
 
-        if (!onPath && tileDistance < 5) {
-            int random = new Random().nextInt(2);
-            if (random == 1) {
-                onPath = true;
+        // Pathfinding
+        if (game.pathFinding) {
+            int xDistance = Math.abs(worldX - game.player.worldX);
+            int yDistance = Math.abs(worldY - game.player.worldY);
+            int tileDistance = (xDistance + yDistance) / game.tileSize;
+
+            if (!onPath && tileDistance < 5) {
+                int random = new Random().nextInt(2);
+                if (random == 1) {
+                    onPath = true;
+                }
+            } else if (tileDistance > 20) {
+                onPath = false;
             }
-        } else if (tileDistance > 20) {
-            onPath = false;
         }
     }
 
@@ -92,14 +96,19 @@ public class MON_Dracore extends Entity {
     @Override
     public void damageReaction() {
         actionLockCounter = 0;
-        onPath = true;
 
-//        switch (game.player.direction) {
-//            case "up": direction = "down"; break;
-//            case "down": direction = "up"; break;
-//            case "left": direction = "right"; break;
-//            case "right": direction = "left"; break;
-//        }
+        // Pathfinding
+        if (game.pathFinding) {
+            onPath = true;
+        } else {
+            // If not then just change direction
+            switch (game.player.direction) {
+                case "up": direction = "down"; break;
+                case "down": direction = "up"; break;
+                case "left": direction = "right"; break;
+                case "right": direction = "left"; break;
+            }
+        }
     }
 
     @Override

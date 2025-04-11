@@ -43,8 +43,9 @@ public class Game extends JPanel implements Runnable {
     Graphics2D graphics2D;
     
     // Settings
-    public boolean fullScreen = false;
-    public boolean BRendering = false;
+    public boolean fullScreen;
+    public boolean BRendering;
+    public boolean pathFinding;
     public boolean debug = false;
     public boolean debugPathfinding = false;
 

@@ -16,7 +16,7 @@ public class OBJ_Key extends Entity {
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_CONSUMABLE);
         down1 = registerEntitySprite("/objects/key");
-        description = "/n Probably opens a gate";
+        description = "Probably opens a gate";
         stackable = true;
         price = 6;
     }

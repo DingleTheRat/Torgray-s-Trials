@@ -31,7 +31,7 @@ public class NPC_Coiner extends Entity {
         down3 = registerEntitySprite("/npc/coiner/coiner_3");
     }
     public void setDialogue() {
-        dialogues.put(0, "Hey there partner, I'm Coiner! /nWanna Trade? :D");
+        dialogues.put(0, "Hey there partner, I'm Coiner! \nWanna Trade? :D");
     }
     public void setItem() {
         inventory.add(new OBJ_Torgray_Soup(game));

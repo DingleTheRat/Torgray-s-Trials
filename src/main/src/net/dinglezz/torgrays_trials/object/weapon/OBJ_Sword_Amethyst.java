@@ -17,7 +17,7 @@ public class OBJ_Sword_Amethyst extends Entity {
         knockBackPower = 2;
         attackArea.width = 36;
         attackArea.height = 36;
-        description = "/n A majestic purple sword /n Attack: +" + attackValue + "/n Knockback: +" + knockBackPower;
+        description = "A majestic purple sword \nAttack: +" + attackValue + "\nKnockback: +" + knockBackPower;
         price = 6;
     }
 }

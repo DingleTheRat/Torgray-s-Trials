@@ -17,7 +17,7 @@ public class OBJ_Map extends Entity {
         down1 = registerEntitySprite("/objects/map");
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_CONSUMABLE);
-        description = "/nA handy map of the world, /nwithout that annoying /ndarkness.";
+        description = "A handy map of the world, \nwithout that annoying \ndarkness.";
         price = 8;
     }
     @Override

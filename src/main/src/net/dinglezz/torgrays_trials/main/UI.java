@@ -288,7 +288,7 @@ public class UI {
                     if (game.inputHandler.spacePressed) {
                         commandNumber = 1;
                         subState = States.PAUSE_STATE_CONFIRM;
-                        currentDialogue = "Are you sure you wanna /nend this game? Your data /nwon't be saved.";
+                        currentDialogue = "Are you sure you wanna \nend this game? Your data \nwon't be saved.";
                         actionMethod = "yesGameEnd";
                     }
                 }
@@ -351,7 +351,7 @@ public class UI {
                 if (!game.fullScreen && !game.BRendering) {
                     commandNumber = 1;
                     subState = States.PAUSE_STATE_CONFIRM;
-                    currentDialogue = "Are you sure you wanna /nenter full screen? It won't /nscale without BRendering.";
+                    currentDialogue = "Are you sure you wanna \nenter full screen? It won't \nscale without BRendering.";
                     actionMethod = "yesFullScreen";
                 } else {
                     yesFullScreen();
@@ -369,7 +369,7 @@ public class UI {
                 if (!game.BRendering) {
                     commandNumber = 1;
                     subState = States.PAUSE_STATE_CONFIRM;
-                    currentDialogue = "BRendering is a highly /nexperimental mode that /ncan break the game if on";
+                    currentDialogue = "BRendering is a highly \nexperimental mode that \ncan break the game if on";
                     actionMethod = "yesBRendering";
                 } else {
                     yesBRendering();
@@ -378,6 +378,21 @@ public class UI {
         }
 
         textY += game.tileSize;
+        graphics2D.drawString("Pathfinding", textX, textY);
+        if (commandNumber == 4) {
+            graphics2D.drawString(">", textX - 30, textY);
+
+            if (game.inputHandler.spacePressed) {
+                if (!game.pathFinding) {
+                    commandNumber = 1;
+                    subState = States.PAUSE_STATE_CONFIRM;
+                    currentDialogue = "Pathfinding is a highly \nexperimental mode that \nmay not work correctly";
+                    actionMethod = "yesPathfinding";
+                } else {
+                    yesPathfinding();
+                }
+            }
+        }
 
         // Close
         textY += game.tileSize * 2;
@@ -423,6 +438,15 @@ public class UI {
         if (game.BRendering) {
             graphics2D.fillRect(textX, textY, 24, 24);
         }
+        
+        // Pathfinding Check Box
+        textY += game.tileSize;
+        graphics2D.setStroke(new BasicStroke(3));
+        graphics2D.drawRect(textX, textY, 24 , 24);
+
+        if (game.pathFinding) {
+            graphics2D.fillRect(textX, textY, 24, 24);
+        }
 
         // Save Data
         game.config.saveConfig();
@@ -439,7 +463,7 @@ public class UI {
         textY = frameY + game.tileSize * 2 + (game.tileSize / 4);
         graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 28f));
 
-        for (String line : currentDialogue.split("/n")) {
+        for (String line : currentDialogue.split("\n")) {
             graphics2D.drawString(line, textX, textY);
             textY += 40;
         }
@@ -467,7 +491,7 @@ public class UI {
         textY = frameY + game.tileSize * 2 + (game.tileSize / 4);
         graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN,28f));
 
-        for (String line : currentDialogue.split("/n")) {
+        for (String line : currentDialogue.split("\n")) {
             graphics2D.drawString(line, textX, textY);
             textY += 40;
         }
@@ -511,22 +535,29 @@ public class UI {
     @SuppressWarnings("unused")
     public void yesFullScreen() {
         game.fullScreen = !game.fullScreen;
-        commandNumber = 0;
         subState = States.PAUSE_STATE_NOTIFICATION;
-        currentDialogue = "Full Screen will only be /nenabled/disabled when /nrelaunching the game.";
+        commandNumber = 0;
+        currentDialogue = "Full Screen will only be \nenabled/disabled when \nrelaunching the game.";
     }
     @SuppressWarnings("unused")
     public void yesBRendering() {
         game.BRendering = !game.BRendering;
+        commandNumber = 0;
+
         if (game.BRendering) {
-            commandNumber = 0;
             subState = States.PAUSE_STATE_NOTIFICATION;
-            currentDialogue = "You can emergency /ndisable BRendering by /npressing F3 and B.";
+            currentDialogue = "You can emergency \ndisable BRendering by \npressing F3 and B.";
         } else {
-            commandNumber = 1;
             subState = States.PAUSE_STATE_SETTINGS_MAIN;
         }
     }
+    @SuppressWarnings("unused")
+    public void yesPathfinding() {
+        game.pathFinding = !game.pathFinding;
+        subState = States.PAUSE_STATE_SETTINGS_MAIN;
+        commandNumber = 0;
+    }
+
     public void controlsPanel(int frameX, int frameY) {
         int textX;
         int textY;
@@ -583,7 +614,7 @@ public class UI {
         x += game.tileSize / 2;
         y += game.tileSize;
 
-        for (String line : currentDialogue.split("/n")) {
+        for (String line : currentDialogue.split("\n")) {
             graphics2D.drawString(line, x, y);
             y += 40;
         }
@@ -789,11 +820,11 @@ public class UI {
                 drawSubWindow(frameX, dFrameY, frameWidth, dFrameHeight);
                 graphics2D.setFont(graphics2D.getFont().deriveFont(30f));
                 graphics2D.drawString(entity.inventory.get(itemIndex).name, textX, textY);
-                textY += 10;
+                textY += 40;
 
                 // Description
                 graphics2D.setFont(graphics2D.getFont().deriveFont(20f));
-                for (String line : entity.inventory.get(itemIndex).description.split("/n")) {
+                for (String line : entity.inventory.get(itemIndex).description.split("\n")) {
                     graphics2D.drawString(line, textX, textY);
                     textY += 30;
                 }
@@ -973,7 +1004,7 @@ public class UI {
                 } else if (game.player.canObtainItem(npc.inventory.get(itemIndex))) {
                     game.player.coins -= price;
                 } else {
-                    currentDialogue = "Sorry partner, I don't think you can /ncarry this :(";
+                    currentDialogue = "Sorry partner, I don't think you can \ncarry this :(";
                     game.gameState = States.STATE_DIALOGUE;
                     game.ui.commandNumber = 0;
                 }
@@ -1014,7 +1045,7 @@ public class UI {
                 if (game.player.inventory.get(itemIndex) == game.player.currentWeapon ||
                         game.player.inventory.get(itemIndex) == game.player.currentShield ||
                         game.player.inventory.get(itemIndex) == game.player.currentLight) {
-                    currentDialogue = "Sorry partner, I can't buy equipped /nitems :(";
+                    currentDialogue = "Sorry partner, I can't buy equipped \nitems :(";
                     game.gameState = States.STATE_DIALOGUE;
                     game.ui.commandNumber = 0;
                 } else if (game.player.inventory.get(itemIndex).tags.contains(EntityTags.TAG_NON_SELLABLE)) {

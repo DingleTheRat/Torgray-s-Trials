@@ -17,7 +17,7 @@ public class OBJ_Pointy_Stick extends Entity {
         knockBackPower = 3;
         attackArea.width = 36;
         attackArea.height = 36;
-        description = "/n Knockback > Damage /n Attack: +" + attackValue + "/n Knockback: +" + knockBackPower;
+        description = "Knockback > Damage \nAttack: +" + attackValue + "\nKnockback: +" + knockBackPower;
         price = 5;
     }
 }
