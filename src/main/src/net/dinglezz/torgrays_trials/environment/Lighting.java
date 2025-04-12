@@ -1,13 +1,17 @@
 package net.dinglezz.torgrays_trials.environment;
 
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.States;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.lang.constant.DynamicCallSiteDesc;
 
 public class Lighting {
     Game game;
     BufferedImage darknessFilter;
+    States darknessState = States.DARKNESS_STATE_NIGHT;
+    int darknessCounter = 0;
 
     public Lighting(Game game) {
         this.game = game;
@@ -17,7 +21,7 @@ public class Lighting {
     public void setLightSource() {
         // Make buffered image for darkness filter
         darknessFilter = new BufferedImage(game.screenWidth, game.screenHeight, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = (Graphics2D)darknessFilter.getGraphics();
+        Graphics2D graphics2D = (Graphics2D)darknessFilter.getGraphics();
 
         // Calculate the centre of the player
         int centreX = game.player.screenX + (game.tileSize) / 2;
@@ -25,7 +29,7 @@ public class Lighting {
 
         // Create a radial gradient paint
         Color[] color = new Color[12];
-        color[0] = new Color(0, 0, 0, 0.1f);
+        color[0] = new Color(0, 0, 0, 0);
         color[1] = new Color(0, 0, 0, 0.42f);
         color[2] = new Color(0, 0, 0, 0.52f);
         color[3] = new Color(0, 0, 0, 0.61f);
@@ -54,23 +58,61 @@ public class Lighting {
 
         if (game.currentMap.equals("Coiner's Shop")) {
             RadialGradientPaint gPaint = new RadialGradientPaint(centreX, centreY, 500, fraction, color);
-            g2.setPaint(gPaint);
+            graphics2D.setPaint(gPaint);
         } else if (game.player.currentLight == null) {
             RadialGradientPaint gPaint = new RadialGradientPaint(centreX, centreY, 70, fraction, color);
-            g2.setPaint(gPaint);
+            graphics2D.setPaint(gPaint);
         } else {
             RadialGradientPaint gPaint = new RadialGradientPaint(centreX, centreY, game.player.currentLight.lightRadius, fraction, color);
-            g2.setPaint(gPaint);
+            graphics2D.setPaint(gPaint);
         }
 
         // Fill the buffered image with the radial gradient paint
-        g2.fillRect(0, 0, game.screenWidth, game.screenHeight);
-        g2.dispose();
+        graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
+        graphics2D.dispose();
     }
     public void update() {
         if (game.player.lightUpdated) {
             setLightSource();
             game.player.lightUpdated = false;
+        }
+
+        // Darkness state stuff
+        System.out.println(darknessState + " " + darknessCounter);
+
+        switch (darknessState) {
+            case DARKNESS_STATE_NIGHT:
+                darknessCounter++;
+
+                if (darknessCounter > 600) {
+                    darknessState = States.DARKNESS_STATE_NEW_DUSK;
+                    darknessCounter = 0;
+                }
+                break;
+            case DARKNESS_STATE_NEW_DUSK:
+                darknessCounter++;
+
+                if (darknessCounter > 100) {
+                    darknessState = States.DARKNESS_STATE_GLOOM;
+                    darknessCounter = 0;
+                }
+                break;
+            case DARKNESS_STATE_GLOOM:
+                darknessCounter++;
+
+                if (darknessCounter > 600) {
+                    darknessState = States.DARKNESS_STATE_DUSK;
+                    darknessCounter = 0;
+                }
+                break;
+            case DARKNESS_STATE_DUSK:
+                darknessCounter++;
+
+                if (darknessCounter > 100) {
+                    darknessState = States.DARKNESS_STATE_NIGHT;
+                    darknessCounter = 0;
+                }
+                break;
         }
     }
     public void draw(Graphics2D g2) {

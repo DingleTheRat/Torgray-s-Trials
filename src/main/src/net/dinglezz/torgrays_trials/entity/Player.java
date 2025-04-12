@@ -116,25 +116,14 @@ public class Player extends Entity{
     public void update() {
         if (attacking) {
             attack();
-            attack();
         } else if (inputHandler.upPressed || inputHandler.downPressed || inputHandler.leftPressed || inputHandler.rightPressed || inputHandler.spacePressed || inputHandler.interactKeyPressed) {
-            if (inputHandler.upPressed && inputHandler.leftPressed) {
-                direction = "up left";
-            } else if (inputHandler.upPressed && inputHandler.rightPressed) {
-                direction = "up right";
-            } else if (inputHandler.downPressed && inputHandler.leftPressed) {
-                direction = "down left";
-            } else if (inputHandler.downPressed && inputHandler.rightPressed) {
-                direction = "down right";
-            } else if (inputHandler.upPressed) {
-                direction = "up";
-            } else if (inputHandler.downPressed) {
-                direction = "down";
-            } else if (inputHandler.leftPressed) {
-                direction = "left";
-            } else if (inputHandler.rightPressed) {
-                direction = "right";
-            }
+            if (inputHandler.upPressed && inputHandler.leftPressed) {direction = "up left";}
+            else if (inputHandler.upPressed && inputHandler.rightPressed) {direction = "up right";}
+            else if (inputHandler.downPressed && inputHandler.leftPressed) {direction = "down left";}
+            else if (inputHandler.downPressed && inputHandler.rightPressed) {direction = "down right";}
+            else if (inputHandler.upPressed) {direction = "up";} else if (inputHandler.downPressed) {direction = "down";}
+            else if (inputHandler.leftPressed) {direction = "left";}
+            else if (inputHandler.rightPressed) {direction = "right";}
 
             // Check tile collision
             collisionOn = false;
@@ -170,6 +159,7 @@ public class Player extends Entity{
 
             // Attacking
             if (inputHandler.spacePressed && !attackCanceled) {
+                game.playSound("Swing");
                 attacking = true;
                 spriteCounter = 0;
             }

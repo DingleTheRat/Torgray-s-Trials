@@ -26,6 +26,7 @@ public class Sound {
         soundLibrary.put("Cursor", getClass().getResource("/sound/cursor.wav"));
         soundLibrary.put("Game Over", getClass().getResource("/sound/game_over.wav"));
         soundLibrary.put("Teleport", getClass().getResource("/sound/teleport.wav"));
+        soundLibrary.put("Swing", getClass().getResource("/sound/swing.wav"));
     }
 
     public void getFile(String soundName) {

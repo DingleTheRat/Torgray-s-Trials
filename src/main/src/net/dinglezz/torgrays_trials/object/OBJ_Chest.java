@@ -53,11 +53,11 @@ public class OBJ_Chest extends Entity {
             for (Entity reward : loot) {
                 if (Objects.equals(reward.name, "Coins")) {
                     game.player.coins += reward.amount;
-                    stringBuilder.append("/n+").append(reward.amount).append(" ").append(reward.name);
+                    stringBuilder.append("\n+").append(reward.amount).append(" ").append(reward.name);
                 } else if (game.player.canObtainItem(reward)) {
-                    stringBuilder.append("/n+1 ").append(reward.name);
+                    stringBuilder.append("\n+1 ").append(reward.name);
                 } else {
-                    stringBuilder.append("I can't carry all this loot :(");
+                    stringBuilder.append("\nI can't carry all this loot :(");
                 }
             }
             game.ui.currentDialogue = stringBuilder.toString();
