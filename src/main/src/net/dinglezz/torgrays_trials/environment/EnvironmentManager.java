@@ -1,12 +1,14 @@
 package net.dinglezz.torgrays_trials.environment;
 
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.States;
 
 import java.awt.*;
 
 public class EnvironmentManager {
     Game game;
-    Lighting lighting;
+    public Lighting lighting;
+    public boolean lightUpdated = false;
 
     public EnvironmentManager(Game game) {
         this.game = game;
@@ -22,5 +24,20 @@ public class EnvironmentManager {
         if (lighting != null) {
             lighting.draw(g2);
         }
+    }
+
+    public String getDarknessStateString() {
+        String darknessStateString = switch (lighting.darknessState) {
+            case DARKNESS_STATE_NIGHT -> "Night";
+            case DARKNESS_STATE_NEW_DUSK -> "New Dusk";
+            case DARKNESS_STATE_GLOOM -> "Gloom";
+            case DARKNESS_STATE_DUSK -> "Dusk";
+            default -> "Error";
+        };
+        return darknessStateString;
+    }
+    public States getDarknessState() {
+        States darknessState = lighting.darknessState;
+        return darknessState;
     }
 }

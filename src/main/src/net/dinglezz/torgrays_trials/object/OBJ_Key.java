@@ -24,7 +24,7 @@ public class OBJ_Key extends Entity {
 
         int objIndex = getDetected(entity, game.object.get(game.currentMap), "Gate");
         if (objIndex != 999) {
-            game.ui.addMessage("-1 Key");
+            game.ui.addMiniNotification("-1 Key");
             game.playSound("Unlock");
             game.object.get(game.currentMap).put(objIndex, null);
             return true;

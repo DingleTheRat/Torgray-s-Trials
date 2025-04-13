@@ -18,7 +18,6 @@ public class Player extends Entity{
     public final int screenY;
     int standCounter = 0;
     public boolean attackCanceled = false;
-    public boolean lightUpdated = false;
 
     public Player(Game game, InputHandler inputHandler) {
         super(game);
@@ -265,7 +264,7 @@ public class Player extends Entity{
             else if (canObtainItem(game.object.get(game.currentMap).get(i))) {
                 game.playSound("Coin");
                 String text = "+1 " + game.object.get(game.currentMap).get(i).name;
-                game.ui.addMessage(text);
+                game.ui.addMiniNotification(text);
                 game.object.get(game.currentMap).put(i, null);
             }
         }
@@ -318,8 +317,8 @@ public class Player extends Entity{
 
                 if (game.monster.get(game.currentMap).get(i).health <= 0) {
                     game.monster.get(game.currentMap).get(i).dying = true;
-                    game.ui.addMessage("Killed " + game.monster.get(game.currentMap).get(i).name);
-                    game.ui.addMessage("+" + game.monster.get(game.currentMap).get(i).exp + " exp");
+                    game.ui.addMiniNotification("Killed " + game.monster.get(game.currentMap).get(i).name);
+                    game.ui.addMiniNotification("+" + game.monster.get(game.currentMap).get(i).exp + " exp");
                     exp += game.monster.get(game.currentMap).get(i).exp;
                     checkLevelUp();
                 }
@@ -340,7 +339,7 @@ public class Player extends Entity{
             dexterity++;
             attack = getAttack();
             defence = getDefence();
-            game.ui.addMessage("Level Up!");
+            game.ui.addMiniNotification("Level Up!");
 
             if (health >= maxHealth) {
                 health = maxHealth;
@@ -368,7 +367,7 @@ public class Player extends Entity{
                 } else {
                     currentLight = selectedItem;
                 }
-                lightUpdated = true;
+                game.environmentManager.lightUpdated = true;
             }
             if (selectedItem.tags.contains(EntityTags.TAG_CONSUMABLE)) {
                 if (selectedItem.use(this)) {

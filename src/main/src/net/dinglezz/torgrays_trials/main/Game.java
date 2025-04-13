@@ -105,7 +105,7 @@ public class Game extends JPanel implements Runnable {
         player.setDefaultPosition();
         player.restoreHealth();
         currentMap = "Main Island";
-        player.lightUpdated = true;
+        environmentManager.lightUpdated = true;
     }
     public void restart() {
         player.setDefaultValues();
@@ -114,7 +114,7 @@ public class Game extends JPanel implements Runnable {
         assetSetter.setNPCs();
         assetSetter.setMonsters();
         currentMap = "Main Island";
-        player.lightUpdated = true;
+        environmentManager.lightUpdated = true;
     }
     public void setFullScreen() {
         GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -377,6 +377,7 @@ public class Game extends JPanel implements Runnable {
             graphics2D.drawString("Row: " + (player.worldY + player.solidArea.y) / tileSize, x, y); y += lineHeight;
 
             graphics2D.drawString("Draw Time: " + passed, x ,y); y += lineHeight;
+            graphics2D.drawString("Darkness Counter: " + environmentManager.lighting.darknessCounter, x ,y); y += lineHeight;
             graphics2D.drawString("Invincibility: " + player.invincibilityCounter, x, y);
         }
 

@@ -14,10 +14,7 @@ public class Config {
             String userHome = System.getProperty("user.home");
             File configFile = new File(userHome, "torgrays-trials-config.txt");
             
-            BufferedWriter bufferedWriter =
-                    new BufferedWriter(
-                            new FileWriter(configFile)
-                    );
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(configFile));
 
             // Music Volume
             bufferedWriter.write(String.valueOf(game.music.volumeScale));

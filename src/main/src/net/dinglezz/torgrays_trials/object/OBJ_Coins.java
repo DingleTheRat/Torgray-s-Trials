@@ -29,9 +29,9 @@ public class OBJ_Coins extends Entity {
 
         // Grammar check
         if (amount == 1) {
-            game.ui.addMessage("+" + amount + " Coin");
+            game.ui.addMiniNotification("+" + amount + " Coin");
         } else {
-            game.ui.addMessage("+" + amount + " Coins");
+            game.ui.addMiniNotification("+" + amount + " Coins");
         }
         return true;
     }

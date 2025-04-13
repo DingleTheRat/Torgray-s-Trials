@@ -53,7 +53,8 @@ public class UI {
         coin = Coin.down1;
     }
 
-    public void addMessage(String message) {
+    /// Adds a mini notification message to the side of the screen
+    public void addMiniNotification(String message) {
         messages.add(message);
         messageCounter.add(0);
     }
@@ -65,17 +66,28 @@ public class UI {
 
         switch (game.gameState) {
             case STATE_TITLE: drawTitleScreen(); break;
-            case STATE_PLAY: drawPlayerHealth(); drawMessage(); break;
+            case STATE_PLAY: drawBasics(); break;
             case STATE_PAUSE: drawPauseScreen(); break;
             case STATE_DIALOGUE: drawDialogueScreen(); drawPlayerHealth(); break;
             case STATE_CHARACTER: drawCharacterScreen(); drawInventory(game.player, true); break;
             case STATE_GAME_OVER: drawGameOverScreen(); break;
-            case STATE_TRANSITION: drawTransitionScreen(); break;
+            case STATE_TRANSITION: drawBasics(); drawTransitionScreen(); break;
             case STATE_TRADE: drawTradeScreen(); break;
             case STATE_MAP: drawMapScreen(); break;
         }
     }
 
+    /// Draws all the basic HUDs in the play state:
+    /// - Player's Health
+    /// - Darkness State
+    /// - Mini Notification Messages
+    public void drawBasics() {
+        drawPlayerHealth();
+        drawDarknessState();
+        drawMiniNotifications();
+    }
+
+    /// Draws the player's health
     public void drawPlayerHealth() {
         int x = game.tileSize / 2;
         int y = game.tileSize / 2;
@@ -103,9 +115,10 @@ public class UI {
             i++;
             x += game.tileSize;
         }
-
     }
-    public void drawMessage() {
+
+    /// Draws all the notification messages on the side of your screen
+    public void drawMiniNotifications() {
         int messageX = game.tileSize / 2;
         int messageY = game.tileSize * 12 - game.tileSize / 2;
         graphics2D.setFont(graphics2D.getFont().deriveFont(23f));
@@ -115,8 +128,8 @@ public class UI {
                 graphics2D.setColor(Color.white);
                 graphics2D.drawString(messages.get(i), messageX, messageY);
 
-                int counter = messageCounter.get(i) + 1; // Counter ++
-                messageCounter.set(i, counter); // Set counter = array
+                int counter = messageCounter.get(i) + 1;
+                messageCounter.set(i, counter);
                 messageY -= 30;
 
                 if (messageCounter.get(i) > 120) {
@@ -126,6 +139,14 @@ public class UI {
             }
         }
     }
+    public void drawDarknessState() {
+        int x = game.tileSize / 2;
+        int y = (game.tileSize * 2) + (game.tileSize / 3);
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 36f));
+
+        graphics2D.drawString(game.environmentManager.getDarknessStateString(), x, y);
+    }
+
     public void drawTitleScreen() {
         if (titleScreenState == States.TITLE_STATE_MAIN) {
             // Title Text
@@ -896,7 +917,7 @@ public class UI {
             game.currentMap = game.eventHandler.nextMap;
             game.player.worldX = game.eventHandler.nextCol;
             game.player.worldY = game.eventHandler.nextRow;
-            game.player.lightUpdated = true;
+            game.environmentManager.lightUpdated = true;
 
             fadeBack = true;
         } else if (transitionCounter == 0f) {

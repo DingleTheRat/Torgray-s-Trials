@@ -37,13 +37,13 @@ public class   InputHandler implements KeyListener {
         // F3 Stuff
         if (f3Pressed && code == KeyEvent.VK_P) {
             game.debugPathfinding = !game.debugPathfinding;
-            game.ui.addMessage("Debug Pathfinding: " + game.debugPathfinding);
+            game.ui.addMiniNotification("Debug Pathfinding: " + game.debugPathfinding);
             debug = false;
 
         } else if (f3Pressed && code == KeyEvent.VK_B) {
             if (game.BRendering) {
                 game.BRendering = false;
-                game.ui.addMessage("BRendering: " + game.BRendering);
+                game.ui.addMiniNotification("BRendering: " + game.BRendering);
             }
         } else if (code == KeyEvent.VK_F3) {
             f3Pressed = true;
@@ -370,7 +370,7 @@ public class   InputHandler implements KeyListener {
             case KeyEvent.VK_F3: f3Pressed = false;
             if (debug) {
                 game.debug = !game.debug;
-                game.ui.addMessage("Debug: " + game.debug);
+                game.ui.addMiniNotification("Debug: " + game.debug);
                 debug = false;
             }
             break;

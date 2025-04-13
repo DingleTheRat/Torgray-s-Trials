@@ -9,8 +9,8 @@ import java.awt.image.BufferedImage;
 public class Lighting {
     Game game;
     BufferedImage darknessFilter;
-    States darknessState = States.DARKNESS_STATE_NIGHT;
-    int darknessCounter = 0;
+    protected States darknessState = States.DARKNESS_STATE_NIGHT;
+    public int darknessCounter = 0;
 
     public Lighting(Game game) {
         this.game = game;
@@ -90,14 +90,14 @@ public class Lighting {
 
         // Set the radius of the darkness filter
         if (game.currentMap.equals("Coiner's Shop")) {
-            RadialGradientPaint gPaint = new RadialGradientPaint(centreX, centreY, 500, fraction, color);
-            graphics2D.setPaint(gPaint);
+            RadialGradientPaint gradientPaint = new RadialGradientPaint(centreX, centreY, 500, fraction, color);
+            graphics2D.setPaint(gradientPaint);
         } else if (game.player.currentLight == null) {
             graphics2D.setColor(color[11]);
             graphics2D.setPaint(null);
         } else {
-            RadialGradientPaint gPaint = new RadialGradientPaint(centreX, centreY, game.player.currentLight.lightRadius, fraction, color);
-            graphics2D.setPaint(gPaint);
+            RadialGradientPaint gradientPaint = new RadialGradientPaint(centreX, centreY, game.player.currentLight.lightRadius, fraction, color);
+            graphics2D.setPaint(gradientPaint);
         }
 
         // Fill the buffered image with the radial gradient paint
@@ -105,49 +105,17 @@ public class Lighting {
         graphics2D.dispose();
     }
     public void update() {
-        if (game.player.lightUpdated) {
+        if (game.environmentManager.lightUpdated) {
             setLightSource();
-            game.player.lightUpdated = false;
+            game.environmentManager.lightUpdated = false;
         }
 
         // Darkness state stuff
-        System.out.println(darknessState + " " + darknessCounter);
-
         switch (darknessState) {
-            case DARKNESS_STATE_NIGHT:
-                darknessCounter++;
-
-                if (darknessCounter > 600) {
-                    darknessState = States.DARKNESS_STATE_NEW_DUSK;
-                    darknessCounter = 0;
-                }
-                break;
-            case DARKNESS_STATE_NEW_DUSK:
-                darknessCounter++;
-
-                if (darknessCounter > 100) {
-                    darknessState = States.DARKNESS_STATE_GLOOM;
-                    darknessCounter = 0;
-                    game.player.lightUpdated = true;
-                }
-                break;
-            case DARKNESS_STATE_GLOOM:
-                darknessCounter++;
-
-                if (darknessCounter > 600) {
-                    darknessState = States.DARKNESS_STATE_DUSK;
-                    darknessCounter = 0;
-                }
-                break;
-            case DARKNESS_STATE_DUSK:
-                darknessCounter++;
-
-                if (darknessCounter > 100) {
-                    darknessState = States.DARKNESS_STATE_NIGHT;
-                    darknessCounter = 0;
-                    game.player.lightUpdated = true;
-                }
-                break;
+            case DARKNESS_STATE_NIGHT: updateDarknessState(States.DARKNESS_STATE_NEW_DUSK, 600, false);break;
+            case DARKNESS_STATE_NEW_DUSK: updateDarknessState(States.DARKNESS_STATE_GLOOM, 100, true);break;
+            case DARKNESS_STATE_GLOOM: updateDarknessState(States.DARKNESS_STATE_DUSK, 600, false);break;
+            case DARKNESS_STATE_DUSK: updateDarknessState(States.DARKNESS_STATE_NIGHT, 100, true);break;
         }
     }
     public void draw(Graphics2D graphics2D) {
@@ -155,5 +123,16 @@ public class Lighting {
         graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
 
         graphics2D.drawImage(darknessFilter, 0,0, null);
+    }
+
+    private void updateDarknessState(States nextState, int threshold, boolean updateLight) {
+        darknessCounter++;
+        if (darknessCounter >= threshold) {
+            darknessCounter = 0;
+            darknessState = nextState;
+            if (updateLight) {
+                game.environmentManager.lightUpdated = true;
+            }
+        }
     }
 }
