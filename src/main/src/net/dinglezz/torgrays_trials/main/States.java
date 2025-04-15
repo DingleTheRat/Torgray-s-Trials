@@ -8,7 +8,6 @@ public enum States {
     STATE_DIALOGUE,
     STATE_CHARACTER,
     STATE_GAME_OVER,
-    STATE_TRANSITION,
     STATE_TRADE,
     STATE_MAP,
 

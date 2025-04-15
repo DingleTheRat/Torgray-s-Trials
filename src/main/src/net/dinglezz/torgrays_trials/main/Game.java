@@ -168,7 +168,6 @@ public class Game extends JPanel implements Runnable {
         if (gameState == States.STATE_PLAY ||
                 gameState == States.STATE_CHARACTER ||
                 gameState == States.STATE_DIALOGUE ||
-                gameState == States.STATE_TRANSITION ||
                 gameState == States.STATE_TRADE ||
                 gameState == States.STATE_MAP) {
 

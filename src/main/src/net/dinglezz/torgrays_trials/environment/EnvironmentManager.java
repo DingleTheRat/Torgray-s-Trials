@@ -27,17 +27,12 @@ public class EnvironmentManager {
     }
 
     public String getDarknessStateString() {
-        String darknessStateString = switch (lighting.darknessState) {
+        return switch (lighting.darknessState) {
             case DARKNESS_STATE_NIGHT -> "Night";
             case DARKNESS_STATE_NEW_DUSK -> "New Dusk";
             case DARKNESS_STATE_GLOOM -> "Gloom";
             case DARKNESS_STATE_DUSK -> "Dusk";
             default -> "Error";
         };
-        return darknessStateString;
-    }
-    public States getDarknessState() {
-        States darknessState = lighting.darknessState;
-        return darknessState;
     }
 }

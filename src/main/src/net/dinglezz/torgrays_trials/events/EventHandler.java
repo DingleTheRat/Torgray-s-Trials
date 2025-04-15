@@ -123,7 +123,7 @@ public class EventHandler {
         if (game.inputHandler.interactKeyPressed) {
             game.gameState = States.STATE_DIALOGUE;
             game.player.attackCanceled = true;
-            game.ui.currentDialogue = "*Drinks water* /nHuh, nothing happened :/";
+            game.ui.currentDialogue = "*Drinks water* \nHuh, nothing happened :/";
 //            game.player.health = game.player.maxHealth;
 //            game.assetSetter.setMonsters();
         }
@@ -135,7 +135,10 @@ public class EventHandler {
         nextMap = map;
         nextCol = game.tileSize * col;
         nextRow = game.tileSize * row;
-        game.gameState = States.STATE_TRANSITION;
+        game.ui.actionMethod = "transitionTeleport";
+        game.ui.transitionOpenSpeed = 0.02f;
+        game.ui.transitionCloseSpeed = 0.02f;
+        game.ui.transitioning = true;
     }
     public void speak(Entity entity) {
         if (game.inputHandler.interactKeyPressed) {

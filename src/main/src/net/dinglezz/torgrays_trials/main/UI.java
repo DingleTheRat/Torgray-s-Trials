@@ -15,24 +15,37 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class UI {
+    // General
     Game game;
     Graphics2D graphics2D;
     Font maruMonica;
     BufferedImage heart, half_heart, lost_heart, coin;
-    ArrayList<String> messages = new ArrayList<>();
-    ArrayList<Integer> messageCounter = new ArrayList<>();
     public String currentDialogue = "";
     public int commandNumber = 0;
+    public String actionMethod;
+
+    // Mini Notifications
+    ArrayList<String> miniNotifications = new ArrayList<>();
+    ArrayList<Integer> miniNotificationCounter = new ArrayList<>();
+
+    // States
     public States titleScreenState = States.TITLE_STATE_MAIN;
     public States subState;
+
+    // Inventory
     public int playerSlotCol = 0;
     public int playerSlotRow = 0;
     public int entitySlotCol = 0;
     public int entitySlotRow = 0;
-    public String actionMethod;
-    public float transitionCounter = 0f;
-    public boolean fadeBack = false;
     public Entity npc;
+
+    // Transitions
+    public float transitionCounter = 0f;
+    public float transitionOpenSpeed = 0f;
+    public float transitionCloseSpeed = 0f;
+    public Color transitionColor = Color.BLACK;
+    public boolean transitioning = false;
+    public boolean fadeBack = false;
 
     public UI(Game game) {
         this.game = game;
@@ -55,23 +68,25 @@ public class UI {
 
     /// Adds a mini notification message to the side of the screen
     public void addMiniNotification(String message) {
-        messages.add(message);
-        messageCounter.add(0);
+        miniNotifications.add(message);
+        miniNotificationCounter.add(0);
     }
     public void draw(Graphics2D g2) {
         this.graphics2D = g2;
         g2.setFont(maruMonica);
         g2.setColor(Color.white);
 
+        if (transitioning) {
+            drawTransitionScreen();
+        }
 
         switch (game.gameState) {
             case STATE_TITLE: drawTitleScreen(); break;
             case STATE_PLAY: drawBasics(); break;
             case STATE_PAUSE: drawPauseScreen(); break;
-            case STATE_DIALOGUE: drawDialogueScreen(); drawPlayerHealth(); break;
+            case STATE_DIALOGUE: drawBasics(); drawDialogueScreen(); break;
             case STATE_CHARACTER: drawCharacterScreen(); drawInventory(game.player, true); break;
             case STATE_GAME_OVER: drawGameOverScreen(); break;
-            case STATE_TRANSITION: drawBasics(); drawTransitionScreen(); break;
             case STATE_TRADE: drawTradeScreen(); break;
             case STATE_MAP: drawMapScreen(); break;
         }
@@ -117,24 +132,24 @@ public class UI {
         }
     }
 
-    /// Draws all the notification messages on the side of your screen
+    /// Draws all the notification miniNotifications on the side of your screen
     public void drawMiniNotifications() {
         int messageX = game.tileSize / 2;
         int messageY = game.tileSize * 12 - game.tileSize / 2;
         graphics2D.setFont(graphics2D.getFont().deriveFont(23f));
 
-        for (int i = 0; i < messages.size(); i++) {
-            if (messages.get(i) != null) {
+        for (int i = 0; i < miniNotifications.size(); i++) {
+            if (miniNotifications.get(i) != null) {
                 graphics2D.setColor(Color.white);
-                graphics2D.drawString(messages.get(i), messageX, messageY);
+                graphics2D.drawString(miniNotifications.get(i), messageX, messageY);
 
-                int counter = messageCounter.get(i) + 1;
-                messageCounter.set(i, counter);
+                int counter = miniNotificationCounter.get(i) + 1;
+                miniNotificationCounter.set(i, counter);
                 messageY -= 30;
 
-                if (messageCounter.get(i) > 120) {
-                    messages.remove(i);
-                    messageCounter.remove(i);
+                if (miniNotificationCounter.get(i) > 120) {
+                    miniNotifications.remove(i);
+                    miniNotificationCounter.remove(i);
                 }
             }
         }
@@ -142,6 +157,7 @@ public class UI {
     public void drawDarknessState() {
         int x = game.tileSize / 2;
         int y = (game.tileSize * 2) + (game.tileSize / 3);
+        graphics2D.setColor(Color.WHITE);
         graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 36f));
 
         graphics2D.drawString(game.environmentManager.getDarknessStateString(), x, y);
@@ -524,12 +540,7 @@ public class UI {
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
             if (game.inputHandler.spacePressed) {
-                try {
-                    Method method = this.getClass().getMethod(actionMethod);
-                    method.invoke(this);
-                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
-                }
+                invokeActionMethod();
             }
         }
 
@@ -543,40 +554,6 @@ public class UI {
                 commandNumber = 0;
             }
         }
-    }
-    @SuppressWarnings("unused")
-    public void yesGameEnd() {
-        subState = States.STATE_PAUSE;
-        game.gameState = States.STATE_TITLE;
-        titleScreenState = States.TITLE_STATE_MAIN;
-        game.music.stop();
-        game.playMusic("Tech Geek");
-        game.restart();
-    }
-    @SuppressWarnings("unused")
-    public void yesFullScreen() {
-        game.fullScreen = !game.fullScreen;
-        subState = States.PAUSE_STATE_NOTIFICATION;
-        commandNumber = 0;
-        currentDialogue = "Full Screen will only be \nenabled/disabled when \nrelaunching the game.";
-    }
-    @SuppressWarnings("unused")
-    public void yesBRendering() {
-        game.BRendering = !game.BRendering;
-        commandNumber = 0;
-
-        if (game.BRendering) {
-            subState = States.PAUSE_STATE_NOTIFICATION;
-            currentDialogue = "You can emergency \ndisable BRendering by \npressing F3 and B.";
-        } else {
-            subState = States.PAUSE_STATE_SETTINGS_MAIN;
-        }
-    }
-    @SuppressWarnings("unused")
-    public void yesPathfinding() {
-        game.pathFinding = !game.pathFinding;
-        subState = States.PAUSE_STATE_SETTINGS_MAIN;
-        commandNumber = 0;
     }
 
     public void controlsPanel(int frameX, int frameY) {
@@ -904,38 +881,33 @@ public class UI {
             graphics2D.drawString(">", x - 40, y);
         }
     }
-    public void drawTransitionScreen() {
-        // Main
-        if (!fadeBack && transitionCounter < 1f) {
-            transitionCounter += 0.02f;
-        } else if (fadeBack && transitionCounter > 0f) {
-            transitionCounter -= 0.02f;
-        }
-        // Switch to next stage (if needed)
-        else if (transitionCounter == 1f) {
-            // Teleport
-            game.currentMap = game.eventHandler.nextMap;
-            game.player.worldX = game.eventHandler.nextCol;
-            game.player.worldY = game.eventHandler.nextRow;
-            game.environmentManager.lightUpdated = true;
-
-            fadeBack = true;
-        } else if (transitionCounter == 0f) {
-            game.gameState = States.STATE_PLAY;
-            fadeBack = false;
-        }
-
-        // Corrections (just in case)
-        if (transitionCounter > 1f) {
-            transitionCounter = 1f;
-        } else if (transitionCounter < 0f) {
-            transitionCounter = 0f;
-        }
-
-        // Draw Transition
-        graphics2D.setColor(new Color(0, 0, 0, transitionCounter));
-        graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
+public void drawTransitionScreen() {
+    // Update transition counter
+    if (!fadeBack) {
+        transitionCounter = Math.min(transitionCounter + transitionOpenSpeed, 1f);
+    } else {
+        transitionCounter = Math.max(transitionCounter - transitionCloseSpeed, 0f);
     }
+
+    // Handle state transitions
+    if (transitionCounter == 1f && !fadeBack) {
+        invokeActionMethod();
+        fadeBack = true;
+    } else if (transitionCounter == 0f && fadeBack) {
+        transitioning = false;
+        fadeBack = false;
+    }
+
+    // Draw transition effect
+    float alpha = transitionCounter;
+    graphics2D.setColor(new Color(
+        transitionColor.getRed() / 255f,
+        transitionColor.getGreen() / 255f,
+        transitionColor.getBlue() / 255f,
+        alpha
+    ));
+    graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
+}
     public void drawTradeScreen() {
         switch (subState) {
             case TRADE_STATE_SELECT: drawTradeSelectScreen(); break;
@@ -1085,26 +1057,86 @@ public class UI {
         }
     }
     public void drawMapScreen() {
-int width = 500;
-int height = 500;
-int x = game.screenWidth / 2 - width / 2;
-int y = game.screenHeight / 2 - height / 2;
-drawSubWindow(x - 20, y - 20, width + 40, height + 40);
-graphics2D.drawImage(game.tileManager.worldMap.get(game.currentMap), x, y, width, height, null);
+        int width = 500;
+        int height = 500;
+        int x = game.screenWidth / 2 - width / 2;
+        int y = game.screenHeight / 2 - height / 2;
+        drawSubWindow(x - 20, y - 20, width + 40, height + 40);
+        graphics2D.drawImage(game.tileManager.worldMap.get(game.currentMap), x, y, width, height, null);
     }
 
+    // Action
+    @SuppressWarnings("unused")
+    public void yesGameEnd() {
+        subState = States.STATE_PAUSE;
+        game.gameState = States.STATE_TITLE;
+        titleScreenState = States.TITLE_STATE_MAIN;
+        game.music.stop();
+        game.playMusic("Tech Geek");
+        game.restart();
+    }
+    @SuppressWarnings("unused")
+    public void yesFullScreen() {
+        game.fullScreen = !game.fullScreen;
+        subState = States.PAUSE_STATE_NOTIFICATION;
+        commandNumber = 0;
+        currentDialogue = "Full Screen will only be \nenabled/disabled when \nrelaunching the game.";
+    }
+    @SuppressWarnings("unused")
+    public void yesBRendering() {
+        game.BRendering = !game.BRendering;
+        commandNumber = 0;
+
+        if (game.BRendering) {
+            subState = States.PAUSE_STATE_NOTIFICATION;
+            currentDialogue = "You can emergency \ndisable BRendering by \npressing F3 and B.";
+        } else {
+            subState = States.PAUSE_STATE_SETTINGS_MAIN;
+        }
+    }
+    @SuppressWarnings("unused")
+    public void yesPathfinding() {
+        game.pathFinding = !game.pathFinding;
+        subState = States.PAUSE_STATE_SETTINGS_MAIN;
+        commandNumber = 0;
+    }
+    @SuppressWarnings("unused")
+    public void transitionTeleport() {
+        game.currentMap = game.eventHandler.nextMap;
+        game.player.worldX = game.eventHandler.nextCol;
+        game.player.worldY = game.eventHandler.nextRow;
+        game.environmentManager.lightUpdated = true;
+    }
+    @SuppressWarnings("unused")
+    public void transitionDarkness() {
+        game.environmentManager.lightUpdated = true;
+    }
+
+    // Helpers
     public int getItemIndex(int slotCol, int slotRow) {
         return slotCol + (slotRow * 5);
     }
+    /// Draws a sub-window of any size and at any position
     public void drawSubWindow(int x, int y, int width, int height) {
-        Color c = new Color(0,0,0, 210);
-        graphics2D.setColor(c);
+        Color color = new Color(0,0,0, 210);
+        graphics2D.setColor(color);
         graphics2D.fillRoundRect(x, y, width, height, 35, 35);
 
-        c = new Color(255, 255,255);
-        graphics2D.setColor(c);
+        color = Color.WHITE;
+        graphics2D.setColor(color);
         graphics2D.setStroke(new BasicStroke(5));
         graphics2D.drawRoundRect(x + 5, y + 5, width - 10, height - 10 ,25, 25);
+    }
+    /// Invokes the method defined in the "action method" variable
+    public void invokeActionMethod() {
+        try {
+            Method method = this.getClass().getMethod(actionMethod);
+            method.invoke(this);
+        } catch (NoSuchMethodException exception) {
+            System.err.println("There is no such method as '" + actionMethod + "' in the UI class.");
+        } catch (IllegalAccessException | InvocationTargetException exception) {
+            exception.printStackTrace();
+        }
     }
 
     public int getCentreX(String text) {
