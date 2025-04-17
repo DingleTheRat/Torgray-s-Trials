@@ -5,16 +5,26 @@ import net.dinglezz.torgrays_trials.main.States;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 public class Lighting {
     Game game;
     BufferedImage darknessFilter;
+
+    // Main Darkness Stuff
     public States darknessState = States.DARKNESS_STATE_NIGHT;
+    public States nextGloom;
     public int darknessCounter = 0;
+
+    // Darkness Settings
+    public int gloomChance = 25;
+    public int lightGloomChance = 50;
+    public int darkGloomChance = 25;
 
     public Lighting(Game game) {
         this.game = game;
         setLightSource();
+        nextGloom = chooseNextGloom();
     }
 
     public void setLightSource() {
@@ -59,7 +69,7 @@ public class Lighting {
             fraction[10] = 0.95f;
             fraction[11] = 1f;
         }
-        if ((darknessState == States.DARKNESS_STATE_GLOOM) ||
+        if ((darknessState == States.DARKNESS_STATE_GLOOM || darknessState == States.DARKNESS_STATE_LIGHT_GLOOM || darknessState == States.DARKNESS_STATE_DARK_GLOOM) ||
                 (darknessState == States.DARKNESS_STATE_DUSK && !game.ui.fadeBack) ||
                 (darknessState == States.DARKNESS_STATE_NEW_DUSK && game.ui.fadeBack)) {
             color[0] = new Color(0, 0, 0.1f, 0.1f);
@@ -95,9 +105,12 @@ public class Lighting {
             graphics2D.setPaint(gradientPaint);
         } else if (game.player.currentLight == null) {
             graphics2D.setColor(color[11]);
-            graphics2D.setPaint(null);
         } else {
-            RadialGradientPaint gradientPaint = new RadialGradientPaint(centreX, centreY, game.player.currentLight.lightRadius, fraction, color);
+            // Light Adjustments
+            int lightRadiusAdjustment = getLightRadiusAdjustment();
+            System.out.println(nextGloom);
+
+            RadialGradientPaint gradientPaint = new RadialGradientPaint(centreX, centreY, game.player.currentLight.lightRadius + lightRadiusAdjustment, fraction, color);
             graphics2D.setPaint(gradientPaint);
         }
 
@@ -105,6 +118,7 @@ public class Lighting {
         graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
         graphics2D.dispose();
     }
+
     public void update() {
         if (game.environmentManager.lightUpdated) {
             setLightSource();
@@ -114,8 +128,8 @@ public class Lighting {
         // Darkness state stuff
         switch (darknessState) {
             case DARKNESS_STATE_NIGHT: updateDarknessState(States.DARKNESS_STATE_NEW_DUSK, 600, true); break;
-            case DARKNESS_STATE_NEW_DUSK: updateDarknessState(States.DARKNESS_STATE_GLOOM, 1, false); break;
-            case DARKNESS_STATE_GLOOM: updateDarknessState(States.DARKNESS_STATE_DUSK, 600, true); break;
+            case DARKNESS_STATE_NEW_DUSK: updateDarknessState(nextGloom, 1, false); break;
+            case DARKNESS_STATE_GLOOM, DARKNESS_STATE_LIGHT_GLOOM, DARKNESS_STATE_DARK_GLOOM: updateDarknessState(States.DARKNESS_STATE_DUSK, 600, true); break;
             case DARKNESS_STATE_DUSK: updateDarknessState(States.DARKNESS_STATE_NIGHT, 1, false); break;
         }
     }
@@ -126,13 +140,16 @@ public class Lighting {
         graphics2D.drawImage(darknessFilter, 0, 0, null);
     }
 
-    private void updateDarknessState(States nextState, int threshold, boolean transitionWhenDone) {
+    public void updateDarknessState(States nextState, int threshold, boolean transitionWhenDone) {
         if (game.ui.transitioning) return;
         darknessCounter++;
         if (darknessCounter < threshold)  return;
 
         darknessCounter = 0;
         darknessState = nextState;
+        if (nextState == nextGloom) {
+            nextGloom = chooseNextGloom();
+        }
 
         if (transitionWhenDone) {
             game.ui.transitioning = true;
@@ -143,5 +160,42 @@ public class Lighting {
             game.ui.actionMethod = "transitionDarkness";
             game.ui.transitionColor = new Color(0, 0, 0.1f);
         }
+    }
+
+    public int getLightRadiusAdjustment() {
+        int lightRadiusAdjustment = switch (darknessState) {
+            case DARKNESS_STATE_LIGHT_GLOOM -> 50;
+            case DARKNESS_STATE_DARK_GLOOM -> -50;
+            default -> 0;
+        };
+        if (darknessState == States.DARKNESS_STATE_NEW_DUSK && game.ui.fadeBack) {
+            if (nextGloom == States.DARKNESS_STATE_LIGHT_GLOOM) {
+                lightRadiusAdjustment = 50;
+            } else if (nextGloom == States.DARKNESS_STATE_DARK_GLOOM) {
+                lightRadiusAdjustment = -50;
+            }
+        } else if (darknessState == States.DARKNESS_STATE_DUSK && !game.ui.fadeBack) {
+            if (nextGloom == States.DARKNESS_STATE_LIGHT_GLOOM) {
+                lightRadiusAdjustment = 50;
+            } else if (nextGloom == States.DARKNESS_STATE_DARK_GLOOM) {
+                lightRadiusAdjustment = -50;
+            }
+        }
+        return lightRadiusAdjustment;
+    }
+
+    public States chooseNextGloom() {
+        int random = new Random().nextInt(100) + 1;
+
+        if (random <= gloomChance) {
+            return States.DARKNESS_STATE_GLOOM;
+        } else if (random <= gloomChance + lightGloomChance) {
+            return States.DARKNESS_STATE_LIGHT_GLOOM;
+        } else if (random <= gloomChance + lightGloomChance + darkGloomChance) {
+            return States.DARKNESS_STATE_DARK_GLOOM;
+        }
+
+        System.err.println("Warning: No gloom state chosen");
+        return States.DARKNESS_STATE_GLOOM;
     }
 }

@@ -31,6 +31,8 @@ public class EnvironmentManager {
             case DARKNESS_STATE_NIGHT -> "Night";
             case DARKNESS_STATE_NEW_DUSK -> "New Dusk";
             case DARKNESS_STATE_GLOOM -> "Gloom";
+            case DARKNESS_STATE_LIGHT_GLOOM -> "Light Gloom";
+            case DARKNESS_STATE_DARK_GLOOM -> "Dark Gloom";
             case DARKNESS_STATE_DUSK -> "Dusk";
             default -> "Error";
         };

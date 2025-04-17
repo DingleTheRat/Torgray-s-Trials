@@ -51,7 +51,7 @@ public class UI {
         this.game = game;
 
         try {
-            InputStream is = getClass().getResourceAsStream("/fonts/x12y16pxMaruMonica.ttf");
+            InputStream is = getClass().getResourceAsStream("/font/Maru_Monica.ttf");
             maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
         } catch (FontFormatException | IOException e) {
             e.printStackTrace();
@@ -136,7 +136,7 @@ public class UI {
     public void drawMiniNotifications() {
         int messageX = game.tileSize / 2;
         int messageY = game.tileSize * 12 - game.tileSize / 2;
-        graphics2D.setFont(graphics2D.getFont().deriveFont(23f));
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN,26f));
 
         for (int i = 0; i < miniNotifications.size(); i++) {
             if (miniNotifications.get(i) != null) {
@@ -158,7 +158,7 @@ public class UI {
         int x = game.tileSize / 2;
         int y = (game.tileSize * 2) + (game.tileSize / 3);
         graphics2D.setColor(Color.WHITE);
-        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 36f));
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 38f));
 
         graphics2D.drawString(game.environmentManager.getDarknessStateString(), x, y);
     }
@@ -608,7 +608,7 @@ public class UI {
         int height = game.tileSize * 4;
         drawSubWindow(x, y, width, height);
 
-        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 28f));
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 30f));
         x += game.tileSize / 2;
         y += game.tileSize;
 
@@ -762,7 +762,7 @@ public class UI {
 
             // Draw Amount
             if (entity.inventory.get(i).amount > 1) {
-                graphics2D.setFont(graphics2D.getFont().deriveFont(28f));
+                graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 28f));
                 int amountX;
                 int amountY;
 
@@ -816,12 +816,12 @@ public class UI {
             if (itemIndex < entity.inventory.size()) {
                 // Window + Title
                 drawSubWindow(frameX, dFrameY, frameWidth, dFrameHeight);
-                graphics2D.setFont(graphics2D.getFont().deriveFont(30f));
+                graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 30f));
                 graphics2D.drawString(entity.inventory.get(itemIndex).name, textX, textY);
                 textY += 40;
 
                 // Description
-                graphics2D.setFont(graphics2D.getFont().deriveFont(20f));
+                graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 20f));
                 for (String line : entity.inventory.get(itemIndex).description.split("\n")) {
                     graphics2D.drawString(line, textX, textY);
                     textY += 30;

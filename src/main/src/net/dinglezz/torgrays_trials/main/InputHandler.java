@@ -106,6 +106,11 @@ public class   InputHandler implements KeyListener {
                     game.player.nextLevelExp = 4;
                     game.player.attack = game.player.getAttack();
                     game.player.defence = game.player.getDefence();
+
+                    // Modified Darkness State Stuff
+                    game.environmentManager.lighting.gloomChance = 35;
+                    game.environmentManager.lighting.lightGloomChance = 50;
+                    game.environmentManager.lighting.darkGloomChance = 15;
                 }
                 if (game.ui.commandNumber == 1) {
                     game.gameState = States.STATE_PLAY;
@@ -127,6 +132,11 @@ public class   InputHandler implements KeyListener {
                     game.player.dexterity = 0;
                     game.player.nextLevelExp = 6;
                     game.player.defence = game.player.getDefence();
+
+                    // Modified Darkness State Stuff
+                    game.environmentManager.lighting.gloomChance = 35;
+                    game.environmentManager.lighting.lightGloomChance = 10;
+                    game.environmentManager.lighting.darkGloomChance = 55;
                 }
                 if (game.ui.commandNumber == 3) {
                     game.ui.titleScreenState = States.TITLE_STATE_MAIN;
