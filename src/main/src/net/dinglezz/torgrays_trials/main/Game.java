@@ -6,8 +6,6 @@ import net.dinglezz.torgrays_trials.environment.EnvironmentManager;
 import net.dinglezz.torgrays_trials.events.EventHandler;
 import net.dinglezz.torgrays_trials.pathfinding.Pathfinder;
 import net.dinglezz.torgrays_trials.tile.TileManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
