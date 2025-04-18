@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class Game extends JPanel implements Runnable {
-    public static final Logger LOGGER = LoggerFactory.getLogger("Torgray's Trials");
-
     // Screen settings
     final int originalTileSize = 16; // 16x16 tile
     final int scale = 3;
@@ -114,7 +112,12 @@ public class Game extends JPanel implements Runnable {
         assetSetter.setNPCs();
         assetSetter.setMonsters();
         currentMap = "Main Island";
+
+        // Darkness reset
         environmentManager.lightUpdated = true;
+        environmentManager.lighting.darknessCounter = 0;
+        environmentManager.lighting.darknessState = States.DARKNESS_STATE_NIGHT;
+        environmentManager.lighting.nextGloom = environmentManager.lighting.chooseNextGloom();
     }
     public void setFullScreen() {
         GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();

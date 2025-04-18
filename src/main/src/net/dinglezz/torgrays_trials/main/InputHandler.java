@@ -69,6 +69,7 @@ public class   InputHandler implements KeyListener {
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                 if (game.ui.commandNumber == 0) {
                     game.ui.titleScreenState = States.TITLE_STATE_MODES;
+                    game.ui.commandNumber = 1;
                 }
                 if (game.ui.commandNumber == 1) {
                     // For later
@@ -108,6 +109,9 @@ public class   InputHandler implements KeyListener {
                     game.player.defence = game.player.getDefence();
 
                     // Modified Darkness State Stuff
+                    game.environmentManager.lighting.nightLength = 18000;
+                    game.environmentManager.lighting.gloomLength = 9000;
+
                     game.environmentManager.lighting.gloomChance = 35;
                     game.environmentManager.lighting.lightGloomChance = 50;
                     game.environmentManager.lighting.darkGloomChance = 15;
@@ -134,12 +138,16 @@ public class   InputHandler implements KeyListener {
                     game.player.defence = game.player.getDefence();
 
                     // Modified Darkness State Stuff
+                    game.environmentManager.lighting.nightLength = 7200;
+                    game.environmentManager.lighting.gloomLength = 144000;
+
                     game.environmentManager.lighting.gloomChance = 35;
                     game.environmentManager.lighting.lightGloomChance = 10;
                     game.environmentManager.lighting.darkGloomChance = 55;
                 }
                 if (game.ui.commandNumber == 3) {
                     game.ui.titleScreenState = States.TITLE_STATE_MAIN;
+                    game.ui.commandNumber = 0;
                 }
             }
         }
@@ -152,7 +160,7 @@ public class   InputHandler implements KeyListener {
             case KeyEvent.VK_D: rightPressed = true; break;
             case KeyEvent.VK_E: interactKeyPressed = true; break;
             case KeyEvent.VK_SPACE: spacePressed = true; break;
-            case KeyEvent.VK_ESCAPE: game.gameState = States.STATE_PAUSE; game.ui.subState = States.STATE_PAUSE; break;
+            case KeyEvent.VK_ESCAPE: game.gameState = States.STATE_PAUSE; game.ui.subState = States.STATE_PAUSE; game.ui.commandNumber = 0; break;
         }
     }
     public void pauseState(int code) {

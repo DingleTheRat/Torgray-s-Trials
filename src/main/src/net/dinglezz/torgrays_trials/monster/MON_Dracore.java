@@ -3,6 +3,7 @@ package net.dinglezz.torgrays_trials.monster;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.object.OBJ_Coins;
 import net.dinglezz.torgrays_trials.object.OBJ_Torgray_Soup;
 
@@ -25,7 +26,17 @@ public class MON_Dracore extends Entity {
         attack = 4;
         defence = 0;
         exp = 2;
-        
+
+        if (game.environmentManager.lighting != null) {
+            if (game.environmentManager.lighting.darknessState == States.DARKNESS_STATE_GLOOM ||
+                    game.environmentManager.lighting.darknessState == States.DARKNESS_STATE_LIGHT_GLOOM ||
+                    game.environmentManager.lighting.darknessState == States.DARKNESS_STATE_DUSK) {
+                attack += 1;
+                maxHealth = maxHealth * 5;
+                health = maxHealth;
+            }
+        }
+
         getImage();
     }
     public void getImage() {

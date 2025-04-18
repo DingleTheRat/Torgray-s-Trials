@@ -1,5 +1,6 @@
 package net.dinglezz.torgrays_trials.environment;
 
+import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.States;
 
@@ -17,6 +18,8 @@ public class Lighting {
     public int darknessCounter = 0;
 
     // Darkness Settings
+    public int nightLength = 12000;
+    public int gloomLength = 10000;
     public int gloomChance = 25;
     public int lightGloomChance = 50;
     public int darkGloomChance = 25;
@@ -108,7 +111,6 @@ public class Lighting {
         } else {
             // Light Adjustments
             int lightRadiusAdjustment = getLightRadiusAdjustment();
-            System.out.println(nextGloom);
 
             RadialGradientPaint gradientPaint = new RadialGradientPaint(centreX, centreY, game.player.currentLight.lightRadius + lightRadiusAdjustment, fraction, color);
             graphics2D.setPaint(gradientPaint);
@@ -127,9 +129,9 @@ public class Lighting {
 
         // Darkness state stuff
         switch (darknessState) {
-            case DARKNESS_STATE_NIGHT: updateDarknessState(States.DARKNESS_STATE_NEW_DUSK, 600, true); break;
+            case DARKNESS_STATE_NIGHT: updateDarknessState(States.DARKNESS_STATE_NEW_DUSK, nightLength, true); break;
             case DARKNESS_STATE_NEW_DUSK: updateDarknessState(nextGloom, 1, false); break;
-            case DARKNESS_STATE_GLOOM, DARKNESS_STATE_LIGHT_GLOOM, DARKNESS_STATE_DARK_GLOOM: updateDarknessState(States.DARKNESS_STATE_DUSK, 600, true); break;
+            case DARKNESS_STATE_GLOOM, DARKNESS_STATE_LIGHT_GLOOM, DARKNESS_STATE_DARK_GLOOM: updateDarknessState(States.DARKNESS_STATE_DUSK, gloomLength, true); break;
             case DARKNESS_STATE_DUSK: updateDarknessState(States.DARKNESS_STATE_NIGHT, 1, false); break;
         }
     }
@@ -149,7 +151,11 @@ public class Lighting {
         darknessState = nextState;
         if (nextState == nextGloom) {
             nextGloom = chooseNextGloom();
+            game.assetSetter.setMonsters();
+        } else if (nextState == States.DARKNESS_STATE_NIGHT) {
+            game.assetSetter.setMonsters();
         }
+
 
         if (transitionWhenDone) {
             game.ui.transitioning = true;
@@ -196,6 +202,7 @@ public class Lighting {
         }
 
         System.err.println("Warning: No gloom state chosen");
+        System.err.println("Number chosen: " + random);
         return States.DARKNESS_STATE_GLOOM;
     }
 }
