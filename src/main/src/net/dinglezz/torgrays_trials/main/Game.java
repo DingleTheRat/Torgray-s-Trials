@@ -49,6 +49,7 @@ public class Game extends JPanel implements Runnable {
 
     // FPS
     int FPS = 60;
+    public long drawStart;
 
     // System
     public TileManager tileManager = new TileManager(this);
@@ -219,7 +220,7 @@ public class Game extends JPanel implements Runnable {
 
     public void drawToTempScreen() {
         // Debug
-        long drawStart = 0;
+        drawStart = 0;
         if (debug) {
             drawStart = System.nanoTime();
         }
@@ -272,27 +273,6 @@ public class Game extends JPanel implements Runnable {
             // More  drawing :D
             environmentManager.draw(graphics2D);
             ui.draw(graphics2D);
-        }
-
-        // Debug
-        if (debug) {
-            long drawEnd = System.nanoTime();
-            long passed = drawEnd - drawStart;
-
-            graphics2D.setFont(new Font("Arial", Font.PLAIN, 20));
-            graphics2D.setColor(Color.white);
-            int x = 10;
-            int y = 400;
-            int lineHeight = 20;
-
-            // Player Position
-            graphics2D.drawString("World X: " + player.worldX, x, y); y += lineHeight;
-            graphics2D.drawString("World Y: " + player.worldY, x, y);  y += lineHeight;
-            graphics2D.drawString("Col: " + (player.worldX + player.solidArea.x) / tileSize, x, y);  y += lineHeight;
-            graphics2D.drawString("Row: " + (player.worldY + player.solidArea.y) / tileSize, x, y); y += lineHeight;
-
-            graphics2D.drawString("Draw Time: " + passed, x ,y); y += lineHeight;
-            graphics2D.drawString("Invincibility: " + player.invincibilityCounter, x, y);
         }
     }
 
@@ -306,7 +286,7 @@ public class Game extends JPanel implements Runnable {
         Graphics2D graphics2D = (Graphics2D)graphics;
 
         // Debug
-        long drawStart = 0;
+        drawStart = 0;
         if (debug) {
             drawStart = System.nanoTime();
         }
@@ -359,28 +339,6 @@ public class Game extends JPanel implements Runnable {
             // More  drawing :D
             environmentManager.draw(graphics2D);
             ui.draw(graphics2D);
-        }
-
-        // Debug
-        if (debug) {
-            long drawEnd = System.nanoTime();
-            long passed = drawEnd - drawStart;
-
-            graphics2D.setFont(new Font("Arial", Font.PLAIN, 20));
-            graphics2D.setColor(Color.white);
-            int x = 10;
-            int y = 400;
-            int lineHeight = 20;
-
-            // Player Position
-            graphics2D.drawString("World X: " + player.worldX, x, y); y += lineHeight;
-            graphics2D.drawString("World Y: " + player.worldY, x, y);  y += lineHeight;
-            graphics2D.drawString("Col: " + (player.worldX + player.solidArea.x) / tileSize, x, y);  y += lineHeight;
-            graphics2D.drawString("Row: " + (player.worldY + player.solidArea.y) / tileSize, x, y); y += lineHeight;
-
-            graphics2D.drawString("Draw Time: " + passed, x ,y); y += lineHeight;
-            graphics2D.drawString("Darkness Counter: " + environmentManager.lighting.darknessCounter, x ,y); y += lineHeight;
-            graphics2D.drawString("Invincibility: " + player.invincibilityCounter, x, y);
         }
 
         // Toxic Waste

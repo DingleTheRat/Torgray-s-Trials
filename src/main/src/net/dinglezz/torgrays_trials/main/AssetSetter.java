@@ -84,8 +84,8 @@ public class AssetSetter {
         // Main Island Map
             // In grass thing
             setAsset(new MON_Dracore(game), 23, 36);
-            setAsset(new MON_Dracore(game), 23, 37);
-            setAsset(new MON_Dracore(game), 23, 38);
+            setAsset(new MON_Dracore(game), 24, 37);
+            setAsset(new MON_Dracore(game), 25, 38);
 
             // In path thing
             setAsset(new MON_Dracore(game), 35, 10);
@@ -95,8 +95,13 @@ public class AssetSetter {
             // In gate thing
             setAsset(new MON_Dracore(game), 10, 29);
             setAsset(new MON_Dracore(game), 11, 29);
-
             setAsset(new MON_Dracore(game), 12, 29);
+
+            // In that one place with a bit of trees
+            setAsset(new MON_Dracore(game), 36, 36);
+            setAsset(new MON_Dracore(game), 36, 32);
+            setAsset(new MON_Dracore(game), 37, 41);
+            setAsset(new MON_Dracore(game), 31, 40);
 
             game.monster.put("Main Island", assetMap);
             assetMap = new HashMap<>();

@@ -87,19 +87,21 @@ public class UI {
             case STATE_DIALOGUE: drawBasics(); drawDialogueScreen(); break;
             case STATE_CHARACTER: drawCharacterScreen(); drawInventory(game.player, true); break;
             case STATE_GAME_OVER: drawGameOverScreen(); break;
-            case STATE_TRADE: drawTradeScreen(); break;
-            case STATE_MAP: drawMapScreen(); break;
+            case STATE_TRADE: if (subState == States.TRADE_STATE_SELECT) {drawBasics();}; drawTradeScreen(); break;
+            case STATE_MAP: drawBasics(); drawMapScreen(); break;
         }
     }
 
     /// Draws all the basic HUDs in the play state:
     /// - Player's Health
     /// - Darkness State
-    /// - Mini Notification Messages
+    /// - Mini Notifications
+    /// - Debug Menu
     public void drawBasics() {
         drawPlayerHealth();
         drawDarknessState();
         drawMiniNotifications();
+        drawDebugMenu();
     }
 
     /// Draws the player's health
@@ -161,6 +163,31 @@ public class UI {
         graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 38f));
 
         graphics2D.drawString(game.environmentManager.getDarknessStateString(), x, y);
+    }
+    public void drawDebugMenu() {
+        if (game.debug) {
+            long drawEnd = System.nanoTime();
+            long passed = drawEnd - game.drawStart;
+
+            graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 21f));
+            graphics2D.setColor(Color.white);
+            int x = game.tileSize / 2;
+            int y = game.tileSize * 3;
+            int lineHeight = 20;
+
+            graphics2D.drawString("FPS: " + game.FPS, x, y); y += lineHeight;
+            graphics2D.drawString("Draw Time: " + passed, x ,y); y += lineHeight;
+            y += lineHeight;
+            graphics2D.drawString("Game State: " + game.gameState, x ,y); y += lineHeight;
+            graphics2D.drawString("Time State: " + game.environmentManager.lighting.darknessState, x ,y); y += lineHeight;
+            graphics2D.drawString("Sub State: " + subState, x ,y); y += lineHeight;
+            y += lineHeight;
+            graphics2D.drawString("Map: " + game.currentMap, x, y); y += lineHeight;
+            graphics2D.drawString("World X: " + game.player.worldX, x, y); y += lineHeight;
+            graphics2D.drawString("World Y: " + game.player.worldY, x, y);  y += lineHeight;
+            graphics2D.drawString("Col: " + (game.player.worldX + game.player.solidArea.x) / game.tileSize, x, y);  y += lineHeight;
+            graphics2D.drawString("Row: " + (game.player.worldY + game.player.solidArea.y) / game.tileSize, x, y); y += lineHeight;
+        }
     }
 
     public void drawTitleScreen() {
