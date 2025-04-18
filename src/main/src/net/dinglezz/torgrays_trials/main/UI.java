@@ -7,6 +7,8 @@ import net.dinglezz.torgrays_trials.object.OBJ_Heart;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -83,7 +85,7 @@ public class UI {
         switch (game.gameState) {
             case STATE_TITLE: drawTitleScreen(); break;
             case STATE_PLAY: drawBasics(); break;
-            case STATE_PAUSE: drawPauseScreen(); break;
+            case STATE_PAUSE: drawBasics(); drawPauseScreen(); break;
             case STATE_DIALOGUE: drawBasics(); drawDialogueScreen(); break;
             case STATE_CHARACTER: drawCharacterScreen(); drawInventory(game.player, true); break;
             case STATE_GAME_OVER: drawGameOverScreen(); break;
@@ -285,6 +287,9 @@ public class UI {
 
     }
     public void drawPauseScreen() {
+        graphics2D.setColor(new Color(0, 0, 0, 0.35f));
+        graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
+
         graphics2D.setColor(Color.white);
         graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 48f));
 
@@ -857,7 +862,7 @@ public class UI {
         }
     }
     public void drawGameOverScreen() {
-        graphics2D.setColor(new Color(0, 0, 0, 150));
+        graphics2D.setColor(new Color(0.1f, 0, 0, 0.94f));
         graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
 
         int x;

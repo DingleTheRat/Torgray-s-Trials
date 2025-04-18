@@ -21,7 +21,7 @@ public class EnvironmentManager {
         lighting.update();
     }
     public void draw(Graphics2D g2) {
-        if (lighting != null) {
+        if (lighting != null && game.gameState != States.STATE_GAME_OVER) {
             lighting.draw(g2);
         }
     }
