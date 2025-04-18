@@ -27,15 +27,18 @@ public class OBJ_Torgray_Soup extends Entity {
     }
     public boolean use(Entity entity) {
         game.gameState = States.STATE_DIALOGUE;
-        int random = new Random().nextInt(6) + 1;
+        int random = new Random().nextInt(9) + 1;
 
         game.ui.currentDialogue = switch (random) {
-            case 1 -> "Erm a last key is behind the pond. \n+4 health";
-            case 2 -> "Erm healing in the pond respawns \nmobs. \n+4 health";
-            case 3 -> "Erm the higher level, the more you \nheal when leveling up. \n+4 health";
-            case 4 -> "Erm I think you are left handed. \n+4 health";
-            case 5 -> "Erm after passing all 3 gates you get \na reward. \n+4 health";
-            case 6 -> "Erm the pond is a good place to \nheal. \n+4 health";
+            case 1 -> "Erm the last two keys have to be bought. \n+4 health";
+            case 2 -> "Erm by pressing F3 you can enter debug \nmode. \n+4 health";
+            case 3 -> "Erm when it's gloom, Dracores respawn, \nhave their health quadrupled, and do half a \nheart more damage. \n+4 health";
+            case 4 -> "Erm it appears you are left handed. \nBut hey, that's just a theory! A GAME THEORY! \n+4 health";
+            case 5 -> "Erm after passing all 4 gates you get \nsome cool goodies. \n+4 health";
+            case 6 -> "Erm in dark gloom or light gloom, your light \nrange increases or decreases by 50px. \n+4 health";
+            case 7 -> "Erm a heart is actually 2 health points, \nhalf a heart is 1. \n+4 health";
+            case 8 -> "Erm when you go down from your spawn \npoint, in the area where the Dracores are, \nthere is a path to a hut. \n+4 health";
+            case 9 -> "Erm leveling up increases your defence and \nattack values, but so do swords and shields. \n+4 health";
             default -> "Erm something went wrong. \n+4 health";
         };
 
