@@ -16,7 +16,7 @@ public class TileManager {
     Game game;
     public HashMap<Integer, Tile> tile = new HashMap<>();
     public HashMap<Integer, String> mapStrings = new HashMap<>();
-    public HashMap<String , Integer> mapNumbers = new HashMap<>();
+    public HashMap<String, Integer> mapNumbers = new HashMap<>();
     public int[][][] mapTileNum;
 
     // Map Screen

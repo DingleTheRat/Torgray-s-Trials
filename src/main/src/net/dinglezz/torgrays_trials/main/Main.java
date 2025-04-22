@@ -4,6 +4,7 @@ import javax.swing.*;
 
 public class Main {
     public static JFrame window;
+    public static Game game;
 
     public static void main(String[] args) {
         window = new JFrame();
@@ -11,7 +12,7 @@ public class Main {
         window.setResizable(false);
         window.setTitle("Torgray's Trials");
 
-        Game game = new Game();
+        game = new Game();
         window.add(game);
 
         game.config.loadConfig();

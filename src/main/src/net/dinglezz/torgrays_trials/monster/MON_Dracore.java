@@ -3,6 +3,7 @@ package net.dinglezz.torgrays_trials.monster;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.LootTable;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.object.OBJ_Coins;
 import net.dinglezz.torgrays_trials.object.OBJ_Torgray_Soup;
@@ -112,7 +113,7 @@ public class MON_Dracore extends Entity {
         if (game.pathFinding) {
             onPath = true;
         } else {
-            // If not then just change direction
+            // If not then change the direction
             switch (game.player.direction) {
                 case "up": direction = "down"; break;
                 case "down": direction = "up"; break;
@@ -124,21 +125,14 @@ public class MON_Dracore extends Entity {
 
     @Override
     public void checkDrop() {
-        int random = new Random().nextInt(2) + 1;
+        Entity loot = LootTable.chooseSingleLoot(LootTable.LOOT_TABLE_DRACORE);
 
-        switch (random) {
-            // No zero since there is supposed to be a chance for no drop
-            case 1: dropItem(new OBJ_Torgray_Soup(game)); break;
-            case 2:
-                int amount = new Random().nextInt(100) + 1;
-                if (amount <= 15) {
-                    dropItem(new OBJ_Coins(game, 3));
-                } else if (amount <= 35) {
-                    dropItem(new OBJ_Coins(game, 2));
-                } else {
-                    dropItem(new OBJ_Coins(game, 1));
-                }
-            break;
+        if (loot != null) {
+            if (loot == LootTable.DRACORE_RANDOM_COIN.loot) {
+                dropItem(LootTable.chooseSingleLoot(LootTable.LOOT_TABLE_DRACORE_COINS));
+            } else {
+                dropItem(loot);
+            }
         }
     }
 
