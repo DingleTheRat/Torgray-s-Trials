@@ -52,8 +52,6 @@ public class Game extends JPanel implements Runnable {
     // System
     public TileManager tileManager = new TileManager(this);
     public InputHandler inputHandler = new InputHandler(this);
-    Sound music = new Sound();
-    Sound sound = new Sound();
     public EnvironmentManager environmentManager = new EnvironmentManager(this);
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public AssetSetter assetSetter = new AssetSetter(this);
@@ -88,7 +86,7 @@ public class Game extends JPanel implements Runnable {
         assetSetter.setNPCs();
         assetSetter.setMonsters();
         environmentManager.setup();
-        playMusic("Tech Geek");
+        Sound.playMusic("Tech Geek");
         gameState = States.STATE_TITLE;
 
         if (fullScreen) {
@@ -343,17 +341,5 @@ public class Game extends JPanel implements Runnable {
         graphics2D.dispose();
     }
 
-    // Sounds
-    public void playMusic(String songName) {
-        music.getFile(songName);
-        music.play();
-        music.loop();
-    }
-    public void stopMusic() {
-        music.stop();
-    }
-    public void playSound(String soundName) {
-        sound.getFile(soundName);
-        sound.play();
-    }
+
  }

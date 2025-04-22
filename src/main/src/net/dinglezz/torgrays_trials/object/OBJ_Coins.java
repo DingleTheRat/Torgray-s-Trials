@@ -4,6 +4,7 @@ import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTags;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.Sound;
 
 public class OBJ_Coins extends Entity {
     Game game;
@@ -25,7 +26,7 @@ public class OBJ_Coins extends Entity {
     @Override
     public boolean use(Entity entity) {
         game.player.coins += amount;
-        game.playSound("Coin");
+        Sound.playSFX("Coin");
 
         // Grammar check
         if (amount == 1) {

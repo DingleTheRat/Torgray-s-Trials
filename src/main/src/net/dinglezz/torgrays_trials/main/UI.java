@@ -7,8 +7,6 @@ import net.dinglezz.torgrays_trials.object.OBJ_Heart;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -479,13 +477,13 @@ public class UI {
         textX = frameX + game.tileSize * 4;
         textY = frameY + game.tileSize * 2 + (game.tileSize / 2) + 14;
         graphics2D.drawRect(textX, textY, 120, 24);
-        int volumeWidth = 24 * game.music.volumeScale;
+        int volumeWidth = 24 * Sound.music.volumeScale;
         graphics2D.fillRect(textX, textY, volumeWidth, 24);
 
         // Sound Slider
         textY += game.tileSize;
         graphics2D.drawRect(textX, textY, 120, 24);
-        volumeWidth = 24 * game.sound.volumeScale;
+        volumeWidth = 24 * Sound.sfx.volumeScale;
         graphics2D.fillRect(textX, textY, volumeWidth, 24);
         graphics2D.fillRect(textX, textY, 24, 24);
 
@@ -1103,8 +1101,8 @@ public void drawTransitionScreen() {
         subState = States.STATE_PAUSE;
         game.gameState = States.STATE_TITLE;
         titleScreenState = States.TITLE_STATE_MAIN;
-        game.music.stop();
-        game.playMusic("Tech Geek");
+        Sound.music.stop();
+        Sound.playMusic("Tech Geek");
         game.restart();
     }
     @SuppressWarnings("unused")

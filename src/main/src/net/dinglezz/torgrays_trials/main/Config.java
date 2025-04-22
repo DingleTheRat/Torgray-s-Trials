@@ -17,11 +17,11 @@ public class Config {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(configFile));
 
             // Music Volume
-            bufferedWriter.write(String.valueOf(game.music.volumeScale));
+            bufferedWriter.write(String.valueOf(Sound.music.volumeScale));
             bufferedWriter.newLine();
 
             // Sound Volume
-            bufferedWriter.write(String.valueOf(game.sound.volumeScale));
+            bufferedWriter.write(String.valueOf(Sound.sfx.volumeScale));
             bufferedWriter.newLine();
 
             // Full screen
@@ -59,11 +59,11 @@ public class Config {
             String s = bufferedReader.readLine();
 
             // Music Volume
-            game.music.volumeScale = Integer.parseInt(s);
+            Sound.music.volumeScale = Integer.parseInt(s);
 
             // Sound Volume
             s = bufferedReader.readLine();
-            game.sound.volumeScale = Integer.parseInt(s);
+            Sound.sfx.volumeScale = Integer.parseInt(s);
 
             // Full screen
             s = bufferedReader.readLine();

@@ -12,8 +12,13 @@ public class LootTable {
     public Entity loot;
     public float chance;
 
+    public LootTable(Entity loot, float chance) {
+        this.loot = loot;
+        this.chance = chance;
+    }
+
     // LootTables
-    public static final LootTable DRACORE_RANDOM_COIN = new LootTable(new OBJ_Coins(Main.game, 0), 0.50f);
+    public static final LootTable DRACORE_RANDOM_COIN = new LootTable(new OBJ_Coins(Main.game, 0), 0.40f);
 
     public static final ArrayList<LootTable> LOOT_TABLE_DRACORE_COINS = new ArrayList<>() {{
         add(new LootTable(new OBJ_Coins(Main.game, 1), 0.5f));
@@ -22,16 +27,15 @@ public class LootTable {
     }};
     public static final ArrayList<LootTable> LOOT_TABLE_DRACORE = new ArrayList<>() {{
         add(new LootTable(null, 0.25f)); // NOTHING!
-        add(new LootTable(new OBJ_Torgray_Soup(Main.game), 0.25f));
+        add(new LootTable(new OBJ_Torgray_Soup(Main.game), 0.35f));
         add(DRACORE_RANDOM_COIN);
     }};
 
-    public LootTable(Entity loot, float chance) {
-        this.loot = loot;
-        this.chance = chance;
-    }
-
+    // Methods
     public static Entity chooseSingleLoot(ArrayList<LootTable> lootTables) {
+        // Sort
+        lootTables.sort((a, b) -> Float.compare(a.chance, b.chance));
+
         // Make sure the chances add up to 100
         float chances = 0f;
         for (LootTable loot : lootTables) {
@@ -41,6 +45,7 @@ public class LootTable {
             throw new IllegalArgumentException("Loot Table chances must add up to 100");
         }
 
+        // Choose loot
         float random = new Random().nextFloat();
         float cumulativeChance = 0f;
         for (LootTable loot : lootTables) {

@@ -2,6 +2,7 @@ package net.dinglezz.torgrays_trials.events;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
 
 import java.util.Objects;
@@ -130,7 +131,7 @@ public class EventHandler {
     }
     public void teleport(String map, int col, int row) {
         canTouchEvent = false;
-        game.playSound("Teleport");
+        Sound.playSFX("Teleport");
 
         nextMap = map;
         nextCol = game.tileSize * col;

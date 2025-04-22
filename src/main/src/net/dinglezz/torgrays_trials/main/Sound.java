@@ -15,18 +15,26 @@ public class Sound {
     float volume;
 
     public Sound() {
-        soundLibrary.put("Journey", getClass().getResource("/sound/journey.wav"));
-        soundLibrary.put("Coin", getClass().getResource("/sound/coin.wav"));
-        soundLibrary.put("Power Up", getClass().getResource("/sound/power_up.wav"));
-        soundLibrary.put("Unlock", getClass().getResource("/sound/unlock.wav"));
-        soundLibrary.put("Way", getClass().getResource("/sound/way.wav"));
-        soundLibrary.put("Tech Geek", getClass().getResource("/sound/tech_geek.wav"));
-        soundLibrary.put("Hit Monster", getClass().getResource("/sound/hit_monster.wav"));
-        soundLibrary.put("Receive Damage", getClass().getResource("/sound/receive_damage.wav"));
-        soundLibrary.put("Cursor", getClass().getResource("/sound/cursor.wav"));
-        soundLibrary.put("Game Over", getClass().getResource("/sound/game_over.wav"));
-        soundLibrary.put("Teleport", getClass().getResource("/sound/teleport.wav"));
-        soundLibrary.put("Swing", getClass().getResource("/sound/swing.wav"));
+        // Music
+        soundLibrary.put("Tech Geek", getClass().getResource("/sound/music/tech_geek.wav"));
+        soundLibrary.put("Umbral Force", getClass().getResource("/sound/music/umbral_force.wav"));
+        soundLibrary.put("Coin Toss", getClass().getResource("/sound/music/coin_toss.wav"));
+        // Unused
+        soundLibrary.put("Journey", getClass().getResource("/sound/music/unused/journey.wav")); // By AWESOME_DRAGON
+        soundLibrary.put("Dark Mystery", getClass().getResource("/sound/music/unused/dark_mystery.wav")); // By LHTD
+
+        // SFX
+        soundLibrary.put("Coin", getClass().getResource("/sound/sfx/coin.wav"));
+        soundLibrary.put("Power Up", getClass().getResource("/sound/sfx/power_up.wav"));
+        soundLibrary.put("Unlock", getClass().getResource("/sound/sfx/unlock.wav"));
+        soundLibrary.put("Hit Monster", getClass().getResource("/sound/sfx/hit_monster.wav"));
+        soundLibrary.put("Receive Damage", getClass().getResource("/sound/sfx/receive_damage.wav"));
+        soundLibrary.put("Cursor", getClass().getResource("/sound/sfx/cursor.wav"));
+        soundLibrary.put("Game Over", getClass().getResource("/sound/sfx/game_over.wav"));
+        soundLibrary.put("Teleport", getClass().getResource("/sound/sfx/teleport.wav"));
+        soundLibrary.put("Swing", getClass().getResource("/sound/sfx/swing.wav"));
+        // Unused
+        soundLibrary.put("Way", getClass().getResource("/sound/sfx/unused/way.wav"));
     }
 
     public void getFile(String soundName) {
@@ -38,20 +46,29 @@ public class Sound {
                 floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
                 checkVolume();
             } else {
-                System.err.println("Warning: \"" + soundName + "\" is not a valid sound.");
+                System.err.println("Warning: \"" + soundName + "\" is not a valid sfx.");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     public void play() {
-        clip.start();
+        if (clip != null) {
+            clip.start();
+        } else {
+            System.err.println("Warning: No clip found to play");}
     }
     public void loop() {
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
+        if ( clip != null) {
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } else {
+            System.err.println("Warning: No clip found to loop");
+        }
     }
     public void stop() {
-        clip.stop();
+        if (clip != null) {
+            clip.stop();
+        }
     }
     public void checkVolume() {
         switch (volumeScale) {
@@ -63,5 +80,22 @@ public class Sound {
             case 5: volume = 6f; break;
         }
         floatControl.setValue(volume);
+    }
+
+    // Static Stuff
+    public static Sound music = new Sound();
+    public static Sound sfx = new Sound();
+
+    public static void playMusic(String songName) {
+        music.getFile(songName);
+        music.play();
+        music.loop();
+    }
+    public static void stopMusic() {
+        music.stop();
+    }
+    public static void playSFX(String sfxName) {
+        sfx.getFile(sfxName);
+        sfx.play();
     }
 }

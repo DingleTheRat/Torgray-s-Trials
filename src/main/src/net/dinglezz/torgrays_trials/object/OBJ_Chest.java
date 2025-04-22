@@ -4,6 +4,7 @@ import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTags;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class OBJ_Chest extends Entity {
     @Override
     public void interact() {
         if (!opened) {
-            game.playSound("Unlock");
+            Sound.playSFX("Unlock");
             game.gameState = States.STATE_DIALOGUE;
             game.player.attackCanceled = true;
 

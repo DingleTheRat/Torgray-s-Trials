@@ -1,6 +1,7 @@
 package net.dinglezz.torgrays_trials.entity;
 
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.UtilityTool;
 
 import javax.imageio.ImageIO;
@@ -232,7 +233,7 @@ public abstract class Entity {
     }
     public void damagePlayer(int attack) {
         if (!game.player.invincible) {
-            game.playSound("Receive Damage");
+            Sound.playSFX("Receive Damage");
 
             int damage = attack - game.player.defence;
             if (damage <= 0) {

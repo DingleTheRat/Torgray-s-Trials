@@ -54,14 +54,14 @@ public class   InputHandler implements KeyListener {
         if (game.ui.titleScreenState == States.TITLE_STATE_MAIN) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 game.ui.commandNumber--;
-                game.playSound("Cursor");
+                Sound.playSFX("Cursor");
                 if (game.ui.commandNumber < 0) {
                     game.ui.commandNumber = 2;
                 }
             }
             if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
                 game.ui.commandNumber++;
-                game.playSound("Cursor");
+                Sound.playSFX("Cursor");
                 if (game.ui.commandNumber > 2) {
                     game.ui.commandNumber = 0;
                 }
@@ -81,14 +81,14 @@ public class   InputHandler implements KeyListener {
         } else if (game.ui.titleScreenState == States.TITLE_STATE_MODES) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 game.ui.commandNumber--;
-                game.playSound("Cursor");
+                Sound.playSFX("Cursor");
                 if (game.ui.commandNumber < 0) {
                     game.ui.commandNumber = 3;
                 }
             }
             if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
                 game.ui.commandNumber++;
-                game.playSound("Cursor");
+                Sound.playSFX("Cursor");
                 if (game.ui.commandNumber > 3) {
                     game.ui.commandNumber = 0;
                 }
@@ -97,8 +97,8 @@ public class   InputHandler implements KeyListener {
                 if (game.ui.commandNumber == 0) {
                     game.gameState = States.STATE_PLAY;
                     game.gameMode = "Easy";
-                    game.stopMusic();
-                    game.playMusic("Journey");
+                    Sound.stopMusic();
+                    Sound.playMusic("Umbral Force");
                     System.out.println("Imagine Picking Easy");
 
                     // Modified Stats
@@ -119,8 +119,8 @@ public class   InputHandler implements KeyListener {
                 if (game.ui.commandNumber == 1) {
                     game.gameState = States.STATE_PLAY;
                     game.gameMode = "Medium";
-                    game.stopMusic();
-                    game.playMusic("Journey");
+                    Sound.stopMusic();
+                    Sound.playMusic("Umbral Force");
                     System.out.println("Kinda a mid game mode lol");
 
                     // No modified stats since Medium is the default
@@ -128,8 +128,8 @@ public class   InputHandler implements KeyListener {
                 if (game.ui.commandNumber == 2) {
                     game.gameState = States.STATE_PLAY;
                     game.gameMode = "Hard";
-                    game.stopMusic();
-                    game.playMusic("Journey");
+                    Sound.stopMusic();
+                    Sound.playMusic("Umbral Force");
                     System.out.println("You really think you are \"hardcore\"?");
 
                     // Modified Stats
@@ -180,7 +180,7 @@ public class   InputHandler implements KeyListener {
 
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
             game.ui.commandNumber--;
-            game.playSound("Cursor");
+            Sound.playSFX("Cursor");
 
             if (game.ui.commandNumber < 0) {
                 game.ui.commandNumber = maxCommandNumber;
@@ -188,7 +188,7 @@ public class   InputHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
             game.ui.commandNumber++;
-            game.playSound("Cursor");
+            Sound.playSFX("Cursor");
 
             if (game.ui.commandNumber > maxCommandNumber) {
                 game.ui.commandNumber = 0;
@@ -200,27 +200,27 @@ public class   InputHandler implements KeyListener {
 
         if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
             if (game.ui.subState == States.PAUSE_STATE_SETTINGS_MAIN) {
-                if (game.ui.commandNumber == 0 && game.music.volumeScale > 0) {
-                    game.music.volumeScale--;
-                    game.music.checkVolume();
-                    game.playSound("Cursor");
+                if (game.ui.commandNumber == 0 && Sound.music.volumeScale > 0) {
+                    Sound.music.volumeScale--;
+                    Sound.music.checkVolume();
+                    Sound.playSFX("Cursor");
                 }
-                if (game.ui.commandNumber == 1 && game.sound.volumeScale > 0) {
-                    game.sound.volumeScale--;
-                    game.playSound("Cursor");
+                if (game.ui.commandNumber == 1 && Sound.sfx.volumeScale > 0) {
+                    Sound.sfx.volumeScale--;
+                    Sound.playSFX("Cursor");
                 }
             }
         }
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
             if (game.ui.subState == States.PAUSE_STATE_SETTINGS_MAIN) {
-                if (game.ui.commandNumber == 0 && game.music.volumeScale < 5) {
-                    game.music.volumeScale++;
-                    game.music.checkVolume();
-                    game.playSound("Cursor");
+                if (game.ui.commandNumber == 0 && Sound.music.volumeScale < 5) {
+                    Sound.music.volumeScale++;
+                    Sound.music.checkVolume();
+                    Sound.playSFX("Cursor");
                 }
-                if (game.ui.commandNumber == 1 && game.sound.volumeScale < 5) {
-                    game.sound.volumeScale++;
-                    game.playSound("Cursor");
+                if (game.ui.commandNumber == 1 && Sound.sfx.volumeScale < 5) {
+                    Sound.sfx.volumeScale++;
+                    Sound.playSFX("Cursor");
                 }
             }
         }
@@ -244,25 +244,25 @@ public class   InputHandler implements KeyListener {
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
             if (game.ui.playerSlotRow != 0) {
                 game.ui.playerSlotRow--;
-                game.playSound("Cursor");
+                Sound.playSFX("Cursor");
             }
         }
         if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
             if (game.ui.playerSlotCol != 0) {
                 game.ui.playerSlotCol--;
-                game.playSound("Cursor");
+                Sound.playSFX("Cursor");
             }
         }
         if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
             if (game.ui.playerSlotRow != 4) {
                 game.ui.playerSlotRow++;
-                game.playSound("Cursor");
+                Sound.playSFX("Cursor");
             }
         }
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
             if (game.ui.playerSlotCol != 4) {
                 game.ui.playerSlotCol++;
-                game.playSound("Cursor");
+                Sound.playSFX("Cursor");
             }
         }
     }
@@ -270,25 +270,25 @@ public class   InputHandler implements KeyListener {
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
             if (game.ui.entitySlotRow != 0) {
                 game.ui.entitySlotRow--;
-                game.playSound("Cursor");
+                Sound.playSFX("Cursor");
             }
         }
         if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
             if (game.ui.entitySlotCol != 0) {
                 game.ui.entitySlotCol--;
-                game.playSound("Cursor");
+                Sound.playSFX("Cursor");
             }
         }
         if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
             if (game.ui.entitySlotRow != 4) {
                 game.ui.entitySlotRow++;
-                game.playSound("Cursor");
+                Sound.playSFX("Cursor");
             }
         }
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
             if (game.ui.entitySlotCol != 4) {
                 game.ui.entitySlotCol++;
-                game.playSound("Cursor");
+                Sound.playSFX("Cursor");
             }
         }
     }
@@ -305,29 +305,29 @@ public class   InputHandler implements KeyListener {
             if (game.ui.commandNumber < 0) {
                 game.ui.commandNumber = maxCommandNumber;
             }
-            game.playSound("Cursor");
+            Sound.playSFX("Cursor");
         }
         if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
             game.ui.commandNumber++;
             if (game.ui.commandNumber > maxCommandNumber) {
                 game.ui.commandNumber = 0;
             }
-            game.playSound("Cursor");
+            Sound.playSFX("Cursor");
         }
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
             if (game.ui.commandNumber == 0) {
                 game.gameState = States.STATE_PLAY;
                 game.restart();
-                game.playMusic("Journey");
+                Sound.playMusic("Umbral Force");
             } else if (game.ui.commandNumber == maxCommandNumber) {
                 game.gameState = States.STATE_TITLE;
                 game.ui.titleScreenState = States.TITLE_STATE_MAIN;
                 game.restart();
-                game.playMusic("Tech Geek");
+                Sound.playMusic("Tech Geek");
             } else if (game.ui.commandNumber == 1) {
                 game.gameState = States.STATE_PLAY;
                 game.respawn();
-                game.playMusic("Journey");
+                Sound.playMusic("Umbral Force");
             }
         }
     }
@@ -347,14 +347,14 @@ public class   InputHandler implements KeyListener {
                 if (game.ui.commandNumber < 0) {
                     game.ui.commandNumber = 2;
                 }
-                game.playSound("Cursor");
+                Sound.playSFX("Cursor");
             }
             if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
                 game.ui.commandNumber++;
                 if (game.ui.commandNumber > 2) {
                     game.ui.commandNumber = 0;
                 }
-                game.playSound("Cursor");
+                Sound.playSFX("Cursor");
             }
         } else if (game.ui.subState == States.TRADE_STATE_BUY) {
             entityInventory(code);

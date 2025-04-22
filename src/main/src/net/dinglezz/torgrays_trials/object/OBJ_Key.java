@@ -4,6 +4,7 @@ import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTags;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.Sound;
 
 public class OBJ_Key extends Entity {
     Game game;
@@ -25,7 +26,7 @@ public class OBJ_Key extends Entity {
         int objIndex = getDetected(entity, game.object.get(game.currentMap), "Gate");
         if (objIndex != 999) {
             game.ui.addMiniNotification("-1 Key");
-            game.playSound("Unlock");
+            Sound.playSFX("Unlock");
             game.object.get(game.currentMap).put(objIndex, null);
             return true;
         } else {

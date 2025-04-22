@@ -2,6 +2,7 @@ package net.dinglezz.torgrays_trials.entity;
 
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.InputHandler;
+import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.object.OBJ_Coins;
 import net.dinglezz.torgrays_trials.object.OBJ_Lantern;
@@ -158,7 +159,7 @@ public class Player extends Entity{
 
             // Attacking
             if (inputHandler.spacePressed && !attackCanceled) {
-                game.playSound("Swing");
+                Sound.playSFX("Swing");
                 attacking = true;
                 spriteCounter = 0;
             }
@@ -203,9 +204,9 @@ public class Player extends Entity{
         }
         if (health <= 0) {
             game.gameState = States.STATE_GAME_OVER;
-            game.playSound("Game Over");
+            Sound.playSFX("Game Over");
             game.ui.commandNumber = -1;
-            game.stopMusic();
+            Sound.stopMusic();
         }
     }
     public void attack() {
@@ -262,7 +263,7 @@ public class Player extends Entity{
                 game.object.get(game.currentMap).put(i, null);
             }
             else if (canObtainItem(game.object.get(game.currentMap).get(i))) {
-                game.playSound("Coin");
+                Sound.playSFX("Coin");
                 String text = "+1 " + game.object.get(game.currentMap).get(i).name;
                 game.ui.addMiniNotification(text);
                 game.object.get(game.currentMap).put(i, null);
@@ -281,7 +282,7 @@ public class Player extends Entity{
     public void contactMonster(int i) {
         if (i != 999) {
             if (!invincible && !game.monster.get(game.currentMap).get(i).dying) {
-                game.playSound("Receive Damage");
+                Sound.playSFX("Receive Damage");
 
                 int damage = game.monster.get(game.currentMap).get(i).attack - defence;
                 if (damage < 0) {
@@ -297,7 +298,7 @@ public class Player extends Entity{
     public void damageMonster(int i, int knockBackPower) {
         if (i != 999) {
             if (!game.monster.get(game.currentMap).get(i).invincible) {
-                game.playSound("Hit Monster");
+                Sound.playSFX("Hit Monster");
 
                 // KnockBack :D
                 if (knockBackPower > 0) {

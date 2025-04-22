@@ -4,6 +4,7 @@ import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTags;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
 
 import java.awt.*;
@@ -48,7 +49,7 @@ public class OBJ_Torgray_Soup extends Entity {
             game.player.health += value;
         }
         game.player.generateParticles(this, game.player);
-        game.playSound("Power Up");
+        Sound.playSFX("Power Up");
         return true;
     }
 
