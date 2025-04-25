@@ -20,8 +20,8 @@ public class Lighting {
     // Darkness Settings
     public int nightLength = 12000;
     public int gloomLength = 10000;
-    public int gloomChance = 25;
-    public int lightGloomChance = 50;
+    public int gloomChance = 50;
+    public int lightGloomChance = 25;
     public int darkGloomChance = 25;
 
     public Lighting(Game game) {
@@ -35,7 +35,7 @@ public class Lighting {
         darknessFilter = new BufferedImage(game.screenWidth, game.screenHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics2D = (Graphics2D) darknessFilter.getGraphics();
 
-        // Calculate the centre of the player
+        // Calculate the center of the player
         int centreX = game.player.screenX + (game.tileSize) / 2;
         int centreY = game.player.screenY + (game.tileSize) / 2;
 

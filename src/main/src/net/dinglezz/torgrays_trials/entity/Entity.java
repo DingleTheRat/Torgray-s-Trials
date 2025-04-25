@@ -75,7 +75,7 @@ public abstract class Entity {
     public int defenceValue;
     public String description = "Nothing Here :(";
     public int lightRadius;
-    public boolean stackable = false;
+    public int maxStack = 1;
     public int amount = 1;
     public int price = 0;
 

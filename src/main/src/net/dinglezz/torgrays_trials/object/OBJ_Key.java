@@ -18,7 +18,7 @@ public class OBJ_Key extends Entity {
         tags.add(EntityTags.TAG_CONSUMABLE);
         down1 = registerEntitySprite("/objects/key");
         description = "Probably opens a gate";
-        stackable = true;
+        maxStack = 4;
         price = 6;
     }
     public boolean use(Entity entity) {

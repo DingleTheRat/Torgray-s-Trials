@@ -177,6 +177,10 @@ public class UI {
 
             graphics2D.drawString("FPS: " + game.FPS, x, y); y += lineHeight;
             graphics2D.drawString("Draw Time: " + passed, x ,y); y += lineHeight;
+            graphics2D.drawString("Darkness Counter: " + game.environmentManager.lighting.darknessCounter + "/" + switch (game.environmentManager.lighting.darknessState) {
+                case DARKNESS_STATE_NIGHT -> game.environmentManager.lighting.nightLength;
+                default -> game.environmentManager.lighting.gloomLength;
+            }, x, y); y += lineHeight;
             y += lineHeight;
             graphics2D.drawString("Game State: " + game.gameState, x ,y); y += lineHeight;
             graphics2D.drawString("Time State: " + game.environmentManager.lighting.darknessState, x ,y); y += lineHeight;

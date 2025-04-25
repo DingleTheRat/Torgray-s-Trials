@@ -176,6 +176,7 @@ public class   InputHandler implements KeyListener {
             case States.STATE_PAUSE: maxCommandNumber = 3; break;
             case States.PAUSE_STATE_SETTINGS_MAIN: maxCommandNumber = 5; break;
             case States.PAUSE_STATE_CONFIRM: maxCommandNumber = 1; break;
+            case States.PAUSE_STATE_CONTROLS, PAUSE_STATE_NOTIFICATION: maxCommandNumber = 0; break;
         }
 
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {

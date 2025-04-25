@@ -31,7 +31,7 @@ public class MON_Dracore extends Entity {
         if (game.environmentManager.lighting != null) {
             if (game.environmentManager.lighting.darknessState == States.DARKNESS_STATE_GLOOM ||
                     game.environmentManager.lighting.darknessState == States.DARKNESS_STATE_LIGHT_GLOOM ||
-                    game.environmentManager.lighting.darknessState == States.DARKNESS_STATE_DUSK) {
+                    game.environmentManager.lighting.darknessState == States.DARKNESS_STATE_DARK_GLOOM) {
                 attack += 1;
                 maxHealth = maxHealth * 5;
                 health = maxHealth;

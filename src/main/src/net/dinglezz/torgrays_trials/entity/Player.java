@@ -394,8 +394,8 @@ public class Player extends Entity{
     public boolean canObtainItem(Entity item) {
         boolean canObtain = false;
 
-        // Check if stackable
-        if (item.stackable) {
+        // Check if maxStack
+        if (!(item.amount >= item.maxStack)) {
             int index = searchInInventory(item.name);
 
             if (index != 999) {
@@ -408,7 +408,7 @@ public class Player extends Entity{
                     canObtain = true;
                 }
             }
-        } else { // Not stackable, so check vacancy
+        } else { // Not maxStack, so check vacancy
             if (inventory.size() != maxInventorySize) {
                 inventory.add(item);
                 canObtain = true;

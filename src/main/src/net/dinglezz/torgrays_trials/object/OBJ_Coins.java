@@ -15,7 +15,7 @@ public class OBJ_Coins extends Entity {
         this.amount = amount;
 
         name = "Coins";
-        stackable = true;
+        maxStack = 2;
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_PICKUP_ONLY);
         tags.add(EntityTags.TAG_NON_SELLABLE);
