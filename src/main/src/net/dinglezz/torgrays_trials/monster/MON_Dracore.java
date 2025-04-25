@@ -128,7 +128,7 @@ public class MON_Dracore extends Entity {
         Entity loot = LootTable.chooseSingleLoot(LootTable.LOOT_TABLE_DRACORE);
 
         if (loot != null) {
-            if (loot == LootTable.DRACORE_RANDOM_COIN.loot) {
+            if (loot == LootTable.RANDOM_COIN) {
                 dropItem(LootTable.chooseSingleLoot(LootTable.LOOT_TABLE_DRACORE_COINS));
             } else {
                 dropItem(loot);

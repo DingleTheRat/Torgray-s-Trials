@@ -37,12 +37,14 @@ public class AssetSetter {
             setAsset(new OBJ_Gate(game), 8, 28);
             setAsset(new OBJ_Gate(game), 12, 23);
 
-            // Other
+            // Chests
             setAsset(new OBJ_Chest(game, new ArrayList<>(
                 List.of(new OBJ_Sword_Amethyst(game),
                         new OBJ_Shield_Amethyst(game),
                         new OBJ_Coins(game, 4)
                 ))), 10, 10);
+            setAsset(new OBJ_Dark_Chest(game, LootTable.LOOT_TABLE_DARK_CHEST), 37, 40);
+            setAsset(new OBJ_Dark_Chest(game, LootTable.LOOT_TABLE_DARK_CHEST), 31, 10);
 
             game.object.put("Main Island", assetMap);
             assetMap = new HashMap<>();
@@ -50,6 +52,8 @@ public class AssetSetter {
 
         // Coiner's Shop Map
             setAsset(new OBJ_Table(game), 12, 10);
+
+            setAsset(new OBJ_Dark_Chest(game, LootTable.LOOT_TABLE_DARK_CHEST), 10, 9);
 
             game.object.put("Coiner's Shop", assetMap);
             assetMap = new HashMap<>();

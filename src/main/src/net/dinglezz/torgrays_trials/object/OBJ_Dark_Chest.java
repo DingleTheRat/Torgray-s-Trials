@@ -4,31 +4,32 @@ import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTags;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.LootTable;
 import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class OBJ_Chest extends Entity {
+public class OBJ_Dark_Chest extends Entity {
     Game game;
-    ArrayList<Entity> loot;
+    ArrayList<LootTable> lootTable;
     boolean opened = false;
 
-    public OBJ_Chest(Game game, ArrayList<Entity> loot) {
+    public OBJ_Dark_Chest(Game game, ArrayList<LootTable> lootTable) {
         super(game);
         this.game = game;
-        this.loot = loot;
+        this.lootTable = lootTable;
 
         setDefaultValues();
     }
 
     public void setDefaultValues() {
-        name = "Chest";
+        name = "Dark Chest";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_OBSTACLE);
-        image = registerEntitySprite("/objects/chest/chest_closed");
-        image2 = registerEntitySprite("/objects/chest/chest_opened");
+        image = registerEntitySprite("/objects/dark_chest/dark_chest_closed");
+        image2 = registerEntitySprite("/objects/dark_chest/dark_chest_opened");
         down1 = image;
         collision = true;
 
@@ -49,13 +50,20 @@ public class OBJ_Chest extends Entity {
             game.player.attackCanceled = true;
 
             StringBuilder stringBuilder = new StringBuilder();
-            if (loot.isEmpty()) {
+
+            if (lootTable.isEmpty()) {
                 stringBuilder.append("This chest is empty :(");
             } else {
-                stringBuilder.append("Woah, this chest is shiny!");
+                ArrayList<Entity> loot = LootTable.chooseMultipleLoot(lootTable);
+                if (loot.isEmpty()) {
+                    stringBuilder.append("This chest is empty :(");
+                } else {
+                    stringBuilder.append("Hmmmm, what's in this old dark chest?");
+                }
 
                 for (Entity reward : loot) {
-                    if (Objects.equals(reward.name, "Coins")) {
+                    if (reward == LootTable.RANDOM_COIN) {
+                        reward = LootTable.chooseSingleLoot(LootTable.LOOT_TABLE_DARK_CHEST_COINS);
                         game.player.coins += reward.amount;
                         if (reward.amount == 1) {
                             stringBuilder.append("\n+").append(reward.amount).append(" Coin");
@@ -65,7 +73,7 @@ public class OBJ_Chest extends Entity {
                     } else if (game.player.canObtainItem(reward)) {
                         stringBuilder.append("\n+1 ").append(reward.name);
                     } else {
-                        stringBuilder.append("\nI can't carry all this lootTable :(");
+                        stringBuilder.append("\nI can't carry all this loot :(");
                     }
                 }
             }
