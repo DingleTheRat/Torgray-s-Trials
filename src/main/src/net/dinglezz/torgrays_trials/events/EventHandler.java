@@ -19,7 +19,7 @@ public class EventHandler {
         this.game = game;
 
         eventRect = new EventRect[game.maxMaps][game.maxWorldCol][game.maxWorldRow];
-        for (int map : game.tileManager.mapNumbers.values()) {
+        for (int map : game.mapHandler.mapNumbers.values()) {
             int col = 0;
             int row = 0;
             while (col < game.maxWorldRow && row < game.maxWorldRow) {
@@ -41,7 +41,7 @@ public class EventHandler {
     }
 
     public void checkEvent() {
-        // Check if player is more then one tile away from last event
+        // Check if player is more then one tile away from the last event
         int xDistance = Math.abs(game.player.worldX - previousEventX);
         int yDistance = Math.abs(game.player.worldY - previousEventY);
         int distance = Math.max(xDistance, yDistance);
@@ -74,18 +74,18 @@ public class EventHandler {
         if (Objects.equals(map, game.currentMap)) {
             game.player.solidArea.x = game.player.worldX + game.player.solidArea.x;
             game.player.solidArea.y = game.player.worldY + game.player.solidArea.y;
-            eventRect[game.tileManager.mapNumbers.get(map)][col][row].x = col * game.tileSize + eventRect[game.tileManager.mapNumbers.get(map)][col][row].x;
-            eventRect[game.tileManager.mapNumbers.get(map)][col][row].y = row * game.tileSize + eventRect[game.tileManager.mapNumbers.get(map)][col][row].y;
+            eventRect[game.mapHandler.mapNumbers.get(map)][col][row].x = col * game.tileSize + eventRect[game.mapHandler.mapNumbers.get(map)][col][row].x;
+            eventRect[game.mapHandler.mapNumbers.get(map)][col][row].y = row * game.tileSize + eventRect[game.mapHandler.mapNumbers.get(map)][col][row].y;
 
-            if (game.player.solidArea.intersects(eventRect[game.tileManager.mapNumbers.get(map)][col][row]) && !eventRect[game.tileManager.mapNumbers.get(map)][col][row].eventDone) {
+            if (game.player.solidArea.intersects(eventRect[game.mapHandler.mapNumbers.get(map)][col][row]) && !eventRect[game.mapHandler.mapNumbers.get(map)][col][row].eventDone) {
                 hit = true;
                 previousEventX = game.player.worldX;
                 previousEventY = game.player.worldY;
             }
             game.player.solidArea.x = game.player.solidAreaDefaultX;
             game.player.solidArea.y = game.player.solidAreaDefaultY;
-            eventRect[game.tileManager.mapNumbers.get(map)][col][row].x = eventRect[game.tileManager.mapNumbers.get(map)][col][row].eventRectDefaultX;
-            eventRect[game.tileManager.mapNumbers.get(map)][col][row].y = eventRect[game.tileManager.mapNumbers.get(map)][col][row].eventRectDefaultY;
+            eventRect[game.mapHandler.mapNumbers.get(map)][col][row].x = eventRect[game.mapHandler.mapNumbers.get(map)][col][row].eventRectDefaultX;
+            eventRect[game.mapHandler.mapNumbers.get(map)][col][row].y = eventRect[game.mapHandler.mapNumbers.get(map)][col][row].eventRectDefaultY;
         }
 
         return hit;
@@ -96,10 +96,10 @@ public class EventHandler {
         if (Objects.equals(map, game.currentMap)) {
             game.player.solidArea.x = game.player.worldX + game.player.solidArea.x;
             game.player.solidArea.y = game.player.worldY + game.player.solidArea.y;
-            eventRect[game.tileManager.mapNumbers.get(map)][col][row].x = col * game.tileSize + eventRect[game.tileManager.mapNumbers.get(map)][col][row].x;
-            eventRect[game.tileManager.mapNumbers.get(map)][col][row].y = row * game.tileSize + eventRect[game.tileManager.mapNumbers.get(map)][col][row].y;
+            eventRect[game.mapHandler.mapNumbers.get(map)][col][row].x = col * game.tileSize + eventRect[game.mapHandler.mapNumbers.get(map)][col][row].x;
+            eventRect[game.mapHandler.mapNumbers.get(map)][col][row].y = row * game.tileSize + eventRect[game.mapHandler.mapNumbers.get(map)][col][row].y;
 
-            if (game.player.solidArea.intersects(eventRect[game.tileManager.mapNumbers.get(map)][col][row]) && !eventRect[game.tileManager.mapNumbers.get(map)][col][row].eventDone) {
+            if (game.player.solidArea.intersects(eventRect[game.mapHandler.mapNumbers.get(map)][col][row]) && !eventRect[game.mapHandler.mapNumbers.get(map)][col][row].eventDone) {
                 if (game.player.direction.contentEquals(direction) || direction.contentEquals("any")) {
                     hit = true;
                     previousEventX = game.player.worldX;
@@ -108,8 +108,8 @@ public class EventHandler {
             }
             game.player.solidArea.x = game.player.solidAreaDefaultX;
             game.player.solidArea.y = game.player.solidAreaDefaultY;
-            eventRect[game.tileManager.mapNumbers.get(map)][col][row].x = eventRect[game.tileManager.mapNumbers.get(map)][col][row].eventRectDefaultX;
-            eventRect[game.tileManager.mapNumbers.get(map)][col][row].y = eventRect[game.tileManager.mapNumbers.get(map)][col][row].eventRectDefaultY;
+            eventRect[game.mapHandler.mapNumbers.get(map)][col][row].x = eventRect[game.mapHandler.mapNumbers.get(map)][col][row].eventRectDefaultX;
+            eventRect[game.mapHandler.mapNumbers.get(map)][col][row].y = eventRect[game.mapHandler.mapNumbers.get(map)][col][row].eventRectDefaultY;
         }
 
         return hit;

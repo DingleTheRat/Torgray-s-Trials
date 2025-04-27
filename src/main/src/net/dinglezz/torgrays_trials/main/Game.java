@@ -5,6 +5,7 @@ import net.dinglezz.torgrays_trials.entity.Player;
 import net.dinglezz.torgrays_trials.environment.EnvironmentManager;
 import net.dinglezz.torgrays_trials.events.EventHandler;
 import net.dinglezz.torgrays_trials.pathfinding.Pathfinder;
+import net.dinglezz.torgrays_trials.tile.MapHandler;
 import net.dinglezz.torgrays_trials.tile.TileManager;
 
 import javax.swing.*;
@@ -50,15 +51,16 @@ public class Game extends JPanel implements Runnable {
     public long drawStart;
 
     // System
-    public TileManager tileManager = new TileManager(this);
-    public InputHandler inputHandler = new InputHandler(this);
-    public EnvironmentManager environmentManager = new EnvironmentManager(this);
-    public CollisionChecker collisionChecker = new CollisionChecker(this);
-    public AssetSetter assetSetter = new AssetSetter(this);
     public UI ui = new UI(this);
-    public EventHandler eventHandler = new EventHandler(this);
-    public Pathfinder pathFinder = new Pathfinder(this);
     public Config config = new Config(this);
+    public TileManager tileManager = new TileManager(this);
+    public MapHandler mapHandler = new MapHandler(this);
+    public Pathfinder pathFinder = new Pathfinder(this);
+    public AssetSetter assetSetter = new AssetSetter(this);
+    public InputHandler inputHandler = new InputHandler(this);
+    public EventHandler eventHandler = new EventHandler(this);
+    public CollisionChecker collisionChecker = new CollisionChecker(this);
+    public EnvironmentManager environmentManager = new EnvironmentManager(this);
     Thread gameThread;
 
     // Entities and Objects

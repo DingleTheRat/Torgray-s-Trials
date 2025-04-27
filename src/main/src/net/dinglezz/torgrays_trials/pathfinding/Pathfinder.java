@@ -68,7 +68,7 @@ public class Pathfinder {
         int row = 0;
         while (col < game.maxWorldCol && row < game.maxWorldRow) {
             // Set the solid nodes
-            int tileNumber = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][col][row];
+            int tileNumber = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][col][row];
             if (game.tileManager.tile.get(tileNumber).collision) {
                 node.get(col).get(row).solid = true;
             }

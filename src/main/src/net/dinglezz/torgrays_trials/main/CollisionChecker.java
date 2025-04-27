@@ -27,88 +27,88 @@ public class CollisionChecker {
         switch (entity.direction) {
             case "up":
                 entityTopRow = (entityTopWordY - entity.speed) / game.tileSize;
-                tileNum1 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
-                tileNum2 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityRightCol][entityTopRow];
+                tileNum1 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
+                tileNum2 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityRightCol][entityTopRow];
                 if (game.tileManager.tile.get(tileNum1).collision || game.tileManager.tile.get(tileNum2).collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case  "up left":
                 entityTopRow = (entityTopWordY - entity.speed) / game.tileSize;
-                tileNum1 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
-                tileNum2 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityRightCol][entityTopRow];
+                tileNum1 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
+                tileNum2 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityRightCol][entityTopRow];
                 if (game.tileManager.tile.get(tileNum1).collision || game.tileManager.tile.get(tileNum2).collision) {
                     entity.collisionOn = true;
                 }
                 entityLeftCol = (entityLeftWordX - entity.speed) / game.tileSize;
-                tileNum1 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
-                tileNum2 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
+                tileNum1 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
+                tileNum2 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
                 if (game.tileManager.tile.get(tileNum1).collision || game.tileManager.tile.get(tileNum2).collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "up right":
                 entityTopRow = (entityTopWordY - entity.speed) / game.tileSize;
-                tileNum1 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
-                tileNum2 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityRightCol][entityTopRow];
+                tileNum1 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
+                tileNum2 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityRightCol][entityTopRow];
                 if (game.tileManager.tile.get(tileNum1).collision || game.tileManager.tile.get(tileNum2).collision) {
                     entity.collisionOn = true;
                 }
                 entityRightCol = (entityRightWordX + entity.speed) / game.tileSize;
-                tileNum1 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
-                tileNum2 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
+                tileNum1 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
+                tileNum2 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
                 if (game.tileManager.tile.get(tileNum1).collision || game.tileManager.tile.get(tileNum2).collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "down":
                 entityBottomRow = (entityBottomWordY + entity.speed) / game.tileSize;
-                tileNum1 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityLeftCol][entityBottomRow];
-                tileNum2 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
+                tileNum1 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityLeftCol][entityBottomRow];
+                tileNum2 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
                 if (game.tileManager.tile.get(tileNum1).collision || game.tileManager.tile.get(tileNum2).collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "down left":
                 entityBottomRow = (entityBottomWordY + entity.speed) / game.tileSize;
-                tileNum1 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityLeftCol][entityBottomRow];
-                tileNum2 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
+                tileNum1 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityLeftCol][entityBottomRow];
+                tileNum2 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
                 if (game.tileManager.tile.get(tileNum1).collision || game.tileManager.tile.get(tileNum2).collision) {
                     entity.collisionOn = true;
                 }
                 entityLeftCol = (entityLeftWordX - entity.speed) / game.tileSize;
-                tileNum1 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
-                tileNum2 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
+                tileNum1 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
+                tileNum2 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
                 if (game.tileManager.tile.get(tileNum1).collision || game.tileManager.tile.get(tileNum2).collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case  "down right":
                 entityBottomRow = (entityBottomWordY + entity.speed) / game.tileSize;
-                tileNum1 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityLeftCol][entityBottomRow];
-                tileNum2 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
+                tileNum1 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityLeftCol][entityBottomRow];
+                tileNum2 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
                 if (game.tileManager.tile.get(tileNum1).collision || game.tileManager.tile.get(tileNum2).collision) {
                     entity.collisionOn = true;
                 }
                 entityRightCol = (entityRightWordX + entity.speed) / game.tileSize;
-                tileNum1 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
-                tileNum2 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
+                tileNum1 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
+                tileNum2 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
                 if (game.tileManager.tile.get(tileNum1).collision || game.tileManager.tile.get(tileNum2).collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "left":
                 entityLeftCol = (entityLeftWordX - entity.speed) / game.tileSize;
-                tileNum1 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
-                tileNum2 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
+                tileNum1 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
+                tileNum2 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
                 if (game.tileManager.tile.get(tileNum1).collision || game.tileManager.tile.get(tileNum2).collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "right":
                 entityRightCol = (entityRightWordX + entity.speed) / game.tileSize;
-                tileNum1 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
-                tileNum2 = game.tileManager.mapTileNum[game.tileManager.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
+                tileNum1 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityLeftCol][entityTopRow];
+                tileNum2 = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][entityRightCol][entityBottomRow];
                 if (game.tileManager.tile.get(tileNum1).collision || game.tileManager.tile.get(tileNum2).collision) {
                     entity.collisionOn = true;
                 }

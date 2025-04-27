@@ -6,17 +6,12 @@ import net.dinglezz.torgrays_trials.main.UtilityTool;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 
 public class TileManager {
     Game game;
     public HashMap<Integer, Tile> tile = new HashMap<>();
-    public HashMap<Integer, String> mapStrings = new HashMap<>();
-    public HashMap<String, Integer> mapNumbers = new HashMap<>();
     public int[][][] mapTileNum;
 
     // Map Screen
@@ -26,11 +21,6 @@ public class TileManager {
         this.game = game;
         mapTileNum = new int[game.maxMaps][game.maxWorldCol][game.maxWorldRow];
         getTileImage();
-        registerMap("Disabled", 0);
-        registerMap("Main Island", 1);
-        registerMap("Coiner's Shop", 2);
-
-        createWorldMap();
     }
 
     public void getTileImage() {
@@ -84,7 +74,7 @@ public class TileManager {
         registerTile(45, "lil_hut", false);
     }
     public void registerTile(int i, String imageName, boolean collision) {
-        UtilityTool uTool = new UtilityTool();
+        UtilityTool utilityTool = new UtilityTool();
         try {
             tile.put(i, new Tile());
             try {
@@ -93,50 +83,18 @@ public class TileManager {
                 System.err.println("\"" + imageName + "\" is not a valid path.");
                 tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/drawable/disabled.png"));
             }
-            tile.get(i).image = uTool.scaleImage(tile.get(i).image, game.tileSize, game.tileSize);
+            tile.get(i).image = utilityTool.scaleImage(tile.get(i).image, game.tileSize, game.tileSize);
             tile.get(i).collision = collision;
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void registerMap(String mapName, int mapNumber) {
-        try {
-            InputStream inputStream = getClass().getResourceAsStream("/values/maps/" + mapName + ".txt");
-            if (inputStream == null) {
-                inputStream = getClass().getResourceAsStream("/values/maps/Disabled.txt");
-                System.err.println("Warning: \"" + mapName + "\" is not a valid path.");
-            }
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            int col = 0;
-            int row = 0;
-
-            while (row < game.maxWorldRow) {
-                String line = bufferedReader.readLine();
-                while (col < game.maxWorldCol) {
-                    String[] numbers = line.split(" ");
-                    int number = Integer.parseInt(numbers[col]);
-                    mapTileNum[mapNumber][col][row] = number;
-                    col++;
-                }
-                if (col == game.maxWorldCol) {
-                    col = 0;
-                    row++;
-                }
-            }
-            bufferedReader.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        mapStrings.put(mapNumber, mapName);
-        mapNumbers.put(mapName, mapNumber);
-    }
 
     public void draw(Graphics2D graphics2D) {
         int worldCol = 0;
         int worldRow = 0;
-
         while (worldCol < game.maxWorldCol && worldRow < game.maxWorldRow) {
-            int tileNumber = mapTileNum[mapNumbers.get(game.currentMap)][worldCol][worldRow];
+            int tileNumber = mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][worldCol][worldRow];
             int worldX = worldCol * game.tileSize;
             int worldY = worldRow * game.tileSize;
             int screenX = worldX - game.player.worldX + game.player.screenX;
@@ -170,34 +128,6 @@ public class TileManager {
                 int screenY = worldY - game.player.worldY + game.player.screenY;
 
                 graphics2D.fillRect(screenX, screenY, game.tileSize, game.tileSize);
-            }
-        }
-    }
-
-    public void createWorldMap() {
-        int worldMapWidth = game.tileSize * game.maxWorldCol;
-        int worldMapHeight = game.tileSize * game.maxWorldRow;
-
-        for (String map : mapStrings.values()) {
-            worldMap.put(map, new BufferedImage(worldMapWidth, worldMapHeight, BufferedImage.TYPE_INT_ARGB));
-            Graphics2D graphics2D = worldMap.get(map).createGraphics();
-
-            int col = 0;
-            int row = 0;
-            while (col < game.maxWorldCol && row < game.maxWorldRow) {
-                int tileNumber = mapTileNum[mapNumbers.get(map)][col][row];
-                int x = col * game.tileSize;
-                int y = row * game.tileSize;
-
-                // Draw Tiles
-                if (tile.get(tileNumber) != null) {
-                    graphics2D.drawImage(tile.get(tileNumber).image, x, y, null);
-                }
-                col++;
-                if (col == game.maxWorldCol) {
-                    col = 0;
-                    row++;
-                }
             }
         }
     }
