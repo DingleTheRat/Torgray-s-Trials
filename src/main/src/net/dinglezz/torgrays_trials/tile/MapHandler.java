@@ -1,14 +1,13 @@
 package net.dinglezz.torgrays_trials.tile;
 
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.UtilityTool;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javax.swing.text.Style;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 
 public class MapHandler {
@@ -25,48 +24,49 @@ public class MapHandler {
     }
 
     public void loadMap(String fileName) {
-        BufferedReader bufferedReader;
-        try {
-            // Input Stream for the map file
-            InputStream inputStream = getClass().getResourceAsStream("/values/maps/" + fileName + ".json");
-            if (inputStream == null) {
-                inputStream = getClass().getResourceAsStream("/values/maps/Disabled.txt");
-                System.err.println("Warning: \"" + fileName + "\" is not a valid path.");
-            }
-            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder stringBuilder = new StringBuilder();
-            for (String line; (line = bufferedReader.readLine()) != null;) {
-                stringBuilder.append(line);
-            }
-            bufferedReader.close();
-            JSONObject json = new JSONObject(stringBuilder.toString());
-            String name = json.getString("name");
-            int numberKey = json.getInt("numberKey");
-            JSONArray map = json.getJSONArray("map");
-
-            // Read the map file
-            int col = 0;
-            int row = 0;
-
-            while (row < game.maxWorldRow) {
-                String mapLine = map.getString(row);
-                while (col < game.maxWorldCol) {
-                    String[] numbers = mapLine.split(" ");
-                    int number = Integer.parseInt(numbers[col]);
-                    game.tileManager.mapTileNum[numberKey][col][row] = number;
-                    col++;
-                }
-                if (col == game.maxWorldCol) {
-                    col = 0;
-                    row++;
-                }
-            }
-
-            mapStrings.put(numberKey, name);
-            mapNumbers.put(name, numberKey);
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Get the file and check if it exists
+        JSONObject file = UtilityTool.getJsonObject("/values/maps/" + fileName + ".json");
+        if (file == null) {
+            file = UtilityTool.getJsonObject("/values/maps/disabled.json");
         }
+
+        // Read the map file
+        String name;
+        int numberKey;
+        JSONArray map;
+
+        try {
+            name = file.getString("name");
+            numberKey = file.getInt("numberKey");
+            map = file.getJSONArray("map");
+        } catch (Exception e) {
+            System.err.println("Failed to find essential map data in " + fileName + ".json. Using default map.");
+            file = UtilityTool.getJsonObject("/values/maps/disabled.json");
+            name = file.getString("name");
+            numberKey = file.getInt("numberKey");
+            map = file.getJSONArray("map");
+        }
+
+        // Read the map file
+        int col = 0;
+        int row = 0;
+
+        while (row < game.maxWorldRow) {
+            String mapLine = map.getString(row);
+            while (col < game.maxWorldCol) {
+                String[] numbers = mapLine.split(" ");
+                int number = Integer.parseInt(numbers[col]);
+                game.tileManager.mapTileNum[numberKey][col][row] = number;
+                col++;
+            }
+            if (col == game.maxWorldCol) {
+                col = 0;
+                row++;
+            }
+        }
+
+        mapStrings.put(numberKey, name);
+        mapNumbers.put(name, numberKey);
     }
 
     public void createWorldMap() {

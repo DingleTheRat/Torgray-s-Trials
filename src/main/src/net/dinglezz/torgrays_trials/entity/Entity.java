@@ -304,7 +304,6 @@ public abstract class Entity {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));
     }
     public BufferedImage registerEntitySprite(String imagePath) {
-        UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
         try {
             try {
@@ -313,14 +312,13 @@ public abstract class Entity {
                 System.err.println("Warning: \"" + imagePath + "\" is not a valid path.");
                 image = ImageIO.read(getClass().getResourceAsStream("/drawable/disabled.png"));
             }
-            image = uTool.scaleImage(image, game.tileSize, game.tileSize);
+            image = UtilityTool.scaleImage(image, game.tileSize, game.tileSize);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return image;
     }
     public BufferedImage registerEntitySprite(String imagePath, int width, int height) {
-        UtilityTool uTool = new UtilityTool();
         BufferedImage image = null;
         try {
             try {
@@ -329,7 +327,7 @@ public abstract class Entity {
                 System.err.println("Warning: \"" + imagePath + "\" is not a valid path.");
                 image = ImageIO.read(getClass().getResourceAsStream("/drawable/disabled.png"));
             }
-            image = uTool.scaleImage(image, width, height);
+            image = UtilityTool.scaleImage(image, width, height);
         } catch (IOException e) {
             e.printStackTrace();
         }
