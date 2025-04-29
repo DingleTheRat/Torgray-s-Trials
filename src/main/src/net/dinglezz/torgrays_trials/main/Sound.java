@@ -1,6 +1,5 @@
 package net.dinglezz.torgrays_trials.main;
 
-import net.dinglezz.torgrays_trials.tile.MapHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,13 +9,12 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Sound {
     Clip clip;
     public HashMap<String, URL> soundLibrary = new HashMap<>();
     FloatControl floatControl;
-    int volumeScale = 3;
+    float volumeScale = 3;
     float volume;
 
     public Sound() {
@@ -77,13 +75,28 @@ public class Sound {
         }
     }
     public void checkVolume() {
-        switch (volumeScale) {
+        switch ((int) (volumeScale * 4)) {
             case 0: volume = -80f; break;
-            case 1: volume = -20f; break;
-            case 2: volume = -12f; break;
-            case 3: volume = -5f; break;
-            case 4: volume = 1f; break;
-            case 5: volume = 6f; break;
+            case 1: volume = -60f; break;
+            case 2: volume = -45f; break;
+            case 3: volume = -30f; break;
+            case 4: volume = -20f; break;
+            case 5: volume = -18f; break;
+            case 6: volume = -16; break;
+            case 7: volume = -14; break;
+            case 8: volume = -12f; break;
+            case 9: volume = -10f; break;
+            case 10: volume = -8f; break;
+            case 11: volume = -6.5f; break;
+            case 12: volume = -5f; break;
+            case 13: volume = -3.5f; break;
+            case 14: volume = -2f; break;
+            case 15: volume = 0f; break;
+            case 16: volume = 1f; break;
+            case 17: volume = 2f; break;
+            case 18: volume = 3f; break;
+            case 19: volume = 4.5f; break;
+            case 20: volume = 6f; break;
         }
         floatControl.setValue(volume);
     }
@@ -91,15 +104,32 @@ public class Sound {
     // Static Stuff
     public static Sound music = new Sound();
     public static Sound sfx = new Sound();
-
+    
     public static void playMusic(String songName) {
-        stopMusic();
-        music.getFile(songName);
-        music.play();
-        music.loop();
+        new Thread(() -> {
+            float originalVolume = music.volumeScale;
+            if (music.floatControl != null) {
+                while (music.volumeScale > 0) {
+                    music.volumeScale -= 0.25f;
+                    System.out.println(music.volumeScale);
+                    music.checkVolume();
+                    try {Thread.sleep(50);} catch (InterruptedException _) {}
+                }
+            }
+            stopMusic();
+            music.getFile(songName);
+            music.volume = 0;
+            music.play();
+            music.loop();
+            while (music.volumeScale < originalVolume) {
+                music.volumeScale += 0.25f;
+                music.checkVolume();
+                System.out.println(music.volumeScale);
+                try {Thread.sleep(50);} catch (InterruptedException _) {}
+            }
+        }).start();
     }
     public static void playMapMusic() {
-        stopMusic();
         JSONObject currentMapFile = Main.game.mapHandler.mapFiles.get(Main.game.currentMap);
 
         try {

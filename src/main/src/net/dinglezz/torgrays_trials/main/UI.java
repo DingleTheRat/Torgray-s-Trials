@@ -481,13 +481,13 @@ public class UI {
         textX = frameX + game.tileSize * 4;
         textY = frameY + game.tileSize * 2 + (game.tileSize / 2) + 14;
         graphics2D.drawRect(textX, textY, 120, 24);
-        int volumeWidth = 24 * Sound.music.volumeScale;
+        int volumeWidth = (int) (24 * Sound.music.volumeScale);
         graphics2D.fillRect(textX, textY, volumeWidth, 24);
 
         // Sound Slider
         textY += game.tileSize;
         graphics2D.drawRect(textX, textY, 120, 24);
-        volumeWidth = 24 * Sound.sfx.volumeScale;
+        volumeWidth = (int) (24 * Sound.sfx.volumeScale);
         graphics2D.fillRect(textX, textY, volumeWidth, 24);
 
         // Full-Screen Check Box

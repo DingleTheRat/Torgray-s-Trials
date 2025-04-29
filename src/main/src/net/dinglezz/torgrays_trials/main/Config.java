@@ -59,11 +59,11 @@ public class Config {
             String s = bufferedReader.readLine();
 
             // Music Volume
-            Sound.music.volumeScale = Integer.parseInt(s);
+            Sound.music.volumeScale = Float.parseFloat(s);
 
             // Sound Volume
             s = bufferedReader.readLine();
-            Sound.sfx.volumeScale = Integer.parseInt(s);
+            Sound.sfx.volumeScale = Float.parseFloat(s);
 
             // Full screen
             s = bufferedReader.readLine();
