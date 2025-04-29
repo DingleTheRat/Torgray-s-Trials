@@ -1,7 +1,14 @@
+-----------------Credits-----------------
+## Main
 Coded by Dingle and UsUsStudios
 Sprites made by Dingle
-Music by AWESOME_DRAGON and Amarhzay_DC
 Sound Effects distributed or made by RyiSnow
-Play testing by UsUsStudios and Headshot_Hitter
+Playtesting by UsUsStudios and Headshot_Hitter
 Font: Marmonica by 患者長ひっく
 Ideas by Dingle
+
+## Music
+Tech Geek (Menu Theme) - Amarhzay_DC
+Umbral Force (Night Theme) - Amarhzay_DC
+Gloom Over Torgray (Gloom Theme) - UsUsStudios
+Coin Toss (Coiner's Shop Theme) - UsUsStudios

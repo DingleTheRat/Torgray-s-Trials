@@ -3,6 +3,7 @@ package net.dinglezz.torgrays_trials.environment;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.States;
+import org.json.JSONException;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -103,17 +104,19 @@ public class Lighting {
         }
 
         // Set the radius of the darkness filter
-        if (game.currentMap.equals("Coiner's Shop")) {
-            RadialGradientPaint gradientPaint = new RadialGradientPaint(centreX, centreY, 500, fraction, color);
+        try {
+            RadialGradientPaint gradientPaint = new RadialGradientPaint(centreX, centreY, game.mapHandler.mapFiles.get(game.currentMap).getInt("light radius"), fraction, color);
             graphics2D.setPaint(gradientPaint);
-        } else if (game.player.currentLight == null) {
-            graphics2D.setColor(color[11]);
-        } else {
-            // Light Adjustments
-            int lightRadiusAdjustment = getLightRadiusAdjustment();
+        } catch (JSONException jsonException) {
+            if (game.player.currentLight == null) {
+                graphics2D.setColor(color[11]);
+            } else {
+                // Light Adjustments
+                int lightRadiusAdjustment = getLightRadiusAdjustment();
 
-            RadialGradientPaint gradientPaint = new RadialGradientPaint(centreX, centreY, game.player.currentLight.lightRadius + lightRadiusAdjustment, fraction, color);
-            graphics2D.setPaint(gradientPaint);
+                RadialGradientPaint gradientPaint = new RadialGradientPaint(centreX, centreY, game.player.currentLight.lightRadius + lightRadiusAdjustment, fraction, color);
+                graphics2D.setPaint(gradientPaint);
+            }
         }
 
         // Fill the buffered image with the radial gradient paint
@@ -136,8 +139,16 @@ public class Lighting {
         }
     }
     public void draw(Graphics2D graphics2D) {
-        graphics2D.setColor(new Color(0, 0, 0.1f, 0.25f));
-        graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
+        // Draw blue effect
+        try {
+            if (game.mapHandler.mapFiles.get(game.currentMap).getBoolean("blue effect")) {
+                graphics2D.setColor(new Color(0, 0, 0.1f, 0.25f));
+                graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
+            }
+        } catch (JSONException jsonException) {
+            graphics2D.setColor(new Color(0, 0, 0.1f, 0.25f));
+            graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
+        }
 
         graphics2D.drawImage(darknessFilter, 0, 0, null);
     }

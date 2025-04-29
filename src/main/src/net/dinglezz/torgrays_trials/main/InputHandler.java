@@ -97,8 +97,7 @@ public class   InputHandler implements KeyListener {
                 if (game.ui.commandNumber == 0) {
                     game.gameState = States.STATE_PLAY;
                     game.gameMode = "Easy";
-                    Sound.stopMusic();
-                    Sound.playMusic("Umbral Force");
+                    Sound.playMapMusic();
                     System.out.println("Imagine Picking Easy");
 
                     // Modified Stats
@@ -119,8 +118,7 @@ public class   InputHandler implements KeyListener {
                 if (game.ui.commandNumber == 1) {
                     game.gameState = States.STATE_PLAY;
                     game.gameMode = "Medium";
-                    Sound.stopMusic();
-                    Sound.playMusic("Umbral Force");
+                    Sound.playMapMusic();
                     System.out.println("Kinda a mid game mode lol");
 
                     // No modified stats since Medium is the default
@@ -128,8 +126,7 @@ public class   InputHandler implements KeyListener {
                 if (game.ui.commandNumber == 2) {
                     game.gameState = States.STATE_PLAY;
                     game.gameMode = "Hard";
-                    Sound.stopMusic();
-                    Sound.playMusic("Umbral Force");
+                    Sound.playMapMusic();
                     System.out.println("You really think you are \"hardcore\"?");
 
                     // Modified Stats
@@ -137,7 +134,7 @@ public class   InputHandler implements KeyListener {
                     game.player.nextLevelExp = 6;
                     game.player.defence = game.player.getDefence();
 
-                    // Modified Darkness State Stuff
+                    // Modified State Stuff
                     game.environmentManager.lighting.nightLength = 7200;
                     game.environmentManager.lighting.gloomLength = 144000;
 
@@ -319,7 +316,7 @@ public class   InputHandler implements KeyListener {
             if (game.ui.commandNumber == 0) {
                 game.gameState = States.STATE_PLAY;
                 game.restart();
-                Sound.playMusic("Umbral Force");
+                Sound.playMapMusic();
             } else if (game.ui.commandNumber == maxCommandNumber) {
                 game.gameState = States.STATE_TITLE;
                 game.ui.titleScreenState = States.TITLE_STATE_MAIN;
@@ -328,7 +325,7 @@ public class   InputHandler implements KeyListener {
             } else if (game.ui.commandNumber == 1) {
                 game.gameState = States.STATE_PLAY;
                 game.respawn();
-                Sound.playMusic("Umbral Force");
+                Sound.playMapMusic();
             }
         }
     }

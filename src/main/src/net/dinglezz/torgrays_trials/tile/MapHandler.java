@@ -3,6 +3,7 @@ package net.dinglezz.torgrays_trials.tile;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.UtilityTool;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.swing.text.Style;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 
 public class MapHandler {
     Game game;
+    public final HashMap<String, JSONObject> mapFiles = new HashMap<>();
     public final HashMap<Integer, String> mapStrings = new HashMap<>();
     public final HashMap<String, Integer> mapNumbers = new HashMap<>();
 
@@ -39,7 +41,7 @@ public class MapHandler {
             name = file.getString("name");
             numberKey = file.getInt("numberKey");
             map = file.getJSONArray("map");
-        } catch (Exception e) {
+        } catch (JSONException jsonException) {
             System.err.println("Failed to find essential map data in " + fileName + ".json. Using default map.");
             file = UtilityTool.getJsonObject("/values/maps/disabled.json");
             name = file.getString("name");
@@ -65,6 +67,8 @@ public class MapHandler {
             }
         }
 
+        // Add to some useful HashMaps
+        mapFiles.put(name, file);
         mapStrings.put(numberKey, name);
         mapNumbers.put(name, numberKey);
     }

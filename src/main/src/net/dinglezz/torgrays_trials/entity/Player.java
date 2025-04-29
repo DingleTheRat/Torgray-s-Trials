@@ -8,6 +8,8 @@ import net.dinglezz.torgrays_trials.object.OBJ_Coins;
 import net.dinglezz.torgrays_trials.object.OBJ_Lantern;
 import net.dinglezz.torgrays_trials.object.shield.OBJ_Shield_Iron;
 import net.dinglezz.torgrays_trials.object.weapon.OBJ_Sword_Iron;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -69,11 +71,8 @@ public class Player extends Entity{
     }
     public void setDefaultValues() {
         type = EntityTypes.TYPE_PLAYER;
-        worldX = game.tileSize * 23;
-        worldY = game.tileSize * 21;
         defaultSpeed = 4;
         speed = defaultSpeed;
-        direction = "down";
 
         // Player Stats
         level = 1;
@@ -91,8 +90,16 @@ public class Player extends Entity{
         defence = getDefence();
     }
     public void setDefaultPosition() {
-        worldX = game.tileSize * 23;
-        worldY = game.tileSize * 21;
+        JSONObject file = game.mapHandler.mapFiles.get(game.currentMap);
+        try {
+            worldX = game.tileSize * file.getJSONObject("spawn point").getInt("col");
+            worldY = game.tileSize * file.getJSONObject("spawn point").getInt("row");
+        } catch (JSONException jsonException) {
+            file = game.mapHandler.mapFiles.get("Disabled");
+            worldX = game.tileSize * file.getJSONObject("spawn point").getInt("col");
+            worldY = game.tileSize * file.getJSONObject("spawn point").getInt("row");
+        }
+
         direction = "down";
     }
     public void restoreHealth() {

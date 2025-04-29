@@ -52,5 +52,9 @@
     "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
   ],
   "name": "Disabled",
-  "numberKey": 0
+  "numberKey": 0,
+  "music": "Umbral Force",
+  "spawn point": {"col": 0, "row": 0},
+  "light radius": 0,
+  "blue effect": true,
 }

@@ -489,9 +489,8 @@ public class UI {
         graphics2D.drawRect(textX, textY, 120, 24);
         volumeWidth = 24 * Sound.sfx.volumeScale;
         graphics2D.fillRect(textX, textY, volumeWidth, 24);
-        graphics2D.fillRect(textX, textY, 24, 24);
 
-        // Full Screen Check Box
+        // Full-Screen Check Box
         textX += game.tileSize;
         textY += game.tileSize;
         graphics2D.setStroke(new BasicStroke(3));
@@ -1137,9 +1136,15 @@ public void drawTransitionScreen() {
     @SuppressWarnings("unused")
     public void transitionTeleport() {
         game.currentMap = game.eventHandler.nextMap;
-        game.player.worldX = game.eventHandler.nextCol;
-        game.player.worldY = game.eventHandler.nextRow;
+        if (game.eventHandler.nextCol == Integer.MIN_VALUE || game.eventHandler.nextRow == Integer.MIN_VALUE) {
+            game.player.setDefaultPosition();
+        } else {
+            game.player.worldX = game.eventHandler.nextCol;
+            game.player.worldY = game.eventHandler.nextRow;
+        }
+        game.player.direction = game.eventHandler.nextDirection;
         game.environmentManager.lightUpdated = true;
+        Sound.playMapMusic();
     }
     @SuppressWarnings("unused")
     public void transitionDarkness() {

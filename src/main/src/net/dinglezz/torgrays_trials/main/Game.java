@@ -90,6 +90,7 @@ public class Game extends JPanel implements Runnable {
         environmentManager.setup();
         Sound.playMusic("Tech Geek");
         gameState = States.STATE_TITLE;
+        player.setDefaultPosition();
 
         if (fullScreen) {
             setFullScreen();
@@ -106,6 +107,7 @@ public class Game extends JPanel implements Runnable {
     }
     public void restart() {
         player.setDefaultValues();
+        player.setDefaultPosition();
         player.setItems();
         assetSetter.setObjects();
         assetSetter.setNPCs();

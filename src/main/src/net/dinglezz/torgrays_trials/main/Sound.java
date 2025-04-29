@@ -1,11 +1,16 @@
 package net.dinglezz.torgrays_trials.main;
 
+import net.dinglezz.torgrays_trials.tile.MapHandler;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Sound {
     Clip clip;
@@ -19,6 +24,7 @@ public class Sound {
         soundLibrary.put("Tech Geek", getClass().getResource("/sound/music/tech_geek.wav"));
         soundLibrary.put("Umbral Force", getClass().getResource("/sound/music/umbral_force.wav"));
         soundLibrary.put("Coin Toss", getClass().getResource("/sound/music/coin_toss.wav"));
+        soundLibrary.put("Gloom Over Torgray", getClass().getResource("/sound/music/gloom_over_torgray.wav"));
         // Unused
         soundLibrary.put("Journey", getClass().getResource("/sound/music/unused/journey.wav")); // By AWESOME_DRAGON
         soundLibrary.put("Dark Mystery", getClass().getResource("/sound/music/unused/dark_mystery.wav")); // By LHTD
@@ -87,9 +93,21 @@ public class Sound {
     public static Sound sfx = new Sound();
 
     public static void playMusic(String songName) {
+        stopMusic();
         music.getFile(songName);
         music.play();
         music.loop();
+    }
+    public static void playMapMusic() {
+        stopMusic();
+        JSONObject currentMapFile = Main.game.mapHandler.mapFiles.get(Main.game.currentMap);
+
+        try {
+            playMusic(currentMapFile.getString("music"));
+        } catch (JSONException jsonException) {
+            currentMapFile = Main.game.mapHandler.mapFiles.get("Disabled");
+            playMusic(currentMapFile.getString("music"));
+        }
     }
     public static void stopMusic() {
         music.stop();

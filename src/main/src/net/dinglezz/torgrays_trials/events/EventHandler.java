@@ -13,7 +13,7 @@ public class EventHandler {
     int previousEventX, previousEventY;
     boolean canTouchEvent;
     public int nextCol, nextRow;
-    public String nextMap;
+    public String nextMap, nextDirection;
 
     public EventHandler(Game game) {
         this.game = game;
@@ -61,10 +61,10 @@ public class EventHandler {
 
                 // Others
                 if (hit("Main Island", 23, 12, "up")) {healingPond();}
-                if (hit("Main Island", 10, 39, "up")) {teleport("Coiner's Shop", 12, 13);}
+                if (hit("Main Island", 10, 39, "up")) {teleport("Coiner's Shop", "up");}
 
             // Coiner's Shop Map
-                if (hit("Coiner's Shop", 12, 13, "down")) {teleport("Main Island", 10, 39);}
+                if (hit("Coiner's Shop", 12, 13, "down")) {teleport("Main Island", 10, 39, "down");}
                 if (hit("Coiner's Shop", 12, 11, "up")) {speak(game.npc.get(game.currentMap).get(0));}
         }
     }
@@ -129,13 +129,27 @@ public class EventHandler {
 //            game.assetSetter.setMonsters();
         }
     }
-    public void teleport(String map, int col, int row) {
+    public void teleport(String map, String direction) {
+        canTouchEvent = false;
+        Sound.playSFX("Teleport");
+
+        nextMap = map;
+        nextCol = Integer.MIN_VALUE;
+        nextRow = Integer.MIN_VALUE;
+        nextDirection = direction;
+        game.ui.actionMethod = "transitionTeleport";
+        game.ui.transitionOpenSpeed = 0.02f;
+        game.ui.transitionCloseSpeed = 0.02f;
+        game.ui.transitioning = true;
+    }
+    public void teleport(String map, int col, int row, String direction) {
         canTouchEvent = false;
         Sound.playSFX("Teleport");
 
         nextMap = map;
         nextCol = game.tileSize * col;
         nextRow = game.tileSize * row;
+        nextDirection = direction;
         game.ui.actionMethod = "transitionTeleport";
         game.ui.transitionOpenSpeed = 0.02f;
         game.ui.transitionCloseSpeed = 0.02f;
