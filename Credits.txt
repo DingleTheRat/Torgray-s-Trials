@@ -1,11 +1,10 @@
 -----------------Credits-----------------
 ## Main
-Coded by Dingle and UsUsStudios
-Sprites made by Dingle
-Sound Effects distributed or made by RyiSnow
-Playtesting by UsUsStudios and Headshot_Hitter
-Font: Marmonica by 患者長ひっく
-Ideas by Dingle
+Coding - Dingle and UsUsStudios
+Sprites - Dingle
+Playtesting - UsUsStudios and Headshot_Hitter
+Ideas - Dingle
+Font (Marmonica) - 患者長ひっく
 
 ## Music
 Tech Geek (Menu Theme) - Amarhzay_DC
