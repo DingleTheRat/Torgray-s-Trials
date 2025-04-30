@@ -141,7 +141,6 @@ public class Game extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
-        long drawCount = 0;
 
         while (gameThread != null) {
             currentTime = System.nanoTime();
@@ -159,11 +158,9 @@ public class Game extends JPanel implements Runnable {
                     repaint();
                 }
                 delta--;
-                drawCount++;
             }
 
             if (timer >= 1000000000) {
-                drawCount = 0;
                 timer = 0;
             }
         }

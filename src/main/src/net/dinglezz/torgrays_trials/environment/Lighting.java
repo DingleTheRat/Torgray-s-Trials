@@ -2,6 +2,7 @@ package net.dinglezz.torgrays_trials.environment;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
 import org.json.JSONException;
 
@@ -19,7 +20,7 @@ public class Lighting {
     public int darknessCounter = 0;
 
     // Darkness Settings
-    public int nightLength = 12000;
+    public int nightLength = 200;
     public int gloomLength = 10000;
     public int gloomChance = 50;
     public int lightGloomChance = 25;
@@ -161,6 +162,7 @@ public class Lighting {
         darknessCounter = 0;
         darknessState = nextState;
         if (nextState == nextGloom) {
+            Sound.playMapMusic();
             nextGloom = chooseNextGloom();
             game.assetSetter.setMonsters();
         } else if (nextState == States.DARKNESS_STATE_NIGHT) {

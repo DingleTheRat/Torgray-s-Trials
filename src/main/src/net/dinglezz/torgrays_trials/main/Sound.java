@@ -102,11 +102,22 @@ public class Sound {
         stopMusic();
         JSONObject currentMapFile = Main.game.mapHandler.mapFiles.get(Main.game.currentMap);
 
-        try {
-            playMusic(currentMapFile.getString("music"));
-        } catch (JSONException jsonException) {
-            currentMapFile = Main.game.mapHandler.mapFiles.get("Disabled");
-            playMusic(currentMapFile.getString("music"));
+        if (currentMapFile.getString("music").equals("Default")) {
+            playMusic(
+                switch (Main.game.environmentManager.lighting.darknessState) {
+                    case DARKNESS_STATE_NIGHT, DARKNESS_STATE_NEW_DUSK,
+                         DARKNESS_STATE_DUSK -> "Umbral Force";
+	                case DARKNESS_STATE_GLOOM, DARKNESS_STATE_LIGHT_GLOOM,
+                         DARKNESS_STATE_DARK_GLOOM -> "Gloom Over Torgray";
+	                default -> "Dark Mystery";}
+            );
+        } else {
+            try {
+                playMusic(currentMapFile.getString("music"));
+            } catch (JSONException jsonException) {
+                currentMapFile = Main.game.mapHandler.mapFiles.get("Disabled");
+                playMusic(currentMapFile.getString("music"));
+            }
         }
     }
     public static void stopMusic() {
