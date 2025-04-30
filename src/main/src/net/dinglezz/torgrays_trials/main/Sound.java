@@ -1,6 +1,5 @@
 package net.dinglezz.torgrays_trials.main;
 
-import net.dinglezz.torgrays_trials.tile.MapHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,7 +9,6 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Sound {
     Clip clip;
@@ -101,15 +99,35 @@ public class Sound {
     public static void playMapMusic() {
         stopMusic();
         JSONObject currentMapFile = Main.game.mapHandler.mapFiles.get(Main.game.currentMap);
-
+        
         if (currentMapFile.getString("music").equals("Default")) {
             playMusic(
                 switch (Main.game.environmentManager.lighting.darknessState) {
                     case DARKNESS_STATE_NIGHT, DARKNESS_STATE_NEW_DUSK,
                          DARKNESS_STATE_DUSK -> "Umbral Force";
-	                case DARKNESS_STATE_GLOOM, DARKNESS_STATE_LIGHT_GLOOM,
+                    case DARKNESS_STATE_GLOOM, DARKNESS_STATE_LIGHT_GLOOM,
                          DARKNESS_STATE_DARK_GLOOM -> "Gloom Over Torgray";
-	                default -> "Dark Mystery";}
+                    default -> "Dark Mystery";}
+            );
+        } else {
+            try {
+                playMusic(currentMapFile.getString("music"));
+            } catch (JSONException jsonException) {
+                currentMapFile = Main.game.mapHandler.mapFiles.get("Disabled");
+                playMusic(currentMapFile.getString("music"));
+            }
+        }
+    }
+    public static void playMapMusic(States state) {
+        stopMusic();
+        JSONObject currentMapFile = Main.game.mapHandler.mapFiles.get(Main.game.currentMap);
+        
+        if (currentMapFile.getString("music").equals("Default")) {
+            playMusic(
+                switch (state) {
+                    case DARKNESS_STATE_DUSK -> "Umbral Force";
+                    case DARKNESS_STATE_NEW_DUSK -> "Gloom Over Torgray";
+                    default -> "Dark Mystery";}
             );
         } else {
             try {

@@ -20,8 +20,8 @@ public class Lighting {
     public int darknessCounter = 0;
 
     // Darkness Settings
-    public int nightLength = 200;
-    public int gloomLength = 10000;
+    public int nightLength = 200; // 12000
+    public int gloomLength = 300; // 10000
     public int gloomChance = 50;
     public int lightGloomChance = 25;
     public int darkGloomChance = 25;
@@ -161,8 +161,8 @@ public class Lighting {
 
         darknessCounter = 0;
         darknessState = nextState;
+        States oldNextGloom = nextGloom;
         if (nextState == nextGloom) {
-            Sound.playMapMusic();
             nextGloom = chooseNextGloom();
             game.assetSetter.setMonsters();
         } else if (nextState == States.DARKNESS_STATE_NIGHT) {
