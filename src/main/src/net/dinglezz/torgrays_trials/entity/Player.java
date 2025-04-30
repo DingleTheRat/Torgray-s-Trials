@@ -483,9 +483,13 @@ public class Player extends Entity{
         if (invincible) {
             graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
         }
-
         graphics2D.drawImage(image, tempScreenX, tempScreenY, null);
         graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
+        if (game.debugHitBoxes) {
+            graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
+            graphics2D.fillRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+        }
     }
 
     // Particles

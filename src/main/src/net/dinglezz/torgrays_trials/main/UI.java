@@ -1122,7 +1122,7 @@ public void drawTransitionScreen() {
 
         if (game.BRendering) {
             subState = States.PAUSE_STATE_NOTIFICATION;
-            currentDialogue = "You can emergency \ndisable BRendering by \npressing F3 and B.";
+            currentDialogue = "You can emergency \ndisable BRendering by \npressing F3 and R.";
         } else {
             subState = States.PAUSE_STATE_SETTINGS_MAIN;
         }

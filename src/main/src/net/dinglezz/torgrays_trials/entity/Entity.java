@@ -17,7 +17,7 @@ public abstract class Entity {
     public BufferedImage attackUp, attackDown, attackLeft, attackRight;
     public BufferedImage image, image2, image3;
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
-    public  Rectangle attackArea = new Rectangle(0, 0, 0, 0);
+    public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collision = false;
     public HashMap<Integer, String> dialogues = new HashMap<>();
@@ -285,6 +285,11 @@ public abstract class Entity {
 
             graphics2D.drawImage(image, screenX, screenY, null);
             changeAlpha(graphics2D, 1f);
+
+            if (game.debugHitBoxes) {
+                graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
+                graphics2D.fillRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+            }
         }
     }
     public void dyingAnimation(Graphics2D g2, int i) {

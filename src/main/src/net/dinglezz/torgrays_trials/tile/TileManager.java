@@ -74,7 +74,6 @@ public class TileManager {
         registerTile(45, "lil_hut", false);
     }
     public void registerTile(int i, String imageName, boolean collision) {
-        UtilityTool utilityTool = new UtilityTool();
         try {
             tile.put(i, new Tile());
             try {
@@ -83,52 +82,60 @@ public class TileManager {
                 System.err.println("\"" + imageName + "\" is not a valid path.");
                 tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/drawable/disabled.png"));
             }
-            tile.get(i).image = utilityTool.scaleImage(tile.get(i).image, game.tileSize, game.tileSize);
+            tile.get(i).image = UtilityTool.scaleImage(tile.get(i).image, game.tileSize, game.tileSize);
             tile.get(i).collision = collision;
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void draw(Graphics2D graphics2D) {
-        int worldCol = 0;
-        int worldRow = 0;
-        while (worldCol < game.maxWorldCol && worldRow < game.maxWorldRow) {
-            int tileNumber = mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][worldCol][worldRow];
-            int worldX = worldCol * game.tileSize;
-            int worldY = worldRow * game.tileSize;
-            int screenX = worldX - game.player.worldX + game.player.screenX;
-            int screenY = worldY - game.player.worldY + game.player.screenY;
+public void draw(Graphics2D graphics2D) {
+    int playerWorldX = game.player.worldX;
+    int playerWorldY = game.player.worldY;
+    int playerScreenX = game.player.screenX;
+    int playerScreenY = game.player.screenY;
+    int tileSize = game.tileSize;
 
-            // Draw Tiles
-            if (worldX + game.tileSize > game.player.worldX - game.player.screenX &&
-                    worldX - game.tileSize < game.player.worldX + game.player.screenX &&
-                    worldY + game.tileSize > game.player.worldY - game.player.screenY &&
-                    worldY - game.tileSize < game.player.worldY + game.player.screenY) {
-                if (tile.get(tileNumber) != null) {
-                    graphics2D.drawImage(tile.get(tileNumber).image, screenX, screenY, null);
+    for (int worldRow = 0; worldRow < game.maxWorldRow; worldRow++) {
+        for (int worldCol = 0; worldCol < game.maxWorldCol; worldCol++) {
+            int tileNumber = mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][worldCol][worldRow];
+            int worldX = worldCol * tileSize;
+            int worldY = worldRow * tileSize;
+            int screenX = worldX - playerWorldX + playerScreenX;
+            int screenY = worldY - playerWorldY + playerScreenY;
+
+            // Check if the tile is within the visible screen
+            if (worldX + tileSize > playerWorldX - playerScreenX &&
+                worldX - tileSize < playerWorldX + playerScreenX &&
+                worldY + tileSize > playerWorldY - playerScreenY &&
+                worldY - tileSize < playerWorldY + playerScreenY) {
+
+                Tile currentTile = tile.get(tileNumber);
+                if (currentTile != null) {
+                    graphics2D.drawImage(currentTile.image, screenX, screenY, null);
+
+                    if (game.debugHitBoxes && currentTile.collision) {
+                        graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
+                        graphics2D.fillRect(screenX, screenY, tileSize, tileSize);
+                    }
                 } else {
                     System.err.println("Index " + tileNumber + " is not a valid tile.");
                     registerTile(tileNumber, "", false);
                 }
             }
-            worldCol++;
-            if (worldCol == game.maxWorldCol) {
-                worldCol = 0;
-                worldRow++;
-            }
-        }
-        if (game.debugPathfinding) {
-            graphics2D.setColor(new Color(255, 0, 0, 70));
-
-            for (int i = 0; i < game.pathFinder.pathList.size(); i++) {
-                int worldX = game.pathFinder.pathList.get(i).col * game.tileSize;
-                int worldY = game.pathFinder.pathList.get(i).row * game.tileSize;
-                int screenX = worldX - game.player.worldX + game.player.screenX;
-                int screenY = worldY - game.player.worldY + game.player.screenY;
-
-                graphics2D.fillRect(screenX, screenY, game.tileSize, game.tileSize);
-            }
         }
     }
+
+    if (game.debugPathfinding) {
+        graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
+        for (var pathNode : game.pathFinder.pathList) {
+            int worldX = pathNode.col * tileSize;
+            int worldY = pathNode.row * tileSize;
+            int screenX = worldX - playerWorldX + playerScreenX;
+            int screenY = worldY - playerWorldY + playerScreenY;
+
+            graphics2D.fillRect(screenX, screenY, tileSize, tileSize);
+        }
+    }
+}
 }

@@ -11,9 +11,8 @@ import net.dinglezz.torgrays_trials.tile.TileManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class Game extends JPanel implements Runnable {
     // Screen settings
@@ -43,8 +42,11 @@ public class Game extends JPanel implements Runnable {
     public boolean fullScreen;
     public boolean BRendering;
     public boolean pathFinding;
+
+    // Debug
     public boolean debug = false;
     public boolean debugPathfinding = false;
+    public boolean debugHitBoxes = false;
 
     // FPS
     int FPS = 60;
@@ -136,21 +138,20 @@ public class Game extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        double drawInterval = (double) 1000000000 / FPS;
-        double delta = 0;
+        final double drawInterval = 1_000_000_000.0 / FPS;
         long lastTime = System.nanoTime();
-        long currentTime;
         long timer = 0;
-        long drawCount = 0;
+        double delta = 0;
 
         while (gameThread != null) {
-            currentTime = System.nanoTime();
-
-            delta += (currentTime - lastTime) / drawInterval;
-            timer += (currentTime - lastTime);
+            long currentTime = System.nanoTime();
+            long elapsedTime = currentTime - lastTime;
             lastTime = currentTime;
 
-            if (delta >= 1) {
+            delta += elapsedTime / drawInterval;
+            timer += elapsedTime;
+
+            while (delta >= 1) {
                 update();
                 if (BRendering && gameState != States.STATE_TITLE) {
                     drawToTempScreen();
@@ -159,11 +160,9 @@ public class Game extends JPanel implements Runnable {
                     repaint();
                 }
                 delta--;
-                drawCount++;
             }
 
-            if (timer >= 1000000000) {
-                drawCount = 0;
+            if (timer >= 1_000_000_000) {
                 timer = 0;
             }
         }
@@ -181,20 +180,18 @@ public class Game extends JPanel implements Runnable {
             }
 
             // NPCs
-            for (int i = 0; i < npc.get(currentMap).size(); i++) {
-                if (npc.get(currentMap).get(i) != null) {
-                    npc.get(currentMap).get(i).update();
-                }
-            }
+            npc.getOrDefault(currentMap, new HashMap<>()).values().stream()
+                    .filter(Objects::nonNull)
+                    .forEach(Entity::update);
+
             // Monsters
-            for (int i = 0; i < monster.get(currentMap).size(); i++) {
-                if (monster.get(currentMap).get(i) != null) {
-                    if (monster.get(currentMap).get(i).alive && !monster.get(currentMap).get(i).dying) {
-                        monster.get(currentMap).get(i).update();
-                    }
-                    if (!monster.get(currentMap).get(i).alive) {
-                        monster.get(currentMap).get(i).checkDrop();
-                        monster.get(currentMap).put(i, null);
+            monster.getOrDefault(currentMap, new HashMap<>()).forEach((key, entity) -> {
+                if (entity != null) {
+                    if (entity.alive && !entity.dying) {
+                        entity.update();
+                    } else if (!entity.alive) {
+                        entity.checkDrop();
+                        monster.get(currentMap).put(key, null);
 
                         // Respawn if all monsters are dead
                         if (monster.get(currentMap).values().stream().allMatch(Objects::isNull)) {
@@ -202,17 +199,11 @@ public class Game extends JPanel implements Runnable {
                         }
                     }
                 }
-            }
+            });
+
             // Particles
-            for (int i = 0; i < particleList.size(); i++) {
-                if (particleList.get(i) != null) {
-                    if (particleList.get(i).alive) {
-                        particleList.get(i).update();
-                    } else {
-                        particleList.remove(i);
-                    }
-                }
-            }
+            particleList.removeIf(particle -> particle == null || !particle.alive);
+            particleList.forEach(Entity::update);
 
             environmentManager.update();
         }
@@ -233,40 +224,20 @@ public class Game extends JPanel implements Runnable {
             tileManager.draw(graphics2D);
 
             // Add entities to list
+            entityList.clear(); // Clear once at the start
             if (gameState != States.STATE_GAME_OVER) {
                 entityList.add(player);
             }
-            for (int i = 0; i < npc.get(currentMap).size(); i++) {
-                if (npc.get(currentMap).get(i) != null) {
-                    entityList.add(npc.get(currentMap).get(i));
-                }
-            }
-            for (int i = 0; i < object.get(currentMap).size(); i++) {
-                if (object.get(currentMap).get(i) != null) {
-                    entityList.add(object.get(currentMap).get(i));
-                }
-            }
-            for (int i = 0; i < monster.get(currentMap).size(); i++) {
-                if (monster.get(currentMap).get(i) != null) {
-                    entityList.add(monster.get(currentMap).get(i));
-                }
-            }
-            for (Entity value : particleList) {
-                if (value != null) {
-                    entityList.add(value);
-                }
-            }
+            npc.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
+            object.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
+            monster.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
+            entityList.addAll(particleList);
 
-            // Sort
-            entityList.sort((e1, e2) -> {
-                int result = Integer.compare(e1.worldY, e2.worldY);
-                return result;
-            });
+            // Sort and draw entities
+            entityList.stream()
+                    .sorted(Comparator.comparingInt(e -> e.worldY))
+                    .forEach(entity -> entity.draw(graphics2D));
 
-            // Draw Entities
-            for (Entity entity : entityList) {
-                entity.draw(graphics2D);
-            }
             // Empty Entity List
             entityList.clear();
 
@@ -281,69 +252,39 @@ public class Game extends JPanel implements Runnable {
         graphics.drawImage(tempScreen,0,0,screenWidth2, screenHeight2, null);
         graphics.dispose();
     }
+    @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-        Graphics2D graphics2D = (Graphics2D)graphics;
+        Graphics2D graphics2D = (Graphics2D) graphics;
 
-        // Debug
-        drawStart = 0;
         if (debug) {
             drawStart = System.nanoTime();
         }
 
-        // Title Screen
         if (gameState == States.STATE_TITLE) {
             ui.draw(graphics2D);
         } else {
-            // Draw :)
             tileManager.draw(graphics2D);
 
             // Add entities to list
             if (gameState != States.STATE_GAME_OVER) {
                 entityList.add(player);
             }
-            for (int i = 0; i < npc.get(currentMap).size(); i++) {
-                if (npc.get(currentMap).get(i) != null) {
-                    entityList.add(npc.get(currentMap).get(i));
-                }
-            }
-            for (int i = 0; i < object.get(currentMap).size(); i++) {
-                if (object.get(currentMap).get(i) != null) {
-                    entityList.add(object.get(currentMap).get(i));
-                }
-            }
-            for (int i = 0; i < monster.get(currentMap).size(); i++) {
-                if (monster.get(currentMap).get(i) != null) {
-                    entityList.add(monster.get(currentMap).get(i));
-                }
-            }
-            for (Entity value : particleList) {
-                if (value != null) {
-                    entityList.add(value);
-                }
-            }
+            npc.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
+            object.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
+            monster.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
+            entityList.addAll(particleList);
 
-            // Sort
-            entityList.sort((e1, e2) -> {
-                int result = Integer.compare(e1.worldY, e2.worldY);
-                return result;
-            });
+            // Sort and draw entities
+            entityList.stream()
+                    .sorted(Comparator.comparingInt(e -> e.worldY))
+                    .forEach(entity -> entity.draw(graphics2D));
 
-            // Draw Entities
-            for (Entity entity : entityList) {
-                entity.draw(graphics2D);
-            }
-            // Empty Entity List
             entityList.clear();
 
-            // More  drawing :D
             environmentManager.draw(graphics2D);
             ui.draw(graphics2D);
         }
-
-        // Toxic Waste
         graphics2D.dispose();
     }
-
-
  }
