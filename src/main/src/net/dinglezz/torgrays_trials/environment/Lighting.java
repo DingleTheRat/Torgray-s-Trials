@@ -20,8 +20,8 @@ public class Lighting {
     public int darknessCounter = 0;
 
     // Darkness Settings
-    public int nightLength = 200; // 12000
-    public int gloomLength = 300; // 10000
+    public int nightLength = 12000;
+    public int gloomLength = 10000;
     public int gloomChance = 50;
     public int lightGloomChance = 25;
     public int darkGloomChance = 25;
@@ -174,8 +174,8 @@ public class Lighting {
             game.ui.transitioning = true;
 
             // Set the transition settings
-            game.ui.transitionOpenSpeed = (darknessState == States.DARKNESS_STATE_NEW_DUSK) ? 0.002f : 0.02f;
-            game.ui.transitionCloseSpeed = (darknessState == States.DARKNESS_STATE_DUSK) ? 0.002f : 0.02f;
+            game.ui.transitionOpenSpeed = (darknessState == States.DARKNESS_STATE_NEW_DUSK) ? 0.005f : 0.01f;
+            game.ui.transitionCloseSpeed = (darknessState == States.DARKNESS_STATE_DUSK) ? 0.005f : 0.01f;
             game.ui.actionMethod = "transitionDarkness";
             game.ui.transitionColor = new Color(0, 0, 0.1f);
         }
