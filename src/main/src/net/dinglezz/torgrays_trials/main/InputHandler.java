@@ -39,12 +39,15 @@ public class   InputHandler implements KeyListener {
             game.debugPathfinding = !game.debugPathfinding;
             game.ui.addMiniNotification("Debug Pathfinding: " + game.debugPathfinding);
             debug = false;
-
-        } else if (f3Pressed && code == KeyEvent.VK_B) {
+        } else if (f3Pressed && code == KeyEvent.VK_R) {
             if (game.BRendering) {
                 game.BRendering = false;
                 game.ui.addMiniNotification("BRendering: " + game.BRendering);
             }
+        } else if (f3Pressed && code == KeyEvent.VK_B) {
+            game.debugHitBoxes = !game.debugHitBoxes;
+            game.ui.addMiniNotification("Debug Hit Boxes: " + game.debugHitBoxes);
+            debug = false;
         } else if (code == KeyEvent.VK_F3) {
             f3Pressed = true;
             debug = true;
