@@ -115,14 +115,14 @@ public class EventHandler {
         return hit;
     }
     public void damagePit() {
-        game.gameState = States.STATE_DIALOGUE;
+        game.gameState = States.GameStates.STATE_DIALOGUE;
         game.ui.currentDialogue = "Dang it, I feel into a pit!";
         game.player.health -= 1;
         canTouchEvent = false;
     }
     public void healingPond() {
         if (game.inputHandler.interactKeyPressed) {
-            game.gameState = States.STATE_DIALOGUE;
+            game.gameState = States.GameStates.STATE_DIALOGUE;
             game.player.attackCanceled = true;
             game.ui.currentDialogue = "*Drinks water* \nHuh, nothing happened :/";
 //            game.player.health = game.player.maxHealth;
@@ -157,7 +157,7 @@ public class EventHandler {
     }
     public void speak(Entity entity) {
         if (game.inputHandler.interactKeyPressed) {
-            game.gameState = States.STATE_DIALOGUE;
+            game.gameState = States.GameStates.STATE_DIALOGUE;
             game.player.attackCanceled = true;
             entity.speak(false);
         }

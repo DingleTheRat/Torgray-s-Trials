@@ -29,8 +29,7 @@ public class UI {
     ArrayList<Integer> miniNotificationCounter = new ArrayList<>();
 
     // States
-    public States titleScreenState = States.TITLE_STATE_MAIN;
-    public States subState;
+    public States.UIStates subState = States.UIStates.TITLE_STATE_MAIN;
 
     // Inventory
     public int playerSlotCol = 0;
@@ -88,7 +87,7 @@ public class UI {
             case STATE_DIALOGUE: drawBasics(); drawDialogueScreen(); break;
             case STATE_CHARACTER: drawCharacterScreen(); drawInventory(game.player, true); break;
             case STATE_GAME_OVER: drawGameOverScreen(); break;
-            case STATE_TRADE: if (subState == States.TRADE_STATE_SELECT) {drawBasics();}; drawTradeScreen(); break;
+            case STATE_TRADE: if (subState == States.UIStates.TRADE_STATE_SELECT) {drawBasics();}; drawTradeScreen(); break;
             case STATE_MAP: drawBasics(); drawMapScreen(); break;
         }
     }
@@ -196,7 +195,7 @@ public class UI {
     }
 
     public void drawTitleScreen() {
-        if (titleScreenState == States.TITLE_STATE_MAIN) {
+        if (subState == States.UIStates.TITLE_STATE_MAIN) {
             // Title Text
             graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 90f));
             String text = "Torgray's Trials";
@@ -246,7 +245,7 @@ public class UI {
             if (commandNumber == 2) {
                 graphics2D.drawString(">", x - game.tileSize,  y);
             }
-        } else if (titleScreenState == States.TITLE_STATE_MODES) {
+        } else if (subState == States.UIStates.TITLE_STATE_MODES) {
             // GameMode Selection
             graphics2D.setColor(Color.white);
             graphics2D.setFont(graphics2D.getFont().deriveFont(42f));
@@ -302,18 +301,18 @@ public class UI {
         int frameWidth = game.tileSize * 8;
         int frameHeight = game.tileSize * 2;
 
-        if (subState == States.PAUSE_STATE_SETTINGS_MAIN || subState == States.PAUSE_STATE_CONTROLS) {
+        if (subState == States.UIStates.PAUSE_STATE_SETTINGS_MAIN || subState == States.UIStates.PAUSE_STATE_CONTROLS) {
             frameY = game.tileSize;
             frameHeight = game.tileSize * 10;
         }
-        else if (subState == States.PAUSE_STATE_NOTIFICATION || subState == States.PAUSE_STATE_CONFIRM) {
+        else if (subState == States.UIStates.PAUSE_STATE_NOTIFICATION || subState == States.UIStates.PAUSE_STATE_CONFIRM) {
             frameY = game.tileSize * 3;
             frameHeight = game.tileSize * 6;
         }
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
         switch (subState) {
-            case States.STATE_PAUSE:
+            case PAUSE_STATE_MAIN:
                 // Title
                 String text = "Game Paused";
                 int x = getCentreX(text);
@@ -334,7 +333,7 @@ public class UI {
                     graphics2D.drawString(">", x - game.tileSize, y);
 
                     if (game.inputHandler.spacePressed) {
-                        subState = States.PAUSE_STATE_SETTINGS_MAIN;
+                        subState = States.UIStates.PAUSE_STATE_SETTINGS_MAIN;
                         commandNumber = 0;
                     }
                 }
@@ -346,7 +345,7 @@ public class UI {
                     graphics2D.drawString(">", x - game.tileSize, y);
 
                     if (game.inputHandler.spacePressed) {
-                        subState = States.PAUSE_STATE_CONTROLS;
+                        subState = States.UIStates.PAUSE_STATE_CONTROLS;
                         commandNumber = 0;
                     }
                 }
@@ -359,7 +358,7 @@ public class UI {
 
                     if (game.inputHandler.spacePressed) {
                         commandNumber = 1;
-                        subState = States.PAUSE_STATE_CONFIRM;
+                        subState = States.UIStates.PAUSE_STATE_CONFIRM;
                         currentDialogue = "Are you sure you wanna \nend this game? Your data \nwon't be saved.";
                         actionMethod = "yesGameEnd";
                     }
@@ -372,15 +371,15 @@ public class UI {
                     graphics2D.drawString(">", x - game.tileSize, y);
 
                     if (game.inputHandler.spacePressed) {
-                        game.gameState = States.STATE_PLAY;
+                        game.gameState = States.GameStates.STATE_PLAY;
                         commandNumber = 0;
                     }
                 }
                 break;
-            case States.PAUSE_STATE_SETTINGS_MAIN: settingsMain(frameX, frameY); break;
-            case States.PAUSE_STATE_NOTIFICATION: settingsNotification(frameX, frameY); break;
-            case States.PAUSE_STATE_CONFIRM: settingsConfirm(frameX, frameY); break;
-            case States.PAUSE_STATE_CONTROLS: controlsPanel(frameX, frameY); break;
+            case PAUSE_STATE_SETTINGS_MAIN: settingsMain(frameX, frameY); break;
+            case PAUSE_STATE_NOTIFICATION: settingsNotification(frameX, frameY); break;
+            case PAUSE_STATE_CONFIRM: settingsConfirm(frameX, frameY); break;
+            case PAUSE_STATE_CONTROLS: controlsPanel(frameX, frameY); break;
         }
 
         game.inputHandler.spacePressed = false;
@@ -422,7 +421,7 @@ public class UI {
             if (game.inputHandler.spacePressed) {
                 if (!game.fullScreen && !game.BRendering) {
                     commandNumber = 1;
-                    subState = States.PAUSE_STATE_CONFIRM;
+                    subState = States.UIStates.PAUSE_STATE_CONFIRM;
                     currentDialogue = "Are you sure you wanna \nenter full screen? It won't \nscale without BRendering.";
                     actionMethod = "yesFullScreen";
                 } else {
@@ -440,7 +439,7 @@ public class UI {
             if (game.inputHandler.spacePressed) {
                 if (!game.BRendering) {
                     commandNumber = 1;
-                    subState = States.PAUSE_STATE_CONFIRM;
+                    subState = States.UIStates.PAUSE_STATE_CONFIRM;
                     currentDialogue = "BRendering is a highly \nexperimental mode that \ncan break the game if on";
                     actionMethod = "yesBRendering";
                 } else {
@@ -457,7 +456,7 @@ public class UI {
             if (game.inputHandler.spacePressed) {
                 if (!game.pathFinding) {
                     commandNumber = 1;
-                    subState = States.PAUSE_STATE_CONFIRM;
+                    subState = States.UIStates.PAUSE_STATE_CONFIRM;
                     currentDialogue = "Pathfinding is a highly \nexperimental mode that \nmay not work correctly";
                     actionMethod = "yesPathfinding";
                 } else {
@@ -473,7 +472,7 @@ public class UI {
             graphics2D.drawString(">", textX - 30, textY);
 
             if (game.inputHandler.spacePressed) {
-                subState = States.STATE_PAUSE;
+                subState = States.UIStates.PAUSE_STATE_MAIN;
                 commandNumber = 0;
             }
         }
@@ -546,7 +545,7 @@ public class UI {
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
             if (game.inputHandler.spacePressed) {
-                subState = States.STATE_PAUSE;
+                subState = States.UIStates.PAUSE_STATE_MAIN;
             }
         }
     }
@@ -584,7 +583,7 @@ public class UI {
         if (commandNumber == 1) {
             graphics2D.drawString(">", textX - 30, textY);
             if (game.inputHandler.spacePressed) {
-                subState = States.STATE_PAUSE;
+                subState = States.UIStates.PAUSE_STATE_MAIN;
                 commandNumber = 0;
             }
         }
@@ -629,7 +628,7 @@ public class UI {
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
             if (game.inputHandler.spacePressed) {
-                subState = States.STATE_PAUSE;
+                subState = States.UIStates.TITLE_STATE_MAIN;
                 commandNumber = 0;
             }
         }
@@ -927,8 +926,8 @@ public void drawTransitionScreen() {
     if (transitionCounter == 1f && !fadeBack) {
         invokeActionMethod();
         fadeBack = true;
-        if (game.environmentManager.lighting.darknessState == States.DARKNESS_STATE_DUSK ||
-                game.environmentManager.lighting.darknessState == States.DARKNESS_STATE_NEW_DUSK) {
+        if (game.environmentManager.lighting.darknessState == States.DarknessStates.DARKNESS_STATE_DUSK ||
+                game.environmentManager.lighting.darknessState == States.DarknessStates.DARKNESS_STATE_NEW_DUSK) {
             Sound.playMapMusic(game.environmentManager.lighting.darknessState);
         }
     } else if (transitionCounter == 0f && fadeBack) {
@@ -971,7 +970,7 @@ public void drawTransitionScreen() {
         if (commandNumber == 0) {
             graphics2D.drawString(">", x - 24, y);
             if (game.inputHandler.spacePressed) {
-                game.ui.subState = States.TRADE_STATE_BUY;
+                game.ui.subState = States.UIStates.TRADE_STATE_BUY;
             }
         }
 
@@ -981,7 +980,7 @@ public void drawTransitionScreen() {
         if (commandNumber == 1) {
             graphics2D.drawString(">", x - 24, y);
             if (game.inputHandler.spacePressed) {
-                game.ui.subState = States.TRADE_STATE_SELL;
+                game.ui.subState = States.UIStates.TRADE_STATE_SELL;
             }
         }
 
@@ -991,7 +990,7 @@ public void drawTransitionScreen() {
         if (commandNumber == 2) {
             graphics2D.drawString(">", x - 24, y);
             if (game.inputHandler.spacePressed) {
-                game.gameState = States.STATE_PLAY;
+                game.gameState = States.GameStates.STATE_PLAY;
                 game.ui.commandNumber = 0;
             }
         }
@@ -1030,13 +1029,13 @@ public void drawTransitionScreen() {
             if (game.inputHandler.spacePressed) {
                 if (npc.inventory.get(itemIndex).price > game.player.coins) {
                     currentDialogue = "Sorry partner, your wallet declined :(";
-                    game.gameState = States.STATE_DIALOGUE;
+                    game.gameState = States.GameStates.STATE_DIALOGUE;
                     game.ui.commandNumber = 0;
                 } else if (game.player.canObtainItem(npc.inventory.get(itemIndex))) {
                     game.player.coins -= price;
                 } else {
                     currentDialogue = "Sorry partner, I don't think you can \ncarry this :(";
-                    game.gameState = States.STATE_DIALOGUE;
+                    game.gameState = States.GameStates.STATE_DIALOGUE;
                     game.ui.commandNumber = 0;
                 }
             }
@@ -1077,11 +1076,11 @@ public void drawTransitionScreen() {
                         game.player.inventory.get(itemIndex) == game.player.currentShield ||
                         game.player.inventory.get(itemIndex) == game.player.currentLight) {
                     currentDialogue = "Sorry partner, I can't buy equipped \nitems :(";
-                    game.gameState = States.STATE_DIALOGUE;
+                    game.gameState = States.GameStates.STATE_DIALOGUE;
                     game.ui.commandNumber = 0;
                 } else if (game.player.inventory.get(itemIndex).tags.contains(EntityTags.TAG_NON_SELLABLE)) {
                     currentDialogue = "Sorry partner, I can't buy this item :(";
-                    game.gameState = States.STATE_DIALOGUE;
+                    game.gameState = States.GameStates.STATE_DIALOGUE;
                     game.ui.commandNumber = 0;
                 } else {
                     game.player.coins += price;
@@ -1106,9 +1105,9 @@ public void drawTransitionScreen() {
     // Action
     @SuppressWarnings("unused")
     public void yesGameEnd() {
-        subState = States.STATE_PAUSE;
-        game.gameState = States.STATE_TITLE;
-        titleScreenState = States.TITLE_STATE_MAIN;
+        subState = States.UIStates.TITLE_STATE_MAIN;
+        game.gameState = States.GameStates.STATE_TITLE;
+        subState = States.UIStates.TITLE_STATE_MAIN;
         Sound.music.stop();
         Sound.playMusic("Tech Geek");
         game.restart();
@@ -1116,7 +1115,7 @@ public void drawTransitionScreen() {
     @SuppressWarnings("unused")
     public void yesFullScreen() {
         game.fullScreen = !game.fullScreen;
-        subState = States.PAUSE_STATE_NOTIFICATION;
+        subState = States.UIStates.PAUSE_STATE_NOTIFICATION;
         commandNumber = 0;
         currentDialogue = "Full Screen will only be \nenabled/disabled when \nrelaunching the game.";
     }
@@ -1126,16 +1125,16 @@ public void drawTransitionScreen() {
         commandNumber = 0;
 
         if (game.BRendering) {
-            subState = States.PAUSE_STATE_NOTIFICATION;
+            subState = States.UIStates.PAUSE_STATE_NOTIFICATION;
             currentDialogue = "You can emergency \ndisable BRendering by \npressing F3 and R.";
         } else {
-            subState = States.PAUSE_STATE_SETTINGS_MAIN;
+            subState = States.UIStates.PAUSE_STATE_SETTINGS_MAIN;
         }
     }
     @SuppressWarnings("unused")
     public void yesPathfinding() {
         game.pathFinding = !game.pathFinding;
-        subState = States.PAUSE_STATE_SETTINGS_MAIN;
+        subState = States.UIStates.PAUSE_STATE_SETTINGS_MAIN;
         commandNumber = 0;
     }
     @SuppressWarnings("unused")

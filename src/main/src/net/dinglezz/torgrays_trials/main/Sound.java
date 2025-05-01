@@ -118,13 +118,13 @@ public class Sound {
             }
         }
     }
-    public static void playMapMusic(States state) {
+    public static void playMapMusic(States.DarknessStates darknessState) {
         stopMusic();
         JSONObject currentMapFile = Main.game.mapHandler.mapFiles.get(Main.game.currentMap);
         
         if (currentMapFile.getString("music").equals("Default")) {
             playMusic(
-                switch (state) {
+                switch (darknessState) {
                     case DARKNESS_STATE_DUSK -> "Umbral Force";
                     case DARKNESS_STATE_NEW_DUSK -> "Gloom Over Torgray";
                     default -> "Dark Mystery";}

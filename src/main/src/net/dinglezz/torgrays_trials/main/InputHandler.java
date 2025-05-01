@@ -24,14 +24,14 @@ public class   InputHandler implements KeyListener {
         int code = e.getKeyCode();
 
         switch (game.gameState) {
-            case States.STATE_TITLE: titleState(code); break;
-            case States.STATE_PLAY: playState(code); break;
-            case States.STATE_PAUSE: pauseState(code); break;
-            case States.STATE_DIALOGUE: dialogueState(code); playState(code); break;
-            case States.STATE_CHARACTER: characterState(code); break;
-            case States.STATE_GAME_OVER: gameOverState(code); break;
-            case States.STATE_TRADE: tradeState(code); break;
-            case States.STATE_MAP: mapState(code); break;
+            case States.GameStates.STATE_TITLE: titleState(code); break;
+            case States.GameStates.STATE_PLAY: playState(code); break;
+            case States.GameStates.STATE_PAUSE: pauseState(code); break;
+            case States.GameStates.STATE_DIALOGUE: dialogueState(code); playState(code); break;
+            case States.GameStates.STATE_CHARACTER: characterState(code); break;
+            case States.GameStates.STATE_GAME_OVER: gameOverState(code); break;
+            case States.GameStates.STATE_TRADE: tradeState(code); break;
+            case States.GameStates.STATE_MAP: mapState(code); break;
         }
 
         // F3 Stuff
@@ -54,7 +54,7 @@ public class   InputHandler implements KeyListener {
         }
     }
     public void titleState(int code) {
-        if (game.ui.titleScreenState == States.TITLE_STATE_MAIN) {
+        if (game.ui.subState == States.UIStates.TITLE_STATE_MAIN) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 game.ui.commandNumber--;
                 Sound.playSFX("Cursor");
@@ -71,7 +71,7 @@ public class   InputHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                 if (game.ui.commandNumber == 0) {
-                    game.ui.titleScreenState = States.TITLE_STATE_MODES;
+                    game.ui.subState = States.UIStates.TITLE_STATE_MODES;
                     game.ui.commandNumber = 1;
                 }
                 if (game.ui.commandNumber == 1) {
@@ -81,7 +81,7 @@ public class   InputHandler implements KeyListener {
                     System.exit(0);
                 }
             }
-        } else if (game.ui.titleScreenState == States.TITLE_STATE_MODES) {
+        } else if (game.ui.subState == States.UIStates.TITLE_STATE_MODES) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 game.ui.commandNumber--;
                 Sound.playSFX("Cursor");
@@ -98,7 +98,7 @@ public class   InputHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                 if (game.ui.commandNumber == 0) {
-                    game.gameState = States.STATE_PLAY;
+                    game.gameState = States.GameStates.STATE_PLAY;
                     game.gameMode = "Easy";
                     Sound.playMapMusic();
                     System.out.println("Imagine Picking Easy");
@@ -119,7 +119,7 @@ public class   InputHandler implements KeyListener {
                     game.environmentManager.lighting.darkGloomChance = 15;
                 }
                 if (game.ui.commandNumber == 1) {
-                    game.gameState = States.STATE_PLAY;
+                    game.gameState = States.GameStates.STATE_PLAY;
                     game.gameMode = "Medium";
                     Sound.playMapMusic();
                     System.out.println("Kinda a mid game mode lol");
@@ -127,7 +127,7 @@ public class   InputHandler implements KeyListener {
                     // No modified stats since Medium is the default
                 }
                 if (game.ui.commandNumber == 2) {
-                    game.gameState = States.STATE_PLAY;
+                    game.gameState = States.GameStates.STATE_PLAY;
                     game.gameMode = "Hard";
                     Sound.playMapMusic();
                     System.out.println("You really think you are \"hardcore\"?");
@@ -146,7 +146,7 @@ public class   InputHandler implements KeyListener {
                     game.environmentManager.lighting.darkGloomChance = 55;
                 }
                 if (game.ui.commandNumber == 3) {
-                    game.ui.titleScreenState = States.TITLE_STATE_MAIN;
+                    game.ui.subState = States.UIStates.TITLE_STATE_MAIN;
                     game.ui.commandNumber = 0;
                 }
             }
@@ -160,23 +160,23 @@ public class   InputHandler implements KeyListener {
             case KeyEvent.VK_D: rightPressed = true; break;
             case KeyEvent.VK_E: interactKeyPressed = true; break;
             case KeyEvent.VK_SPACE: spacePressed = true; break;
-            case KeyEvent.VK_ESCAPE: game.gameState = States.STATE_PAUSE; game.ui.subState = States.STATE_PAUSE; game.ui.commandNumber = 0; break;
+            case KeyEvent.VK_ESCAPE: game.gameState = States.GameStates.STATE_PAUSE; game.ui.subState = States.UIStates.PAUSE_STATE_MAIN; game.ui.commandNumber = 0; break;
         }
     }
     public void pauseState(int code) {
         if (code == KeyEvent.VK_ESCAPE) {
-            if (game.ui.subState == States.STATE_PAUSE) {
-                game.gameState = States.STATE_PLAY;
+            if (game.ui.subState == States.UIStates.PAUSE_STATE_MAIN) {
+                game.gameState = States.GameStates.STATE_PLAY;
             }
-            game.ui.subState = States.STATE_PAUSE;
+            game.ui.subState = States.UIStates.PAUSE_STATE_MAIN;
             game.ui.commandNumber = 0;
         }
 
         switch (game.ui.subState) {
-            case States.STATE_PAUSE: maxCommandNumber = 3; break;
-            case States.PAUSE_STATE_SETTINGS_MAIN: maxCommandNumber = 5; break;
-            case States.PAUSE_STATE_CONFIRM: maxCommandNumber = 1; break;
-            case States.PAUSE_STATE_CONTROLS, PAUSE_STATE_NOTIFICATION: maxCommandNumber = 0; break;
+            case PAUSE_STATE_MAIN: maxCommandNumber = 3; break;
+            case PAUSE_STATE_SETTINGS_MAIN: maxCommandNumber = 5; break;
+            case PAUSE_STATE_CONFIRM: maxCommandNumber = 1; break;
+            case PAUSE_STATE_CONTROLS, PAUSE_STATE_NOTIFICATION: maxCommandNumber = 0; break;
         }
 
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
@@ -200,7 +200,7 @@ public class   InputHandler implements KeyListener {
         }
 
         if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
-            if (game.ui.subState == States.PAUSE_STATE_SETTINGS_MAIN) {
+            if (game.ui.subState == States.UIStates.PAUSE_STATE_SETTINGS_MAIN) {
                 if (game.ui.commandNumber == 0 && Sound.music.volumeScale > 0) {
                     Sound.music.volumeScale--;
                     Sound.music.checkVolume();
@@ -213,7 +213,7 @@ public class   InputHandler implements KeyListener {
             }
         }
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
-            if (game.ui.subState == States.PAUSE_STATE_SETTINGS_MAIN) {
+            if (game.ui.subState == States.UIStates.PAUSE_STATE_SETTINGS_MAIN) {
                 if (game.ui.commandNumber == 0 && Sound.music.volumeScale < 5) {
                     Sound.music.volumeScale++;
                     Sound.music.checkVolume();
@@ -229,12 +229,12 @@ public class   InputHandler implements KeyListener {
     public void dialogueState(int code) {
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ESCAPE) {
             game.player.attackCanceled = true;
-            game.gameState = States.STATE_PLAY;
+            game.gameState = States.GameStates.STATE_PLAY;
         }
     }
     public void characterState(int code) {
         if (code == KeyEvent.VK_E || code == KeyEvent.VK_ESCAPE) {
-            game.gameState = States.STATE_PLAY;
+            game.gameState = States.GameStates.STATE_PLAY;
         }
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
             game.player.selectItem();
@@ -317,16 +317,16 @@ public class   InputHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
             if (game.ui.commandNumber == 0) {
-                game.gameState = States.STATE_PLAY;
+                game.gameState = States.GameStates.STATE_PLAY;
                 game.restart();
                 Sound.playMapMusic();
             } else if (game.ui.commandNumber == maxCommandNumber) {
-                game.gameState = States.STATE_TITLE;
-                game.ui.titleScreenState = States.TITLE_STATE_MAIN;
+                game.gameState = States.GameStates.STATE_TITLE;
+                game.ui.subState = States.UIStates.TITLE_STATE_MAIN;
                 game.restart();
                 Sound.playMusic("Tech Geek");
             } else if (game.ui.commandNumber == 1) {
-                game.gameState = States.STATE_PLAY;
+                game.gameState = States.GameStates.STATE_PLAY;
                 game.respawn();
                 Sound.playMapMusic();
             }
@@ -337,9 +337,9 @@ public class   InputHandler implements KeyListener {
             spacePressed = true;
         }
 
-        if (game.ui.subState == States.TRADE_STATE_SELECT) {
+        if (game.ui.subState == States.UIStates.TRADE_STATE_SELECT) {
             if (code == KeyEvent.VK_ESCAPE) {
-                game.gameState = States.STATE_PLAY;
+                game.gameState = States.GameStates.STATE_PLAY;
                 game.ui.commandNumber = 0;
             }
 
@@ -357,23 +357,23 @@ public class   InputHandler implements KeyListener {
                 }
                 Sound.playSFX("Cursor");
             }
-        } else if (game.ui.subState == States.TRADE_STATE_BUY) {
+        } else if (game.ui.subState == States.UIStates.TRADE_STATE_BUY) {
             entityInventory(code);
 
             if (code == KeyEvent.VK_ESCAPE) {
-                game.ui.subState = States.TRADE_STATE_SELECT;
+                game.ui.subState = States.UIStates.TRADE_STATE_SELECT;
             }
-        } else if (game.ui.subState == States.TRADE_STATE_SELL) {
+        } else if (game.ui.subState == States.UIStates.TRADE_STATE_SELL) {
             playerInventory(code);
 
             if (code == KeyEvent.VK_ESCAPE) {
-                game.ui.subState = States.TRADE_STATE_SELECT;
+                game.ui.subState = States.UIStates.TRADE_STATE_SELECT;
             }
         }
     }
     public void mapState(int code) {
         if (code == KeyEvent.VK_ESCAPE) {
-            game.gameState = States.STATE_CHARACTER;
+            game.gameState = States.GameStates.STATE_CHARACTER;
         }
     }
 

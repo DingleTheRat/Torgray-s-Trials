@@ -45,7 +45,7 @@ public class OBJ_Chest extends Entity {
     public void interact() {
         if (!opened) {
             Sound.playSFX("Unlock");
-            game.gameState = States.STATE_DIALOGUE;
+            game.gameState = States.GameStates.STATE_DIALOGUE;
             game.player.attackCanceled = true;
 
             StringBuilder stringBuilder = new StringBuilder();

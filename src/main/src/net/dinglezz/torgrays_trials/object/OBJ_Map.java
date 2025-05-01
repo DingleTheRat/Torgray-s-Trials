@@ -22,7 +22,7 @@ public class OBJ_Map extends Entity {
     }
     @Override
     public boolean use(Entity entity) {
-        game.gameState = States.STATE_MAP;
+        game.gameState = States.GameStates.STATE_MAP;
         game.inputHandler.upPressed = false;
         game.inputHandler.downPressed = false;
         game.inputHandler.leftPressed = false;

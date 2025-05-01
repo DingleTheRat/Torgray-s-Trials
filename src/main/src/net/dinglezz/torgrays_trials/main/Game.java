@@ -72,7 +72,7 @@ public class Game extends JPanel implements Runnable {
     public ArrayList<Entity> particleList = new ArrayList<>();
     public ArrayList<Entity> entityList = new ArrayList<>();
 
-    public States gameState = States.STATE_TITLE;
+    public States.GameStates gameState = States.GameStates.STATE_TITLE;
     public String currentMap = "Main Island";
     public String gameMode;
 
@@ -90,7 +90,7 @@ public class Game extends JPanel implements Runnable {
         assetSetter.setMonsters();
         environmentManager.setup();
         Sound.playMusic("Tech Geek");
-        gameState = States.STATE_TITLE;
+        gameState = States.GameStates.STATE_TITLE;
         player.setDefaultPosition();
 
         if (fullScreen) {
@@ -101,24 +101,24 @@ public class Game extends JPanel implements Runnable {
         graphics2D = (Graphics2D)tempScreen.getGraphics();
     }
     public void respawn() {
-        player.setDefaultPosition();
         player.restoreHealth();
         currentMap = "Main Island";
+        player.setDefaultPosition();
         environmentManager.lightUpdated = true;
     }
     public void restart() {
         player.setDefaultValues();
-        player.setDefaultPosition();
         player.setItems();
         assetSetter.setObjects();
         assetSetter.setNPCs();
         assetSetter.setMonsters();
         currentMap = "Main Island";
+        player.setDefaultPosition();
 
         // Darkness reset
         environmentManager.lightUpdated = true;
         environmentManager.lighting.darknessCounter = 0;
-        environmentManager.lighting.darknessState = States.DARKNESS_STATE_NIGHT;
+        environmentManager.lighting.darknessState = States.DarknessStates.DARKNESS_STATE_NIGHT;
         environmentManager.lighting.nextGloom = environmentManager.lighting.chooseNextGloom();
     }
     public void setFullScreen() {
@@ -152,7 +152,7 @@ public class Game extends JPanel implements Runnable {
 
             while (delta >= 1) {
                 update();
-                if (BRendering && gameState != States.STATE_TITLE) {
+                if (BRendering && gameState != States.GameStates.STATE_TITLE) {
                     drawToTempScreen();
                     drawToScreen();
                 } else {
@@ -167,14 +167,14 @@ public class Game extends JPanel implements Runnable {
         }
     }
     public void update() {
-        if (gameState == States.STATE_PLAY ||
-                gameState == States.STATE_CHARACTER ||
-                gameState == States.STATE_DIALOGUE ||
-                gameState == States.STATE_TRADE ||
-                gameState == States.STATE_MAP) {
+        if (gameState == States.GameStates.STATE_PLAY ||
+                gameState == States.GameStates.STATE_CHARACTER ||
+                gameState == States.GameStates.STATE_DIALOGUE ||
+                gameState == States.GameStates.STATE_TRADE ||
+                gameState == States.GameStates.STATE_MAP) {
 
             // Player
-            if (gameState != States.STATE_TRADE) {
+            if (gameState != States.GameStates.STATE_TRADE) {
                 player.update();
             }
 
@@ -216,7 +216,7 @@ public class Game extends JPanel implements Runnable {
         }
 
         // Title Screen
-        if (gameState == States.STATE_TITLE) {
+        if (gameState == States.GameStates.STATE_TITLE) {
             ui.draw(graphics2D);
         } else {
             // Draw :)
@@ -224,7 +224,7 @@ public class Game extends JPanel implements Runnable {
 
             // Add entities to list
             entityList.clear(); // Clear once at the start
-            if (gameState != States.STATE_GAME_OVER) {
+            if (gameState != States.GameStates.STATE_GAME_OVER) {
                 entityList.add(player);
             }
             npc.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
@@ -260,13 +260,13 @@ public class Game extends JPanel implements Runnable {
             drawStart = System.nanoTime();
         }
 
-        if (gameState == States.STATE_TITLE) {
+        if (gameState == States.GameStates.STATE_TITLE) {
             ui.draw(graphics2D);
         } else {
             tileManager.draw(graphics2D);
 
             // Add entities to list
-            if (gameState != States.STATE_GAME_OVER) {
+            if (gameState != States.GameStates.STATE_GAME_OVER) {
                 entityList.add(player);
             }
             npc.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
