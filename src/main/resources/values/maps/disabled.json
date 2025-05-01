@@ -53,7 +53,7 @@
   ],
   "name": "Disabled",
   "numberKey": 0,
-  "music": "Umbral Force",
+  "music": "Default",
   "spawn point": {"col": 0, "row": 0},
   "light radius": 0,
   "blue effect": true

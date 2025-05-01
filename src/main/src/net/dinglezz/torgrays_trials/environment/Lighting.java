@@ -2,6 +2,7 @@ package net.dinglezz.torgrays_trials.environment;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
 import org.json.JSONException;
 
@@ -160,6 +161,7 @@ public class Lighting {
 
         darknessCounter = 0;
         darknessState = nextState;
+        States oldNextGloom = nextGloom;
         if (nextState == nextGloom) {
             nextGloom = chooseNextGloom();
             game.assetSetter.setMonsters();
@@ -172,8 +174,8 @@ public class Lighting {
             game.ui.transitioning = true;
 
             // Set the transition settings
-            game.ui.transitionOpenSpeed = (darknessState == States.DARKNESS_STATE_NEW_DUSK) ? 0.002f : 0.02f;
-            game.ui.transitionCloseSpeed = (darknessState == States.DARKNESS_STATE_DUSK) ? 0.002f : 0.02f;
+            game.ui.transitionOpenSpeed = (darknessState == States.DARKNESS_STATE_NEW_DUSK) ? 0.005f : 0.01f;
+            game.ui.transitionCloseSpeed = (darknessState == States.DARKNESS_STATE_DUSK) ? 0.005f : 0.01f;
             game.ui.actionMethod = "transitionDarkness";
             game.ui.transitionColor = new Color(0, 0, 0.1f);
         }

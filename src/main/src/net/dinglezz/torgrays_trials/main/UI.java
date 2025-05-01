@@ -46,6 +46,7 @@ public class UI {
     public Color transitionColor = Color.BLACK;
     public boolean transitioning = false;
     public boolean fadeBack = false;
+    public States nextState;
 
     public UI(Game game) {
         this.game = game;
@@ -926,6 +927,10 @@ public void drawTransitionScreen() {
     if (transitionCounter == 1f && !fadeBack) {
         invokeActionMethod();
         fadeBack = true;
+        if (game.environmentManager.lighting.darknessState == States.DARKNESS_STATE_DUSK ||
+                game.environmentManager.lighting.darknessState == States.DARKNESS_STATE_NEW_DUSK) {
+            Sound.playMapMusic(game.environmentManager.lighting.darknessState);
+        }
     } else if (transitionCounter == 0f && fadeBack) {
         transitioning = false;
         fadeBack = false;

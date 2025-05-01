@@ -12,7 +12,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class Game extends JPanel implements Runnable {
     // Screen settings

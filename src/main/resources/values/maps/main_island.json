@@ -53,5 +53,6 @@
   ],
   "name": "Main Island",
   "numberKey": 1,
+  "music": "Default",
   "spawn point": {"col": 23, "row": 21}
 }
