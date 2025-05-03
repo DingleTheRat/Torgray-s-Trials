@@ -1,5 +1,6 @@
 package net.dinglezz.torgrays_trials.environment;
 
+import net.dinglezz.torgrays_trials.main.AssetSetter;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.States;
 import org.json.JSONException;
@@ -161,9 +162,9 @@ public class Lighting {
         darknessState = nextDarknessState;
         if (nextDarknessState == nextGloom) {
             nextGloom = chooseNextGloom();
-            game.assetSetter.setMonsters();
+            AssetSetter.setMonsters(true);
         } else if (nextDarknessState == States.DarknessStates.DARKNESS_STATE_NIGHT) {
-            game.assetSetter.setMonsters();
+            AssetSetter.setMonsters(true);
         }
 
 

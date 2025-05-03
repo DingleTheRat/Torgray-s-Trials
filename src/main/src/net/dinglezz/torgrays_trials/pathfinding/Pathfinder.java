@@ -163,7 +163,7 @@ public class Pathfinder {
         Node current = goalNode;
 
         while (current != startNode) {
-            pathList.add(0, current);
+            pathList.addFirst(current);
             current = current.parent;
         }
     }

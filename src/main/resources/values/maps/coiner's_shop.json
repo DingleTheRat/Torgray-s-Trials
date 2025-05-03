@@ -60,11 +60,10 @@
 
   "entities": {
     "objects": [
-      {"path": "net.dinglezz.object.OBJ_Table", "col": 12, "row": 10},
-      {"path": "net.dinglezz.object.OBJ_Dark_Chest", "col": 10, "row": 9}
+      {"path": "net.dinglezz.torgrays_trials.object.OBJ_Table", "col": 12, "row": 10},
     ],
     "npcs": [
-      {"path": "net.dinglezz.npc.NPC_Coiner", "col": 12, "row": 9}
+      {"path": "net.dinglezz.torgrays_trials.npc.NPC_Coiner", "col": 12, "row": 9}
     ],
     "monsters": []
   }

@@ -6,7 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.swing.text.Style;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;

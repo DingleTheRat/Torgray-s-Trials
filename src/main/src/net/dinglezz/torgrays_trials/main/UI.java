@@ -1149,6 +1149,11 @@ public void drawTransitionScreen() {
         game.player.direction = game.eventHandler.nextDirection;
         game.environmentManager.lightUpdated = true;
         Sound.playMapMusic();
+
+        // Load Entities if needed
+        AssetSetter.setObjects(false);
+        AssetSetter.setNPCs(false);
+        AssetSetter.setMonsters(false);
     }
     @SuppressWarnings("unused")
     public void transitionDarkness() {

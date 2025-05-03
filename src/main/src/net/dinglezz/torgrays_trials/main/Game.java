@@ -57,7 +57,6 @@ public class Game extends JPanel implements Runnable {
     public TileManager tileManager = new TileManager(this);
     public MapHandler mapHandler = new MapHandler(this);
     public Pathfinder pathFinder = new Pathfinder(this);
-    public AssetSetter assetSetter = new AssetSetter(this);
     public InputHandler inputHandler = new InputHandler(this);
     public EventHandler eventHandler = new EventHandler(this);
     public CollisionChecker collisionChecker = new CollisionChecker(this);
@@ -85,9 +84,9 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void setupGame() {
-        assetSetter.setObjects();
-        assetSetter.setNPCs();
-        assetSetter.setMonsters();
+        AssetSetter.setObjects(true);
+        AssetSetter.setNPCs(true);
+        AssetSetter.setMonsters(true);
         environmentManager.setup();
         Sound.playMusic("Tech Geek");
         gameState = States.GameStates.STATE_TITLE;
@@ -109,9 +108,9 @@ public class Game extends JPanel implements Runnable {
     public void restart() {
         player.setDefaultValues();
         player.setItems();
-        assetSetter.setObjects();
-        assetSetter.setNPCs();
-        assetSetter.setMonsters();
+        AssetSetter.setObjects(true);
+        AssetSetter.setNPCs(true);
+        AssetSetter.setMonsters(true);
         currentMap = "Main Island";
         player.setDefaultPosition();
 
@@ -194,7 +193,7 @@ public class Game extends JPanel implements Runnable {
 
                         // Respawn if all monsters are dead
                         if (monster.get(currentMap).values().stream().allMatch(Objects::isNull)) {
-                            assetSetter.setMonsters();
+                            AssetSetter.setMonsters(false);
                         }
                     }
                 }

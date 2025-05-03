@@ -43,7 +43,7 @@ public class UtilityTool {
         }
     }
 
-    public Entity generateEntity(String path) {
+    public static Entity generateEntity(String path) {
         try {
             Class<?> clazz = Class.forName(path);
             return (Entity) clazz.getDeclaredConstructor(Game.class).newInstance(Main.game);

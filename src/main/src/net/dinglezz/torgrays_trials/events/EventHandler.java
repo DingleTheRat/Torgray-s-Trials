@@ -1,6 +1,7 @@
 package net.dinglezz.torgrays_trials.events;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
+import net.dinglezz.torgrays_trials.main.AssetSetter;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
@@ -126,7 +127,7 @@ public class EventHandler {
             game.player.attackCanceled = true;
             game.ui.currentDialogue = "*Drinks water* \nHuh, nothing happened :/";
 //            game.player.health = game.player.maxHealth;
-//            game.assetSetter.setMonsters();
+//            game.assetSetter.seteMonsters();
         }
     }
     public void teleport(String map, String direction) {
