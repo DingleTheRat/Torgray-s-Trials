@@ -56,5 +56,16 @@
   "music": "Coin Toss",
   "spawn point": {"col": 12, "row": 13},
   "light radius": 500,
-  "blue effect": false
+  "blue effect": false,
+
+  "entities": {
+    "objects": [
+      {"path": "net.dinglezz.object.OBJ_Table", "col": 12, "row": 10},
+      {"path": "net.dinglezz.object.OBJ_Dark_Chest", "col": 10, "row": 9}
+    ],
+    "npcs": [
+      {"path": "net.dinglezz.npc.NPC_Coiner", "col": 12, "row": 9}
+    ],
+    "monsters": []
+  }
 }

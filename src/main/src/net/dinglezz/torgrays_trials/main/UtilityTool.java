@@ -1,5 +1,6 @@
 package net.dinglezz.torgrays_trials.main;
 
+import net.dinglezz.torgrays_trials.entity.Entity;
 import org.json.JSONObject;
 
 import java.awt.*;
@@ -37,6 +38,16 @@ public class UtilityTool {
                 return new JSONObject(stringBuilder.toString());
             }
         } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Entity generateEntity(String path) {
+        try {
+            Class<?> clazz = Class.forName(path);
+            return (Entity) clazz.getDeclaredConstructor(Game.class).newInstance(Main.game);
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
