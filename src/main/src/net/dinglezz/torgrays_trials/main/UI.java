@@ -1151,9 +1151,13 @@ public void drawTransitionScreen() {
         Sound.playMapMusic();
 
         // Load Entities if needed
-        AssetSetter.setObjects(false);
-        AssetSetter.setNPCs(false);
-        AssetSetter.setMonsters(false);
+        if (game.object.get(game.currentMap) == null ||
+                game.npc.get(game.currentMap) == null ||
+                game.monster.get(game.currentMap) == null) {
+            AssetSetter.setObjects(false);
+            AssetSetter.setNPCs(false);
+            AssetSetter.setMonsters(false);
+        }
     }
     @SuppressWarnings("unused")
     public void transitionDarkness() {

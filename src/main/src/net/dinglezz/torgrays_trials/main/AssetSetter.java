@@ -1,6 +1,5 @@
 package net.dinglezz.torgrays_trials.main;
 
-import net.dinglezz.torgrays_trials.entity.Entity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -141,7 +140,6 @@ public class AssetSetter {
             }
         }
     }
-
     public static void setNPCs(boolean removePrevious) {
         JSONObject file = Main.game.mapHandler.mapFiles.get(Main.game.currentMap);
         if (file != null) {
@@ -169,7 +167,6 @@ public class AssetSetter {
             }
         }
     }
-
     public static void setMonsters(boolean removePrevious) {
         JSONObject file = Main.game.mapHandler.mapFiles.get(Main.game.currentMap);
         if (file != null) {
