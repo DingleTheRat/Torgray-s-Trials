@@ -1,4 +1,26 @@
 {
+  "numberKey": 2,
+  "music": "Coin Toss",
+  "blue effect": false,
+  "spawn point": {
+    "col": 12,
+    "row": 13
+  },
+  "entities": {
+    "npcs": [{
+      "path": "net.dinglezz.torgrays_trials.npc.NPC_Coiner",
+      "col": 12,
+      "row": 9
+    }],
+    "monsters": [],
+    "objects": [{
+      "path": "net.dinglezz.torgrays_trials.object.OBJ_Table",
+      "col": 12,
+      "row": 10
+    }]
+  },
+  "name": "Coiner's Shop",
+  "light radius": 500,
   "map": [
     "41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41",
     "41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41",
@@ -50,21 +72,5 @@
     "41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41",
     "41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41",
     "41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41"
-  ],
-  "name": "Coiner's Shop",
-  "numberKey": 2,
-  "music": "Coin Toss",
-  "spawn point": {"col": 12, "row": 13},
-  "light radius": 500,
-  "blue effect": false,
-
-  "entities": {
-    "objects": [
-      {"path": "net.dinglezz.torgrays_trials.object.OBJ_Table", "col": 12, "row": 10},
-    ],
-    "npcs": [
-      {"path": "net.dinglezz.torgrays_trials.npc.NPC_Coiner", "col": 12, "row": 9}
-    ],
-    "monsters": []
-  }
+  ]
 }
