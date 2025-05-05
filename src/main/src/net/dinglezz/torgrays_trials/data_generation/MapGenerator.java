@@ -1,6 +1,12 @@
 package net.dinglezz.torgrays_trials.data_generation;
 
 import com.ususstudios.torgrays_datagen.generators.Entity;
+import net.dinglezz.torgrays_trials.monster.MON_Dracore;
+import net.dinglezz.torgrays_trials.npc.NPC_Coiner;
+import net.dinglezz.torgrays_trials.npc.NPC_GateKeeper;
+import net.dinglezz.torgrays_trials.object.OBJ_Gate;
+import net.dinglezz.torgrays_trials.object.OBJ_Key;
+import net.dinglezz.torgrays_trials.object.OBJ_Table;
 
 public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.MapGenerator {
 	@Override
@@ -66,34 +72,34 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 				-1,
 				false,
 				new Entity[] {
-					new Entity("net.dinglezz.torgrays_trials.object.OBJ_Key", 23, 40, null),
-					new Entity("net.dinglezz.torgrays_trials.object.OBJ_Key", 38, 8, null),
+					new Entity(OBJ_Key.class, 23, 40, null),
+					new Entity(OBJ_Key.class, 38, 8, null),
 					
-					new Entity("net.dinglezz.torgrays_trials.object.OBJ_Gate", 10, 12, null),
-					new Entity("net.dinglezz.torgrays_trials.object.OBJ_Gate", 14, 28, null),
-					new Entity("net.dinglezz.torgrays_trials.object.OBJ_Gate", 8, 28, null),
-					new Entity("net.dinglezz.torgrays_trials.object.OBJ_Gate", 12, 23, null)
+					new Entity(OBJ_Gate.class, 10, 12, null),
+					new Entity(OBJ_Gate.class, 14, 28, null),
+					new Entity(OBJ_Gate.class, 8, 28, null),
+					new Entity(OBJ_Gate.class, 12, 23, null)
 				},
 				new Entity[] {
-					new Entity("net.dinglezz.torgrays_trials.npc.NPC_GateKeeper", 21, 21, null)
+					new Entity(NPC_GateKeeper.class, 21, 21, null)
 				},
 				new Entity[] {
-					new Entity("net.dinglezz.torgrays_trials.monster.MON_Dracore", 23, 36, null),
-					new Entity("net.dinglezz.torgrays_trials.monster.MON_Dracore", 24, 37, null),
-					new Entity("net.dinglezz.torgrays_trials.monster.MON_Dracore", 25, 38, null),
+					new Entity(MON_Dracore.class, 23, 36, null),
+					new Entity(MON_Dracore.class, 24, 37, null),
+					new Entity(MON_Dracore.class, 25, 38, null),
 					
-					new Entity("net.dinglezz.torgrays_trials.monster.MON_Dracore", 35, 10, null),
-					new Entity("net.dinglezz.torgrays_trials.monster.MON_Dracore", 37, 8, null),
-					new Entity("net.dinglezz.torgrays_trials.monster.MON_Dracore", 39, 10, null),
+					new Entity(MON_Dracore.class, 35, 10, null),
+					new Entity(MON_Dracore.class, 37, 8, null),
+					new Entity(MON_Dracore.class, 39, 10, null),
 					
-					new Entity("net.dinglezz.torgrays_trials.monster.MON_Dracore", 10, 29, null),
-					new Entity("net.dinglezz.torgrays_trials.monster.MON_Dracore", 11, 29, null),
-					new Entity("net.dinglezz.torgrays_trials.monster.MON_Dracore", 12, 29, null),
+					new Entity(MON_Dracore.class, 10, 29, null),
+					new Entity(MON_Dracore.class, 11, 29, null),
+					new Entity(MON_Dracore.class, 12, 29, null),
 					
-					new Entity("net.dinglezz.torgrays_trials.monster.MON_Dracore", 36, 36, null),
-					new Entity("net.dinglezz.torgrays_trials.monster.MON_Dracore", 36, 32, null),
-					new Entity("net.dinglezz.torgrays_trials.monster.MON_Dracore", 37, 41, null),
-					new Entity("net.dinglezz.torgrays_trials.monster.MON_Dracore", 31, 40, null)
+					new Entity(MON_Dracore.class, 36, 36, null),
+					new Entity(MON_Dracore.class, 36, 32, null),
+					new Entity(MON_Dracore.class, 37, 41, null),
+					new Entity(MON_Dracore.class, 31, 40, null)
 				});
 		register("coiner's_shop",
 				new String[]{
@@ -155,10 +161,10 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 				500,
 				false,
 				new Entity[] {
-					new Entity("net.dinglezz.torgrays_trials.object.OBJ_Table", 12, 10, null)
+					new Entity(OBJ_Table.class, 12, 10, null)
 				},
 				new Entity[] {
-					new Entity("net.dinglezz.torgrays_trials.npc.NPC_Coiner", 12, 9, null)
+					new Entity(NPC_Coiner.class, 12, 9, null)
 				},
 				new Entity[] {});
 	}
