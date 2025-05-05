@@ -1,10 +1,11 @@
 -----------------Credits-----------------
 ## Main
 Coding - Dinglezz and UsUsStudios
+Data Generaion - UsUsStudios
 Sprites - Dinglezz
-Playtesting - UsUsStudios and Headshot_Hitter
 Ideas - Dinglezz
 Font (Marmonica) - 患者長ひっく
+Playtesting - UsUsStudios and Headshot_Hitter
 
 ## Music
 Tech Geek (Menu Theme) - Amarhzay_DC
