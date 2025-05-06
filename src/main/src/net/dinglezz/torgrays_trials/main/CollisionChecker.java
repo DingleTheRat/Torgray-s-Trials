@@ -149,30 +149,31 @@ public static int checkObject(Entity entity, boolean player) {
 
 public static int checkEntity(Entity entity, HashMap<String, HashMap<Integer, Entity>> target) {
     int index = 999;
+    if (target.get(Main.game.currentMap) != null) {
+        for (int i = 0; i < target.get(Main.game.currentMap).size(); i++) {
+            if (target.get(Main.game.currentMap).get(i) != null) {
+                entity.solidArea.x = entity.worldX + entity.solidAreaDefaultX;
+                entity.solidArea.y = entity.worldY + entity.solidAreaDefaultY;
+                target.get(Main.game.currentMap).get(i).solidArea.x = target.get(Main.game.currentMap).get(i).worldX + target.get(Main.game.currentMap).get(i).solidAreaDefaultX;
+                target.get(Main.game.currentMap).get(i).solidArea.y = target.get(Main.game.currentMap).get(i).worldY + target.get(Main.game.currentMap).get(i).solidAreaDefaultY;
 
-    for (int i = 0; i < target.get(Main.game.currentMap).size(); i++) {
-        if (target.get(Main.game.currentMap).get(i) != null) {
-            entity.solidArea.x = entity.worldX + entity.solidAreaDefaultX;
-            entity.solidArea.y = entity.worldY + entity.solidAreaDefaultY;
-            target.get(Main.game.currentMap).get(i).solidArea.x = target.get(Main.game.currentMap).get(i).worldX + target.get(Main.game.currentMap).get(i).solidAreaDefaultX;
-            target.get(Main.game.currentMap).get(i).solidArea.y = target.get(Main.game.currentMap).get(i).worldY + target.get(Main.game.currentMap).get(i).solidAreaDefaultY;
-
-            switch (entity.direction) {
-                case "up": entity.solidArea.y -= entity.speed; break;
-                case "down": entity.solidArea.y += entity.speed; break;
-                case "left": entity.solidArea.x -= entity.speed; break;
-                case "right": entity.solidArea.x += entity.speed; break;
-            }
-            if (entity.solidArea.intersects(target.get(Main.game.currentMap).get(i).solidArea)) {
-                if (target.get(Main.game.currentMap).get(i) != entity) {
-                    entity.collisionOn = true;
-                    index = i;
+                switch (entity.direction) {
+                    case "up": entity.solidArea.y -= entity.speed; break;
+                    case "down": entity.solidArea.y += entity.speed; break;
+                    case "left": entity.solidArea.x -= entity.speed; break;
+                    case "right": entity.solidArea.x += entity.speed; break;
                 }
+                if (entity.solidArea.intersects(target.get(Main.game.currentMap).get(i).solidArea)) {
+                    if (target.get(Main.game.currentMap).get(i) != entity) {
+                        entity.collisionOn = true;
+                        index = i;
+                    }
+                }
+                entity.solidArea.x = entity.solidAreaDefaultX;
+                entity.solidArea.y = entity.solidAreaDefaultY;
+                target.get(Main.game.currentMap).get(i).solidArea.x = target.get(Main.game.currentMap).get(i).solidAreaDefaultX;
+                target.get(Main.game.currentMap).get(i).solidArea.y = target.get(Main.game.currentMap).get(i).solidAreaDefaultY;
             }
-            entity.solidArea.x = entity.solidAreaDefaultX;
-            entity.solidArea.y = entity.solidAreaDefaultY;
-            target.get(Main.game.currentMap).get(i).solidArea.x = target.get(Main.game.currentMap).get(i).solidAreaDefaultX;
-            target.get(Main.game.currentMap).get(i).solidArea.y = target.get(Main.game.currentMap).get(i).solidAreaDefaultY;
         }
     }
 

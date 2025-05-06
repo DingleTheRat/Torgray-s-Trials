@@ -48,7 +48,6 @@ public class UI {
     public Color transitionColor = Color.BLACK;
     public boolean transitioning = false;
     public boolean fadeBack = false;
-    public States nextState;
 
     public UI(Game game) {
         this.game = game;
@@ -84,14 +83,14 @@ public class UI {
         }
 
         switch (game.gameState) {
-            case STATE_TITLE: drawTitleScreen(); break;
-            case STATE_PLAY: drawBasics(); break;
-            case STATE_PAUSE: drawBasics(); drawPauseScreen(); break;
-            case STATE_DIALOGUE: drawBasics(); drawDialogueScreen(); break;
-            case STATE_CHARACTER: drawCharacterScreen(); drawInventory(game.player, true); break;
-            case STATE_GAME_OVER: drawGameOverScreen(); break;
-            case STATE_TRADE: if (subState == States.UIStates.TRADE_STATE_SELECT) {drawBasics();}; drawTradeScreen(); break;
-            case STATE_MAP: drawBasics(); drawMapScreen(); break;
+            case STATE_TITLE -> drawTitleScreen();
+            case STATE_PLAY -> drawBasics();
+            case STATE_PAUSE -> {drawBasics(); drawPauseScreen();}
+            case STATE_DIALOGUE -> {drawBasics(); drawDialogueScreen();}
+            case STATE_CHARACTER -> {drawCharacterScreen(); drawInventory(game.player, true);}
+            case STATE_GAME_OVER -> drawGameOverScreen();
+            case STATE_TRADE -> {if (subState == States.UIStates.TRADE_STATE_SELECT) {drawBasics();} drawTradeScreen();}
+            case STATE_MAP -> {drawBasics(); drawMapScreen();}
         }
     }
 
@@ -1140,30 +1139,35 @@ public void drawTransitionScreen() {
         subState = States.UIStates.PAUSE_STATE_SETTINGS_MAIN;
         commandNumber = 0;
     }
-    @SuppressWarnings("unused")
-    public void transitionTeleport() {
-        game.currentMap = EventHandler.nextMap;
-        if (EventHandler.nextCol == Integer.MIN_VALUE || EventHandler.nextRow == Integer.MIN_VALUE) {
-            game.player.setDefaultPosition();
-        } else {
-            game.player.worldX = EventHandler.nextCol;
-            game.player.worldY = EventHandler.nextRow;
-        }
-        game.player.direction = EventHandler.nextDirection;
-        game.environmentManager.lightUpdated = true;
-        Sound.playMapMusic();
+@SuppressWarnings("unused")
+public void transitionTeleport() {
+    game.currentMap = EventHandler.nextMap;
 
-        // Load Entities if needed
-        if (game.object.get(game.currentMap) == null) {
-            AssetSetter.setObjects(false);
-        }
-        if (game.npc.get(game.currentMap) == null) {
-            AssetSetter.setNPCs(false);
-        }
-        if (game.monster.get(game.currentMap) == null) {
-            AssetSetter.setMonsters(false);
-        }
+    // Set player position
+    if (EventHandler.nextCol == Integer.MIN_VALUE || EventHandler.nextRow == Integer.MIN_VALUE) {
+        game.player.setDefaultPosition();
+    } else {
+        game.player.worldX = EventHandler.nextCol;
+        game.player.worldY = EventHandler.nextRow;
     }
+
+    game.player.direction = EventHandler.nextDirection;
+    game.environmentManager.lightUpdated = true;
+
+    // Play map music
+    Sound.playMapMusic();
+
+    // Load entities if not already loaded
+    if (game.object.getOrDefault(game.currentMap, null) == null) {
+        AssetSetter.setObjects(false);
+    }
+    if (game.npc.getOrDefault(game.currentMap, null) == null) {
+        AssetSetter.setNPCs(false);
+    }
+    if (game.monster.getOrDefault(game.currentMap, null) == null) {
+        AssetSetter.setMonsters(false);
+    }
+}
     @SuppressWarnings("unused")
     public void transitionDarkness() {
         game.environmentManager.lightUpdated = true;

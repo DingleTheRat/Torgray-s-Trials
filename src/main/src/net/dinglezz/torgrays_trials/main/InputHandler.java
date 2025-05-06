@@ -24,14 +24,14 @@ public class   InputHandler implements KeyListener {
         int code = e.getKeyCode();
 
         switch (game.gameState) {
-            case States.GameStates.STATE_TITLE: titleState(code); break;
-            case States.GameStates.STATE_PLAY: playState(code); break;
-            case States.GameStates.STATE_PAUSE: pauseState(code); break;
-            case States.GameStates.STATE_DIALOGUE: dialogueState(code); playState(code); break;
-            case States.GameStates.STATE_CHARACTER: characterState(code); break;
-            case States.GameStates.STATE_GAME_OVER: gameOverState(code); break;
-            case States.GameStates.STATE_TRADE: tradeState(code); break;
-            case States.GameStates.STATE_MAP: mapState(code); break;
+            case STATE_TITLE -> titleState(code);
+            case STATE_PLAY -> playState(code);
+            case STATE_PAUSE -> pauseState(code);
+            case STATE_DIALOGUE -> {dialogueState(code); playState(code);}
+            case STATE_CHARACTER -> characterState(code);
+            case STATE_GAME_OVER -> gameOverState(code);
+            case STATE_TRADE -> tradeState(code);
+            case STATE_MAP -> mapState(code);
         }
 
         // F3 Stuff
@@ -154,13 +154,13 @@ public class   InputHandler implements KeyListener {
     }
     public void playState(int code) {
         switch (code) {
-            case KeyEvent.VK_W: upPressed = true; break;
-            case KeyEvent.VK_A: leftPressed = true; break;
-            case KeyEvent.VK_S: downPressed = true; break;
-            case KeyEvent.VK_D: rightPressed = true; break;
-            case KeyEvent.VK_E: interactKeyPressed = true; break;
-            case KeyEvent.VK_SPACE: spacePressed = true; break;
-            case KeyEvent.VK_ESCAPE: game.gameState = States.GameStates.STATE_PAUSE; game.ui.subState = States.UIStates.PAUSE_STATE_MAIN; game.ui.commandNumber = 0; break;
+            case KeyEvent.VK_W -> upPressed = true;
+            case KeyEvent.VK_A -> leftPressed = true;
+            case KeyEvent.VK_S -> downPressed = true;
+            case KeyEvent.VK_D -> rightPressed = true;
+            case KeyEvent.VK_E -> interactKeyPressed = true;
+            case KeyEvent.VK_SPACE -> spacePressed = true;
+            case KeyEvent.VK_ESCAPE -> {game.gameState = States.GameStates.STATE_PAUSE; game.ui.subState = States.UIStates.PAUSE_STATE_MAIN; game.ui.commandNumber = 0;}
         }
     }
     public void pauseState(int code) {
@@ -172,12 +172,12 @@ public class   InputHandler implements KeyListener {
             game.ui.commandNumber = 0;
         }
 
-        switch (game.ui.subState) {
-            case PAUSE_STATE_MAIN: maxCommandNumber = 3; break;
-            case PAUSE_STATE_SETTINGS_MAIN: maxCommandNumber = 5; break;
-            case PAUSE_STATE_CONFIRM: maxCommandNumber = 1; break;
-            case PAUSE_STATE_CONTROLS, PAUSE_STATE_NOTIFICATION: maxCommandNumber = 0; break;
-        }
+        maxCommandNumber = switch (game.ui.subState) {
+            case PAUSE_STATE_MAIN -> 3;
+            case PAUSE_STATE_SETTINGS_MAIN -> 5;
+            case PAUSE_STATE_CONFIRM -> 1;
+            default -> 0;
+        };
 
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
             game.ui.commandNumber--;
@@ -382,17 +382,18 @@ public class   InputHandler implements KeyListener {
         int code = e.getKeyCode();
 
         switch (code) {
-            case KeyEvent.VK_W: upPressed = false; break;
-            case KeyEvent.VK_A: leftPressed = false; break;
-            case KeyEvent.VK_S: downPressed = false; break;
-            case KeyEvent.VK_D: rightPressed = false; break;
-            case KeyEvent.VK_F3: f3Pressed = false;
-            if (debug) {
-                game.debug = !game.debug;
-                game.ui.addMiniNotification("Debug: " + game.debug);
-                debug = false;
+            case KeyEvent.VK_W -> upPressed = false;
+            case KeyEvent.VK_A -> leftPressed = false;
+            case KeyEvent.VK_S -> downPressed = false;
+            case KeyEvent.VK_D -> rightPressed = false;
+            case KeyEvent.VK_F3 -> {
+                f3Pressed = false;
+                if (debug) {
+                    game.debug = !game.debug;
+                    game.ui.addMiniNotification("Debug: " + game.debug);
+                    debug = false;
+                }
             }
-            break;
         }
     }
 }
