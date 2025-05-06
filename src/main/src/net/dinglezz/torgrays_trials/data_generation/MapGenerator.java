@@ -171,7 +171,7 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 				false,
 				new Entity[] {
 					new Entity(OBJ_Table.class, 12, 10, null),
-					new Entity(OBJ_Table.class, 10, 9, "Normal Dark Chest")
+					new Entity(OBJ_Dark_Chest.class, 10, 9, "Normal Dark Chest")
 				},
 				new Entity[] {
 					new Entity(NPC_Coiner.class, 12, 9, null)
