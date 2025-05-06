@@ -55,6 +55,6 @@
   "numberKey": 0,
   "music": "Default",
   "spawn point": {"col": 0, "row": 0},
-  "light radius": 0,
+  "light radius": 5000,
   "blue effect": true
 }

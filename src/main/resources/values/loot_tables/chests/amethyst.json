@@ -1,0 +1,9 @@
+{
+  "name": "Amethyst Chest",
+  "type": "all",
+  "loot": [
+    {"object": "net.dinglezz.torgrays_trials.object.weapon.OBJ_Sword_Amethyst"},
+    {"object": "net.dinglezz.torgrays_trials.object.shield.OBJ_Shield_Amethyst"},
+    {"object": "COIN_4"}
+  ]
+}

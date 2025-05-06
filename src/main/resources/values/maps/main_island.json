@@ -1,7 +1,7 @@
 {
   "numberKey": 1,
   "music": "Default",
-  "blue effect": false,
+  "blue effect": true,
   "spawn point": {
     "col": 23,
     "row": 21
@@ -16,67 +16,80 @@
       {
         "path": "net.dinglezz.torgrays_trials.monster.MON_Dracore",
         "col": 23,
-        "row": 36
+        "row": 36,
+        "loot table": "Dracores"
       },
       {
         "path": "net.dinglezz.torgrays_trials.monster.MON_Dracore",
         "col": 24,
-        "row": 37
+        "row": 37,
+        "loot table": "Dracores"
       },
       {
         "path": "net.dinglezz.torgrays_trials.monster.MON_Dracore",
         "col": 25,
-        "row": 38
+        "row": 38,
+        "loot table": "Dracores"
       },
       {
         "path": "net.dinglezz.torgrays_trials.monster.MON_Dracore",
         "col": 35,
-        "row": 10
+        "row": 10,
+        "loot table": "Dracores"
       },
       {
         "path": "net.dinglezz.torgrays_trials.monster.MON_Dracore",
         "col": 37,
-        "row": 8
+        "row": 8,
+        "loot table": "Dracores"
       },
       {
         "path": "net.dinglezz.torgrays_trials.monster.MON_Dracore",
         "col": 39,
-        "row": 10
+        "row": 10,
+        "loot table": "Dracores"
       },
       {
         "path": "net.dinglezz.torgrays_trials.monster.MON_Dracore",
         "col": 10,
-        "row": 29
+        "row": 29,
+        "loot table": "Dracores"
       },
       {
         "path": "net.dinglezz.torgrays_trials.monster.MON_Dracore",
         "col": 11,
-        "row": 29
+        "row": 29,
+        "loot table": "Dracores"
       },
       {
         "path": "net.dinglezz.torgrays_trials.monster.MON_Dracore",
         "col": 12,
-        "row": 29
+        "row": 29,
+        "loot table": "Dracores"
       },
       {
         "path": "net.dinglezz.torgrays_trials.monster.MON_Dracore",
         "col": 36,
-        "row": 36
+        "row": 36,
+        "loot table": "Dracores"
       },
       {
         "path": "net.dinglezz.torgrays_trials.monster.MON_Dracore",
         "col": 36,
-        "row": 32
+        "row": 32,
+        "loot table": "Dracores"
       },
       {
         "path": "net.dinglezz.torgrays_trials.monster.MON_Dracore",
         "col": 37,
-        "row": 41
+        "row": 41,
+        "loot table": "Dracores"
       },
       {
         "path": "net.dinglezz.torgrays_trials.monster.MON_Dracore",
         "col": 31,
-        "row": 40
+        "row": 40,
+        "loot table": "Dracores"
       }
     ],
     "objects": [
@@ -109,6 +122,24 @@
         "path": "net.dinglezz.torgrays_trials.object.OBJ_Gate",
         "col": 12,
         "row": 23
+      },
+      {
+        "path": "net.dinglezz.torgrays_trials.object.OBJ_Chest",
+        "col": 10,
+        "row": 10,
+        "loot table": "Amethyst Chest"
+      },
+      {
+        "path": "net.dinglezz.torgrays_trials.object.OBJ_Dark_Chest",
+        "col": 37,
+        "row": 40,
+        "loot table": "Normal Dark Chest"
+      },
+      {
+        "path": "net.dinglezz.torgrays_trials.object.OBJ_Dark_Chest",
+        "col": 31,
+        "row": 10,
+        "loot table": "Normal Dark Chest"
       }
     ]
   },

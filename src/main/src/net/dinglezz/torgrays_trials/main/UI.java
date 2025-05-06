@@ -2,8 +2,11 @@ package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTags;
+import net.dinglezz.torgrays_trials.events.EventHandler;
 import net.dinglezz.torgrays_trials.object.OBJ_Coins;
 import net.dinglezz.torgrays_trials.object.OBJ_Heart;
+import net.dinglezz.torgrays_trials.tile.MapHandler;
+import net.dinglezz.torgrays_trials.tile.TileManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -1099,7 +1102,7 @@ public void drawTransitionScreen() {
         int x = game.screenWidth / 2 - width / 2;
         int y = game.screenHeight / 2 - height / 2;
         drawSubWindow(x - 20, y - 20, width + 40, height + 40);
-        graphics2D.drawImage(game.tileManager.worldMap.get(game.currentMap), x, y, width, height, null);
+        graphics2D.drawImage(MapHandler.worldMap.get(game.currentMap), x, y, width, height, null);
     }
 
     // Action
@@ -1139,23 +1142,25 @@ public void drawTransitionScreen() {
     }
     @SuppressWarnings("unused")
     public void transitionTeleport() {
-        game.currentMap = game.eventHandler.nextMap;
-        if (game.eventHandler.nextCol == Integer.MIN_VALUE || game.eventHandler.nextRow == Integer.MIN_VALUE) {
+        game.currentMap = EventHandler.nextMap;
+        if (EventHandler.nextCol == Integer.MIN_VALUE || EventHandler.nextRow == Integer.MIN_VALUE) {
             game.player.setDefaultPosition();
         } else {
-            game.player.worldX = game.eventHandler.nextCol;
-            game.player.worldY = game.eventHandler.nextRow;
+            game.player.worldX = EventHandler.nextCol;
+            game.player.worldY = EventHandler.nextRow;
         }
-        game.player.direction = game.eventHandler.nextDirection;
+        game.player.direction = EventHandler.nextDirection;
         game.environmentManager.lightUpdated = true;
         Sound.playMapMusic();
 
         // Load Entities if needed
-        if (game.object.get(game.currentMap) == null ||
-                game.npc.get(game.currentMap) == null ||
-                game.monster.get(game.currentMap) == null) {
+        if (game.object.get(game.currentMap) == null) {
             AssetSetter.setObjects(false);
+        }
+        if (game.npc.get(game.currentMap) == null) {
             AssetSetter.setNPCs(false);
+        }
+        if (game.monster.get(game.currentMap) == null) {
             AssetSetter.setMonsters(false);
         }
     }

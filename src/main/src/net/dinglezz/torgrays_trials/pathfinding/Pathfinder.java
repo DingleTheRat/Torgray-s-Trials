@@ -1,6 +1,8 @@
 package net.dinglezz.torgrays_trials.pathfinding;
 
 import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.tile.MapHandler;
+import net.dinglezz.torgrays_trials.tile.TileManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,8 +70,8 @@ public class Pathfinder {
         int row = 0;
         while (col < game.maxWorldCol && row < game.maxWorldRow) {
             // Set the solid nodes
-            int tileNumber = game.tileManager.mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][col][row];
-            if (game.tileManager.tile.get(tileNumber).collision) {
+            int tileNumber = TileManager.mapTileNum[MapHandler.mapNumbers.get(game.currentMap)][col][row];
+            if (TileManager.tile.get(tileNumber).collision) {
                 node.get(col).get(row).solid = true;
             }
 

@@ -3,6 +3,7 @@ package net.dinglezz.torgrays_trials.environment;
 import net.dinglezz.torgrays_trials.main.AssetSetter;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.States;
+import net.dinglezz.torgrays_trials.tile.MapHandler;
 import org.json.JSONException;
 
 import java.awt.*;
@@ -105,7 +106,7 @@ public class Lighting {
 
         // Set the radius of the darkness filter
         try {
-            RadialGradientPaint gradientPaint = new RadialGradientPaint(centreX, centreY, game.mapHandler.mapFiles.get(game.currentMap).getInt("light radius"), fraction, color);
+            RadialGradientPaint gradientPaint = new RadialGradientPaint(centreX, centreY, MapHandler.mapFiles.get(game.currentMap).getInt("light radius"), fraction, color);
             graphics2D.setPaint(gradientPaint);
         } catch (JSONException jsonException) {
             if (game.player.currentLight == null) {
@@ -141,7 +142,7 @@ public class Lighting {
     public void draw(Graphics2D graphics2D) {
         // Draw blue effect
         try {
-            if (game.mapHandler.mapFiles.get(game.currentMap).getBoolean("blue effect")) {
+            if (MapHandler.mapFiles.get(game.currentMap).getBoolean("blue effect")) {
                 graphics2D.setColor(new Color(0, 0, 0.1f, 0.25f));
                 graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
             }

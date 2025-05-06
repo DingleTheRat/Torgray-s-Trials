@@ -1,0 +1,9 @@
+{
+  "name": "Normal Dark Chest",
+  "type": "multiple",
+  "loot": [
+    {"object": "net.dinglezz.torgrays_trials.object.OBJ_Torgray_Soup", "chance": 0.55},
+    {"object": "RANDOM_COIN", "chance": 0.25},
+    {"object": "net.dinglezz.torgrays_trials.object.weapon.OBJ_Stick", "chance": 0.10}
+  ]
+}

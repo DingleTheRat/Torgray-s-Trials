@@ -1,5 +1,6 @@
 package net.dinglezz.torgrays_trials.main;
 
+import net.dinglezz.torgrays_trials.tile.MapHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -98,7 +99,7 @@ public class Sound {
     }
     public static void playMapMusic() {
         stopMusic();
-        JSONObject currentMapFile = Main.game.mapHandler.mapFiles.get(Main.game.currentMap);
+        JSONObject currentMapFile = MapHandler.mapFiles.get(Main.game.currentMap);
         
         if (currentMapFile.getString("music").equals("Default")) {
             playMusic(
@@ -113,14 +114,14 @@ public class Sound {
             try {
                 playMusic(currentMapFile.getString("music"));
             } catch (JSONException jsonException) {
-                currentMapFile = Main.game.mapHandler.mapFiles.get("Disabled");
+                currentMapFile = MapHandler.mapFiles.get("Disabled");
                 playMusic(currentMapFile.getString("music"));
             }
         }
     }
     public static void playMapMusic(States.DarknessStates darknessState) {
         stopMusic();
-        JSONObject currentMapFile = Main.game.mapHandler.mapFiles.get(Main.game.currentMap);
+        JSONObject currentMapFile = MapHandler.mapFiles.get(Main.game.currentMap);
         
         if (currentMapFile.getString("music").equals("Default")) {
             playMusic(
@@ -133,7 +134,7 @@ public class Sound {
             try {
                 playMusic(currentMapFile.getString("music"));
             } catch (JSONException jsonException) {
-                currentMapFile = Main.game.mapHandler.mapFiles.get("Disabled");
+                currentMapFile = MapHandler.mapFiles.get("Disabled");
                 playMusic(currentMapFile.getString("music"));
             }
         }

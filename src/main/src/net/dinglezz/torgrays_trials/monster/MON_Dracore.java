@@ -3,20 +3,21 @@ package net.dinglezz.torgrays_trials.monster;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
-import net.dinglezz.torgrays_trials.main.LootTable;
+import net.dinglezz.torgrays_trials.entity.LootTable;
 import net.dinglezz.torgrays_trials.main.States;
-import net.dinglezz.torgrays_trials.object.OBJ_Coins;
-import net.dinglezz.torgrays_trials.object.OBJ_Torgray_Soup;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class MON_Dracore extends Entity {
     Game game;
+    String lootTable;
 
-    public MON_Dracore(Game game) {
+    public MON_Dracore(Game game, String lootTable) {
         super(game);
         this.game = game;
+        this.lootTable = lootTable;
 
         name = "Dracore";
         type = EntityTypes.TYPE_MONSTER;
@@ -125,13 +126,14 @@ public class MON_Dracore extends Entity {
 
     @Override
     public void checkDrop() {
-        Entity loot = LootTable.chooseSingleLoot(LootTable.LOOT_TABLE_DRACORE);
+        ArrayList<Entity> loot = LootTable.generateLoot(LootTable.lootTables.get(lootTable));
 
-        if (loot != null) {
-            if (loot == LootTable.RANDOM_COIN) {
-                dropItem(LootTable.chooseSingleLoot(LootTable.LOOT_TABLE_DRACORE_COINS));
+        if (!loot.isEmpty() && loot.getFirst() != null) {
+            if (loot.getFirst() == LootTable.RANDOM_COIN) {
+                loot = LootTable.generateLoot(LootTable.lootTables.get("Dracores Coins"));
+                dropItem(loot.getFirst());
             } else {
-                dropItem(loot);
+                dropItem(loot.getFirst());
             }
         }
     }

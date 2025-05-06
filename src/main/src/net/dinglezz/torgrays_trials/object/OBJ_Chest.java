@@ -3,6 +3,7 @@ package net.dinglezz.torgrays_trials.object;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTags;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
+import net.dinglezz.torgrays_trials.entity.LootTable;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
@@ -12,13 +13,13 @@ import java.util.Objects;
 
 public class OBJ_Chest extends Entity {
     Game game;
-    ArrayList<Entity> loot;
+    String lootTable;
     boolean opened = false;
 
-    public OBJ_Chest(Game game, ArrayList<Entity> loot) {
+    public OBJ_Chest(Game game, String lootTable) {
         super(game);
         this.game = game;
-        this.loot = loot;
+        this.lootTable = lootTable;
 
         setDefaultValues();
     }
@@ -49,13 +50,24 @@ public class OBJ_Chest extends Entity {
             game.player.attackCanceled = true;
 
             StringBuilder stringBuilder = new StringBuilder();
-            if (loot.isEmpty()) {
+
+            if (lootTable.isEmpty()) {
                 stringBuilder.append("This chest is empty :(");
             } else {
-                stringBuilder.append("Woah, this chest is shiny!");
+                ArrayList<Entity> loot = LootTable.generateLoot(LootTable.lootTables.get(lootTable));
+                if (!LootTable.lootTables.get(lootTable).getString("type").equals("all")) {
+                    stringBuilder.append("Loot table type is not 'all'");
+                    stringBuilder.append("\nFIX IT >:(");
+                    game.ui.currentDialogue = stringBuilder.toString();
+                    return;
+                } else if (loot.isEmpty()) {
+                    stringBuilder.append("This chest is empty :(");
+                } else {
+                    stringBuilder.append("Woah, this chest is shiny!");
+                }
 
                 for (Entity reward : loot) {
-                    if (Objects.equals(reward.name, "Coins")) {
+                    if (reward.name.equals("Coins")) {
                         game.player.coins += reward.amount;
                         if (reward.amount == 1) {
                             stringBuilder.append("\n+").append(reward.amount).append(" Coin");
@@ -65,7 +77,7 @@ public class OBJ_Chest extends Entity {
                     } else if (game.player.canObtainItem(reward)) {
                         stringBuilder.append("\n+1 ").append(reward.name);
                     } else {
-                        stringBuilder.append("\nI can't carry all this lootTable :(");
+                        stringBuilder.append("\nI can't carry all this loot :(");
                     }
                 }
             }

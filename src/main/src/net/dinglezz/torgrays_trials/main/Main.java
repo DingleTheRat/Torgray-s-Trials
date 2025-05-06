@@ -1,7 +1,5 @@
 package net.dinglezz.torgrays_trials.main;
 
-import org.json.JSONObject;
-
 import javax.swing.*;
 import java.io.*;
 

@@ -1,13 +1,12 @@
 package net.dinglezz.torgrays_trials.entity;
 
-import net.dinglezz.torgrays_trials.main.Game;
-import net.dinglezz.torgrays_trials.main.InputHandler;
-import net.dinglezz.torgrays_trials.main.Sound;
-import net.dinglezz.torgrays_trials.main.States;
+import net.dinglezz.torgrays_trials.events.EventHandler;
+import net.dinglezz.torgrays_trials.main.*;
 import net.dinglezz.torgrays_trials.object.OBJ_Coins;
 import net.dinglezz.torgrays_trials.object.OBJ_Lantern;
 import net.dinglezz.torgrays_trials.object.shield.OBJ_Shield_Iron;
 import net.dinglezz.torgrays_trials.object.weapon.OBJ_Sword_Iron;
+import net.dinglezz.torgrays_trials.tile.MapHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -90,12 +89,12 @@ public class Player extends Entity{
         defence = getDefence();
     }
     public void setDefaultPosition() {
-        JSONObject file = game.mapHandler.mapFiles.get(game.currentMap);
+        JSONObject file = MapHandler.mapFiles.get(game.currentMap);
         try {
             worldX = game.tileSize * file.getJSONObject("spawn point").getInt("col");
             worldY = game.tileSize * file.getJSONObject("spawn point").getInt("row");
         } catch (JSONException jsonException) {
-            file = game.mapHandler.mapFiles.get("Disabled");
+            file = MapHandler.mapFiles.get("Disabled");
             worldX = game.tileSize * file.getJSONObject("spawn point").getInt("col");
             worldY = game.tileSize * file.getJSONObject("spawn point").getInt("row");
         }
@@ -134,21 +133,21 @@ public class Player extends Entity{
 
             // Check tile collision
             collisionOn = false;
-            game.collisionChecker.checkTile(this);
+            CollisionChecker.checkTile(this);
 
             // Check OBJ collision
-            int objIndex = game.collisionChecker.checkObject(this, true);
+            int objIndex = CollisionChecker.checkObject(this, true);
             pickUpObject(objIndex);
 
             // Check NPC collision
-            int npcIndex = game.collisionChecker.checkEntity(this, game.npc);
+            int npcIndex = CollisionChecker.checkEntity(this, game.npc);
             interactNPC(npcIndex);
 
             // Check Event
-            game.eventHandler.checkEvent();
+            EventHandler.checkEvent();
 
             // Check Mob Collision
-            int mobIndex = game.collisionChecker.checkEntity(this, game.monster);
+            int mobIndex = CollisionChecker.checkEntity(this, game.monster);
             contactMonster(mobIndex);
 
             if (!collisionOn && !inputHandler.spacePressed && !inputHandler.interactKeyPressed) {
@@ -243,7 +242,7 @@ public class Player extends Entity{
             solidArea.height = attackArea.height;
 
             // Check collision with the updates
-            int monsterIndex = game.collisionChecker.checkEntity(this, game.monster);
+            int monsterIndex = CollisionChecker.checkEntity(this, game.monster);
             damageMonster(monsterIndex, currentWeapon.knockBackPower);
 
             // Restore original data

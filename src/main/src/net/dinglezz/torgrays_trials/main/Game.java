@@ -1,6 +1,7 @@
 package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
+import net.dinglezz.torgrays_trials.entity.LootTable;
 import net.dinglezz.torgrays_trials.entity.Player;
 import net.dinglezz.torgrays_trials.environment.EnvironmentManager;
 import net.dinglezz.torgrays_trials.events.EventHandler;
@@ -54,12 +55,8 @@ public class Game extends JPanel implements Runnable {
     // System
     public UI ui = new UI(this);
     public Config config = new Config(this);
-    public TileManager tileManager = new TileManager(this);
-    public MapHandler mapHandler = new MapHandler(this);
     public Pathfinder pathFinder = new Pathfinder(this);
     public InputHandler inputHandler = new InputHandler(this);
-    public EventHandler eventHandler = new EventHandler(this);
-    public CollisionChecker collisionChecker = new CollisionChecker(this);
     public EnvironmentManager environmentManager = new EnvironmentManager(this);
     Thread gameThread;
 
@@ -84,18 +81,25 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void setupGame() {
+        TileManager.getTileImage();
+        MapHandler.loadMaps();
+        LootTable.loadLootTables();
+        EventHandler.setup();
+        environmentManager.setup();
+
+        // Set Assets
         AssetSetter.setObjects(true);
         AssetSetter.setNPCs(true);
         AssetSetter.setMonsters(true);
-        environmentManager.setup();
+
         Sound.playMusic("Tech Geek");
         gameState = States.GameStates.STATE_TITLE;
         player.setDefaultPosition();
 
+        // Load Config
         if (fullScreen) {
             setFullScreen();
         }
-
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         graphics2D = (Graphics2D)tempScreen.getGraphics();
     }
@@ -219,7 +223,7 @@ public class Game extends JPanel implements Runnable {
             ui.draw(graphics2D);
         } else {
             // Draw :)
-            tileManager.draw(graphics2D);
+            TileManager.draw(graphics2D);
 
             // Add entities to list
             entityList.clear(); // Clear once at the start
@@ -262,7 +266,7 @@ public class Game extends JPanel implements Runnable {
         if (gameState == States.GameStates.STATE_TITLE) {
             ui.draw(graphics2D);
         } else {
-            tileManager.draw(graphics2D);
+            TileManager.draw(graphics2D);
 
             // Add entities to list
             if (gameState != States.GameStates.STATE_GAME_OVER) {

@@ -1,6 +1,6 @@
 package net.dinglezz.torgrays_trials.tile;
 
-import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.UtilityTool;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,20 +11,33 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 public class MapHandler {
-    Game game;
-    public final HashMap<String, JSONObject> mapFiles = new HashMap<>();
-    public final HashMap<Integer, String> mapStrings = new HashMap<>();
-    public final HashMap<String, Integer> mapNumbers = new HashMap<>();
+    public static final HashMap<String, JSONObject> mapFiles = new HashMap<>();
+    public static final HashMap<Integer, String> mapStrings = new HashMap<>();
+    public static final HashMap<String, Integer> mapNumbers = new HashMap<>();
 
-    public MapHandler(Game game) {
-        this.game = game;
-        loadMap("disabled");
-        loadMap("main_island");
-        loadMap("coiner's_shop");
+    public static HashMap<String, BufferedImage> worldMap = new HashMap<>();
+
+    public static void loadMaps() {
+        String[] mapFiles = UtilityTool.getResourceFileNames("/values/maps");
+        for (String mapFile : mapFiles) {
+            if (mapFile.endsWith(".json")) {
+                String mapName = mapFile.substring(0, mapFile.lastIndexOf(".json"));
+                loadMap(mapName);
+            } else if (!mapFile.contains(".")) { // Check if it's a directory
+                String[] subFiles = UtilityTool.getResourceFileNames("/values/maps/" + mapFile);
+                for (String subFile : subFiles) {
+                    if (subFile.endsWith(".json")) {
+                        String mapName = subFile.substring(0, subFile.lastIndexOf(".json"));
+                        loadMap(mapFile + "/" + mapName);
+                    }
+                }
+            }
+        }
+
         createWorldMap();
     }
 
-    public void loadMap(String fileName) {
+    public static void loadMap(String fileName) {
         // Get the file and check if it exists
         JSONObject file = UtilityTool.getJsonObject("/values/maps/" + fileName + ".json");
         if (file == null) {
@@ -52,15 +65,15 @@ public class MapHandler {
         int col = 0;
         int row = 0;
 
-        while (row < game.maxWorldRow) {
+        while (row < Main.game.maxWorldRow) {
             String mapLine = map.getString(row);
-            while (col < game.maxWorldCol) {
+            while (col < Main.game.maxWorldCol) {
                 String[] numbers = mapLine.split(" ");
                 int number = Integer.parseInt(numbers[col]);
-                game.tileManager.mapTileNum[numberKey][col][row] = number;
+                TileManager.mapTileNum[numberKey][col][row] = number;
                 col++;
             }
-            if (col == game.maxWorldCol) {
+            if (col == Main.game.maxWorldCol) {
                 col = 0;
                 row++;
             }
@@ -72,27 +85,27 @@ public class MapHandler {
         mapNumbers.put(name, numberKey);
     }
 
-    public void createWorldMap() {
-        int worldMapWidth = game.tileSize * game.maxWorldCol;
-        int worldMapHeight = game.tileSize * game.maxWorldRow;
+    public static void createWorldMap() {
+        int worldMapWidth = Main.game.tileSize * Main.game.maxWorldCol;
+        int worldMapHeight = Main.game.tileSize * Main.game.maxWorldRow;
 
         for (String map : mapStrings.values()) {
-            game.tileManager.worldMap.put(map, new BufferedImage(worldMapWidth, worldMapHeight, BufferedImage.TYPE_INT_ARGB));
-            Graphics2D graphics2D = game.tileManager.worldMap.get(map).createGraphics();
+            MapHandler.worldMap.put(map, new BufferedImage(worldMapWidth, worldMapHeight, BufferedImage.TYPE_INT_ARGB));
+            Graphics2D graphics2D = MapHandler.worldMap.get(map).createGraphics();
 
             int col = 0;
             int row = 0;
-            while (col < game.maxWorldCol && row < game.maxWorldRow) {
-                int tileNumber = game.tileManager.mapTileNum[mapNumbers.get(map)][col][row];
-                int x = col * game.tileSize;
-                int y = row * game.tileSize;
+            while (col < Main.game.maxWorldCol && row < Main.game.maxWorldRow) {
+                int tileNumber = TileManager.mapTileNum[mapNumbers.get(map)][col][row];
+                int x = col * Main.game.tileSize;
+                int y = row * Main.game.tileSize;
 
                 // Draw Tiles
-                if (game.tileManager.tile.get(tileNumber) != null) {
-                    graphics2D.drawImage(game.tileManager.tile.get(tileNumber).image, x, y, null);
+                if (TileManager.tile.get(tileNumber) != null) {
+                    graphics2D.drawImage(TileManager.tile.get(tileNumber).image, x, y, null);
                 }
                 col++;
-                if (col == game.maxWorldCol) {
+                if (col == Main.game.maxWorldCol) {
                     col = 0;
                     row++;
                 }

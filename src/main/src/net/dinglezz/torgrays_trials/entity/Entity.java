@@ -1,5 +1,6 @@
 package net.dinglezz.torgrays_trials.entity;
 
+import net.dinglezz.torgrays_trials.main.CollisionChecker;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.UtilityTool;
@@ -162,12 +163,27 @@ public abstract class Entity {
     }
     public void checkCollision() {
         collisionOn = false;
-        game.collisionChecker.checkTile(this);
-        game.collisionChecker.checkObject(this, false);
-        int npcContact = game.collisionChecker.checkEntity(this, game.npc);
-        game.collisionChecker.checkEntity(this, game.monster);
-        boolean contactPlayer = game.collisionChecker.checkPlayer(this);
 
+        // Check tile collision
+        CollisionChecker.checkTile(this);
+
+        // Check object collision
+        CollisionChecker.checkObject(this, false);
+
+        // Check player collision
+        boolean contactPlayer = CollisionChecker.checkPlayer(this);
+
+        // Check NPC and monster collisions
+        if (game.npc.get(game.currentMap) != null || game.monster.get(game.currentMap) != null) {
+            if (game.npc.get(game.currentMap) != null) {
+                CollisionChecker.checkEntity(this, game.npc);
+            }
+            if (game.monster.get(game.currentMap) != null) {
+                CollisionChecker.checkEntity(this, game.monster);
+            }
+        }
+
+        // Handle monster-specific behavior
         if (this.type == EntityTypes.TYPE_MONSTER && contactPlayer) {
             damagePlayer(attack);
         }

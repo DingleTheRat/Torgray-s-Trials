@@ -52,4 +52,29 @@ public class UtilityTool {
             return null;
         }
     }
+    public static Entity generateLootTableEntity(String path, String lootTable) {
+        try {
+            Class<?> clazz = Class.forName(path);
+            return (Entity) clazz.getDeclaredConstructor(Game.class, String.class).newInstance(Main.game, lootTable);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String[] getResourceFileNames(String directoryPath) {
+        try (InputStream inputStream = UtilityTool.class.getResourceAsStream(directoryPath)) {
+            if (inputStream == null) {
+                System.err.println("Warning: \"" + directoryPath + "\" is not a valid path.");
+                return new String[0];
+            }
+
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
+                return bufferedReader.lines().toArray(String[]::new);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new String[0];
+        }
+    }
 }

@@ -1,0 +1,9 @@
+{
+  "name": "Dracores",
+  "type": "single",
+  "loot": [
+    {"object": "RANDOM_COIN", "chance": 0.40},
+    {"object": "net.dinglezz.torgrays_trials.object.OBJ_Torgray_Soup", "chance": 0.35},
+    {"object": "", "chance": 0.25}
+  ]
+}

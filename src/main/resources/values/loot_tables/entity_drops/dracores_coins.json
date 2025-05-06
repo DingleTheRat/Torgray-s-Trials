@@ -1,0 +1,9 @@
+{
+  "name": "Dracores Coins",
+  "type": "single",
+  "loot": [
+    {"object": "COIN_1", "chance": 0.50},
+    {"object": "COIN_2", "chance": 0.35},
+    {"object": "COIN_3", "chance": 0.15}
+  ]
+}

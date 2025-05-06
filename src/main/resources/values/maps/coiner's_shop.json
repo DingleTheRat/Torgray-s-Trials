@@ -13,11 +13,19 @@
       "row": 9
     }],
     "monsters": [],
-    "objects": [{
-      "path": "net.dinglezz.torgrays_trials.object.OBJ_Table",
-      "col": 12,
-      "row": 10
-    }]
+    "objects": [
+      {
+        "path": "net.dinglezz.torgrays_trials.object.OBJ_Table",
+        "col": 12,
+        "row": 10
+      },
+      {
+        "path": "net.dinglezz.torgrays_trials.object.OBJ_Dark_Chest",
+        "col": 10,
+        "row": 9,
+        "loot table": "Normal Dark Chest"
+      }
+    ]
   },
   "name": "Coiner's Shop",
   "light radius": 500,

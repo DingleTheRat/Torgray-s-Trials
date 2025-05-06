@@ -1,29 +1,19 @@
 package net.dinglezz.torgrays_trials.tile;
 
-import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
 
 public class TileManager {
-    Game game;
-    public HashMap<Integer, Tile> tile = new HashMap<>();
-    public int[][][] mapTileNum;
+    public static HashMap<Integer, Tile> tile = new HashMap<>();
+    public static int[][][] mapTileNum = new int[Main.game.maxMaps][Main.game.maxWorldCol][Main.game.maxWorldRow];;
 
-    // Map Screen
-    public HashMap<String, BufferedImage> worldMap = new HashMap<>();
 
-    public TileManager(Game game) {
-        this.game = game;
-        mapTileNum = new int[game.maxMaps][game.maxWorldCol][game.maxWorldRow];
-        getTileImage();
-    }
-
-    public void getTileImage() {
+    public static void getTileImage() {
         // Grass
         registerTile(10, "grass/grass_1", false);
         registerTile(11, "grass/grass_2", false);
@@ -73,32 +63,32 @@ public class TileManager {
 
         registerTile(45, "lil_hut", false);
     }
-    public void registerTile(int i, String imageName, boolean collision) {
+    public static void registerTile(int i, String imageName, boolean collision) {
         try {
             tile.put(i, new Tile());
             try {
-                tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/drawable/tiles/" + imageName + ".png"));
+                tile.get(i).image = ImageIO.read(TileManager.class.getResourceAsStream("/drawable/tiles/" + imageName + ".png"));
             } catch (IllegalArgumentException e) {
                 System.err.println("\"" + imageName + "\" is not a valid path.");
-                tile.get(i).image = ImageIO.read(getClass().getResourceAsStream("/drawable/disabled.png"));
+                tile.get(i).image = ImageIO.read(TileManager.class.getResourceAsStream("/drawable/disabled.png"));
             }
-            tile.get(i).image = UtilityTool.scaleImage(tile.get(i).image, game.tileSize, game.tileSize);
+            tile.get(i).image = UtilityTool.scaleImage(tile.get(i).image, Main.game.tileSize, Main.game.tileSize);
             tile.get(i).collision = collision;
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-public void draw(Graphics2D graphics2D) {
-    int playerWorldX = game.player.worldX;
-    int playerWorldY = game.player.worldY;
-    int playerScreenX = game.player.screenX;
-    int playerScreenY = game.player.screenY;
-    int tileSize = game.tileSize;
+public static void draw(Graphics2D graphics2D) {
+    int playerWorldX = Main.game.player.worldX;
+    int playerWorldY = Main.game.player.worldY;
+    int playerScreenX = Main.game.player.screenX;
+    int playerScreenY = Main.game.player.screenY;
+    int tileSize = Main.game.tileSize;
 
-    for (int worldRow = 0; worldRow < game.maxWorldRow; worldRow++) {
-        for (int worldCol = 0; worldCol < game.maxWorldCol; worldCol++) {
-            int tileNumber = mapTileNum[game.mapHandler.mapNumbers.get(game.currentMap)][worldCol][worldRow];
+    for (int worldRow = 0; worldRow < Main.game.maxWorldRow; worldRow++) {
+        for (int worldCol = 0; worldCol < Main.game.maxWorldCol; worldCol++) {
+            int tileNumber = mapTileNum[MapHandler.mapNumbers.get(Main.game.currentMap)][worldCol][worldRow];
             int worldX = worldCol * tileSize;
             int worldY = worldRow * tileSize;
             int screenX = worldX - playerWorldX + playerScreenX;
@@ -114,7 +104,7 @@ public void draw(Graphics2D graphics2D) {
                 if (currentTile != null) {
                     graphics2D.drawImage(currentTile.image, screenX, screenY, null);
 
-                    if (game.debugHitBoxes && currentTile.collision) {
+                    if (Main.game.debugHitBoxes && currentTile.collision) {
                         graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
                         graphics2D.fillRect(screenX, screenY, tileSize, tileSize);
                     }
@@ -126,9 +116,9 @@ public void draw(Graphics2D graphics2D) {
         }
     }
 
-    if (game.debugPathfinding) {
+    if (Main.game.debugPathfinding) {
         graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
-        for (var pathNode : game.pathFinder.pathList) {
+        for (var pathNode : Main.game.pathFinder.pathList) {
             int worldX = pathNode.col * tileSize;
             int worldY = pathNode.row * tileSize;
             int screenX = worldX - playerWorldX + playerScreenX;
