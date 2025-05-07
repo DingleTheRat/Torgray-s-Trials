@@ -80,6 +80,21 @@ public class Config {
             bufferedReader.close();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Error: Couldn't read config file, creating a new one.");
+            try {
+                String userHome = System.getProperty("user.home");
+                File configFile = new File(userHome, "torgrays-trials-config.txt");
+                FileWriter fileWriter = new FileWriter(configFile);
+                fileWriter.write("3\n");
+                fileWriter.write("3\n");
+                fileWriter.write("false\n");
+                fileWriter.write("false\n");
+                fileWriter.write("false\n");
+                fileWriter.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 }
