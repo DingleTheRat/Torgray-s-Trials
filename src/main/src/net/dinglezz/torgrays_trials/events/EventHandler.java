@@ -5,28 +5,30 @@ import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
+import net.dinglezz.torgrays_trials.tile.TilePoint;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class EventHandler {
-    static EventRect[][][] eventRect = new EventRect[Main.game.maxMaps][Main.game.maxWorldCol][Main.game.maxWorldRow];;
+    public static final HashMap<TilePoint, EventRect> eventRect = new HashMap<>();
     static int previousEventX, previousEventY;
     static boolean canTouchEvent;
     static public int nextCol, nextRow;
     static public String nextMap, nextDirection;
 
     public static void setup() {
-        for (int map : MapHandler.mapNumbers.values()) {
+        for (String map : MapHandler.maps) {
             int col = 0;
             int row = 0;
             while (col < Main.game.maxWorldRow && row < Main.game.maxWorldRow) {
-                eventRect[map][col][row] = new EventRect();
-                eventRect[map][col][row].x = 23;
-                eventRect[map][col][row].y = 23;
-                eventRect[map][col][row].width = 2;
-                eventRect[map][col][row].height = 2;
-                eventRect[map][col][row].eventRectDefaultX = eventRect[map][col][row].x;
-                eventRect[map][col][row].eventRectDefaultY = eventRect[map][col][row].y;
+                eventRect.put(new TilePoint(map, col, row), new EventRect());
+                eventRect.get(new TilePoint(map, col, row)).x = 23;
+                eventRect.get(new TilePoint(map, col, row)).y = 23;
+                eventRect.get(new TilePoint(map, col, row)).width = 2;
+                eventRect.get(new TilePoint(map, col, row)).height = 2;
+                eventRect.get(new TilePoint(map, col, row)).eventRectDefaultX = eventRect.get(new TilePoint(map, col, row)).x;
+                eventRect.get(new TilePoint(map, col, row)).eventRectDefaultY = eventRect.get(new TilePoint(map, col, row)).y;
 
                 col++;
                 if (col == Main.game.maxWorldCol) {
@@ -71,18 +73,18 @@ public class EventHandler {
         if (Objects.equals(map, Main.game.currentMap)) {
             Main.game.player.solidArea.x = Main.game.player.worldX + Main.game.player.solidArea.x;
             Main.game.player.solidArea.y = Main.game.player.worldY + Main.game.player.solidArea.y;
-            eventRect[MapHandler.mapNumbers.get(map)][col][row].x = col * Main.game.tileSize + eventRect[MapHandler.mapNumbers.get(map)][col][row].x;
-            eventRect[MapHandler.mapNumbers.get(map)][col][row].y = row * Main.game.tileSize + eventRect[MapHandler.mapNumbers.get(map)][col][row].y;
+            eventRect.get(new TilePoint(map, col, row)).x = col * Main.game.tileSize + eventRect.get(new TilePoint(map, col, row)).x;
+            eventRect.get(new TilePoint(map, col, row)).y = row * Main.game.tileSize + eventRect.get(new TilePoint(map, col, row)).y;
 
-            if (Main.game.player.solidArea.intersects(eventRect[MapHandler.mapNumbers.get(map)][col][row]) && !eventRect[MapHandler.mapNumbers.get(map)][col][row].eventDone) {
+            if (Main.game.player.solidArea.intersects(eventRect.get(new TilePoint(map, col, row))) && !eventRect.get(new TilePoint(map, col, row)).eventDone) {
                 hit = true;
                 previousEventX = Main.game.player.worldX;
                 previousEventY = Main.game.player.worldY;
             }
             Main.game.player.solidArea.x = Main.game.player.solidAreaDefaultX;
             Main.game.player.solidArea.y = Main.game.player.solidAreaDefaultY;
-            eventRect[MapHandler.mapNumbers.get(map)][col][row].x = eventRect[MapHandler.mapNumbers.get(map)][col][row].eventRectDefaultX;
-            eventRect[MapHandler.mapNumbers.get(map)][col][row].y = eventRect[MapHandler.mapNumbers.get(map)][col][row].eventRectDefaultY;
+            eventRect.get(new TilePoint(map, col, row)).x = eventRect.get(new TilePoint(map, col, row)).eventRectDefaultX;
+            eventRect.get(new TilePoint(map, col, row)).y = eventRect.get(new TilePoint(map, col, row)).eventRectDefaultY;
         }
 
         return hit;
@@ -93,10 +95,10 @@ public class EventHandler {
         if (Objects.equals(map, Main.game.currentMap)) {
             Main.game.player.solidArea.x = Main.game.player.worldX + Main.game.player.solidArea.x;
             Main.game.player.solidArea.y = Main.game.player.worldY + Main.game.player.solidArea.y;
-            eventRect[MapHandler.mapNumbers.get(map)][col][row].x = col * Main.game.tileSize + eventRect[MapHandler.mapNumbers.get(map)][col][row].x;
-            eventRect[MapHandler.mapNumbers.get(map)][col][row].y = row * Main.game.tileSize + eventRect[MapHandler.mapNumbers.get(map)][col][row].y;
+            eventRect.get(new TilePoint(map, col, row)).x = col * Main.game.tileSize + eventRect.get(new TilePoint(map, col, row)).x;
+            eventRect.get(new TilePoint(map, col, row)).y = row * Main.game.tileSize + eventRect.get(new TilePoint(map, col, row)).y;
 
-            if (Main.game.player.solidArea.intersects(eventRect[MapHandler.mapNumbers.get(map)][col][row]) && !eventRect[MapHandler.mapNumbers.get(map)][col][row].eventDone) {
+            if (Main.game.player.solidArea.intersects(eventRect.get(new TilePoint(map, col, row))) && !eventRect.get(new TilePoint(map, col, row)).eventDone) {
                 if (Main.game.player.direction.contentEquals(direction) || direction.contentEquals("any")) {
                     hit = true;
                     previousEventX = Main.game.player.worldX;
@@ -105,8 +107,8 @@ public class EventHandler {
             }
             Main.game.player.solidArea.x = Main.game.player.solidAreaDefaultX;
             Main.game.player.solidArea.y = Main.game.player.solidAreaDefaultY;
-            eventRect[MapHandler.mapNumbers.get(map)][col][row].x = eventRect[MapHandler.mapNumbers.get(map)][col][row].eventRectDefaultX;
-            eventRect[MapHandler.mapNumbers.get(map)][col][row].y = eventRect[MapHandler.mapNumbers.get(map)][col][row].eventRectDefaultY;
+            eventRect.get(new TilePoint(map, col, row)).x = eventRect.get(new TilePoint(map, col, row)).eventRectDefaultX;
+            eventRect.get(new TilePoint(map, col, row)).y = eventRect.get(new TilePoint(map, col, row)).eventRectDefaultY;
         }
 
         return hit;

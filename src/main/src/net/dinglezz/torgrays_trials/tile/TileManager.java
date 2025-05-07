@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class TileManager {
     public static HashMap<Integer, Tile> tile = new HashMap<>();
-    public static int[][][] mapTileNum = new int[Main.game.maxMaps][Main.game.maxWorldCol][Main.game.maxWorldRow];;
+    public static final HashMap<TilePoint, Integer> mapTileNumber = new HashMap<>();
 
 
     public static void getTileImage() {
@@ -88,7 +88,7 @@ public static void draw(Graphics2D graphics2D) {
 
     for (int worldRow = 0; worldRow < Main.game.maxWorldRow; worldRow++) {
         for (int worldCol = 0; worldCol < Main.game.maxWorldCol; worldCol++) {
-            int tileNumber = mapTileNum[MapHandler.mapNumbers.get(Main.game.currentMap)][worldCol][worldRow];
+            int tileNumber = mapTileNumber.get(new TilePoint(Main.game.currentMap, worldCol, worldRow));
             int worldX = worldCol * tileSize;
             int worldY = worldRow * tileSize;
             int screenX = worldX - playerWorldX + playerScreenX;

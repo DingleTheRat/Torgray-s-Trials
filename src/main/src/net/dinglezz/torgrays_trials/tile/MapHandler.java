@@ -8,12 +8,12 @@ import org.json.JSONObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MapHandler {
     public static final HashMap<String, JSONObject> mapFiles = new HashMap<>();
-    public static final HashMap<Integer, String> mapStrings = new HashMap<>();
-    public static final HashMap<String, Integer> mapNumbers = new HashMap<>();
+    public static final ArrayList<String> maps = new ArrayList<>();
 
     public static HashMap<String, BufferedImage> worldMap = new HashMap<>();
 
@@ -44,20 +44,17 @@ public class MapHandler {
             file = UtilityTool.getJsonObject("/values/maps/disabled.json");
         }
 
-        // Read the map file
+        // Get required values
         String name;
-        int numberKey;
         JSONArray map;
 
         try {
             name = file.getString("name");
-            numberKey = file.getInt("numberKey");
             map = file.getJSONArray("map");
         } catch (JSONException jsonException) {
             System.err.println("Failed to find essential map data in " + fileName + ".json. Using default map.");
             file = UtilityTool.getJsonObject("/values/maps/disabled.json");
             name = file.getString("name");
-            numberKey = file.getInt("numberKey");
             map = file.getJSONArray("map");
         }
 
@@ -70,7 +67,7 @@ public class MapHandler {
             while (col < Main.game.maxWorldCol) {
                 String[] numbers = mapLine.split(" ");
                 int number = Integer.parseInt(numbers[col]);
-                TileManager.mapTileNum[numberKey][col][row] = number;
+                TileManager.mapTileNumber.put(new TilePoint(name, col, row), number);
                 col++;
             }
             if (col == Main.game.maxWorldCol) {
@@ -79,24 +76,23 @@ public class MapHandler {
             }
         }
 
-        // Add to some useful HashMaps
+        // Add to some useful HashMap and Array List
         mapFiles.put(name, file);
-        mapStrings.put(numberKey, name);
-        mapNumbers.put(name, numberKey);
+        maps.add(name);
     }
 
     public static void createWorldMap() {
         int worldMapWidth = Main.game.tileSize * Main.game.maxWorldCol;
         int worldMapHeight = Main.game.tileSize * Main.game.maxWorldRow;
 
-        for (String map : mapStrings.values()) {
+        for (String map : maps) {
             MapHandler.worldMap.put(map, new BufferedImage(worldMapWidth, worldMapHeight, BufferedImage.TYPE_INT_ARGB));
             Graphics2D graphics2D = MapHandler.worldMap.get(map).createGraphics();
 
             int col = 0;
             int row = 0;
             while (col < Main.game.maxWorldCol && row < Main.game.maxWorldRow) {
-                int tileNumber = TileManager.mapTileNum[mapNumbers.get(map)][col][row];
+                int tileNumber = TileManager.mapTileNumber.get(new TilePoint(map, col, row));
                 int x = col * Main.game.tileSize;
                 int y = row * Main.game.tileSize;
 
