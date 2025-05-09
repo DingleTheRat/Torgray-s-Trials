@@ -4,7 +4,7 @@ import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTags;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
-import net.dinglezz.torgrays_trials.entity.LootTable;
+import net.dinglezz.torgrays_trials.entity.LootTableHandler;
 import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
 
@@ -53,21 +53,15 @@ public class OBJ_Dark_Chest extends Entity {
             if (lootTable.isEmpty()) {
                 stringBuilder.append("This chest is empty :(");
             } else {
-                ArrayList<Entity> loot = LootTable.generateLoot(LootTable.lootTables.get(lootTable));
-                if (!LootTable.lootTables.get(lootTable).getString("type").equals("multiple")) {
-                    stringBuilder.append("Loot table type is not 'multiple'");
-                    stringBuilder.append("\nFIX IT >:(");
-                    game.ui.currentDialogue = stringBuilder.toString();
-                    return;
-                } else if (loot.isEmpty()) {
+                ArrayList<Entity> loot = LootTableHandler.generateLoot(LootTableHandler.lootTables.get(lootTable));
+                if (loot.isEmpty()) {
                     stringBuilder.append("This chest is empty :(");
                 } else {
-                    stringBuilder.append("Hmmmm, what's in this old dark chest?");
+                    stringBuilder.append("Woah, this chest is shiny!");
                 }
 
                 for (Entity reward : loot) {
-                    if (reward == LootTable.RANDOM_COIN) {
-                        reward = LootTable.generateLoot(LootTable.lootTables.get("Normal Dark Chest Coins")).getFirst();
+                    if (reward.name.equals("Coins")) {
                         game.player.coins += reward.amount;
                         if (reward.amount == 1) {
                             stringBuilder.append("\n+").append(reward.amount).append(" Coin");

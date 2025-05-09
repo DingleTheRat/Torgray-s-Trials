@@ -22,6 +22,18 @@ public class OBJ_Coins extends Entity {
         down1 = registerEntitySprite("/objects/coin");
         description = "Precious pieces of gold";
     }
+    public OBJ_Coins(Game game) {
+        super(game);
+        this.game = game;
+
+        name = "Coins";
+        maxStack = 2;
+        type = EntityTypes.TYPE_OBJECT;
+        tags.add(EntityTags.TAG_PICKUP_ONLY);
+        tags.add(EntityTags.TAG_NON_SELLABLE);
+        down1 = registerEntitySprite("/objects/coin");
+        description = "Precious pieces of gold";
+    }
 
     @Override
     public boolean use(Entity entity) {

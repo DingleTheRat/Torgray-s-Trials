@@ -3,7 +3,7 @@ package net.dinglezz.torgrays_trials.monster;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
-import net.dinglezz.torgrays_trials.entity.LootTable;
+import net.dinglezz.torgrays_trials.entity.LootTableHandler;
 import net.dinglezz.torgrays_trials.main.States;
 
 import java.awt.*;
@@ -114,7 +114,7 @@ public class MON_Dracore extends Entity {
         if (game.pathFinding) {
             onPath = true;
         } else {
-            // If not then change the direction
+            // If not, then change the direction
             switch (game.player.direction) {
                 case "up": direction = "down"; break;
                 case "down": direction = "up"; break;
@@ -126,15 +126,11 @@ public class MON_Dracore extends Entity {
 
     @Override
     public void checkDrop() {
-        ArrayList<Entity> loot = LootTable.generateLoot(LootTable.lootTables.get(lootTable));
+        ArrayList<Entity> loot = LootTableHandler.generateLoot(LootTableHandler.lootTables.get(lootTable));
+        System.out.println(loot);
 
-        if (!loot.isEmpty() && loot.getFirst() != null) {
-            if (loot.getFirst() == LootTable.RANDOM_COIN) {
-                loot = LootTable.generateLoot(LootTable.lootTables.get("Dracores Coins"));
-                dropItem(loot.getFirst());
-            } else {
-                dropItem(loot.getFirst());
-            }
+        if (!loot.isEmpty()) {
+            dropItem(loot.getFirst());
         }
     }
 

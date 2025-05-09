@@ -1,9 +1,23 @@
 {
   "name": "Amethyst Chest",
-  "type": "all",
   "loot": [
-    {"object": "net.dinglezz.torgrays_trials.object.weapon.OBJ_Sword_Amethyst"},
-    {"object": "net.dinglezz.torgrays_trials.object.shield.OBJ_Shield_Amethyst"},
-    {"object": "COIN_4"}
+    {
+      "chance": 1,
+      "loot": [
+        {"object": "net.dinglezz.torgrays_trials.object.weapon.OBJ_Sword_Amethyst", "chance": 1, "amount": 1}
+      ]
+    },
+    {
+      "chance": 1,
+      "loot": [
+        {"object": "net.dinglezz.torgrays_trials.object.shield.OBJ_Shield_Amethyst", "chance": 1, "amount": 1}
+      ]
+    },
+    {
+      "chance": 1,
+      "loot": [
+        {"object": "net.dinglezz.torgrays_trials.object.OBJ_Coins", "chance": 1, "amount": 4}
+      ]
+    }
   ]
 }

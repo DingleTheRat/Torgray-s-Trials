@@ -3,13 +3,12 @@ package net.dinglezz.torgrays_trials.object;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTags;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
-import net.dinglezz.torgrays_trials.entity.LootTable;
+import net.dinglezz.torgrays_trials.entity.LootTableHandler;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class OBJ_Chest extends Entity {
     Game game;
@@ -54,13 +53,8 @@ public class OBJ_Chest extends Entity {
             if (lootTable.isEmpty()) {
                 stringBuilder.append("This chest is empty :(");
             } else {
-                ArrayList<Entity> loot = LootTable.generateLoot(LootTable.lootTables.get(lootTable));
-                if (!LootTable.lootTables.get(lootTable).getString("type").equals("all")) {
-                    stringBuilder.append("Loot table type is not 'all'");
-                    stringBuilder.append("\nFIX IT >:(");
-                    game.ui.currentDialogue = stringBuilder.toString();
-                    return;
-                } else if (loot.isEmpty()) {
+                ArrayList<Entity> loot = LootTableHandler.generateLoot(LootTableHandler.lootTables.get(lootTable));
+                if (loot.isEmpty()) {
                     stringBuilder.append("This chest is empty :(");
                 } else {
                     stringBuilder.append("Woah, this chest is shiny!");

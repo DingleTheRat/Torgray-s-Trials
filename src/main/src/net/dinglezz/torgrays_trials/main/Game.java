@@ -1,7 +1,7 @@
 package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
-import net.dinglezz.torgrays_trials.entity.LootTable;
+import net.dinglezz.torgrays_trials.entity.LootTableHandler;
 import net.dinglezz.torgrays_trials.entity.Player;
 import net.dinglezz.torgrays_trials.environment.EnvironmentManager;
 import net.dinglezz.torgrays_trials.events.EventHandler;
@@ -82,7 +82,7 @@ public class Game extends JPanel implements Runnable {
     public void setupGame() {
         TileManager.getTileImage();
         MapHandler.loadMaps();
-        LootTable.loadLootTables();
+        LootTableHandler.loadLootTables();
         EventHandler.setup();
         environmentManager.setup();
 

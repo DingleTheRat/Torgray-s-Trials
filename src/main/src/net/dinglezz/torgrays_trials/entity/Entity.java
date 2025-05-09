@@ -133,12 +133,14 @@ public abstract class Entity {
     public boolean use(Entity entity) {return false;}
     public void checkDrop() {}
     public void dropItem(Entity droppedItem) {
-        for (int i = 0; i < game.object.size(); i++) {
-            if (game.object.get(game.currentMap).get(i) == null) {
-                game.object.get(game.currentMap).put(i, droppedItem);
-                game.object.get(game.currentMap).get(i).worldX = worldX;
-                game.object.get(game.currentMap).get(i).worldY = worldY;
-                break;
+        if (game.object.get(game.currentMap) != null) {
+            for (int i = 0; i < game.object.get(game.currentMap).size(); i++) {
+                if (game.object.get(game.currentMap).get(i) == null) {
+                    game.object.get(game.currentMap).put(i, droppedItem);
+                    droppedItem.worldX = worldX;
+                    droppedItem.worldY = worldY;
+                    break;
+                }
             }
         }
     }
@@ -193,24 +195,18 @@ public abstract class Entity {
         if (knockBack) {
             checkCollision();
 
-            if (collisionOn) {
+            if (collisionOn || knockBackCounter == 10) {
                 knockBackCounter = 0;
                 knockBack = false;
                 speed = defaultSpeed;
             } else {
-                switch (game.player.direction)  {
+                switch (game.player.direction) {
                     case "up": worldY -= speed; break;
                     case "down": worldY += speed; break;
                     case "left": worldX -= speed; break;
                     case "right": worldX += speed; break;
                 }
-            }
-
-            knockBackCounter++;
-            if (knockBackCounter == 10) {
-                knockBackCounter = 0;
-                knockBack = false;
-                speed = defaultSpeed;
+                knockBackCounter++;
             }
         } else {
             setAction();

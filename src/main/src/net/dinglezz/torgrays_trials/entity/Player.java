@@ -136,8 +136,8 @@ public class Player extends Entity{
             CollisionChecker.checkTile(this);
 
             // Check OBJ collision
-            int objIndex = CollisionChecker.checkObject(this, true);
-            pickUpObject(objIndex);
+            int objectIndex = CollisionChecker.checkObject(this, true);
+            pickUpObject(objectIndex);
 
             // Check NPC collision
             int npcIndex = CollisionChecker.checkEntity(this, game.npc);
@@ -147,8 +147,8 @@ public class Player extends Entity{
             EventHandler.checkEvent();
 
             // Check Mob Collision
-            int mobIndex = CollisionChecker.checkEntity(this, game.monster);
-            contactMonster(mobIndex);
+            int monsterIndex = CollisionChecker.checkEntity(this, game.monster);
+            contactMonster(monsterIndex);
 
             if (!collisionOn && !inputHandler.spacePressed && !inputHandler.interactKeyPressed) {
                 switch (direction) {

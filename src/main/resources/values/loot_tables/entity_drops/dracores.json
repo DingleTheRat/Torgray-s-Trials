@@ -1,9 +1,15 @@
 {
   "name": "Dracores",
-  "type": "single",
   "loot": [
-    {"object": "RANDOM_COIN", "chance": 0.40},
-    {"object": "net.dinglezz.torgrays_trials.object.OBJ_Torgray_Soup", "chance": 0.35},
-    {"object": "", "chance": 0.25}
+    {
+      "chance": 1,
+      "loot": [
+        {"object": "net.dinglezz.torgrays_trials.object.OBJ_Torgray_Soup", "chance": 0.35, "amount": 1},
+        {"object": "", "chance": 0.25},
+        {"object": "net.dinglezz.torgrays_trials.object.OBJ_Coins", "chance": 0.20, "amount": 1},
+        {"object": "net.dinglezz.torgrays_trials.object.OBJ_Coins", "chance": 0.14, "amount": 2},
+        {"object": "net.dinglezz.torgrays_trials.object.OBJ_Coins", "chance": 0.06, "amount": 3}
+      ]
+    }
   ]
 }
