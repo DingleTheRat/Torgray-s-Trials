@@ -1,10 +1,10 @@
 -----------------Credits-----------------
 ## Main
 Coding - Dinglezz and UsUsStudios
-Data Generaion - UsUsStudios
+Data Generation - UsUsStudios
 Sprites - Dinglezz
 Ideas - Dinglezz
-Font (Marmonica) - 患者長ひっく
+Marmonica (Font) - 患者長ひっく
 Playtesting - UsUsStudios and Headshot_Hitter
 
 ## Music
