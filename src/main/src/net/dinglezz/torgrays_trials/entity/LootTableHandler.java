@@ -59,50 +59,81 @@ public class LootTableHandler {
             return finalLoot; // Return early if the loot array is missing
         }
 
-        // Do multi select
-        for (int i = 0; i < multiSelectLoot.length(); i++) {
-            JSONObject loot = multiSelectLoot.getJSONObject(i);
-            float multiRandom = new Random().nextFloat(); // Random number between 0 and 1
+        // Get optional minimum and maximum
+        int minimum = 0;
+        int maximum = 0;
+        if (lootTable.has("minimum")) {
+            minimum = lootTable.getInt("minimum");
+        }
+        if (lootTable.has("maximum")) {
+            maximum = lootTable.getInt("maximum");
+        }
 
-            try {
-                // If so, do single-select
-                if (multiRandom <= loot.getFloat("chance")) {
-                    JSONArray singleSelectLoot = loot.optJSONArray("loot");
+        int step = 0;
+        int selects = 0;
+        while (step <= 100) {
+            step++;
+            System.out.println(step);
+            // Do multi select
+            for (int i = 0; i < multiSelectLoot.length(); i++) {
+                JSONObject loot = multiSelectLoot.getJSONObject(i);
+                float multiRandom = new Random().nextFloat(); // Random number between 0 and 1
 
-                    float singleRandom = new Random().nextFloat(); // Random number between 0 and 1
-                    float cumulativeChance = 0f;
-
-                    for (int j = 0; j < singleSelectLoot.length(); j++) {
-                        JSONObject lootItem = singleSelectLoot.optJSONObject(j);
-
-                        try {
-                            float chance = lootItem.getFloat("chance");
-                            cumulativeChance += chance;
-
-                            if (singleRandom <= cumulativeChance) {
-                                String object = lootItem.getString("object");
-
-                                // Check for keywords
-                                if (!object.isEmpty()) {
-                                    Entity entity = UtilityTool.generateEntity(object);
-                                    entity.amount = lootItem.getInt("amount");
-                                    finalLoot.add(entity);
-                                }
-                                break;
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            System.err.println("Couldn't load loot item");
-                            System.err.println("Missing loot item data in " + lootItem + " in loot table by the name of '" + lootTable.getString("name") + "'");
-                        } catch (NumberFormatException e) {
-                            System.err.println("Invalid coin format in loot item. Ensure it is 'COIN_X', where X is a number.");
+                try {
+                    // If so, do single-select
+                    if (multiRandom <= loot.getFloat("chance")) {
+                        // Minimum and maximum
+                        selects++;
+                        if (selects < minimum && minimum != 0) {
+                            break;
                         }
-                    }
+                        if (selects > maximum && maximum != 0) {
+                            break;
+                        }
 
+                        JSONArray singleSelectLoot = loot.optJSONArray("loot");
+
+                        float singleRandom = new Random().nextFloat(); // Random number between 0 and 1
+                        float cumulativeChance = 0f;
+
+                        for (int j = 0; j < singleSelectLoot.length(); j++) {
+                            JSONObject lootItem = singleSelectLoot.optJSONObject(j);
+
+                            try {
+                                float chance = lootItem.getFloat("chance");
+                                cumulativeChance += chance;
+
+                                if (singleRandom <= cumulativeChance) {
+                                    String object = lootItem.getString("object");
+
+                                    if (!object.isEmpty()) {
+                                        Entity entity = UtilityTool.generateEntity(object);
+                                        entity.amount = lootItem.getInt("amount");
+                                        finalLoot.add(entity);
+                                    } else {
+                                        finalLoot.add(null);
+                                    }
+                                    break;
+                                }
+                            } catch (JSONException | NullPointerException e) {
+                                System.err.println("Couldn't load loot item");
+                                System.err.println("Missing loot item data in " + lootItem + " in loot table by the name of '" + lootTable.getString("name") + "'");
+                            } catch (NumberFormatException e) {
+                                System.err.println("Invalid coin format in loot item. Ensure it is 'COIN_X', where X is a number.");
+                            }
+                        }
+
+                    }
+                } catch (JSONException | NullPointerException e) {
+                    System.err.println("Couldn't load loot item");
+                    System.err.println("Missing loot item data in " + loot + " in loot table by the name of '" + lootTable.getString("name") + "'");
                 }
-            } catch (JSONException | NullPointerException e) {
-                System.err.println("Couldn't load loot item");
-                System.err.println("Missing loot item data in " + loot + " in loot table by the name of '" + lootTable.getString("name") + "'");
+            }
+            if (!finalLoot.isEmpty()) {
+                break;
+            }
+            if (step >= 100) {
+               System.err.println("Couldn't reach loot table minimum and maximum in 100 steps in loot table by the name of '" + lootTable.getString("name") + "'");
             }
         }
         return finalLoot;

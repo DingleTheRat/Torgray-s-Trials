@@ -1,5 +1,6 @@
 {
   "name": "Normal Dark Chest",
+  "minimum": 1,
   "loot": [
     {
       "chance": 0.55,
