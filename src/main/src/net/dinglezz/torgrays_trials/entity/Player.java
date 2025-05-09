@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 public class Player extends Entity{
     InputHandler inputHandler;
@@ -401,7 +402,7 @@ public class Player extends Entity{
         boolean canObtain = false;
 
         // Check if maxStack
-        if (!(item.amount >= item.maxStack)) {
+        if (!(item.amount >= item.maxStack) && !Objects.equals(item.name, "Coins")) {
             int index = searchInInventory(item.name);
 
             if (index != 999) {
@@ -414,6 +415,9 @@ public class Player extends Entity{
                     canObtain = true;
                 }
             }
+        } else if (Objects.equals(item.name, "Coins")) {
+            coins += item.amount;
+            canObtain = true;
         } else { // Not maxStack, so check vacancy
             if (inventory.size() != maxInventorySize) {
                 inventory.add(item);

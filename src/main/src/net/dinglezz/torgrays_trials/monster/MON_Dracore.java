@@ -116,10 +116,10 @@ public class MON_Dracore extends Entity {
         } else {
             // If not, then change the direction
             switch (game.player.direction) {
-                case "up": direction = "down"; break;
-                case "down": direction = "up"; break;
-                case "left": direction = "right"; break;
-                case "right": direction = "left"; break;
+                case "up" -> direction = "down";
+                case "down" -> direction = "up";
+                case "left" -> direction = "right";
+                case "right" -> direction = "left";
             }
         }
     }

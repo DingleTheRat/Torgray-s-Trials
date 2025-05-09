@@ -11,9 +11,9 @@
     {
       "chance": 0.25,
       "loot": [
-        {"object": "net.dinglezz.torgrays_trials.object.OBJ_Coins", "chance": 0.45, "amount": 1},
+        {"object": "net.dinglezz.torgrays_trials.object.OBJ_Coins", "chance": 0.40, "amount": 1},
         {"object": "net.dinglezz.torgrays_trials.object.OBJ_Coins", "chance": 0.30, "amount": 2},
-        {"object": "net.dinglezz.torgrays_trials.object.OBJ_Coins", "chance": 0.15, "amount": 3},
+        {"object": "net.dinglezz.torgrays_trials.object.OBJ_Coins", "chance": 0.20, "amount": 3},
         {"object": "net.dinglezz.torgrays_trials.object.OBJ_Coins", "chance": 0.07, "amount": 4},
         {"object": "net.dinglezz.torgrays_trials.object.OBJ_Coins", "chance": 0.03, "amount": 5}
       ]
@@ -21,7 +21,7 @@
     {
       "chance": 0.10,
       "loot": [
-        {"object": "net.dinglezz.torgrays_trials.object.weapon.OBJ_Stick", "chance": 1}
+        {"object": "net.dinglezz.torgrays_trials.object.weapon.OBJ_Stick", "chance": 1, "amount": 1}
       ]
     }
   ]

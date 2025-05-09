@@ -73,7 +73,6 @@ public class LootTableHandler {
         int selects = 0;
         while (step <= 100) {
             step++;
-            System.out.println(step);
             // Do multi select
             for (int i = 0; i < multiSelectLoot.length(); i++) {
                 JSONObject loot = multiSelectLoot.getJSONObject(i);
@@ -92,6 +91,23 @@ public class LootTableHandler {
                         }
 
                         JSONArray singleSelectLoot = loot.optJSONArray("loot");
+
+                        // Check if the chance adds up to 1f
+                        float totalChance = 0f;
+
+                        for (int j = 0; j < singleSelectLoot.length(); j++) {
+                            JSONObject lootItem = singleSelectLoot.optJSONObject(j);
+                            if (lootItem.has("chance")) {
+                                totalChance += lootItem.getFloat("chance");
+                            } else {
+                                System.err.println("Missing loot item chance in " + lootItem + " in loot table by the name of '" + lootTable.getString("name") + "'");
+                                return finalLoot;
+                            }
+                        }
+                        if (totalChance != 1f) {
+                            System.err.println("Loot item chances do not add up to 1f in " + singleSelectLoot + " in loot table by the name of '" + lootTable.getString("name") + "'");
+                            return finalLoot;
+                        }
 
                         float singleRandom = new Random().nextFloat(); // Random number between 0 and 1
                         float cumulativeChance = 0f;
@@ -118,8 +134,10 @@ public class LootTableHandler {
                             } catch (JSONException | NullPointerException e) {
                                 System.err.println("Couldn't load loot item");
                                 System.err.println("Missing loot item data in " + lootItem + " in loot table by the name of '" + lootTable.getString("name") + "'");
+                                return finalLoot;
                             } catch (NumberFormatException e) {
                                 System.err.println("Invalid coin format in loot item. Ensure it is 'COIN_X', where X is a number.");
+                                return finalLoot;
                             }
                         }
 
@@ -127,6 +145,7 @@ public class LootTableHandler {
                 } catch (JSONException | NullPointerException e) {
                     System.err.println("Couldn't load loot item");
                     System.err.println("Missing loot item data in " + loot + " in loot table by the name of '" + lootTable.getString("name") + "'");
+                    return finalLoot;
                 }
             }
             if (!finalLoot.isEmpty()) {
