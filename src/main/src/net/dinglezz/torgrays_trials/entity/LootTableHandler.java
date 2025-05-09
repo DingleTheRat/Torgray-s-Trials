@@ -67,7 +67,6 @@ public class LootTableHandler {
             try {
                 // If so, do single-select
                 if (multiRandom <= loot.getFloat("chance")) {
-                    System.out.println(multiRandom + " <= " + loot.getFloat("chance"));
                     JSONArray singleSelectLoot = loot.optJSONArray("loot");
 
                     float singleRandom = new Random().nextFloat(); // Random number between 0 and 1
@@ -81,15 +80,11 @@ public class LootTableHandler {
                             cumulativeChance += chance;
 
                             if (singleRandom <= cumulativeChance) {
-                                System.out.println(singleRandom + " <= " + cumulativeChance);
-                                System.out.println(lootItem.getFloat("chance"));
                                 String object = lootItem.getString("object");
 
                                 // Check for keywords
                                 if (!object.isEmpty()) {
-                                    System.out.println("Adding " + object + " to loot");
                                     Entity entity = UtilityTool.generateEntity(object);
-                                    System.out.println(lootItem.getInt("amount"));
                                     entity.amount = lootItem.getInt("amount");
                                     finalLoot.add(entity);
                                 }

@@ -127,7 +127,6 @@ public class MON_Dracore extends Entity {
     @Override
     public void checkDrop() {
         ArrayList<Entity> loot = LootTableHandler.generateLoot(LootTableHandler.lootTables.get(lootTable));
-        System.out.println(loot);
 
         if (!loot.isEmpty()) {
             dropItem(loot.getFirst());
