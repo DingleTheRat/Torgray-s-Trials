@@ -1,6 +1,6 @@
 package net.dinglezz.torgrays_trials.data_generation;
 
-import com.ususstudios.torgrays_datagen.generators.Entity;
+import com.ususstudios.torgrays_datagen.dataclasses.Entity;
 import net.dinglezz.torgrays_trials.monster.MON_Dracore;
 import net.dinglezz.torgrays_trials.npc.NPC_Coiner;
 import net.dinglezz.torgrays_trials.npc.NPC_GateKeeper;

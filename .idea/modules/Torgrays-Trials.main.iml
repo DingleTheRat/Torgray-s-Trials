@@ -6,11 +6,10 @@
     <content url="file://$MODULE_DIR$/../../src/main">
       <sourceFolder url="file://$MODULE_DIR$/../../src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/../../src/main/src" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/../../src/main/resources/values/maps/archive" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: org.json:json:20250107" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.UsUsStudios:Torgrays-Datagen:v0.7" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.UsUsStudios:Torgrays-Datagen:v0.10" level="project" />
   </component>
 </module>

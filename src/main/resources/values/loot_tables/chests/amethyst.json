@@ -3,21 +3,27 @@
   "loot": [
     {
       "chance": 1,
-      "loot": [
-        {"object": "net.dinglezz.torgrays_trials.object.weapon.OBJ_Sword_Amethyst", "chance": 1, "amount": 1}
-      ]
+      "loot": [{
+        "amount": 1,
+        "chance": 1,
+        "object": "net.dinglezz.torgrays_trials.object.weapon.OBJ_Sword_Amethyst"
+      }]
     },
     {
       "chance": 1,
-      "loot": [
-        {"object": "net.dinglezz.torgrays_trials.object.shield.OBJ_Shield_Amethyst", "chance": 1, "amount": 1}
-      ]
+      "loot": [{
+        "amount": 1,
+        "chance": 1,
+        "object": "net.dinglezz.torgrays_trials.object.shield.OBJ_Shield_Amethyst"
+      }]
     },
     {
       "chance": 1,
-      "loot": [
-        {"object": "net.dinglezz.torgrays_trials.object.OBJ_Coins", "chance": 1, "amount": 4}
-      ]
+      "loot": [{
+        "amount": 4,
+        "chance": 1,
+        "object": "net.dinglezz.torgrays_trials.object.OBJ_Coins"
+      }]
     }
   ]
 }
