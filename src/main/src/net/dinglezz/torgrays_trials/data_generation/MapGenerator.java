@@ -63,7 +63,6 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 					"12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12"
 				},
 				"Main Island",
-				1,
 				"Default",
 				23,
 				21,
@@ -164,7 +163,6 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 						"41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41"
 				},
 				"Coiner's Shop",
-				2,
 				"Coin Toss",
 				12, 13,
 				500,
