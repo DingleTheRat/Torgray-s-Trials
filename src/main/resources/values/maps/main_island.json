@@ -6,13 +6,11 @@
     "row": 21
   },
   "entities": {
-    "npcs": [
-      {
-        "path": "net.dinglezz.torgrays_trials.npc.NPC_GateKeeper",
-        "col": 21,
-        "row": 21
-      }
-    ],
+    "npcs": [{
+      "path": "net.dinglezz.torgrays_trials.npc.NPC_GateKeeper",
+      "col": 21,
+      "row": 21
+    }],
     "monsters": [
       {
         "path": "net.dinglezz.torgrays_trials.monster.MON_Dracore",
