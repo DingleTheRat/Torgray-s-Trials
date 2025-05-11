@@ -3,7 +3,7 @@ An in-dev currently RPG-like game about a ghost trapped in eternal darkness.
 itch.io page coming soon!
 If you are too lazy to go on there to see the changelog then here it is: 
 
-## Changes in Alpha 2.2
+## Changes in latest update
 **IMPORTANT: If you played earlier versions, delete the `torgrays-trials-config` in your user home directory to not cause issues**
 ### Shop System
 A cute lil guy by the name of Coiner arrived to the world! Find a hut somewhere and go in it to find Coiner! Coiner sells a bunch of new stuff like Maps, Keys, Sticks and Torgray's Soup. In order to buy them, you need coins that are obtained by killing Dracores who drop 1-3 of them or by selling some of your goodies to Coiner. You can also now see how many you have in your inventory!
