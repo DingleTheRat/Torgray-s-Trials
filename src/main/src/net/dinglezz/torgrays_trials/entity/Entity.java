@@ -176,7 +176,7 @@ public abstract class Entity {
         boolean contactPlayer = CollisionChecker.checkPlayer(this);
 
         // Check NPC and monster collisions
-        if (game.npc.get(game.currentMap) != null || game.monster.get(game.currentMap) != null) {
+        if (game.npc.get(game.currentMap) != null) {
             if (game.npc.get(game.currentMap) != null) {
                 CollisionChecker.checkEntity(this, game.npc);
             }

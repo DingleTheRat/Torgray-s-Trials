@@ -80,7 +80,7 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void setupGame() {
-        TileManager.getTileImage();
+        TileManager.setup();
         MapHandler.loadMaps();
         LootTableHandler.loadLootTables();
         EventHandler.setup();

@@ -63,7 +63,7 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 					"12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12"
 				},
 				"Main Island",
-				"Default",
+				"default",
 				23,
 				21,
 				-1,

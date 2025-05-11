@@ -101,7 +101,7 @@ public class Sound {
         stopMusic();
         JSONObject currentMapFile = MapHandler.mapFiles.get(Main.game.currentMap);
         
-        if (currentMapFile.getString("music").equals("Default")) {
+        if (currentMapFile.getString("music").equals("default")) {
             playMusic(
                 switch (Main.game.environmentManager.lighting.darknessState) {
                     case DARKNESS_STATE_NIGHT, DARKNESS_STATE_NEW_DUSK,

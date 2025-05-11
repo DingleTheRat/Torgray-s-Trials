@@ -46,33 +46,63 @@ public class MapHandler {
 
         // Get required values
         String name;
-        JSONArray map;
+        JSONObject map;
+        JSONArray ground;
 
         try {
             name = file.getString("name");
-            map = file.getJSONArray("map");
+            map = file.getJSONObject("map");
+            ground = map.getJSONArray("ground");
         } catch (JSONException jsonException) {
             System.err.println("Failed to find essential map data in " + fileName + ".json. Using default map.");
             file = UtilityTool.getJsonObject("/values/maps/disabled.json");
             name = file.getString("name");
-            map = file.getJSONArray("map");
+            map = file.getJSONObject("map");
+            ground = map.getJSONArray("ground");
+        }
+
+        JSONArray foreground = null;
+        if (map.has("foreground")) {
+            foreground = map.getJSONArray("foreground");
         }
 
         // Read the map file
-        int col = 0;
-        int row = 0;
-
-        while (row < Main.game.maxWorldRow) {
-            String mapLine = map.getString(row);
-            while (col < Main.game.maxWorldCol) {
-                String[] numbers = mapLine.split(" ");
-                int number = Integer.parseInt(numbers[col]);
-                TileManager.mapTileNumber.put(new TilePoint(name, col, row), number);
-                col++;
+        for (String layer : TileManager.mapTileNumber.keySet()) {
+            if (layer.equals("foreground") && foreground == null) {
+                continue;
             }
-            if (col == Main.game.maxWorldCol) {
-                col = 0;
-                row++;
+            JSONArray layerArray = switch (layer) {
+                case "ground" -> ground;
+                case "foreground" -> foreground;
+                default -> throw new IllegalStateException("Unexpected value: " + layer);
+            };
+
+            int col = 0;
+            int row = 0;
+            while (row < Main.game.maxWorldRow) {
+                String mapLine = layerArray.getString(row);
+                while (col < Main.game.maxWorldCol) {
+                    String[] numbers = mapLine.split(" ");
+                    int number = Integer.parseInt(numbers[col]);
+                    TileManager.mapTileNumber.get(layer).put(new TilePoint(name, col, row), number);
+
+                    // If the tile number is not registered, register it as a disabled tile
+                    if (TileManager.tile.get(number) == null) {
+                        System.err.println("Index " + number + " is not a valid tile in " + name + " map.");
+                        TileManager.registerTile(number, "", false);
+                    }
+
+                    // Warn if a collision tile is not on the foreground layer
+                    if (TileManager.tile.get(number).collision && !layer.equals("foreground")) {
+                        System.err.println("Collision tile " + number + " is not on the foreground layer in " +  name + " map.");
+                        System.err.println("Collisions are only checked on the foreground layer.");
+                    }
+                    col++;
+                }
+                if (col == Main.game.maxWorldCol) {
+                    col = 0;
+                    row++;
+                }
             }
         }
 
@@ -92,7 +122,7 @@ public class MapHandler {
             int col = 0;
             int row = 0;
             while (col < Main.game.maxWorldCol && row < Main.game.maxWorldRow) {
-                int tileNumber = TileManager.mapTileNumber.get(new TilePoint(map, col, row));
+                int tileNumber = TileManager.mapTileNumber.get("ground").get(new TilePoint(map, col, row));
                 int x = col * Main.game.tileSize;
                 int y = row * Main.game.tileSize;
 

@@ -4,21 +4,26 @@ public class States {
     public enum GameStates {
         STATE_TITLE,
         STATE_PLAY,
-        STATE_PAUSE,
         STATE_DIALOGUE,
+        STATE_PAUSE,
         STATE_CHARACTER,
         STATE_GAME_OVER,
         STATE_TRADE,
         STATE_MAP
     }
     public enum UIStates {
+        // Title
         TITLE_STATE_MAIN,
         TITLE_STATE_MODES,
         PAUSE_STATE_MAIN,
+
+        // Pause
         PAUSE_STATE_SETTINGS_MAIN,
         PAUSE_STATE_CONTROLS,
         PAUSE_STATE_NOTIFICATION,
         PAUSE_STATE_CONFIRM,
+
+        // Trade
         TRADE_STATE_SELECT,
         TRADE_STATE_BUY,
         TRADE_STATE_SELL

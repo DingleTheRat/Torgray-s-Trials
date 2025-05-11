@@ -39,9 +39,9 @@ public class NPC_GateKeeper extends Entity {
     }
     public void setDialogue() {
         dialogues.put(0, "Hey there partner!");
-        dialogues.put(1, "Let me tell you a very special secret");
-        dialogues.put(2, "This game is for a science fair");
-        dialogues.put(3, "The person who made this game, \nDingle, is actually super screwed for \nthe science fair");
+        dialogues.put(1, "This place is quite dark isn't it?");
+        dialogues.put(2, "I heard that it's some sort of curse that \nwas placed upon this village");
+        dialogues.put(3, "Who did it though?");
     }
 
     @Override
