@@ -104,10 +104,10 @@ public class Sound {
         if (currentMapFile.getString("music").equals("default")) {
             playMusic(
                 switch (Main.game.environmentManager.lighting.darknessState) {
-                    case DARKNESS_STATE_NIGHT, DARKNESS_STATE_NEW_DUSK,
-                         DARKNESS_STATE_DUSK -> "Umbral Force";
-                    case DARKNESS_STATE_GLOOM, DARKNESS_STATE_LIGHT_GLOOM,
-                         DARKNESS_STATE_DARK_GLOOM -> "Gloom Over Torgray";
+                    case NIGHT, NEW_DUSK,
+                         DUSK -> "Umbral Force";
+                    case GLOOM, LIGHT_GLOOM,
+                         DARK_GLOOM -> "Gloom Over Torgray";
                     default -> "Dark Mystery";}
             );
         } else {
@@ -126,8 +126,8 @@ public class Sound {
         if (currentMapFile.getString("music").equals("Default")) {
             playMusic(
                 switch (darknessState) {
-                    case DARKNESS_STATE_DUSK -> "Umbral Force";
-                    case DARKNESS_STATE_NEW_DUSK -> "Gloom Over Torgray";
+                    case DUSK -> "Umbral Force";
+                    case NEW_DUSK -> "Gloom Over Torgray";
                     default -> "Dark Mystery";}
             );
         } else {

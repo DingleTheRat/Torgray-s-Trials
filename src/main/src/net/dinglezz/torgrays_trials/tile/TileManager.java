@@ -84,7 +84,7 @@ public class TileManager {
             tile.get(i).image = UtilityTool.scaleImage(tile.get(i).image, Main.game.tileSize, Main.game.tileSize);
             tile.get(i).collision = collision;
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

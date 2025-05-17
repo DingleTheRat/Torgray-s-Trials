@@ -31,21 +31,13 @@ public class OBJ_Dark_Chest extends Entity {
         image2 = registerEntitySprite("/objects/dark_chest/dark_chest_opened");
         down1 = image;
         collision = true;
-
-        // Solid Area
-        solidArea.x = 4;
-        solidArea.y = 16;
-        solidArea.width = 40;
-        solidArea.height = 32;
-        solidAreaDefaultX = solidArea.x;
-        solidAreaDefaultY = solidArea.y;
     }
 
     @Override
     public void interact() {
         if (!opened) {
             Sound.playSFX("Unlock");
-            game.gameState = States.GameStates.STATE_DIALOGUE;
+            game.gameState = States.GameStates.DIALOGUE;
             game.player.attackCanceled = true;
 
             StringBuilder stringBuilder = new StringBuilder();

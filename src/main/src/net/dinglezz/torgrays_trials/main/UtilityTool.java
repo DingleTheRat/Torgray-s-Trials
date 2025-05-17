@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 
 public class UtilityTool {
 
@@ -37,9 +38,8 @@ public class UtilityTool {
 
                 return new JSONObject(stringBuilder.toString());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
         }
     }
 
@@ -47,18 +47,18 @@ public class UtilityTool {
         try {
             Class<?> clazz = Class.forName(path);
             return (Entity) clazz.getDeclaredConstructor(Game.class).newInstance(Main.game);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+                 ClassNotFoundException exception) {
+            throw new RuntimeException(exception);
         }
     }
     public static Entity generateLootTableEntity(String path, String lootTable) {
         try {
             Class<?> clazz = Class.forName(path);
             return (Entity) clazz.getDeclaredConstructor(Game.class, String.class).newInstance(Main.game, lootTable);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+                 ClassNotFoundException exception) {
+            throw new RuntimeException(exception);
         }
     }
 
@@ -72,9 +72,8 @@ public class UtilityTool {
             try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
                 return bufferedReader.lines().toArray(String[]::new);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new String[0];
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
         }
     }
 }

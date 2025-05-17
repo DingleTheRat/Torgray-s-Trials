@@ -4,13 +4,13 @@ import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.LootTableHandler;
 import net.dinglezz.torgrays_trials.entity.Player;
 import net.dinglezz.torgrays_trials.environment.EnvironmentManager;
-import net.dinglezz.torgrays_trials.events.EventHandler;
 import net.dinglezz.torgrays_trials.pathfinding.Pathfinder;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
 import net.dinglezz.torgrays_trials.tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
 import java.awt.image.BufferedImage;
 import java.util.*;
 
@@ -67,7 +67,9 @@ public class Game extends JPanel implements Runnable {
     public ArrayList<Entity> particleList = new ArrayList<>();
     public ArrayList<Entity> entityList = new ArrayList<>();
 
-    public States.GameStates gameState = States.GameStates.STATE_TITLE;
+    public States.GameStates gameState = States.GameStates.TITLE;
+    public States.ExceptionStates exceptionState = States.ExceptionStates.ONLY_IGNORABLE;
+    public String exceptionStackTrace = "";
     public String currentMap = "Main Island";
     public String gameMode;
 
@@ -80,10 +82,10 @@ public class Game extends JPanel implements Runnable {
     }
 
     public void setupGame() {
+        setupExceptionHandling();
         TileManager.setup();
         MapHandler.loadMaps();
         LootTableHandler.loadLootTables();
-        EventHandler.setup();
         environmentManager.setup();
 
         // Set Assets
@@ -92,7 +94,7 @@ public class Game extends JPanel implements Runnable {
         AssetSetter.setMonsters(true);
 
         Sound.playMusic("Tech Geek");
-        gameState = States.GameStates.STATE_TITLE;
+        gameState = States.GameStates.TITLE;
         player.setDefaultPosition();
 
         // Load Config
@@ -101,6 +103,31 @@ public class Game extends JPanel implements Runnable {
         }
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         graphics2D = (Graphics2D)tempScreen.getGraphics();
+    }
+    private void setupExceptionHandling() {
+        Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
+            if (exceptionState != States.ExceptionStates.NOTHING) {
+                // Console stuff (If anyone actually sees this)
+                System.err.println("Torgray's Trials has encountered an error!");
+                System.err.println("This is likely not your fault, please create an issue on GitHub with the error below.");
+                System.err.println("---------------------------------------------------------------------------------------");
+                exception.printStackTrace();
+                exceptionStackTrace = "Error Message: '" + exception.getMessage() + "' Stack Trace: " + Arrays.toString(exception.getStackTrace());
+
+                if (exceptionState != States.ExceptionStates.INSTANT_QUIT) {
+                    // Display the error message
+                    startGameThread();
+                    gameState = States.GameStates.EXCEPTION;
+                    ui.commandNumber = 0;
+                } else {
+                    // Welp, guess we're quitting
+                    System.exit(1);
+                }
+            } else {
+                // If the state is nothing, just forget the exception ever happened and restarted the game thread
+                startGameThread();
+            }
+        });
     }
     public void respawn() {
         player.restoreHealth();
@@ -120,7 +147,7 @@ public class Game extends JPanel implements Runnable {
         // Darkness reset
         environmentManager.lightUpdated = true;
         environmentManager.lighting.darknessCounter = 0;
-        environmentManager.lighting.darknessState = States.DarknessStates.DARKNESS_STATE_NIGHT;
+        environmentManager.lighting.darknessState = States.DarknessStates.NIGHT;
         environmentManager.lighting.nextGloom = environmentManager.lighting.chooseNextGloom();
     }
     public void setFullScreen() {
@@ -154,7 +181,7 @@ public class Game extends JPanel implements Runnable {
 
             while (delta >= 1) {
                 update();
-                if (BRendering && gameState != States.GameStates.STATE_TITLE) {
+                if (BRendering && gameState != States.GameStates.TITLE) {
                     drawToTempScreen();
                     drawToScreen();
                 } else {
@@ -169,14 +196,14 @@ public class Game extends JPanel implements Runnable {
         }
     }
     public void update() {
-        if (gameState == States.GameStates.STATE_PLAY ||
-                gameState == States.GameStates.STATE_CHARACTER ||
-                gameState == States.GameStates.STATE_DIALOGUE ||
-                gameState == States.GameStates.STATE_TRADE ||
-                gameState == States.GameStates.STATE_MAP) {
+        if (gameState == States.GameStates.PLAY ||
+                gameState == States.GameStates.CHARACTER ||
+                gameState == States.GameStates.DIALOGUE ||
+                gameState == States.GameStates.TRADE ||
+                gameState == States.GameStates.MAP) {
 
             // Player
-            if (gameState != States.GameStates.STATE_TRADE) {
+            if (gameState != States.GameStates.TRADE) {
                 player.update();
             }
 
@@ -218,15 +245,15 @@ public class Game extends JPanel implements Runnable {
         }
 
         // Title Screen
-        if (gameState == States.GameStates.STATE_TITLE) {
+        if (gameState == States.GameStates.TRADE) {
             ui.draw(graphics2D);
         } else {
             // Draw :)
             TileManager.draw(graphics2D);
 
-            // Add entities to list
+            // Add entities to the list
             entityList.clear(); // Clear once at the start
-            if (gameState != States.GameStates.STATE_GAME_OVER) {
+            if (gameState != States.GameStates.GAME_OVER) {
                 entityList.add(player);
             }
             npc.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
@@ -262,13 +289,13 @@ public class Game extends JPanel implements Runnable {
             drawStart = System.nanoTime();
         }
 
-        if (gameState == States.GameStates.STATE_TITLE) {
+        if (gameState == States.GameStates.TITLE) {
             ui.draw(graphics2D);
         } else {
             TileManager.draw(graphics2D);
 
-            // Add entities to list
-            if (gameState != States.GameStates.STATE_GAME_OVER) {
+            // Add entities to the list
+            if (gameState != States.GameStates.GAME_OVER) {
                 entityList.add(player);
             }
             npc.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);

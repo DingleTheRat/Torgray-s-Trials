@@ -24,14 +24,15 @@ public class   InputHandler implements KeyListener {
         int code = e.getKeyCode();
 
         switch (game.gameState) {
-            case STATE_TITLE -> titleState(code);
-            case STATE_PLAY -> playState(code);
-            case STATE_PAUSE -> pauseState(code);
-            case STATE_DIALOGUE -> {dialogueState(code); playState(code);}
-            case STATE_CHARACTER -> characterState(code);
-            case STATE_GAME_OVER -> gameOverState(code);
-            case STATE_TRADE -> tradeState(code);
-            case STATE_MAP -> mapState(code);
+            case TITLE -> titleState(code);
+            case PLAY -> playState(code);
+            case PAUSE -> pauseState(code);
+            case DIALOGUE -> {dialogueState(code); playState(code);}
+            case CHARACTER -> characterState(code);
+            case GAME_OVER -> gameOverState(code);
+            case EXCEPTION -> exceptionState(code);
+            case TRADE -> tradeState(code);
+            case MAP -> mapState(code);
         }
 
         // F3 Stuff
@@ -98,7 +99,7 @@ public class   InputHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                 if (game.ui.commandNumber == 0) {
-                    game.gameState = States.GameStates.STATE_PLAY;
+                    game.gameState = States.GameStates.PLAY;
                     game.gameMode = "Easy";
                     Sound.playMapMusic();
                     System.out.println("Imagine Picking Easy");
@@ -119,7 +120,7 @@ public class   InputHandler implements KeyListener {
                     game.environmentManager.lighting.darkGloomChance = 15;
                 }
                 if (game.ui.commandNumber == 1) {
-                    game.gameState = States.GameStates.STATE_PLAY;
+                    game.gameState = States.GameStates.PLAY;
                     game.gameMode = "Medium";
                     Sound.playMapMusic();
                     System.out.println("Kinda a mid game mode lol");
@@ -127,7 +128,7 @@ public class   InputHandler implements KeyListener {
                     // No modified stats since Medium is the default
                 }
                 if (game.ui.commandNumber == 2) {
-                    game.gameState = States.GameStates.STATE_PLAY;
+                    game.gameState = States.GameStates.PLAY;
                     game.gameMode = "Hard";
                     Sound.playMapMusic();
                     System.out.println("You really think you are \"hardcore\"?");
@@ -160,13 +161,13 @@ public class   InputHandler implements KeyListener {
             case KeyEvent.VK_D -> rightPressed = true;
             case KeyEvent.VK_E -> interactKeyPressed = true;
             case KeyEvent.VK_SPACE -> spacePressed = true;
-            case KeyEvent.VK_ESCAPE -> {game.gameState = States.GameStates.STATE_PAUSE; game.ui.subState = States.UIStates.PAUSE_STATE_MAIN; game.ui.commandNumber = 0;}
+            case KeyEvent.VK_ESCAPE -> {game.gameState = States.GameStates.PAUSE; game.ui.subState = States.UIStates.PAUSE_STATE_MAIN; game.ui.commandNumber = 0;}
         }
     }
     public void pauseState(int code) {
         if (code == KeyEvent.VK_ESCAPE) {
             if (game.ui.subState == States.UIStates.PAUSE_STATE_MAIN) {
-                game.gameState = States.GameStates.STATE_PLAY;
+                game.gameState = States.GameStates.PLAY;
             }
             game.ui.subState = States.UIStates.PAUSE_STATE_MAIN;
             game.ui.commandNumber = 0;
@@ -229,12 +230,12 @@ public class   InputHandler implements KeyListener {
     public void dialogueState(int code) {
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ESCAPE) {
             game.player.attackCanceled = true;
-            game.gameState = States.GameStates.STATE_PLAY;
+            game.gameState = States.GameStates.PLAY;
         }
     }
     public void characterState(int code) {
         if (code == KeyEvent.VK_E || code == KeyEvent.VK_ESCAPE) {
-            game.gameState = States.GameStates.STATE_PLAY;
+            game.gameState = States.GameStates.PLAY;
         }
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
             game.player.selectItem();
@@ -317,19 +318,45 @@ public class   InputHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
             if (game.ui.commandNumber == 0) {
-                game.gameState = States.GameStates.STATE_PLAY;
+                game.gameState = States.GameStates.PLAY;
                 game.restart();
                 Sound.playMapMusic();
             } else if (game.ui.commandNumber == maxCommandNumber) {
-                game.gameState = States.GameStates.STATE_TITLE;
+                game.gameState = States.GameStates.TITLE;
                 game.ui.subState = States.UIStates.TITLE_STATE_MAIN;
                 game.restart();
                 Sound.playMusic("Tech Geek");
             } else if (game.ui.commandNumber == 1) {
-                game.gameState = States.GameStates.STATE_PLAY;
+                game.gameState = States.GameStates.PLAY;
                 game.respawn();
                 Sound.playMapMusic();
             }
+        }
+    }
+    public void exceptionState(int code) {
+        if (game.exceptionState == States.ExceptionStates.IGNORABLE_QUITABLE) {
+            System.err.println("E");
+            maxCommandNumber = 2;
+        } else {
+            maxCommandNumber = 1;
+        }
+
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+            game.ui.commandNumber--;
+            if (game.ui.commandNumber < 0) {
+                game.ui.commandNumber = maxCommandNumber;
+            }
+            Sound.playSFX("Cursor");
+        }
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+            game.ui.commandNumber++;
+            if (game.ui.commandNumber > maxCommandNumber) {
+                game.ui.commandNumber = 0;
+            }
+            Sound.playSFX("Cursor");
+        }
+        if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
+            spacePressed = true;
         }
     }
     public void tradeState(int code) {
@@ -339,7 +366,7 @@ public class   InputHandler implements KeyListener {
 
         if (game.ui.subState == States.UIStates.TRADE_STATE_SELECT) {
             if (code == KeyEvent.VK_ESCAPE) {
-                game.gameState = States.GameStates.STATE_PLAY;
+                game.gameState = States.GameStates.PLAY;
                 game.ui.commandNumber = 0;
             }
 
@@ -373,7 +400,7 @@ public class   InputHandler implements KeyListener {
     }
     public void mapState(int code) {
         if (code == KeyEvent.VK_ESCAPE) {
-            game.gameState = States.GameStates.STATE_CHARACTER;
+            game.gameState = States.GameStates.CHARACTER;
         }
     }
 

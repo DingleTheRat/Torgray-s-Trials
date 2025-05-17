@@ -38,8 +38,8 @@ public class Config {
 
             bufferedWriter.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
         }
     }
     public void loadConfig() {
@@ -78,9 +78,9 @@ public class Config {
             game.pathFinding = s.equals("true");
 
             bufferedReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        } catch (Exception exception) {
             System.err.println("Error: Couldn't read config file, creating a new one.");
             try {
                 String userHome = System.getProperty("user.home");
@@ -92,8 +92,8 @@ public class Config {
                 fileWriter.write("false\n");
                 fileWriter.write("false\n");
                 fileWriter.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
+            } catch (IOException ioException) {
+                throw new RuntimeException(ioException);
             }
         }
     }

@@ -2,14 +2,15 @@ package net.dinglezz.torgrays_trials.main;
 
 public class States {
     public enum GameStates {
-        STATE_TITLE,
-        STATE_PLAY,
-        STATE_DIALOGUE,
-        STATE_PAUSE,
-        STATE_CHARACTER,
-        STATE_GAME_OVER,
-        STATE_TRADE,
-        STATE_MAP
+        TITLE,
+        PLAY,
+        DIALOGUE,
+        PAUSE,
+        CHARACTER,
+        GAME_OVER,
+        EXCEPTION,
+        TRADE,
+        MAP
     }
     public enum UIStates {
         // Title
@@ -29,11 +30,18 @@ public class States {
         TRADE_STATE_SELL
     }
     public enum DarknessStates {
-        DARKNESS_STATE_NIGHT,
-        DARKNESS_STATE_NEW_DUSK,
-        DARKNESS_STATE_GLOOM,
-        DARKNESS_STATE_LIGHT_GLOOM,
-        DARKNESS_STATE_DARK_GLOOM,
-        DARKNESS_STATE_DUSK
+        NIGHT,
+        NEW_DUSK,
+        GLOOM,
+        LIGHT_GLOOM,
+        DARK_GLOOM,
+        DUSK
+    }
+    public enum ExceptionStates {
+        NOTHING,
+        ONLY_IGNORABLE,
+        IGNORABLE_QUITABLE,
+        ONLY_QUITABLE,
+        INSTANT_QUIT,
     }
 }

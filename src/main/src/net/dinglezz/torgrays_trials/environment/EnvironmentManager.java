@@ -21,19 +21,20 @@ public class EnvironmentManager {
         lighting.update();
     }
     public void draw(Graphics2D g2) {
-        if (lighting != null && game.gameState != States.GameStates.STATE_GAME_OVER) {
+        if (game.gameState != States.GameStates.GAME_OVER &&
+                game.gameState != States.GameStates.EXCEPTION) {
             lighting.draw(g2);
         }
     }
 
     public String getDarknessStateString() {
         return switch (lighting.darknessState) {
-            case DARKNESS_STATE_NIGHT -> "Night";
-            case DARKNESS_STATE_NEW_DUSK -> "New Dusk";
-            case DARKNESS_STATE_GLOOM -> "Gloom";
-            case DARKNESS_STATE_LIGHT_GLOOM -> "Light Gloom";
-            case DARKNESS_STATE_DARK_GLOOM -> "Dark Gloom";
-            case DARKNESS_STATE_DUSK -> "Dusk";
+            case NIGHT -> "Night";
+            case NEW_DUSK -> "New Dusk";
+            case GLOOM -> "Gloom";
+            case LIGHT_GLOOM -> "Light Gloom";
+            case DARK_GLOOM -> "Dark Gloom";
+            case DUSK -> "Dusk";
         };
     }
 }

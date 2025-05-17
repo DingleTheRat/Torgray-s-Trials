@@ -6,9 +6,10 @@ import net.dinglezz.torgrays_trials.events.EventHandler;
 import net.dinglezz.torgrays_trials.object.OBJ_Coins;
 import net.dinglezz.torgrays_trials.object.OBJ_Heart;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
-import net.dinglezz.torgrays_trials.tile.TileManager;
 
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,12 +43,12 @@ public class UI {
     public Entity npc;
 
     // Transitions
-    public float transitionCounter = 0f;
-    public float transitionOpenSpeed = 0f;
-    public float transitionCloseSpeed = 0f;
-    public Color transitionColor = Color.BLACK;
+    private float transitionCounter = 0f;
+    private float transitionOpenSpeed = 0f;
+    private float transitionCloseSpeed = 0f;
+    private Color transitionColor = Color.BLACK;
     public boolean transitioning = false;
-    public boolean fadeBack = false;
+    private boolean fadeBack = false;
 
     public UI(Game game) {
         this.game = game;
@@ -55,8 +56,9 @@ public class UI {
         try {
             InputStream is = getClass().getResourceAsStream("/font/Maru_Monica.ttf");
             maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
+        } catch (FontFormatException | IOException exception) {
+            game.exceptionState = States.ExceptionStates.ONLY_IGNORABLE;
+            throw new RuntimeException(exception);
         }
 
         // Make some HUD objects
@@ -83,14 +85,15 @@ public class UI {
         }
 
         switch (game.gameState) {
-            case STATE_TITLE -> drawTitleScreen();
-            case STATE_PLAY -> drawBasics();
-            case STATE_PAUSE -> {drawBasics(); drawPauseScreen();}
-            case STATE_DIALOGUE -> {drawBasics(); drawDialogueScreen();}
-            case STATE_CHARACTER -> {drawCharacterScreen(); drawInventory(game.player, true);}
-            case STATE_GAME_OVER -> drawGameOverScreen();
-            case STATE_TRADE -> {if (subState == States.UIStates.TRADE_STATE_SELECT) {drawBasics();} drawTradeScreen();}
-            case STATE_MAP -> {drawBasics(); drawMapScreen();}
+            case TITLE -> drawTitleScreen();
+            case PLAY -> drawBasics();
+            case PAUSE -> {drawBasics(); drawPauseScreen();}
+            case DIALOGUE -> {drawBasics(); drawDialogueScreen();}
+            case CHARACTER -> {drawCharacterScreen(); drawInventory(game.player, true);}
+            case GAME_OVER -> drawGameOverScreen();
+            case EXCEPTION -> drawExceptionScreen();
+            case TRADE -> {if (subState == States.UIStates.TRADE_STATE_SELECT) {drawBasics();} drawTradeScreen();}
+            case MAP -> {drawBasics(); drawMapScreen();}
         }
     }
 
@@ -136,7 +139,7 @@ public class UI {
         }
     }
 
-    /// Draws all the notification miniNotifications on the side of your screen
+    /// Draws the the messages on the side of your screen
     public void drawMiniNotifications() {
         int messageX = game.tileSize / 2;
         int messageY = game.tileSize * 12 - game.tileSize / 2;
@@ -180,7 +183,7 @@ public class UI {
             graphics2D.drawString("FPS: " + game.FPS, x, y); y += lineHeight;
             graphics2D.drawString("Draw Time: " + passed, x ,y); y += lineHeight;
             graphics2D.drawString("Darkness Counter: " + game.environmentManager.lighting.darknessCounter + "/" + switch (game.environmentManager.lighting.darknessState) {
-                case DARKNESS_STATE_NIGHT -> game.environmentManager.lighting.nightLength;
+                case NIGHT -> game.environmentManager.lighting.nightLength;
                 default -> game.environmentManager.lighting.gloomLength;
             }, x, y); y += lineHeight;
             y += lineHeight;
@@ -373,7 +376,7 @@ public class UI {
                     graphics2D.drawString(">", x - game.tileSize, y);
 
                     if (game.inputHandler.spacePressed) {
-                        game.gameState = States.GameStates.STATE_PLAY;
+                        game.gameState = States.GameStates.PLAY;
                         commandNumber = 0;
                     }
                 }
@@ -569,7 +572,7 @@ public class UI {
         }
 
         // Yes
-        textY = frameY = game.tileSize * 8 - (game.tileSize / 4);
+        textY = game.tileSize * 8 - (game.tileSize / 4);
         textX += game.tileSize / 2;
         graphics2D.drawString("Yes", textX, textY);
         if (commandNumber == 0) {
@@ -737,7 +740,7 @@ public class UI {
         graphics2D.drawString(value, textX, textY);
         textY += lineHeight * 2;
 
-        value = String.valueOf(game.player.health + "/" + game.player.maxHealth);
+        value = game.player.health + "/" + game.player.maxHealth;
         textX = alignXToRight(value, tailX);
         graphics2D.drawString(value, textX, textY);
         textY += lineHeight;
@@ -916,37 +919,129 @@ public class UI {
             graphics2D.drawString(">", x - 40, y);
         }
     }
-public void drawTransitionScreen() {
-    // Update transition counter
-    if (!fadeBack) {
-        transitionCounter = Math.min(transitionCounter + transitionOpenSpeed, 1f);
-    } else {
-        transitionCounter = Math.max(transitionCounter - transitionCloseSpeed, 0f);
-    }
+    public void drawExceptionScreen() {
+        // Background
+        graphics2D.setColor(new Color(0.1f, 0, 0, 0.94f));
+        graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
 
-    // Handle state transitions
-    if (transitionCounter == 1f && !fadeBack) {
-        invokeActionMethod();
-        fadeBack = true;
-        if (game.environmentManager.lighting.darknessState == States.DarknessStates.DARKNESS_STATE_DUSK ||
-                game.environmentManager.lighting.darknessState == States.DarknessStates.DARKNESS_STATE_NEW_DUSK) {
-            Sound.playMapMusic(game.environmentManager.lighting.darknessState);
+        // Sub-Window
+        int frameX = game.tileSize * 6;
+        int frameY = game.tileSize * 3;
+        int frameWidth = game.tileSize * 8;
+        int frameHeight = game.tileSize * 6;
+
+        if (game.exceptionState == States.ExceptionStates.IGNORABLE_QUITABLE) {
+            frameHeight += 40;
         }
-    } else if (transitionCounter == 0f && fadeBack) {
-        transitioning = false;
-        fadeBack = false;
-    }
 
-    // Draw transition effect
-    float alpha = transitionCounter;
-    graphics2D.setColor(new Color(
-        transitionColor.getRed() / 255f,
-        transitionColor.getGreen() / 255f,
-        transitionColor.getBlue() / 255f,
-        alpha
-    ));
-    graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
-}
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        // Title
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 48f));
+        String text = "Exception Thrown!";
+        int textX = getCentreX(text);
+        int textY = frameY + game.tileSize + (game.tileSize / 4);
+        graphics2D.drawString(text, textX, textY);
+
+        // Text
+        textX = frameX + game.tileSize / 2;
+        textY = frameY + game.tileSize * 2 + (game.tileSize / 4);
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN,28f));
+
+        graphics2D.drawString("This is likely not your fault, please", textX, textY);
+        textY += 40;
+        graphics2D.drawString("make an issue about this on GitHub", textX, textY);
+        textY += 40;
+        graphics2D.drawString("with the stack trace. Thank You!", textX, textY);
+
+        // Copy Stack Trace
+        textY = frameY = game.tileSize * 8 - (game.tileSize / 4);
+        textX += game.tileSize / 2;
+        graphics2D.drawString("Copy Stack Trace", textX, textY);
+        if (commandNumber == 0) {
+            graphics2D.drawString(">", textX - 30, textY);
+            if (game.inputHandler.spacePressed) {
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(game.exceptionStackTrace), null);
+            }
+        }
+
+        // Ignore
+        if (game.exceptionState == States.ExceptionStates.IGNORABLE_QUITABLE ||
+                game.exceptionState == States.ExceptionStates.ONLY_IGNORABLE) {
+            textY += 40;
+            graphics2D.drawString("Ignore", textX, textY);
+            if (commandNumber == 1) {
+                graphics2D.drawString(">", textX - 30, textY);
+                if (game.inputHandler.spacePressed) {
+                    game.gameState = States.GameStates.PLAY;
+                    commandNumber = 0;
+                    game.player.attacking = false;
+
+                    // Switch to the following exception state to avoid an infinite loop
+                    game.exceptionState = switch (game.exceptionState) {
+                        case NOTHING -> States.ExceptionStates.ONLY_IGNORABLE;
+                        case ONLY_IGNORABLE -> States.ExceptionStates.IGNORABLE_QUITABLE;
+                        case IGNORABLE_QUITABLE -> States.ExceptionStates.ONLY_QUITABLE;
+                        case ONLY_QUITABLE -> States.ExceptionStates.INSTANT_QUIT;
+                        case INSTANT_QUIT -> States.ExceptionStates.NOTHING;
+                    };
+                }
+            }
+        }
+        // Quit
+        if (game.exceptionState == States.ExceptionStates.IGNORABLE_QUITABLE ||
+                game.exceptionState == States.ExceptionStates.ONLY_QUITABLE) {
+            textY += 40;
+            graphics2D.drawString("Quit", textX, textY);
+            if (commandNumber == 2 || (commandNumber == 1 && game.exceptionState == States.ExceptionStates.ONLY_QUITABLE)) {
+                graphics2D.drawString(">", textX - 30, textY);
+                if (game.inputHandler.spacePressed) {
+                    System.exit(0);
+                }
+            }
+        }
+        
+        game.inputHandler.spacePressed = false;
+    }
+    public void drawTransitionScreen() {
+        // Update transition counter
+        if (!fadeBack) {
+            transitionCounter = Math.min(transitionCounter + transitionOpenSpeed, 1f);
+        } else {
+            transitionCounter = Math.max(transitionCounter - transitionCloseSpeed, 0f);
+        }
+
+        // Handle state transitions
+        if (transitionCounter == 1f && !fadeBack) {
+            invokeActionMethod();
+            fadeBack = true;
+            if (game.environmentManager.lighting.darknessState == States.DarknessStates.DUSK ||
+                    game.environmentManager.lighting.darknessState == States.DarknessStates.NEW_DUSK) {
+                Sound.playMapMusic(game.environmentManager.lighting.darknessState);
+            }
+        } else if (transitionCounter == 0f && fadeBack) {
+            transitioning = false;
+            fadeBack = false;
+        }
+
+        // Draw transition effect
+        float alpha = transitionCounter;
+        graphics2D.setColor(new Color(
+                transitionColor.getRed() / 255f,
+                transitionColor.getGreen() / 255f,
+                transitionColor.getBlue() / 255f,
+                alpha
+        ));
+        graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
+    }
+    public void setTransitionSettings(Color color, float openSpeed, float closeSpeed) {
+        transitionColor = color;
+        transitionOpenSpeed = openSpeed;
+        transitionCloseSpeed = closeSpeed;
+    }
+    public boolean isFadingBack() {
+        return fadeBack;
+    }
     public void drawTradeScreen() {
         switch (subState) {
             case TRADE_STATE_SELECT: drawTradeSelectScreen(); break;
@@ -992,7 +1087,7 @@ public void drawTransitionScreen() {
         if (commandNumber == 2) {
             graphics2D.drawString(">", x - 24, y);
             if (game.inputHandler.spacePressed) {
-                game.gameState = States.GameStates.STATE_PLAY;
+                game.gameState = States.GameStates.PLAY;
                 game.ui.commandNumber = 0;
             }
         }
@@ -1031,13 +1126,13 @@ public void drawTransitionScreen() {
             if (game.inputHandler.spacePressed) {
                 if (npc.inventory.get(itemIndex).price > game.player.coins) {
                     currentDialogue = "Sorry partner, your wallet declined :(";
-                    game.gameState = States.GameStates.STATE_DIALOGUE;
+                    game.gameState = States.GameStates.DIALOGUE;
                     game.ui.commandNumber = 0;
                 } else if (game.player.canObtainItem(npc.inventory.get(itemIndex))) {
                     game.player.coins -= price;
                 } else {
                     currentDialogue = "Sorry partner, I don't think you can \ncarry this :(";
-                    game.gameState = States.GameStates.STATE_DIALOGUE;
+                    game.gameState = States.GameStates.DIALOGUE;
                     game.ui.commandNumber = 0;
                 }
             }
@@ -1048,7 +1143,7 @@ public void drawTransitionScreen() {
         drawInventory(game.player, true);
 
         // Hint Window
-        graphics2D.setFont(graphics2D.getFont().deriveFont(30f));
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 30f));
         int x = game.tileSize / 2;
         int y = (game.tileSize * 9) + (game.tileSize / 2);
         int width = game.tileSize * 6;
@@ -1078,11 +1173,11 @@ public void drawTransitionScreen() {
                         game.player.inventory.get(itemIndex) == game.player.currentShield ||
                         game.player.inventory.get(itemIndex) == game.player.currentLight) {
                     currentDialogue = "Sorry partner, I can't buy equipped \nitems :(";
-                    game.gameState = States.GameStates.STATE_DIALOGUE;
+                    game.gameState = States.GameStates.DIALOGUE;
                     game.ui.commandNumber = 0;
                 } else if (game.player.inventory.get(itemIndex).tags.contains(EntityTags.TAG_NON_SELLABLE)) {
                     currentDialogue = "Sorry partner, I can't buy this item :(";
-                    game.gameState = States.GameStates.STATE_DIALOGUE;
+                    game.gameState = States.GameStates.DIALOGUE;
                     game.ui.commandNumber = 0;
                 } else {
                     game.player.coins += price;
@@ -1108,7 +1203,7 @@ public void drawTransitionScreen() {
     @SuppressWarnings("unused")
     public void yesGameEnd() {
         subState = States.UIStates.TITLE_STATE_MAIN;
-        game.gameState = States.GameStates.STATE_TITLE;
+        game.gameState = States.GameStates.TITLE;
         subState = States.UIStates.TITLE_STATE_MAIN;
         Sound.music.stop();
         Sound.playMusic("Tech Geek");
@@ -1196,7 +1291,7 @@ public void transitionTeleport() {
         } catch (NoSuchMethodException exception) {
             System.err.println("There is no such method as '" + actionMethod + "' in the UI class.");
         } catch (IllegalAccessException | InvocationTargetException exception) {
-            exception.printStackTrace();
+            throw new RuntimeException(exception);
         }
     }
 

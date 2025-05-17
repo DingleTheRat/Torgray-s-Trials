@@ -123,6 +123,7 @@ public class Player extends Entity{
     public void update() {
         if (attacking) {
             attack();
+            throw new RuntimeException("Attacking");
         } else if (inputHandler.upPressed || inputHandler.downPressed || inputHandler.leftPressed || inputHandler.rightPressed || inputHandler.spacePressed || inputHandler.interactKeyPressed) {
             if (inputHandler.upPressed && inputHandler.leftPressed) {direction = "up left";}
             else if (inputHandler.upPressed && inputHandler.rightPressed) {direction = "up right";}
@@ -173,7 +174,7 @@ public class Player extends Entity{
 
             // Inventory
             if (inputHandler.interactKeyPressed && !attackCanceled) {
-                game.gameState = States.GameStates.STATE_CHARACTER;
+                game.gameState = States.GameStates.CHARACTER;
             }
 
             attackCanceled = false;
@@ -210,7 +211,7 @@ public class Player extends Entity{
             health = maxHealth;
         }
         if (health <= 0) {
-            game.gameState = States.GameStates.STATE_GAME_OVER;
+            game.gameState = States.GameStates.GAME_OVER;
             Sound.playSFX("Game Over");
             game.ui.commandNumber = -1;
             Sound.stopMusic();
@@ -281,7 +282,7 @@ public class Player extends Entity{
         if (game.inputHandler.interactKeyPressed) {
             if (i != 999) {
                 attackCanceled = true;
-                game.gameState = States.GameStates.STATE_DIALOGUE;
+                game.gameState = States.GameStates.DIALOGUE;
                 game.npc.get(game.currentMap).get(i).speak(false);
             }
         }

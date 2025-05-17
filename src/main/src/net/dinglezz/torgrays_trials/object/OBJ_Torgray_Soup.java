@@ -27,7 +27,7 @@ public class OBJ_Torgray_Soup extends Entity {
         price = 2;
     }
     public boolean use(Entity entity) {
-        game.gameState = States.GameStates.STATE_DIALOGUE;
+        game.gameState = States.GameStates.DIALOGUE;
         int random = new Random().nextInt(9) + 1;
 
         game.ui.currentDialogue = switch (random) {
