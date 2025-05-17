@@ -156,7 +156,7 @@ public class EventHandler {
     }
     public static void speak(Entity entity) {
         if (Main.game.inputHandler.interactKeyPressed) {
-            Main.game.gameState = States.GameStates.STATE_DIALOGUE;
+            Main.game.gameState = States.GameStates.DIALOGUE;
             Main.game.player.attackCanceled = true;
             entity.speak(false);
         }
