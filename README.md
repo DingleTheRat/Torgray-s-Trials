@@ -69,7 +69,7 @@ Sadly, only Torgray's Soup knows what they do. But I heard the chances change de
 - ### Alpha-2.2 - Plentiful Coins Update
   - Coiner, Coiner's Hut and trading system
   - Knockback
-  - Map item
+  - Map and Stick items
   - Pathfinding framework
   - Agro pathfinding
   - Darkness cycle (gloom, night, dusk)
