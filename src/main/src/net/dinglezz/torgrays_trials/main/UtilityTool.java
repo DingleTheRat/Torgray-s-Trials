@@ -1,6 +1,8 @@
 package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
+import net.dinglezz.torgrays_trials.event.Event;
+import net.dinglezz.torgrays_trials.tile.TilePoint;
 import org.json.JSONObject;
 
 import java.awt.*;
@@ -47,8 +49,8 @@ public class UtilityTool {
         try {
             Class<?> clazz = Class.forName(path);
             return (Entity) clazz.getDeclaredConstructor(Game.class).newInstance(Main.game);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
-                 ClassNotFoundException exception) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException | ClassNotFoundException exception) {
             throw new RuntimeException(exception);
         }
     }
@@ -56,8 +58,19 @@ public class UtilityTool {
         try {
             Class<?> clazz = Class.forName(path);
             return (Entity) clazz.getDeclaredConstructor(Game.class, String.class).newInstance(Main.game, lootTable);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException |
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException
+                 | NoSuchMethodException |
                  ClassNotFoundException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+    public static Event generateEvent(String path, String map, int col, int row, JSONObject parameters) {
+        TilePoint tilePoint = new TilePoint(map, col, row);
+        try {
+            Class<?> clazz = Class.forName(path);
+            return (Event) clazz.getDeclaredConstructor(TilePoint.class, JSONObject.class).newInstance(tilePoint, parameters);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException | ClassNotFoundException exception) {
             throw new RuntimeException(exception);
         }
     }

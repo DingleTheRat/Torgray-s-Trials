@@ -89,9 +89,7 @@ public class Game extends JPanel implements Runnable {
         environmentManager.setup();
 
         // Set Assets
-        AssetSetter.setObjects(true);
-        AssetSetter.setNPCs(true);
-        AssetSetter.setMonsters(true);
+        AssetSetter.setAssets(true);
 
         Sound.playMusic("Tech Geek");
         gameState = States.GameStates.TITLE;
@@ -102,7 +100,7 @@ public class Game extends JPanel implements Runnable {
             setFullScreen();
         }
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
-        graphics2D = (Graphics2D)tempScreen.getGraphics();
+        graphics2D = (Graphics2D) tempScreen.getGraphics();
     }
     private void setupExceptionHandling() {
         Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
@@ -138,9 +136,7 @@ public class Game extends JPanel implements Runnable {
     public void restart() {
         player.setDefaultValues();
         player.setItems();
-        AssetSetter.setObjects(true);
-        AssetSetter.setNPCs(true);
-        AssetSetter.setMonsters(true);
+        AssetSetter.setAssets(true);
         currentMap = "Main Island";
         player.setDefaultPosition();
 

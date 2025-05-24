@@ -49,7 +49,7 @@ public class OBJ_Dark_Chest extends Entity {
                 if (loot.isEmpty()) {
                     stringBuilder.append("This chest is empty :(");
                 } else {
-                    stringBuilder.append("Woah, this chest is shiny!");
+                    stringBuilder.append("Hmmm what's in this dark old chest?");
                 }
 
                 for (Entity reward : loot) {

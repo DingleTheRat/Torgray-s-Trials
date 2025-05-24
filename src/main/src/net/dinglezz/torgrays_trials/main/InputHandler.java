@@ -3,7 +3,7 @@ package net.dinglezz.torgrays_trials.main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class   InputHandler implements KeyListener {
+public class InputHandler implements KeyListener {
     Game game;
     public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, interactKeyPressed, f3Pressed;
     public int maxCommandNumber = 0;

@@ -4,10 +4,8 @@ import net.dinglezz.torgrays_trials.tile.MapHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.*;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -53,8 +51,8 @@ public class Sound {
             } else {
                 System.err.println("Warning: \"" + soundName + "\" is not a valid sfx.");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+            throw new RuntimeException(e);
         }
     }
     public void play() {
@@ -71,18 +69,16 @@ public class Sound {
         }
     }
     public void stop() {
-        if (clip != null) {
-            clip.stop();
-        }
+        if (clip != null) clip.stop();
     }
     public void checkVolume() {
         switch (volumeScale) {
-            case 0: volume = -80f; break;
-            case 1: volume = -20f; break;
-            case 2: volume = -12f; break;
-            case 3: volume = -5f; break;
-            case 4: volume = 1f; break;
-            case 5: volume = 6f; break;
+            case 0 -> volume = -80f;
+            case 1 -> volume = -20f;
+            case 2 -> volume = -12f;
+            case 3 -> volume = -5f;
+            case 4 -> volume = 1f;
+            case 5 -> volume = 6f;
         }
         floatControl.setValue(volume);
     }
@@ -104,12 +100,9 @@ public class Sound {
         if (currentMapFile.getString("music").equals("default")) {
             playMusic(
                 switch (Main.game.environmentManager.lighting.darknessState) {
-                    case NIGHT, NEW_DUSK,
-                         DUSK -> "Umbral Force";
-                    case GLOOM, LIGHT_GLOOM,
-                         DARK_GLOOM -> "Gloom Over Torgray";
-                    default -> "Dark Mystery";}
-            );
+                    case NIGHT, NEW_DUSK, DUSK -> "Umbral Force";
+                    case GLOOM, LIGHT_GLOOM, DARK_GLOOM -> "Gloom Over Torgray";
+                });
         } else {
             try {
                 playMusic(currentMapFile.getString("music"));
@@ -128,8 +121,8 @@ public class Sound {
                 switch (darknessState) {
                     case DUSK -> "Umbral Force";
                     case NEW_DUSK -> "Gloom Over Torgray";
-                    default -> "Dark Mystery";}
-            );
+                    default -> "Dark Mystery";
+                });
         } else {
             try {
                 playMusic(currentMapFile.getString("music"));

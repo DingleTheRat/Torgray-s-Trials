@@ -22,7 +22,7 @@ public class LootTableHandler {
         try {
             String name = file.getString("name");
             lootTables.put(name, file);
-        } catch (JSONException e) {
+        } catch (JSONException exception) {
             System.err.println("Couldn't load loot table");
             System.err.println("Missing loot table data in " + fileName + ".json");
         }
@@ -54,7 +54,7 @@ public class LootTableHandler {
         JSONArray multiSelectLoot;
         try {
             multiSelectLoot = lootTable.getJSONArray("loot");
-        } catch (JSONException | NullPointerException e) {
+        } catch (JSONException | NullPointerException exception) {
             System.err.println("Missing loot table array in the loot table JSON by the name of '" + lootTable.optString("name", "unknown") + "'");
             return finalLoot; // Return early if the loot array is missing
         }
@@ -131,18 +131,18 @@ public class LootTableHandler {
                                     }
                                     break;
                                 }
-                            } catch (JSONException | NullPointerException e) {
+                            } catch (JSONException | NullPointerException exception) {
                                 System.err.println("Couldn't load loot item");
                                 System.err.println("Missing loot item data in " + lootItem + " in loot table by the name of '" + lootTable.getString("name") + "'");
                                 return finalLoot;
-                            } catch (NumberFormatException e) {
+                            } catch (NumberFormatException exception) {
                                 System.err.println("Invalid coin format in loot item. Ensure it is 'COIN_X', where X is a number.");
                                 return finalLoot;
                             }
                         }
 
                     }
-                } catch (JSONException | NullPointerException e) {
+                } catch (JSONException | NullPointerException exception) {
                     System.err.println("Couldn't load loot item");
                     System.err.println("Missing loot item data in " + loot + " in loot table by the name of '" + lootTable.getString("name") + "'");
                     return finalLoot;

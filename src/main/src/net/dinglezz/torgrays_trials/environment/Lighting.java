@@ -165,7 +165,7 @@ public class Lighting {
             nextGloom = chooseNextGloom();
             AssetSetter.setMonsters(true);
         } else if (nextDarknessState == States.DarknessStates.NIGHT) {
-            AssetSetter.setMonsters(true);
+            AssetSetter.setMonsters(false);
         }
 
 

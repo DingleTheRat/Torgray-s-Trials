@@ -2,13 +2,12 @@ package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTags;
-import net.dinglezz.torgrays_trials.events.EventHandler;
+import net.dinglezz.torgrays_trials.event.EVT_Teleport;
 import net.dinglezz.torgrays_trials.object.OBJ_Coins;
 import net.dinglezz.torgrays_trials.object.OBJ_Heart;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
 
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -1234,35 +1233,35 @@ public class UI {
         subState = States.UIStates.PAUSE_STATE_SETTINGS_MAIN;
         commandNumber = 0;
     }
-@SuppressWarnings("unused")
-public void transitionTeleport() {
-    game.currentMap = EventHandler.nextMap;
+    @SuppressWarnings("unused")
+    public void transitionTeleport() {
+        game.currentMap = EVT_Teleport.nextMap;
 
-    // Set player position
-    if (EventHandler.nextCol == Integer.MIN_VALUE || EventHandler.nextRow == Integer.MIN_VALUE) {
-        game.player.setDefaultPosition();
-    } else {
-        game.player.worldX = EventHandler.nextCol;
-        game.player.worldY = EventHandler.nextRow;
-    }
+        // Set player position
+        if (EVT_Teleport.nextCol == Integer.MIN_VALUE || EVT_Teleport.nextRow == Integer.MIN_VALUE) {
+            game.player.setDefaultPosition();
+        } else {
+            game.player.worldX = EVT_Teleport.nextCol;
+            game.player.worldY = EVT_Teleport.nextRow;
+        }
+        game.player.direction = EVT_Teleport.nextDirection;
+        game.environmentManager.lightUpdated = true;
 
-    game.player.direction = EventHandler.nextDirection;
-    game.environmentManager.lightUpdated = true;
+        // Play map music
+        Sound.playMapMusic();
 
-    // Play map music
-    Sound.playMapMusic();
-
-    // Load entities if not already loaded
-    if (game.object.getOrDefault(game.currentMap, null) == null) {
-        AssetSetter.setObjects(false);
+        // Load entities and events if not already loaded
+        if (game.object.getOrDefault(game.currentMap, null) == null) {
+            AssetSetter.setObjects(false);
+        }
+        if (game.npc.getOrDefault(game.currentMap, null) == null) {
+            AssetSetter.setNPCs(false);
+        }
+        if (game.monster.getOrDefault(game.currentMap, null) == null) {
+            AssetSetter.setMonsters(false);
+        }
+        AssetSetter.setEvents();
     }
-    if (game.npc.getOrDefault(game.currentMap, null) == null) {
-        AssetSetter.setNPCs(false);
-    }
-    if (game.monster.getOrDefault(game.currentMap, null) == null) {
-        AssetSetter.setMonsters(false);
-    }
-}
     @SuppressWarnings("unused")
     public void transitionDarkness() {
         game.environmentManager.lightUpdated = true;

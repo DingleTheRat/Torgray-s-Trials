@@ -114,18 +114,16 @@ public abstract class Entity {
     public void setAction() {}
     public void damageReaction() {}
     public void speak(boolean facePlayer) {
-        if (dialogues.get(dialogueIndex) == null) {
-            dialogueIndex = 0;
-        }
+        if (dialogues.get(dialogueIndex) == null) dialogueIndex = 0;
         game.ui.currentDialogue = dialogues.get(dialogueIndex);
         dialogueIndex++;
 
         if (facePlayer) {
             switch (game.player.direction) {
-                case "up": direction = "down"; break;
-                case "down": direction = "up"; break;
-                case "left": direction = "right"; break;
-                case "right": direction = "left"; break;
+                case "up" -> direction = "down";
+                case "down" -> direction = "up";
+                case "left" -> direction = "right";
+                case "right" -> direction = "left";
             }
         }
     }
@@ -201,10 +199,10 @@ public abstract class Entity {
                 speed = defaultSpeed;
             } else {
                 switch (game.player.direction) {
-                    case "up": worldY -= speed; break;
-                    case "down": worldY += speed; break;
-                    case "left": worldX -= speed; break;
-                    case "right": worldX += speed; break;
+                    case "up" -> worldY -= speed;
+                    case "down" -> worldY += speed;
+                    case "left" -> worldX -= speed;
+                    case "right" -> worldX += speed;
                 }
                 knockBackCounter++;
             }
@@ -215,23 +213,19 @@ public abstract class Entity {
             // If collisionOn is false, move the entity
             if (!collisionOn) {
                 switch (direction) {
-                    case "up": worldY -= speed; break;
-                    case "down": worldY += speed; break;
-                    case "left": worldX -= speed; break;
-                    case "right": worldX += speed; break;
+                    case "up" -> worldY -= speed;
+                    case "down" -> worldY += speed;
+                    case "left" -> worldX -= speed;
+                    case "right" -> worldX += speed;
                 }
             }
         }
 
         spriteCounter ++;
         if (spriteCounter > spriteSpeed) {
-            if (spriteNumber == 1) {
-                spriteNumber = 2;
-            } else if (spriteNumber == 2) {
-                spriteNumber = 3;
-            } else if (spriteNumber == 3) {
-                spriteNumber = 1;
-            }
+            if (spriteNumber == 1) spriteNumber = 2;
+            else if (spriteNumber == 2) spriteNumber = 3;
+            else if (spriteNumber == 3) spriteNumber = 1;
             spriteCounter = 0;
         }
 
@@ -293,7 +287,7 @@ public abstract class Entity {
                 healthBarCounter = 0;
                 changeAlpha(graphics2D, 0.4f);
             }
-            if (dying) {dyingAnimation(graphics2D, 5);}
+            if (dying) dyingAnimation(graphics2D, 5);
 
             graphics2D.drawImage(image, screenX, screenY, null);
             changeAlpha(graphics2D, 1f);
@@ -325,28 +319,28 @@ public abstract class Entity {
         try {
             try {
                 image = ImageIO.read(getClass().getResourceAsStream("/drawable" + imagePath + ".png"));
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException exception) {
                 System.err.println("Warning: \"" + imagePath + "\" is not a valid path.");
                 image = ImageIO.read(getClass().getResourceAsStream("/drawable/disabled.png"));
             }
             image = UtilityTool.scaleImage(image, game.tileSize, game.tileSize);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return image;
     }
     public BufferedImage registerEntitySprite(String imagePath, int width, int height) {
-        BufferedImage image = null;
+        BufferedImage image;
         try {
             try {
                 image = ImageIO.read(getClass().getResourceAsStream("/drawable" + imagePath + ".png"));
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException exception) {
                 System.err.println("Warning: \"" + imagePath + "\" is not a valid path.");
                 image = ImageIO.read(getClass().getResourceAsStream("/drawable/disabled.png"));
             }
             image = UtilityTool.scaleImage(image, width, height);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
         }
         return image;
     }
@@ -359,10 +353,10 @@ public abstract class Entity {
         int nextWorldY = user.getTopY();
 
         switch (user.direction) {
-            case "up": nextWorldY = user.getTopY() - 10; break;
-            case "down": nextWorldY = user.getBottomY() + 10; break;
-            case "left": nextWorldX = user.getLeftX() - 10; break;
-            case "right": nextWorldY = user.getRightX() + 10; break;
+            case "up" -> nextWorldY = user.getTopY() - 10;
+            case "down" -> nextWorldY = user.getBottomY() + 10;
+            case "left" -> nextWorldX = user.getLeftX() - 10;
+            case "right" -> nextWorldY = user.getRightX() + 10;
         }
         int col = nextWorldX / game.tileSize;
         int row = nextWorldY / game.tileSize;

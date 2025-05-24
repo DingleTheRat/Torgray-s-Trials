@@ -1,6 +1,6 @@
 package net.dinglezz.torgrays_trials.entity;
 
-import net.dinglezz.torgrays_trials.events.EventHandler;
+import net.dinglezz.torgrays_trials.event.EventHandler;
 import net.dinglezz.torgrays_trials.main.*;
 import net.dinglezz.torgrays_trials.object.OBJ_Coins;
 import net.dinglezz.torgrays_trials.object.OBJ_Lantern;
@@ -45,18 +45,22 @@ public class Player extends Entity{
     }
 
     public void getImage() {
+        // Up
         up1 = registerEntitySprite("/player/walking/torgray_up_1");
         up2 = registerEntitySprite("/player/walking/torgray_up_2");
         up3 = registerEntitySprite("/player/walking/torgray_up_3");
 
+        // Down
         down1 = registerEntitySprite("/player/walking/torgray_down_1");
         down2 = registerEntitySprite("/player/walking/torgray_down_2");
         down3 = registerEntitySprite("/player/walking/torgray_down_3");
 
+        // Left
         left1 = registerEntitySprite("/player/walking/torgray_left_1");
         left2 = registerEntitySprite("/player/walking/torgray_left_2");
         left3 = registerEntitySprite("/player/walking/torgray_left_3");
 
+        // Right
         right1 = registerEntitySprite("/player/walking/torgray_right_1");
         right2 = registerEntitySprite("/player/walking/torgray_right_2");
         right3 = registerEntitySprite("/player/walking/torgray_right_3");
@@ -123,15 +127,14 @@ public class Player extends Entity{
     public void update() {
         if (attacking) {
             attack();
-            throw new RuntimeException("Attacking");
         } else if (inputHandler.upPressed || inputHandler.downPressed || inputHandler.leftPressed || inputHandler.rightPressed || inputHandler.spacePressed || inputHandler.interactKeyPressed) {
-            if (inputHandler.upPressed && inputHandler.leftPressed) {direction = "up left";}
-            else if (inputHandler.upPressed && inputHandler.rightPressed) {direction = "up right";}
-            else if (inputHandler.downPressed && inputHandler.leftPressed) {direction = "down left";}
-            else if (inputHandler.downPressed && inputHandler.rightPressed) {direction = "down right";}
-            else if (inputHandler.upPressed) {direction = "up";} else if (inputHandler.downPressed) {direction = "down";}
-            else if (inputHandler.leftPressed) {direction = "left";}
-            else if (inputHandler.rightPressed) {direction = "right";}
+            if (inputHandler.upPressed && inputHandler.leftPressed) direction = "up left";
+            else if (inputHandler.upPressed && inputHandler.rightPressed) direction = "up right";
+            else if (inputHandler.downPressed && inputHandler.leftPressed) direction = "down left";
+            else if (inputHandler.downPressed && inputHandler.rightPressed) direction = "down right";
+            else if (inputHandler.upPressed) direction = "up"; else if (inputHandler.downPressed) direction = "down";
+            else if (inputHandler.leftPressed) direction = "left";
+            else if (inputHandler.rightPressed) direction = "right";
 
             // Check tile collision
             collisionOn = false;
@@ -154,14 +157,14 @@ public class Player extends Entity{
 
             if (!collisionOn && !inputHandler.spacePressed && !inputHandler.interactKeyPressed) {
                 switch (direction) {
-                    case "up left": worldX -= (speed - 1); worldY -= (speed - 1); break;
-                    case "up right": worldX += (speed - 1); worldY -= (speed - 1); break;
-                    case "down left": worldX -= (speed - 1); worldY += (speed - 1); break;
-                    case "down right": worldX += (speed - 1); worldY += (speed - 1); break;
-                    case "up": worldY -= speed; break;
-                    case "down": worldY += speed; break;
-                    case "left": worldX -= speed; break;
-                    case "right": worldX += speed; break;
+                    case "up left" -> {worldX -= (speed - 1); worldY -= (speed - 1);}
+                    case "up right" -> {worldX += (speed - 1); worldY -= (speed - 1);}
+                    case "down left" -> {worldX -= (speed - 1); worldY += (speed - 1);}
+                    case "down right" -> {worldX += (speed - 1); worldY += (speed - 1);}
+                    case "up" -> worldY -= speed;
+                    case "down" -> worldY += speed;
+                    case "left" -> worldX -= speed;
+                    case "right" -> worldX += speed;
                 }
             }
 
@@ -234,10 +237,10 @@ public class Player extends Entity{
 
             // Ajust player's worldX and worldY for attack area
             switch (direction) {
-                case "up": worldY -= attackArea.height; break;
-                case "down": worldY += attackArea.height; break;
-                case "left", "down left", "up left": worldX -= attackArea.width; break;
-                case "right", "up right", "down right": worldX += attackArea.width; break;
+                case "up" -> worldY -= attackArea.height;
+                case "down" -> worldY += attackArea.height;
+                case "left", "down left", "up left" -> worldX -= attackArea.width;
+                case "right", "up right", "down right" -> worldX += attackArea.width;
             }
             // Attack Area = Solid Area
             solidArea.width = attackArea.width;
@@ -430,23 +433,23 @@ public class Player extends Entity{
 
     public void draw(Graphics2D graphics2D) {
         BufferedImage image = null;
-        int tempScreenX = screenX;
-        int tempScreenY = screenY;
+        int temporaryScreenX = screenX;
+        int temporaryScreenY = screenY;
 
         switch (direction) {
-            case "up":
+            case "up" -> {
                 if (!attacking) {
                     if (spriteNumber == 1) {image = up1;}
                     else if (spriteNumber == 2) {image = up2;}
                     else if (spriteNumber == 3) {image = up3;}
                 } if (attacking) {
-                    tempScreenY = screenY - game.tileSize;
+                    temporaryScreenY = screenY - game.tileSize;
                     if (spriteNumber == 1) {image = attackUp;}
                     if (spriteNumber == 2) {image = attackUp;}
                     if (spriteNumber == 3) {image = attackUp;}
                 }
-            break;
-            case "down":
+            }
+            case "down" -> {
                 if (!attacking) {
                     if (spriteNumber == 1) {image = down1;}
                     else if (spriteNumber == 2) {image = down2;}
@@ -457,21 +460,21 @@ public class Player extends Entity{
                     if (spriteNumber == 2) {image = attackDown;}
                     if (spriteNumber == 3) {image = attackDown;}
                 }
-            break;
-            case "left", "up left", "down left":
+            }
+            case "left", "up left", "down left" -> {
                 if (!attacking) {
                     if (spriteNumber == 1) {image = left1;}
                     else if (spriteNumber == 2) {image = left2;}
                     else if (spriteNumber == 3) {image = left3;}
                 }
                 if (attacking) {
-                    tempScreenX = screenX - game.tileSize;
+                    temporaryScreenX = screenX - game.tileSize;
                     if (spriteNumber == 1) {image = attackLeft;}
                     if (spriteNumber == 2) {image = attackLeft;}
                     if (spriteNumber == 3) {image = attackLeft;}
                 }
-            break;
-            case "right", "up right", "down right":
+            }
+            case "right", "up right", "down right" -> {
                 if (!attacking) {
                     if (spriteNumber == 1) {image = right1;}
                     else if (spriteNumber == 2) {image = right2;}
@@ -482,12 +485,12 @@ public class Player extends Entity{
                     if (spriteNumber == 2) {image = attackRight;}
                     if (spriteNumber == 3) {image = attackRight;}
                 }
-            break;
+            }
         }
         if (invincible) {
             graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
         }
-        graphics2D.drawImage(image, tempScreenX, tempScreenY, null);
+        graphics2D.drawImage(image, temporaryScreenX, temporaryScreenY, null);
         graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
         if (game.debugHitBoxes) {

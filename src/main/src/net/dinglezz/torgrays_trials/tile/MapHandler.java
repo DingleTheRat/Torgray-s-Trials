@@ -74,7 +74,7 @@ public class MapHandler {
             JSONArray layerArray = switch (layer) {
                 case "ground" -> ground;
                 case "foreground" -> foreground;
-                default -> throw new IllegalStateException("Unexpected value: " + layer);
+                default -> throw new IllegalStateException("Unexpected layer: " + layer);
             };
 
             int col = 0;
