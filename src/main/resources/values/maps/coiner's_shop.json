@@ -26,10 +26,6 @@
       }
     ]
   },
-  "events": [
-    {"path": "net.dinglezz.torgrays_trials.event.EVT_Teleport", "col": 10, "row": 39, "parameters": {"map":  "Main Island", "col": 10, "row": 39, "direction": "down"}},
-    {"path": "net.dinglezz.torgrays_trials.event.EVT_Speak", "col": 12, "row": 11 , "parameters": {"type": "npc", "index": 0}}
-  ],
   "name": "Coiner's Shop",
   "light radius": 500,
   "map": {
@@ -137,5 +133,25 @@
       "41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41",
       "41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41"
     ]
-  }
+  },
+  "events": [
+    {
+      "path": "net.dinglezz.torgrays_trials.event.EVT_Teleport",
+      "col": "10",
+      "row": "39",
+      "parameters": {
+        "map": "Coiner's Shop",
+        "direction": "down"
+      }
+    },
+    {
+      "path": "net.dinglezz.torgrays_trials.event.EVT_Speak",
+      "col": "12",
+      "row": "11",
+      "parameters": {
+        "type": "npc",
+        "index": 0
+      }
+    }
+  ]
 }

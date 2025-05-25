@@ -1,10 +1,17 @@
 package net.dinglezz.torgrays_trials.data_generation;
 
 import com.ususstudios.torgrays_datagen.dataclasses.Entity;
+import com.ususstudios.torgrays_datagen.dataclasses.Event;
+import net.dinglezz.torgrays_trials.event.EVT_Healing_Pond;
+import net.dinglezz.torgrays_trials.event.EVT_Pit;
+import net.dinglezz.torgrays_trials.event.EVT_Speak;
+import net.dinglezz.torgrays_trials.event.EVT_Teleport;
 import net.dinglezz.torgrays_trials.monster.MON_Dracore;
 import net.dinglezz.torgrays_trials.npc.NPC_Coiner;
 import net.dinglezz.torgrays_trials.npc.NPC_GateKeeper;
 import net.dinglezz.torgrays_trials.object.*;
+
+import java.util.HashMap;
 
 public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.MapGenerator {
 	@Override
@@ -159,6 +166,20 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 					new Entity(MON_Dracore.class, 36, 32, "Dracores"),
 					new Entity(MON_Dracore.class, 37, 41, "Dracores"),
 					new Entity(MON_Dracore.class, 31, 40, "Dracores")
+				},
+				new Event[]{
+						new Event(EVT_Pit.class, 23, 19),
+						new Event(EVT_Pit.class, 22, 40),
+						new Event(EVT_Pit.class, 14, 26),
+						new Event(EVT_Pit.class, 36, 9),
+						new Event(EVT_Pit.class, 37, 34),
+						new Event(EVT_Pit.class, 35, 38),
+						new Event(EVT_Pit.class, 9, 30),
+						
+						new Event(EVT_Healing_Pond.class, 23, 12),
+						
+						new Event(EVT_Teleport.class, 10, 39, new HashMap<>(){{
+							put("map", "Coiner's Shop");put("direction", "up");}})
 				});
 		register("coiner's_shop",
 				new String[]{
@@ -276,7 +297,15 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 				new Entity[] {
 						new Entity(NPC_Coiner.class, 12, 9, null)
 				},
-				new Entity[] {});
+				new Entity[] {},
+				new Event[]{
+					new Event(EVT_Teleport.class, 10, 39, new HashMap<>(){{
+						put("map", "Coiner's Shop");put("direction", "down");}
+					}),
+					new Event(EVT_Speak.class, 12, 11, new HashMap<>(){{
+						put("type", "npc"); put("index", 0);
+					}}),
+		});
 		register("disabled",
 				new String[]{
 						"10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10",
@@ -388,6 +417,7 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 				true,
 				new Entity[] {},
 				new Entity[] {},
-				new Entity[] {});
+				new Entity[] {},
+				new Event[] {});
 	}
 }
