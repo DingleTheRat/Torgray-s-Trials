@@ -13,7 +13,7 @@ public class OBJ_Table extends Entity {
         this.game = game;
 
         name = "Table";
-        down1 = registerEntitySprite("/objects/table");
+        down1 = registerEntitySprite("/object/table");
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_OBSTACLE);
         collision = true;

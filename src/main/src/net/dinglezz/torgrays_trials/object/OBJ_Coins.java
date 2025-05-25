@@ -19,7 +19,7 @@ public class OBJ_Coins extends Entity {
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_PICKUP_ONLY);
         tags.add(EntityTags.TAG_NON_SELLABLE);
-        down1 = registerEntitySprite("/objects/coin");
+        down1 = registerEntitySprite("/object/coin");
         description = "Precious pieces of gold";
     }
     public OBJ_Coins(Game game) {
@@ -31,7 +31,7 @@ public class OBJ_Coins extends Entity {
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_PICKUP_ONLY);
         tags.add(EntityTags.TAG_NON_SELLABLE);
-        down1 = registerEntitySprite("/objects/coin");
+        down1 = registerEntitySprite("/object/coin");
         description = "Precious pieces of gold";
     }
 

@@ -12,7 +12,7 @@ public class OBJ_Stick extends Entity {
         name = "Stick";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_WEAPON);
-        down1 = registerEntitySprite("/objects/stick");
+        down1 = registerEntitySprite("/object/stick");
         knockBackPower = 5;
         attackArea.width = 36;
         attackArea.height = 36;

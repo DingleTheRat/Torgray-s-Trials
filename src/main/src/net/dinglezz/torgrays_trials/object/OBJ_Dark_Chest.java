@@ -27,8 +27,8 @@ public class OBJ_Dark_Chest extends Entity {
         name = "Dark Chest";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_OBSTACLE);
-        image = registerEntitySprite("/objects/dark_chest/dark_chest_closed");
-        image2 = registerEntitySprite("/objects/dark_chest/dark_chest_opened");
+        image = registerEntitySprite("/object/dark_chest/dark_chest_closed");
+        image2 = registerEntitySprite("/object/dark_chest/dark_chest_opened");
         down1 = image;
         collision = true;
     }

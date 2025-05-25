@@ -1,7 +1,6 @@
 package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
-import net.dinglezz.torgrays_trials.tile.MapHandler;
 import net.dinglezz.torgrays_trials.tile.TileManager;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 
@@ -9,7 +8,7 @@ import java.util.HashMap;
 
 public class CollisionChecker {
     public static void checkTile(Entity entity) {
-        if (TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, 0, 0)) == null) {
+        if (TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, 0, 0)) == null) {
             return;
         }
 
@@ -28,88 +27,88 @@ public class CollisionChecker {
         switch (entity.direction) {
             case "up":
                 entityTopRow = (entityTopWordY - entity.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
-                tileNumber2 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityTopRow));
+                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
+                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityTopRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case  "up left":
                 entityTopRow = (entityTopWordY - entity.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
-                tileNumber2 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityTopRow));
+                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
+                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityTopRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }
                 entityLeftCol = (entityLeftWordX - entity.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
-                tileNumber2 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
+                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
+                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "up right":
                 entityTopRow = (entityTopWordY - entity.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
-                tileNumber2 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityTopRow));
+                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
+                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityTopRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }
                 entityRightCol = (entityRightWordX + entity.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
-                tileNumber2 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
+                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
+                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "down":
                 entityBottomRow = (entityBottomWordY + entity.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityBottomRow));
-                tileNumber2 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
+                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityBottomRow));
+                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "down left":
                 entityBottomRow = (entityBottomWordY + entity.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityBottomRow));
-                tileNumber2 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
+                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityBottomRow));
+                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }
                 entityLeftCol = (entityLeftWordX - entity.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
-                tileNumber2 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
+                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
+                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case  "down right":
                 entityBottomRow = (entityBottomWordY + entity.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityBottomRow));
-                tileNumber2 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
+                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityBottomRow));
+                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }
                 entityRightCol = (entityRightWordX + entity.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityBottomRow));
-                tileNumber2 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
+                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityBottomRow));
+                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "left":
                 entityLeftCol = (entityLeftWordX - entity.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
-                tileNumber2 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
+                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
+                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "right":
                 entityRightCol = (entityRightWordX + entity.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
-                tileNumber2 = TileManager.mapTileNumber.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
+                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
+                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }

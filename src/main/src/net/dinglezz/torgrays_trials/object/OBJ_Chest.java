@@ -27,8 +27,8 @@ public class OBJ_Chest extends Entity {
         name = "Chest";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_OBSTACLE);
-        image = registerEntitySprite("/objects/chest/chest_closed");
-        image2 = registerEntitySprite("/objects/chest/chest_opened");
+        image = registerEntitySprite("/object/chest/chest_closed");
+        image2 = registerEntitySprite("/object/chest/chest_opened");
         down1 = image;
         collision = true;
     }

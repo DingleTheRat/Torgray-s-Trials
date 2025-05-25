@@ -14,7 +14,7 @@ public class OBJ_Map extends Entity {
         this.game = game;
 
         name = "Map";
-        down1 = registerEntitySprite("/objects/map");
+        down1 = registerEntitySprite("/object/map");
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_CONSUMABLE);
         description = "A handy map of the world, \nwithout that annoying \ndarkness.";

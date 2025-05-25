@@ -7,21 +7,20 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class TileManager {
     public static HashMap<Integer, Tile> tile = new HashMap<>();
-    public static final HashMap<String, HashMap<TilePoint, Integer>> mapTileNumber = new HashMap<>();
+    public static final HashMap<String, HashMap<TilePoint, Integer>> mapTileNumbers = new HashMap<>();
 
 
     public static void setup() {
-        // Add layers to the mapTileNumber HashMap
-        mapTileNumber.put("ground", new HashMap<>());
-        //mapTileNumber.put("event", new HashMap<>());
-        mapTileNumber.put("foreground", new HashMap<>());
+        // Add layers to the mapTileNumbers HashMap
+        mapTileNumbers.put("ground", new HashMap<>());
+        //mapTileNumbers.put("event", new HashMap<>());
+        mapTileNumbers.put("foreground", new HashMap<>());
 
         // Register Tiles
-            registerTile(00, "nothing", false);
+            registerTile(0, "nothing", false);
 
             // Grass
             registerTile(10, "grass/grass_1", false);
@@ -76,7 +75,7 @@ public class TileManager {
         try {
             tile.put(i, new Tile());
             try {
-                tile.get(i).image = ImageIO.read(TileManager.class.getResourceAsStream("/drawable/tiles/" + imageName + ".png"));
+                tile.get(i).image = ImageIO.read(TileManager.class.getResourceAsStream("/drawable/tile/" + imageName + ".png"));
             } catch (IllegalArgumentException e) {
                 System.err.println("\"" + imageName + "\" is not a valid path.");
                 tile.get(i).image = ImageIO.read(TileManager.class.getResourceAsStream("/drawable/disabled.png"));
@@ -88,55 +87,55 @@ public class TileManager {
         }
     }
 
-public static void draw(Graphics2D graphics2D) {
-    int playerWorldX = Main.game.player.worldX;
-    int playerWorldY = Main.game.player.worldY;
-    int playerScreenX = Main.game.player.screenX;
-    int playerScreenY = Main.game.player.screenY;
-    int tileSize = Main.game.tileSize;
+    public static void draw(Graphics2D graphics2D) {
+        int playerWorldX = Main.game.player.worldX;
+        int playerWorldY = Main.game.player.worldY;
+        int playerScreenX = Main.game.player.screenX;
+        int playerScreenY = Main.game.player.screenY;
+        int tileSize = Main.game.tileSize;
 
-    for (String layer : TileManager.mapTileNumber.keySet()) {
-        // Skip the layer if it is not present in the map
-        if (TileManager.mapTileNumber.get(layer).get(new TilePoint(Main.game.currentMap, 0, 0)) == null && layer.equals("foreground")) {
-            continue;
-        }
+        for (String layer : TileManager.mapTileNumbers.keySet()) {
+            // Skip the layer if it is not present in the map
+            if (TileManager.mapTileNumbers.get(layer).get(new TilePoint(Main.game.currentMap, 0, 0)) == null && layer.equals("foreground")) {
+                continue;
+            }
 
-        for (int worldRow = 0; worldRow < Main.game.maxWorldRow; worldRow++) {
-            for (int worldCol = 0; worldCol < Main.game.maxWorldCol; worldCol++) {
-                int tileNumber = mapTileNumber.get(layer).get(new TilePoint(Main.game.currentMap, worldCol, worldRow));
-                int worldX = worldCol * tileSize;
-                int worldY = worldRow * tileSize;
-                int screenX = worldX - playerWorldX + playerScreenX;
-                int screenY = worldY - playerWorldY + playerScreenY;
+            for (int worldRow = 0; worldRow < Main.game.maxWorldRow; worldRow++) {
+                for (int worldCol = 0; worldCol < Main.game.maxWorldCol; worldCol++) {
+                    int tileNumber = mapTileNumbers.get(layer).get(new TilePoint(Main.game.currentMap, worldCol, worldRow));
+                    int worldX = worldCol * tileSize;
+                    int worldY = worldRow * tileSize;
+                    int screenX = worldX - playerWorldX + playerScreenX;
+                    int screenY = worldY - playerWorldY + playerScreenY;
 
-                // Check if the tile is within the visible screen
-                if (worldX + tileSize > playerWorldX - playerScreenX &&
-                        worldX - tileSize < playerWorldX + playerScreenX &&
-                        worldY + tileSize > playerWorldY - playerScreenY &&
-                        worldY - tileSize < playerWorldY + playerScreenY) {
+                    // Check if the tile is within the visible screen
+                    if (worldX + tileSize > playerWorldX - playerScreenX &&
+                            worldX - tileSize < playerWorldX + playerScreenX &&
+                            worldY + tileSize > playerWorldY - playerScreenY &&
+                            worldY - tileSize < playerWorldY + playerScreenY) {
 
-                    Tile currentTile = tile.get(tileNumber);
-                    graphics2D.drawImage(currentTile.image, screenX, screenY, null);
+                        Tile currentTile = tile.get(tileNumber);
+                        graphics2D.drawImage(currentTile.image, screenX, screenY, null);
 
-                    if (Main.game.debugHitBoxes && currentTile.collision && layer.equals("foreground")) {
-                        graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
-                        graphics2D.fillRect(screenX, screenY, tileSize, tileSize);
+                        if (Main.game.debugHitBoxes && currentTile.collision && layer.equals("foreground")) {
+                            graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
+                            graphics2D.fillRect(screenX, screenY, tileSize, tileSize);
+                        }
                     }
                 }
             }
         }
-    }
 
-    if (Main.game.debugPathfinding) {
-        graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
-        for (var pathNode : Main.game.pathFinder.pathList) {
-            int worldX = pathNode.col * tileSize;
-            int worldY = pathNode.row * tileSize;
-            int screenX = worldX - playerWorldX + playerScreenX;
-            int screenY = worldY - playerWorldY + playerScreenY;
+        if (Main.game.debugPathfinding) {
+            graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
+            for (var pathNode : Main.game.pathFinder.pathList) {
+                int worldX = pathNode.col * tileSize;
+                int worldY = pathNode.row * tileSize;
+                int screenX = worldX - playerWorldX + playerScreenX;
+                int screenY = worldY - playerWorldY + playerScreenY;
 
-            graphics2D.fillRect(screenX, screenY, tileSize, tileSize);
+                graphics2D.fillRect(screenX, screenY, tileSize, tileSize);
+            }
         }
     }
-}
 }

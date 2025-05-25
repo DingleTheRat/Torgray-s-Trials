@@ -67,7 +67,7 @@ public class MapHandler {
         }
 
         // Read the map file
-        for (String layer : TileManager.mapTileNumber.keySet()) {
+        for (String layer : TileManager.mapTileNumbers.keySet()) {
             if (layer.equals("foreground") && foreground == null) {
                 continue;
             }
@@ -84,7 +84,7 @@ public class MapHandler {
                 while (col < Main.game.maxWorldCol) {
                     String[] numbers = mapLine.split(" ");
                     int number = Integer.parseInt(numbers[col]);
-                    TileManager.mapTileNumber.get(layer).put(new TilePoint(name, col, row), number);
+                    TileManager.mapTileNumbers.get(layer).put(new TilePoint(name, col, row), number);
 
                     // If the tile number is not registered, register it as a disabled tile
                     if (TileManager.tile.get(number) == null) {
@@ -122,7 +122,7 @@ public class MapHandler {
             int col = 0;
             int row = 0;
             while (col < Main.game.maxWorldCol && row < Main.game.maxWorldRow) {
-                int tileNumber = TileManager.mapTileNumber.get("ground").get(new TilePoint(map, col, row));
+                int tileNumber = TileManager.mapTileNumbers.get("ground").get(new TilePoint(map, col, row));
                 int x = col * Main.game.tileSize;
                 int y = row * Main.game.tileSize;
 

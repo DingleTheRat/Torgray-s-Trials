@@ -12,7 +12,7 @@ public class OBJ_Sword_Iron extends Entity {
         name = "Iron Sword";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_WEAPON);
-        down1 = registerEntitySprite("/objects/iron_sword");
+        down1 = registerEntitySprite("/object/iron_sword");
         attackValue = 1;
         knockBackPower = 1;
         attackArea.width = 36;

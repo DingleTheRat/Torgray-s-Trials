@@ -13,7 +13,7 @@ public class OBJ_Gate extends Entity {
         this.game = game;
 
         name = "Gate";
-        down1 = registerEntitySprite("/objects/gate");
+        down1 = registerEntitySprite("/object/gate");
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_OBSTACLE);
         collision = true;

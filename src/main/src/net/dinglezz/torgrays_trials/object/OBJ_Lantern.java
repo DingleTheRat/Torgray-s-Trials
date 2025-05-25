@@ -17,7 +17,7 @@ public class OBJ_Lantern extends Entity {
         tags.add(EntityTags.TAG_LIGHT);
         tags.add(EntityTags.TAG_NON_SELLABLE);
         lightRadius = 150;
-        down1 = registerEntitySprite("/objects/lantern");
+        down1 = registerEntitySprite("/object/lantern");
         description = "SHINE BRIGHTTTTTT \nTONIGHTTTTTT /lyr \nLight Radius: " + lightRadius;
     }
 }

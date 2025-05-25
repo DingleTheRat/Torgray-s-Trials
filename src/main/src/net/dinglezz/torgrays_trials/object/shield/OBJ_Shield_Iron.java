@@ -12,7 +12,7 @@ public class OBJ_Shield_Iron extends Entity {
         name = "Iron Shield";
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_SHIELD);
-        down1 = registerEntitySprite("/objects/iron_shield");
+        down1 = registerEntitySprite("/object/iron_shield");
         defenceValue = 1;
         description = "A shiny iron shield \nDefence: +" + defenceValue;
         price = 4;
