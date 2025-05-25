@@ -34,4 +34,7 @@ public class EVT_Speak extends Event {
             entity.speak(false);
         }
     }
+
+    @Override
+    public void onLeave() {}
 }

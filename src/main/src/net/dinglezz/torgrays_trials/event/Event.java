@@ -10,6 +10,7 @@ import java.util.Map;
 public abstract class Event {
     private final Map<String, Object> parameters;
     public final TilePoint tilePoint;
+    public boolean wasInEvent;
 
     public Event(TilePoint tilePoint, JSONObject parameters) {
         // Change the parameters to a map and add the event to the events to a list
@@ -28,10 +29,9 @@ public abstract class Event {
     }
 
     // Methods that are called when the player hits the event
-    /// Triggers when the player first hits the event
     public abstract void onHit();
-    /// Triggers while the player is in the event
     public abstract void whileHit();
+    public abstract void onLeave();
 
     // Parameter getters
     public Object getParameter(String key) {

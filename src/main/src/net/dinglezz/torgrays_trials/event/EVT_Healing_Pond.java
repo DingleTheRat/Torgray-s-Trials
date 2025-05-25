@@ -24,4 +24,7 @@ public class EVT_Healing_Pond extends Event {
             // Main.game.assetSetter.setMonsters();
         }
     }
+
+    @Override
+    public void onLeave() {}
 }

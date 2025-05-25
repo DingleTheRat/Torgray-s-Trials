@@ -43,4 +43,7 @@ public class EVT_Teleport extends Event {
 
     @Override
     public void whileHit() {}
+
+    @Override
+    public void onLeave() {}
 }

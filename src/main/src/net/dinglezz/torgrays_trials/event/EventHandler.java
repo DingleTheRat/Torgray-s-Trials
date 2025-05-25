@@ -13,7 +13,21 @@ public class EventHandler {
     private static int previousEventX, previousEventY;
     private static boolean canTouchEvent;
 
-    /// Checks if the player is in an event and calls the onHit/wileHit method
+    /**
+     * Checks the player's interaction with events based on their current position
+     * and triggers the appropriate event methods.
+     * <p>
+     * This method calculates the distance between the player's current position
+     * and the last recorded event position to determine if the player can trigger
+     * a new event. If the player is within the proximity of an event, it calls
+     * event-specific methods:
+     * <p>
+     * - {@code onHit()} is called when the player enters the event for the first time.
+     * - {@code whileHit()} is repeatedly called while the player stays in the event.
+     * - {@code onLeave()} is called when the player exits the event.
+     * <p>
+     * The method iteratively checks all events for potential interaction.
+     */
     public static void checkEvent() {
         // Check if player is more then one tile away from the last event
         int xDistance = Math.abs(Main.game.player.worldX - previousEventX);
@@ -29,13 +43,32 @@ public class EventHandler {
                     event.onHit();
                     canTouchEvent = false;
                 }
+
                 // Call the whileHit method while the player is in the event
                 event.whileHit();
+                event.wasInEvent = true;
+            } else {
+                // If the player is not in the event anymore, call the onLeave method
+                if (event.wasInEvent) {
+                    event.onLeave();
+                    event.wasInEvent = false;
+                }
             }
         }
     }
 
-    /// Checks if the player is in a tile with an event rectangle
+    /**
+     * Checks if the player has collided with a specific event rectangle
+     * corresponding to the provided tile point and triggers the event if necessary.
+     *
+     * The method calculates the player's position and the event rectangle's position
+     * and checks if they intersect. If a collision is detected and the event has not
+     * already been triggered, it updates event states accordingly.
+     *
+     * @param tilePoint the tile point representing the location and map of the event
+     *                  to check collision with
+     * @return {@code true} if a collision with the event rectangle occurs, {@code false} otherwise
+     */
     public static boolean hit(TilePoint tilePoint) {
         boolean hit = false;
 

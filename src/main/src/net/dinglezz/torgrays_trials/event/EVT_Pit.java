@@ -23,4 +23,7 @@ public class EVT_Pit extends Event {
 
     @Override
     public void whileHit() {}
+
+    @Override
+    public void onLeave() {}
 }
