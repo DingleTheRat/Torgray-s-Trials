@@ -22,7 +22,6 @@ public class EVT_Speak extends Event {
             Main.game.player.attackCanceled = true;
 
             // Set the entity depending on the provided type
-            System.out.println(Main.game.npc.get(tilePoint.map()).get((int) getParameter("index")));
             Entity entity = switch ((String) getParameter("type")) {
                 case "npc" -> Main.game.npc.get(tilePoint.map()).get((int) getParameter("index"));
                 case "object" -> Main.game.object.get(tilePoint.map()).get((int) getParameter("index"));
