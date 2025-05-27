@@ -34,14 +34,17 @@ public abstract class Event {
     public abstract void onLeave();
 
     // Parameter getters
-    public Object getParameter(String key) {
+    public <T> T getParameter(String key, Class<T> type) {
         // If the event doesn't have the required parameter, throw an exception
         if (!parameters.containsKey(key)) {
-            Main.game.exceptionState = States.ExceptionStates.IGNORABLE_QUITABLE;
-            throw new RuntimeException("Unable to get required parameter for event. Missing parameter: " + key);
+            Main.game.exceptionState = States.ExceptionStates.ONLY_QUITABLE;
+            throw new IllegalArgumentException("Missing required parameter '" + key + "' for event at " + tilePoint);
         }
-
-        return parameters.get(key);
+        Object value = parameters.get(key);
+        if (!type.isInstance(value)) {
+            throw new IllegalStateException("Invalid type for parameter '" + key + "' in event at " + tilePoint + ". Expected " + type.getSimpleName() + " but got " + value.getClass().getSimpleName());
+        }
+        return type.cast(value);
     }
     public boolean hasParameter(String key) {
         return parameters.containsKey(key);

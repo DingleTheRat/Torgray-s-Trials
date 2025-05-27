@@ -23,12 +23,12 @@ public class EVT_Teleport extends Event {
         Sound.playSFX("Teleport");
 
         // Set all the necessary values
-        nextMap = (String) getParameter("map");
-        nextDirection = getParameter("direction").toString();
+        nextMap = getParameter("map", String.class);
+        nextDirection = getParameter("direction", String.class);
         if (hasParameter("col") && hasParameter("row")) {
             // Then set the col and row to the provided values
-            nextCol = (int) getParameter("col");
-            nextRow = (int) getParameter("row");
+            nextCol = getParameter("col", Integer.class);
+            nextRow = getParameter("row", Integer.class);
         } else {
             // Otherwise, set the col and row to the lowest point so it's set to the spawn point
             nextCol = Integer.MIN_VALUE;

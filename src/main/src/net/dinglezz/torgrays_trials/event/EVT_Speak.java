@@ -24,11 +24,11 @@ public class EVT_Speak extends Event {
             Main.game.player.attackCanceled = true;
 
             // Set the entity depending on the provided type
-            Entity entity = switch ((String) getParameter("type")) {
-                case "npc" -> Main.game.npc.get(tilePoint.map()).get((int) getParameter("index"));
-                case "object" -> Main.game.object.get(tilePoint.map()).get((int) getParameter("index"));
-                case "monster" -> Main.game.monster.get(tilePoint.map()).get((int) getParameter("index"));
-                default -> throw new IllegalStateException("Unexpected value: " + getParameter("type"));
+            Entity entity = switch (getParameter("type", String.class)) {
+                case "npc" -> Main.game.npc.get(tilePoint.map()).get(getParameter("index", Integer.class));
+                case "object" -> Main.game.object.get(tilePoint.map()).get(getParameter("index", Integer.class));
+                case "monster" -> Main.game.monster.get(tilePoint.map()).get(getParameter("index", Integer.class));
+                default -> throw new IllegalStateException("Unexpected value: " + getParameter("type", String.class));
             };
 
             // Force the entity to speak against its will >:)
