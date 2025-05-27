@@ -10,7 +10,6 @@ import net.dinglezz.torgrays_trials.tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
 import java.awt.image.BufferedImage;
 import java.util.*;
 
@@ -192,16 +191,9 @@ public class Game extends JPanel implements Runnable {
         }
     }
     public void update() {
-        if (gameState == States.GameStates.PLAY ||
-                gameState == States.GameStates.CHARACTER ||
-                gameState == States.GameStates.DIALOGUE ||
-                gameState == States.GameStates.TRADE ||
-                gameState == States.GameStates.MAP) {
-
+        if (gameState == States.GameStates.PLAY) {
             // Player
-            if (gameState != States.GameStates.TRADE) {
-                player.update();
-            }
+            player.update();
 
             // NPCs
             npc.getOrDefault(currentMap, new HashMap<>()).values().stream()
@@ -233,15 +225,14 @@ public class Game extends JPanel implements Runnable {
         }
     }
 
-    public void drawToTempScreen() {
+    public void draw(Graphics2D graphics2D) {
         // Debug
-        drawStart = 0;
         if (debug) {
             drawStart = System.nanoTime();
         }
 
         // Title Screen
-        if (gameState == States.GameStates.TRADE) {
+        if (gameState == States.GameStates.TITLE) {
             ui.draw(graphics2D);
         } else {
             // Draw :)
@@ -249,7 +240,7 @@ public class Game extends JPanel implements Runnable {
 
             // Add entities to the list
             entityList.clear(); // Clear once at the start
-            if (gameState != States.GameStates.GAME_OVER) {
+            if (gameState != States.GameStates.GAME_END) {
                 entityList.add(player);
             }
             npc.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
@@ -270,6 +261,9 @@ public class Game extends JPanel implements Runnable {
             ui.draw(graphics2D);
         }
     }
+    public void drawToTempScreen() {
+        draw(graphics2D);
+    }
 
     public void drawToScreen() {
         Graphics graphics = getGraphics();
@@ -281,34 +275,7 @@ public class Game extends JPanel implements Runnable {
         super.paintComponent(graphics);
         Graphics2D graphics2D = (Graphics2D) graphics;
 
-        if (debug) {
-            drawStart = System.nanoTime();
-        }
-
-        if (gameState == States.GameStates.TITLE) {
-            ui.draw(graphics2D);
-        } else {
-            TileManager.draw(graphics2D);
-
-            // Add entities to the list
-            if (gameState != States.GameStates.GAME_OVER) {
-                entityList.add(player);
-            }
-            npc.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
-            object.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
-            monster.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
-            entityList.addAll(particleList);
-
-            // Sort and draw entities
-            entityList.stream()
-                    .sorted(Comparator.comparingInt(e -> e.worldY))
-                    .forEach(entity -> entity.draw(graphics2D));
-
-            entityList.clear();
-
-            environmentManager.draw(graphics2D);
-            ui.draw(graphics2D);
-        }
+        draw(graphics2D);
         graphics2D.dispose();
     }
  }

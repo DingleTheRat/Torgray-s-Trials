@@ -127,12 +127,13 @@ public class Player extends Entity{
     public void update() {
         if (attacking) {
             attack();
-        } else if (inputHandler.upPressed || inputHandler.downPressed || inputHandler.leftPressed || inputHandler.rightPressed || inputHandler.spacePressed || inputHandler.interactKeyPressed) {
+        } else if (inputHandler.upPressed || inputHandler.downPressed || inputHandler.leftPressed || inputHandler.rightPressed || inputHandler.interactKeyPressed) {
             if (inputHandler.upPressed && inputHandler.leftPressed) direction = "up left";
             else if (inputHandler.upPressed && inputHandler.rightPressed) direction = "up right";
             else if (inputHandler.downPressed && inputHandler.leftPressed) direction = "down left";
             else if (inputHandler.downPressed && inputHandler.rightPressed) direction = "down right";
-            else if (inputHandler.upPressed) direction = "up"; else if (inputHandler.downPressed) direction = "down";
+            else if (inputHandler.upPressed) direction = "up";
+            else if (inputHandler.downPressed) direction = "down";
             else if (inputHandler.leftPressed) direction = "left";
             else if (inputHandler.rightPressed) direction = "right";
 
@@ -168,20 +169,11 @@ public class Player extends Entity{
                 }
             }
 
-            // Attacking
-            if (inputHandler.spacePressed && !attackCanceled) {
-                Sound.playSFX("Swing");
-                attacking = true;
-                spriteCounter = 0;
-            }
-
             // Inventory
             if (inputHandler.interactKeyPressed && !attackCanceled) {
-                game.gameState = States.GameStates.CHARACTER;
+                game.ui.uiState = States.UIStates.CHARACTER;
             }
 
-            attackCanceled = false;
-            game.inputHandler.spacePressed = false;
             game.inputHandler.interactKeyPressed = false;
 
             spriteCounter ++;
@@ -214,7 +206,7 @@ public class Player extends Entity{
             health = maxHealth;
         }
         if (health <= 0) {
-            game.gameState = States.GameStates.GAME_OVER;
+            game.gameState = States.GameStates.GAME_END;
             Sound.playSFX("Game Over");
             game.ui.commandNumber = -1;
             Sound.stopMusic();
@@ -285,7 +277,7 @@ public class Player extends Entity{
         if (game.inputHandler.interactKeyPressed) {
             if (i != 999) {
                 attackCanceled = true;
-                game.gameState = States.GameStates.DIALOGUE;
+                game.ui.uiState = States.UIStates.DIALOGUE;
                 game.npc.get(game.currentMap).get(i).speak(false);
             }
         }

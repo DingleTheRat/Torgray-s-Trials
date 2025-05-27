@@ -115,7 +115,7 @@ public abstract class Entity {
     public void damageReaction() {}
     public void speak(boolean facePlayer) {
         if (dialogues.get(dialogueIndex) == null) dialogueIndex = 0;
-        game.ui.currentDialogue = dialogues.get(dialogueIndex);
+        game.ui.setCurrentDialogue(dialogues.get(dialogueIndex));
         dialogueIndex++;
 
         if (facePlayer) {

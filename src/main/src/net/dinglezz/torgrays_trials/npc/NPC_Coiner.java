@@ -42,8 +42,8 @@ public class NPC_Coiner extends Entity {
     @Override
     public void speak(boolean facePlayer) {
         super.speak(false);
-        game.gameState = States.GameStates.TRADE;
-        game.ui.subState = States.UIStates.TRADE_STATE_SELECT;
+        game.ui.uiState = States.UIStates.TRADE;
+        game.ui.subUIState = "Select";
         game.ui.commandNumber = 0;
         game.ui.npc = this;
     }

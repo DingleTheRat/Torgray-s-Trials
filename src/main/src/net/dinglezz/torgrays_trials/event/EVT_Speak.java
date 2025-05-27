@@ -16,9 +16,11 @@ public class EVT_Speak extends Event {
 
     @Override
     public void whileHit() {
+        Main.game.ui.uiState = States.UIStates.INTERACT;
+
         if (Main.game.inputHandler.interactKeyPressed) {
             // Prepare for dialogue
-            Main.game.gameState = States.GameStates.DIALOGUE;
+            Main.game.ui.uiState = States.UIStates.DIALOGUE;
             Main.game.player.attackCanceled = true;
 
             // Set the entity depending on the provided type
@@ -35,5 +37,7 @@ public class EVT_Speak extends Event {
     }
 
     @Override
-    public void onLeave() {}
+    public void onLeave() {
+        Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
+    }
 }

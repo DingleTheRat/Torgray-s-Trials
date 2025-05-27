@@ -16,8 +16,16 @@ public class AssetSetter {
         AssetSetter.setMonsters(removePrevious);
         AssetSetter.setEvents();
     }
-    /// Reads the map file of the current map, and sets the objects with their settings listed in the file
-    /// @param removePrevious If true, the previous objects in the current map will be all cleared
+    /**
+     * Initializes and sets up game objects for the current map based on its JSON configuration.
+     * This method reads the map's JSON file and processes its "entities" section to locate
+     * and position objects on the current map. The objects can have optional attributes such as
+     * a loot table, and their settings are managed through utility methods.
+     * The method also handles clearing previously existing objects if specified.
+     *
+     * @param removePrevious If true, all previously existing objects in the current map
+     *                       are cleared before setting up the new objects.
+     */
     public static void setObjects(boolean removePrevious) {
         JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
         if (file != null) {
@@ -37,7 +45,7 @@ public class AssetSetter {
 
                     if (object.has("loot table")) {
                         String lootTable = object.getString("loot table");
-                        Main.game.object.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateLootTableEntity(path, lootTable));
+                        Main.game.object.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path, lootTable));
                     } else {
                         Main.game.object.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path));
                     }
@@ -50,8 +58,14 @@ public class AssetSetter {
             }
         }
     }
-    /// Reads the map file of the current map, and sets the NPCs with their settings listed in the file
-    /// @param removePrevious If true, the previous NPCs in the current map will be all cleared
+    /**
+     * Reads the map file of the current map and initializes the NPCs listed in the file.
+     * This method sets up NPCs based on their configuration in the map's JSON data,
+     * associating them with their specified locations, attributes, and optional loot tables.
+     *
+     * @param removePrevious If true, all previously existing NPCs in the current map are cleared
+     *                       before setting up the new NPCs.
+     */
     public static void setNPCs(boolean removePrevious) {
         JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
         if (file != null) {
@@ -71,7 +85,7 @@ public class AssetSetter {
 
                     if (npc.has("loot table")) {
                         String lootTable = npc.getString("loot table");
-                        Main.game.npc.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateLootTableEntity(path, lootTable));
+                        Main.game.npc.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path, lootTable));
                     } else {
                         Main.game.npc.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path));
                     }
@@ -85,8 +99,14 @@ public class AssetSetter {
             }
         }
     }
-    /// Reads the map file of the current map,e and sets the monsters with their settings listed in the file
-    /// @param removePrevious If true, the previous monsters in the current map will be all cleared
+    /**
+     * Reads the map file of the current map and initializes the monsters listed in the file.
+     * This method sets up monsters based on their configuration in the map's JSON data,
+     * associating them with their specified locations, attributes, and optional loot tables.
+     *
+     * @param removePrevious If true, all previously existing monsters in the current map are cleared
+     *                        before setting up the new monsters.
+     */
     public static void setMonsters(boolean removePrevious) {
         JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
         if (file != null) {
@@ -106,7 +126,7 @@ public class AssetSetter {
 
                     if (monster.has("loot table")) {
                         String lootTable = monster.getString("loot table");
-                        Main.game.monster.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateLootTableEntity(path, lootTable));
+                        Main.game.monster.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path, lootTable));
                     } else {
                         Main.game.monster.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path));
                     }
@@ -120,7 +140,16 @@ public class AssetSetter {
         }
     }
 
-    /// Reads the map file of the current map, and sets the events with their settings listed in the file
+    /**
+     * Configures and initializes events for the current map based on its JSON configuration.
+     * This method retrieves the "events" section from the JSON file associated with the current map
+     * and processes each event to generate it within the game. For each event, the method identifies
+     * its configuration details such as file path, grid position (column and row), and optional parameters.
+     * Events are generated through a utility method that handles their creation and placement on the map.
+     *
+     * If the map file does not contain event data or there is an error in processing the JSON data, the
+     * method logs an error message to the console.
+     */
     public static void setEvents() {
         JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
         if (file != null) {

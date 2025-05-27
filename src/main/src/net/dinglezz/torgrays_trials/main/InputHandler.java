@@ -2,6 +2,7 @@ package net.dinglezz.torgrays_trials.main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Objects;
 
 public class InputHandler implements KeyListener {
     Game game;
@@ -23,15 +24,20 @@ public class InputHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
 
-        switch (game.gameState) {
-            case TITLE -> titleState(code);
-            case PLAY -> playState(code);
+        if (game.ui.uiState.defaultKeyboardInput) {
+            switch (game.gameState) {
+                case TITLE -> titleState(code);
+                case PLAY -> playState(code);
+                case GAME_END -> gameOverState(code);
+                case EXCEPTION -> exceptionState(code);
+            }
+        }
+
+        switch (game.ui.uiState) {
+            case DIALOGUE -> dialogueState(code);
             case PAUSE -> pauseState(code);
-            case DIALOGUE -> {dialogueState(code); playState(code);}
-            case CHARACTER -> characterState(code);
-            case GAME_OVER -> gameOverState(code);
-            case EXCEPTION -> exceptionState(code);
             case TRADE -> tradeState(code);
+            case CHARACTER -> characterState(code);
             case MAP -> mapState(code);
         }
 
@@ -55,7 +61,7 @@ public class InputHandler implements KeyListener {
         }
     }
     public void titleState(int code) {
-        if (game.ui.subState == States.UIStates.TITLE_STATE_MAIN) {
+        if (Objects.equals(game.ui.subUIState, "Main Title")) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 game.ui.commandNumber--;
                 Sound.playSFX("Cursor");
@@ -72,7 +78,7 @@ public class InputHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                 if (game.ui.commandNumber == 0) {
-                    game.ui.subState = States.UIStates.TITLE_STATE_MODES;
+                    game.ui.subUIState = "Modes";
                     game.ui.commandNumber = 1;
                 }
                 if (game.ui.commandNumber == 1) {
@@ -82,7 +88,7 @@ public class InputHandler implements KeyListener {
                     System.exit(0);
                 }
             }
-        } else if (game.ui.subState == States.UIStates.TITLE_STATE_MODES) {
+        } else if (Objects.equals(game.ui.subUIState, "Modes")) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 game.ui.commandNumber--;
                 Sound.playSFX("Cursor");
@@ -147,7 +153,7 @@ public class InputHandler implements KeyListener {
                     game.environmentManager.lighting.darkGloomChance = 55;
                 }
                 if (game.ui.commandNumber == 3) {
-                    game.ui.subState = States.UIStates.TITLE_STATE_MAIN;
+                    game.ui.subUIState = "Main Title";
                     game.ui.commandNumber = 0;
                 }
             }
@@ -160,23 +166,39 @@ public class InputHandler implements KeyListener {
             case KeyEvent.VK_S -> downPressed = true;
             case KeyEvent.VK_D -> rightPressed = true;
             case KeyEvent.VK_E -> interactKeyPressed = true;
-            case KeyEvent.VK_SPACE -> spacePressed = true;
-            case KeyEvent.VK_ESCAPE -> {game.gameState = States.GameStates.PAUSE; game.ui.subState = States.UIStates.PAUSE_STATE_MAIN; game.ui.commandNumber = 0;}
+            case KeyEvent.VK_SPACE -> {
+                if (!game.player.attackCanceled && !game.player.attacking) {
+                    Sound.playSFX("Swing");
+                    game.player.attacking = true;
+                    game.player.spriteCounter = 0;
+                }
+                game.player.attackCanceled = false;
+            }
+            case KeyEvent.VK_ESCAPE -> {
+                if (game.ui.uiState == States.UIStates.JUST_DEFAULT || game.ui.uiState == States.UIStates.INTERACT) {
+                    game.gameState = States.GameStates.PAUSE;
+                    game.ui.uiState = States.UIStates.PAUSE;
+                    game.ui.subUIState = "";
+                    game.ui.commandNumber = 0;
+                }
+            }
         }
     }
     public void pauseState(int code) {
         if (code == KeyEvent.VK_ESCAPE) {
-            if (game.ui.subState == States.UIStates.PAUSE_STATE_MAIN) {
+            if (Objects.equals(game.ui.subUIState, "Main Pause")) {
                 game.gameState = States.GameStates.PLAY;
+                game.ui.uiState = States.UIStates.JUST_DEFAULT;
+            } else {
+                game.ui.subUIState = "Main Pause";
+                game.ui.commandNumber = 0;
             }
-            game.ui.subState = States.UIStates.PAUSE_STATE_MAIN;
-            game.ui.commandNumber = 0;
         }
 
-        maxCommandNumber = switch (game.ui.subState) {
-            case PAUSE_STATE_MAIN -> 3;
-            case PAUSE_STATE_SETTINGS_MAIN -> 5;
-            case PAUSE_STATE_CONFIRM -> 1;
+        maxCommandNumber = switch (game.ui.subUIState) {
+            case "Main Pause" -> 3;
+            case "Settings Main" -> 5;
+            case "Confirm" -> 1;
             default -> 0;
         };
 
@@ -184,24 +206,18 @@ public class InputHandler implements KeyListener {
             game.ui.commandNumber--;
             Sound.playSFX("Cursor");
 
-            if (game.ui.commandNumber < 0) {
-                game.ui.commandNumber = maxCommandNumber;
-            }
+            if (game.ui.commandNumber < 0) game.ui.commandNumber = maxCommandNumber;
         }
         if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
             game.ui.commandNumber++;
             Sound.playSFX("Cursor");
 
-            if (game.ui.commandNumber > maxCommandNumber) {
-                game.ui.commandNumber = 0;
-            }
+            if (game.ui.commandNumber > maxCommandNumber) game.ui.commandNumber = 0;
         }
-        if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
-            spacePressed = true;
-        }
+        if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) spacePressed = true;
 
         if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
-            if (game.ui.subState == States.UIStates.PAUSE_STATE_SETTINGS_MAIN) {
+            if (game.ui.subUIState.equals("Settings Main")) {
                 if (game.ui.commandNumber == 0 && Sound.music.volumeScale > 0) {
                     Sound.music.volumeScale--;
                     Sound.music.checkVolume();
@@ -214,7 +230,7 @@ public class InputHandler implements KeyListener {
             }
         }
         if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) {
-            if (game.ui.subState == States.UIStates.PAUSE_STATE_SETTINGS_MAIN) {
+            if (game.ui.subUIState.equals("Settings Main")) {
                 if (game.ui.commandNumber == 0 && Sound.music.volumeScale < 5) {
                     Sound.music.volumeScale++;
                     Sound.music.checkVolume();
@@ -230,12 +246,12 @@ public class InputHandler implements KeyListener {
     public void dialogueState(int code) {
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ESCAPE) {
             game.player.attackCanceled = true;
-            game.gameState = States.GameStates.PLAY;
+            game.ui.uiState = States.UIStates.JUST_DEFAULT;
         }
     }
     public void characterState(int code) {
         if (code == KeyEvent.VK_E || code == KeyEvent.VK_ESCAPE) {
-            game.gameState = States.GameStates.PLAY;
+            game.ui.uiState = States.UIStates.JUST_DEFAULT;
         }
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
             game.player.selectItem();
@@ -323,7 +339,7 @@ public class InputHandler implements KeyListener {
                 Sound.playMapMusic();
             } else if (game.ui.commandNumber == maxCommandNumber) {
                 game.gameState = States.GameStates.TITLE;
-                game.ui.subState = States.UIStates.TITLE_STATE_MAIN;
+                game.ui.subUIState = "Main Pause";
                 game.restart();
                 Sound.playMusic("Tech Geek");
             } else if (game.ui.commandNumber == 1) {
@@ -335,7 +351,6 @@ public class InputHandler implements KeyListener {
     }
     public void exceptionState(int code) {
         if (game.exceptionState == States.ExceptionStates.IGNORABLE_QUITABLE) {
-            System.err.println("E");
             maxCommandNumber = 2;
         } else {
             maxCommandNumber = 1;
@@ -360,13 +375,11 @@ public class InputHandler implements KeyListener {
         }
     }
     public void tradeState(int code) {
-        if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
-            spacePressed = true;
-        }
+        if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) spacePressed = true;
 
-        if (game.ui.subState == States.UIStates.TRADE_STATE_SELECT) {
+        if (Objects.equals(game.ui.subUIState, "Select")) {
             if (code == KeyEvent.VK_ESCAPE) {
-                game.gameState = States.GameStates.PLAY;
+                game.ui.uiState = States.UIStates.JUST_DEFAULT;
                 game.ui.commandNumber = 0;
             }
 
@@ -384,23 +397,23 @@ public class InputHandler implements KeyListener {
                 }
                 Sound.playSFX("Cursor");
             }
-        } else if (game.ui.subState == States.UIStates.TRADE_STATE_BUY) {
+        } else if (Objects.equals(game.ui.subUIState, "Buy")) {
             entityInventory(code);
 
             if (code == KeyEvent.VK_ESCAPE) {
-                game.ui.subState = States.UIStates.TRADE_STATE_SELECT;
+                game.ui.subUIState = "Select";
             }
-        } else if (game.ui.subState == States.UIStates.TRADE_STATE_SELL) {
+        } else if (Objects.equals(game.ui.subUIState, "Sell")) {
             playerInventory(code);
 
             if (code == KeyEvent.VK_ESCAPE) {
-                game.ui.subState = States.UIStates.TRADE_STATE_SELECT;
+                game.ui.subUIState = "Select";
             }
         }
     }
     public void mapState(int code) {
         if (code == KeyEvent.VK_ESCAPE) {
-            game.gameState = States.GameStates.CHARACTER;
+            game.ui.uiState = States.UIStates.CHARACTER;
         }
     }
 

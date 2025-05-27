@@ -23,7 +23,7 @@ public class UI {
     Graphics2D graphics2D;
     Font maruMonica;
     BufferedImage heart, half_heart, lost_heart, coin;
-    public String currentDialogue = "";
+    private String currentDialogue = "";
     public int commandNumber = 0;
     public String actionMethod;
 
@@ -32,7 +32,8 @@ public class UI {
     ArrayList<Integer> miniNotificationCounter = new ArrayList<>();
 
     // States
-    public States.UIStates subState = States.UIStates.TITLE_STATE_MAIN;
+    public States.UIStates uiState = States.UIStates.JUST_DEFAULT;
+    public String subUIState = "Main Title";
 
     // Inventory
     public int playerSlotCol = 0;
@@ -53,8 +54,8 @@ public class UI {
         this.game = game;
 
         try {
-            InputStream is = getClass().getResourceAsStream("/font/Maru_Monica.ttf");
-            maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
+            InputStream inputStream = getClass().getResourceAsStream("/font/Maru_Monica.ttf");
+            maruMonica = Font.createFont(Font.TRUETYPE_FONT, inputStream);
         } catch (FontFormatException | IOException exception) {
             game.exceptionState = States.ExceptionStates.ONLY_IGNORABLE;
             throw new RuntimeException(exception);
@@ -83,24 +84,36 @@ public class UI {
             drawTransitionScreen();
         }
 
-        switch (game.gameState) {
-            case TITLE -> drawTitleScreen();
-            case PLAY -> drawBasics();
-            case PAUSE -> {drawBasics(); drawPauseScreen();}
-            case DIALOGUE -> {drawBasics(); drawDialogueScreen();}
-            case CHARACTER -> {drawCharacterScreen(); drawInventory(game.player, true);}
-            case GAME_OVER -> drawGameOverScreen();
-            case EXCEPTION -> drawExceptionScreen();
-            case TRADE -> {if (subState == States.UIStates.TRADE_STATE_SELECT) {drawBasics();} drawTradeScreen();}
-            case MAP -> {drawBasics(); drawMapScreen();}
+        if (uiState.defaultUI) {
+            switch (game.gameState) {
+                case TITLE -> drawTitleScreen();
+                case PLAY, PAUSE -> drawBasics();
+                case GAME_END -> drawGameOverScreen();
+                case EXCEPTION -> drawExceptionScreen();
+            }
+        }
+
+        switch (uiState) {
+            case DIALOGUE -> drawDialogueScreen();
+            case INTERACT -> drawInteractScreen();
+            case PAUSE -> drawPauseScreen();
+            case TRADE -> drawTradeScreen();
+            case CHARACTER -> drawCharacterScreen();
+            case MAP -> drawMapScreen();
         }
     }
 
-    /// Draws all the basic HUDs in the play state:
-    /// - Player's Health
-    /// - Darkness State
-    /// - Mini Notifications
-    /// - Debug Menu
+    /**
+     * Draws the basic UI elements such as player's health, darkness state,
+     * mini notifications, and debug menu if applicable. This method ensures
+     * that fundamental UI components are consistently rendered during gameplay.
+     * <p>
+     * Functionality includes:
+     * <li>Drawing the player's current and maximum health.</li>
+     * <li>Displaying the current darkness state of the environment.</li>
+     * <li>Showing mini notifications for brief messages.</li>
+     * <li>Rendering the debug menu for game metrics when debug mode is enabled.</li>
+     */
     public void drawBasics() {
         drawPlayerHealth();
         drawDarknessState();
@@ -108,7 +121,6 @@ public class UI {
         drawDebugMenu();
     }
 
-    /// Draws the player's health
     public void drawPlayerHealth() {
         int x = game.tileSize / 2;
         int y = game.tileSize / 2;
@@ -188,7 +200,8 @@ public class UI {
             y += lineHeight;
             graphics2D.drawString("Game State: " + game.gameState, x ,y); y += lineHeight;
             graphics2D.drawString("Time State: " + game.environmentManager.lighting.darknessState, x ,y); y += lineHeight;
-            graphics2D.drawString("Sub State: " + subState, x ,y); y += lineHeight;
+            graphics2D.drawString("UI State: " + uiState, x ,y); y += lineHeight;
+            graphics2D.drawString("Sub-UI State: " + subUIState, x ,y); y += lineHeight;
             y += lineHeight;
             graphics2D.drawString("Map: " + game.currentMap, x, y); y += lineHeight;
             graphics2D.drawString("World X: " + game.player.worldX, x, y); y += lineHeight;
@@ -199,7 +212,7 @@ public class UI {
     }
 
     public void drawTitleScreen() {
-        if (subState == States.UIStates.TITLE_STATE_MAIN) {
+        if (Objects.equals(subUIState, "Main Title")) {
             // Title Text
             graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 90f));
             String text = "Torgray's Trials";
@@ -249,7 +262,7 @@ public class UI {
             if (commandNumber == 2) {
                 graphics2D.drawString(">", x - game.tileSize,  y);
             }
-        } else if (subState == States.UIStates.TITLE_STATE_MODES) {
+        } else if (Objects.equals(subUIState, "Modes")) {
             // GameMode Selection
             graphics2D.setColor(Color.white);
             graphics2D.setFont(graphics2D.getFont().deriveFont(42f));
@@ -305,18 +318,18 @@ public class UI {
         int frameWidth = game.tileSize * 8;
         int frameHeight = game.tileSize * 2;
 
-        if (subState == States.UIStates.PAUSE_STATE_SETTINGS_MAIN || subState == States.UIStates.PAUSE_STATE_CONTROLS) {
+        if (Objects.equals(subUIState, "Settings Main") || Objects.equals(subUIState, "Controls")) {
             frameY = game.tileSize;
             frameHeight = game.tileSize * 10;
         }
-        else if (subState == States.UIStates.PAUSE_STATE_NOTIFICATION || subState == States.UIStates.PAUSE_STATE_CONFIRM) {
+        else if (Objects.equals(subUIState, "Confirm") || Objects.equals(subUIState, "Notification")) {
             frameY = game.tileSize * 3;
             frameHeight = game.tileSize * 6;
         }
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
-        switch (subState) {
-            case PAUSE_STATE_MAIN:
+        switch (subUIState) {
+            case "Main Pause":
                 // Title
                 String text = "Game Paused";
                 int x = getCentreX(text);
@@ -337,7 +350,7 @@ public class UI {
                     graphics2D.drawString(">", x - game.tileSize, y);
 
                     if (game.inputHandler.spacePressed) {
-                        subState = States.UIStates.PAUSE_STATE_SETTINGS_MAIN;
+                        subUIState = "Settings Main";
                         commandNumber = 0;
                     }
                 }
@@ -349,7 +362,7 @@ public class UI {
                     graphics2D.drawString(">", x - game.tileSize, y);
 
                     if (game.inputHandler.spacePressed) {
-                        subState = States.UIStates.PAUSE_STATE_CONTROLS;
+                        subUIState = "Controls";
                         commandNumber = 0;
                     }
                 }
@@ -362,8 +375,8 @@ public class UI {
 
                     if (game.inputHandler.spacePressed) {
                         commandNumber = 1;
-                        subState = States.UIStates.PAUSE_STATE_CONFIRM;
-                        currentDialogue = "Are you sure you wanna \nend this game? Your data \nwon't be saved.";
+                        subUIState = "Confirm";
+                        setCurrentDialogue("Are you sure you wanna \nend this game? Your data \nwon't be saved.");
                         actionMethod = "yesGameEnd";
                     }
                 }
@@ -376,14 +389,15 @@ public class UI {
 
                     if (game.inputHandler.spacePressed) {
                         game.gameState = States.GameStates.PLAY;
+                        game.ui.uiState = States.UIStates.JUST_DEFAULT;
                         commandNumber = 0;
                     }
                 }
                 break;
-            case PAUSE_STATE_SETTINGS_MAIN: settingsMain(frameX, frameY); break;
-            case PAUSE_STATE_NOTIFICATION: settingsNotification(frameX, frameY); break;
-            case PAUSE_STATE_CONFIRM: settingsConfirm(frameX, frameY); break;
-            case PAUSE_STATE_CONTROLS: controlsPanel(frameX, frameY); break;
+            case "Settings Main": settingsMain(frameX, frameY); break;
+            case "Notification": settingsNotification(frameX, frameY); break;
+            case "Confirm": settingsConfirm(frameX, frameY); break;
+            case "Controls": controlsPanel(frameX, frameY); break;
         }
 
         game.inputHandler.spacePressed = false;
@@ -425,8 +439,8 @@ public class UI {
             if (game.inputHandler.spacePressed) {
                 if (!game.fullScreen && !game.BRendering) {
                     commandNumber = 1;
-                    subState = States.UIStates.PAUSE_STATE_CONFIRM;
-                    currentDialogue = "Are you sure you wanna \nenter full screen? It won't \nscale without BRendering.";
+                    subUIState = "Confirm";
+                    setCurrentDialogue("Are you sure you wanna \nenter full screen? It won't \nscale without BRendering.");
                     actionMethod = "yesFullScreen";
                 } else {
                     yesFullScreen();
@@ -443,8 +457,8 @@ public class UI {
             if (game.inputHandler.spacePressed) {
                 if (!game.BRendering) {
                     commandNumber = 1;
-                    subState = States.UIStates.PAUSE_STATE_CONFIRM;
-                    currentDialogue = "BRendering is a highly \nexperimental mode that \ncan break the game if on";
+                    subUIState = "Confirm";
+                    setCurrentDialogue("BRendering is a highly \nexperimental mode that \ncan break the game if on");
                     actionMethod = "yesBRendering";
                 } else {
                     yesBRendering();
@@ -460,8 +474,8 @@ public class UI {
             if (game.inputHandler.spacePressed) {
                 if (!game.pathFinding) {
                     commandNumber = 1;
-                    subState = States.UIStates.PAUSE_STATE_CONFIRM;
-                    currentDialogue = "Pathfinding is a highly \nexperimental mode that \nmay not work correctly";
+                    subUIState = "Confirm";
+                    setCurrentDialogue("Pathfinding is a highly \nexperimental mode that \nmay not work correctly");
                     actionMethod = "yesPathfinding";
                 } else {
                     yesPathfinding();
@@ -476,7 +490,7 @@ public class UI {
             graphics2D.drawString(">", textX - 30, textY);
 
             if (game.inputHandler.spacePressed) {
-                subState = States.UIStates.PAUSE_STATE_MAIN;
+                subUIState = "Main Pause";
                 commandNumber = 0;
             }
         }
@@ -549,7 +563,7 @@ public class UI {
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
             if (game.inputHandler.spacePressed) {
-                subState = States.UIStates.PAUSE_STATE_MAIN;
+                subUIState = "Main Pause";
             }
         }
     }
@@ -587,7 +601,7 @@ public class UI {
         if (commandNumber == 1) {
             graphics2D.drawString(">", textX - 30, textY);
             if (game.inputHandler.spacePressed) {
-                subState = States.UIStates.PAUSE_STATE_MAIN;
+                subUIState = "Main Pause";
                 commandNumber = 0;
             }
         }
@@ -632,17 +646,16 @@ public class UI {
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
             if (game.inputHandler.spacePressed) {
-                subState = States.UIStates.TITLE_STATE_MAIN;
+                subUIState = "Main Pause";
                 commandNumber = 0;
             }
         }
-
     }
     public void drawDialogueScreen() {
-        int x = game.tileSize * 4;
-        int y = game.tileSize / 2 + (game.tileSize * 7);
         int width = game.screenWidth - (game.tileSize * 9);
         int height = game.tileSize * 4;
+        int x = game.screenWidth / 2 - (width / 2);
+        int y = game.tileSize / 2 + (game.tileSize * 7);
         drawSubWindow(x, y, width, height);
 
         graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 30f));
@@ -654,7 +667,29 @@ public class UI {
             y += 40;
         }
     }
+    public void setCurrentDialogue(String dialogue) {
+        currentDialogue = dialogue;
+    }
+
+    public void drawInteractScreen() {
+        // Settings
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 35f));
+        String text = "Press E to interact";
+        int x = getCentreX(text);
+        int y = (game.tileSize / 2) + (game.tileSize * 10);
+
+        // Stroke
+        graphics2D.setColor(Color.black);
+        graphics2D.drawString(text, x + 3, y + 3);
+
+        // Main Text
+        graphics2D.setColor(Color.white);
+        graphics2D.drawString(text, x, y);
+    }
     public void drawCharacterScreen() {
+        // Inventory
+        drawInventory(game.player, true);
+
         // Make a frame
         final int frameX = game.tileSize / 2;
         final int frameY = game.tileSize / 2;
@@ -664,7 +699,7 @@ public class UI {
 
         // Text
         graphics2D.setColor(Color.white);
-        graphics2D.setFont(graphics2D.getFont().deriveFont(30f));
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 30f));
 
         int textX = frameX + 20;
         int textY = frameY + game.tileSize;
@@ -1042,10 +1077,10 @@ public class UI {
         return fadeBack;
     }
     public void drawTradeScreen() {
-        switch (subState) {
-            case TRADE_STATE_SELECT: drawTradeSelectScreen(); break;
-            case TRADE_STATE_BUY: drawTradeBuyScreen(); break;
-            case TRADE_STATE_SELL: drawTradeSellScreen(); break;
+        switch (subUIState) {
+            case "Select": drawTradeSelectScreen(); break;
+            case "Buy": drawTradeBuyScreen(); break;
+            case "Sell": drawTradeSellScreen(); break;
         }
         game.inputHandler.spacePressed = false;
     }
@@ -1053,7 +1088,7 @@ public class UI {
         drawDialogueScreen();
 
         // Draw Window
-        int x = game.tileSize * 15;
+        int x = game.tileSize * 15 + game.tileSize / 2;
         int y = (game.tileSize * 8) - (game.tileSize / 4);
         int width = game.tileSize * 3;
         int height = (game.tileSize * 3) + (game.tileSize / 2);
@@ -1066,7 +1101,7 @@ public class UI {
         if (commandNumber == 0) {
             graphics2D.drawString(">", x - 24, y);
             if (game.inputHandler.spacePressed) {
-                game.ui.subState = States.UIStates.TRADE_STATE_BUY;
+                subUIState = "Buy";
             }
         }
 
@@ -1076,7 +1111,7 @@ public class UI {
         if (commandNumber == 1) {
             graphics2D.drawString(">", x - 24, y);
             if (game.inputHandler.spacePressed) {
-                game.ui.subState = States.UIStates.TRADE_STATE_SELL;
+                subUIState = "Sell";
             }
         }
 
@@ -1086,7 +1121,7 @@ public class UI {
         if (commandNumber == 2) {
             graphics2D.drawString(">", x - 24, y);
             if (game.inputHandler.spacePressed) {
-                game.gameState = States.GameStates.PLAY;
+                game.ui.uiState = States.UIStates.JUST_DEFAULT;
                 game.ui.commandNumber = 0;
             }
         }
@@ -1097,7 +1132,7 @@ public class UI {
         drawInventory(npc, true);
 
         // Hint Window
-        graphics2D.setFont(graphics2D.getFont().deriveFont(30f));
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 30f));
         int x = (game.tileSize * 13) + (game.tileSize / 2);
         int y = (game.tileSize * 9) + (game.tileSize / 2);
         int width = game.tileSize * 6;
@@ -1124,14 +1159,14 @@ public class UI {
             // Buy an item
             if (game.inputHandler.spacePressed) {
                 if (npc.inventory.get(itemIndex).price > game.player.coins) {
-                    currentDialogue = "Sorry partner, your wallet declined :(";
-                    game.gameState = States.GameStates.DIALOGUE;
+                    setCurrentDialogue("Sorry partner, your wallet declined :(");
+                    uiState = States.UIStates.DIALOGUE;
                     game.ui.commandNumber = 0;
                 } else if (game.player.canObtainItem(npc.inventory.get(itemIndex))) {
                     game.player.coins -= price;
                 } else {
-                    currentDialogue = "Sorry partner, I don't think you can \ncarry this :(";
-                    game.gameState = States.GameStates.DIALOGUE;
+                    setCurrentDialogue("Sorry partner, I don't think you can \ncarry this :(");
+                    uiState = States.UIStates.DIALOGUE;
                     game.ui.commandNumber = 0;
                 }
             }
@@ -1171,12 +1206,12 @@ public class UI {
                 if (game.player.inventory.get(itemIndex) == game.player.currentWeapon ||
                         game.player.inventory.get(itemIndex) == game.player.currentShield ||
                         game.player.inventory.get(itemIndex) == game.player.currentLight) {
-                    currentDialogue = "Sorry partner, I can't buy equipped \nitems :(";
-                    game.gameState = States.GameStates.DIALOGUE;
+                    setCurrentDialogue("Sorry partner, I can't buy equipped \nitems :(");
+                    uiState = States.UIStates.DIALOGUE;
                     game.ui.commandNumber = 0;
                 } else if (game.player.inventory.get(itemIndex).tags.contains(EntityTags.TAG_NON_SELLABLE)) {
-                    currentDialogue = "Sorry partner, I can't buy this item :(";
-                    game.gameState = States.GameStates.DIALOGUE;
+                    setCurrentDialogue("Sorry partner, I can't buy this item :(");
+                    uiState = States.UIStates.DIALOGUE;
                     game.ui.commandNumber = 0;
                 } else {
                     game.player.coins += price;
@@ -1201,9 +1236,9 @@ public class UI {
     // Action
     @SuppressWarnings("unused")
     public void yesGameEnd() {
-        subState = States.UIStates.TITLE_STATE_MAIN;
         game.gameState = States.GameStates.TITLE;
-        subState = States.UIStates.TITLE_STATE_MAIN;
+        uiState = States.UIStates.JUST_DEFAULT;
+        subUIState = "Main Title";
         Sound.music.stop();
         Sound.playMusic("Tech Geek");
         game.restart();
@@ -1211,9 +1246,9 @@ public class UI {
     @SuppressWarnings("unused")
     public void yesFullScreen() {
         game.fullScreen = !game.fullScreen;
-        subState = States.UIStates.PAUSE_STATE_NOTIFICATION;
+        subUIState = "Notification";
         commandNumber = 0;
-        currentDialogue = "Full Screen will only be \nenabled/disabled when \nrelaunching the game.";
+        setCurrentDialogue("Full Screen will only be \nenabled/disabled when \nrelaunching the game.");
     }
     @SuppressWarnings("unused")
     public void yesBRendering() {
@@ -1221,16 +1256,16 @@ public class UI {
         commandNumber = 0;
 
         if (game.BRendering) {
-            subState = States.UIStates.PAUSE_STATE_NOTIFICATION;
-            currentDialogue = "You can emergency \ndisable BRendering by \npressing F3 and R.";
+            subUIState = "Notification";
+            setCurrentDialogue("You can emergency \ndisable BRendering by \npressing F3 and R.");
         } else {
-            subState = States.UIStates.PAUSE_STATE_SETTINGS_MAIN;
+            subUIState = "Settings Main";
         }
     }
     @SuppressWarnings("unused")
     public void yesPathfinding() {
         game.pathFinding = !game.pathFinding;
-        subState = States.UIStates.PAUSE_STATE_SETTINGS_MAIN;
+        subUIState = "Settings Main";
         commandNumber = 0;
     }
     @SuppressWarnings("unused")
