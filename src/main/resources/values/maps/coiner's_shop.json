@@ -137,17 +137,19 @@
   "events": [
     {
       "path": "net.dinglezz.torgrays_trials.event.EVT_Teleport",
-      "col": "10",
-      "row": "39",
+      "col": 12,
+      "row": 13,
       "parameters": {
-        "map": "Coiner's Shop",
+        "map": "Main Island",
+        "col": 10,
+        "row": 39,
         "direction": "down"
       }
     },
     {
       "path": "net.dinglezz.torgrays_trials.event.EVT_Speak",
-      "col": "12",
-      "row": "11",
+      "col": 12,
+      "row": 11,
       "parameters": {
         "type": "npc",
         "index": 0

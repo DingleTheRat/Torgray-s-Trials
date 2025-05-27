@@ -299,8 +299,9 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 				},
 				new Entity[] {},
 				new Event[]{
-					new Event(EVT_Teleport.class, 10, 39, new HashMap<>(){{
-						put("map", "Coiner's Shop");put("direction", "down");}
+					new Event(EVT_Teleport.class, 12, 13, new HashMap<>(){{
+						put("map", "Main Island");put("direction", "down");
+						put("col", 10); put("row", 39);}
 					}),
 					new Event(EVT_Speak.class, 12, 11, new HashMap<>(){{
 						put("type", "npc"); put("index", 0);

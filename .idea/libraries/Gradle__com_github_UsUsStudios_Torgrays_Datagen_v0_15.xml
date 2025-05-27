@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.UsUsStudios:Torgrays-Datagen:v0.15" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="com.github.UsUsStudios" artifactId="Torgrays-Datagen" version="v0.15" baseVersion="v0.15" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.UsUsStudios/Torgrays-Datagen/v0.15/dd54b1e03b9750d7310782382d05789d28634e41/Torgrays-Datagen-v0.15.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
