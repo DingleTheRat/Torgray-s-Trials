@@ -37,7 +37,7 @@ public class OBJ_Chest extends Entity {
     public void interact() {
         if (!opened) {
             Sound.playSFX("Unlock");
-            game.gameState = States.GameStates.DIALOGUE;
+            game.ui.uiState = States.UIStates.DIALOGUE;
             game.player.attackCanceled = true;
 
             StringBuilder stringBuilder = new StringBuilder();
@@ -61,7 +61,7 @@ public class OBJ_Chest extends Entity {
                 }
             }
 
-            game.ui.currentDialogue = stringBuilder.toString();
+            game.ui.setCurrentDialogue(stringBuilder.toString());
             down1 = image2;
             opened = true;
         }

@@ -14,8 +14,8 @@ public class EVT_Pit extends Event {
     @Override
     public void onHit() {
         // Torgray being annoyed dialogue
-        Main.game.gameState = States.GameStates.DIALOGUE;
-        Main.game.ui.currentDialogue = "Dang it, I feel into a pit!";
+        Main.game.ui.uiState = States.UIStates.DIALOGUE;
+        Main.game.ui.setCurrentDialogue("Dang it, I feel into a pit!");
 
         // Take some health >:)
         Main.game.player.health -= 1;

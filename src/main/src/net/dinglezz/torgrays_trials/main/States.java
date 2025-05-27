@@ -4,30 +4,26 @@ public class States {
     public enum GameStates {
         TITLE,
         PLAY,
-        DIALOGUE,
         PAUSE,
-        CHARACTER,
-        GAME_OVER,
+        GAME_END,
         EXCEPTION,
-        TRADE,
-        MAP
     }
     public enum UIStates {
-        // Title
-        TITLE_STATE_MAIN,
-        TITLE_STATE_MODES,
-        PAUSE_STATE_MAIN,
+        NONE(false, false),
+        JUST_DEFAULT(true, true),
+        DIALOGUE(true, true),
+        INTERACT(true, true),
+        PAUSE(true, true),
+        CHARACTER(false, false),
+        TRADE(false, false),
+        MAP(false, false),;
 
-        // Pause
-        PAUSE_STATE_SETTINGS_MAIN,
-        PAUSE_STATE_CONTROLS,
-        PAUSE_STATE_NOTIFICATION,
-        PAUSE_STATE_CONFIRM,
-
-        // Trade
-        TRADE_STATE_SELECT,
-        TRADE_STATE_BUY,
-        TRADE_STATE_SELL
+        final boolean defaultKeyboardInput;
+        final boolean defaultUI;
+        UIStates(boolean defaultKeyboardInput, boolean defaultUI) {
+            this.defaultKeyboardInput = defaultKeyboardInput;
+            this.defaultUI = defaultUI;
+        }
     }
     public enum DarknessStates {
         NIGHT,

@@ -27,10 +27,10 @@ public class OBJ_Torgray_Soup extends Entity {
         price = 2;
     }
     public boolean use(Entity entity) {
-        game.gameState = States.GameStates.DIALOGUE;
+        game.ui.uiState = States.UIStates.DIALOGUE;
         int random = new Random().nextInt(9) + 1;
 
-        game.ui.currentDialogue = switch (random) {
+        game.ui.setCurrentDialogue(switch (random) {
             case 1 -> "Erm the last two keys have to be bought. \n+4 health";
             case 2 -> "Erm by pressing F3 you can enter debug \nmode. \n+4 health";
             case 3 -> "Erm when it's gloom, Dracores respawn, \nhave their health quadrupled, and do half a \nheart more damage. \n+4 health";
@@ -41,7 +41,7 @@ public class OBJ_Torgray_Soup extends Entity {
             case 8 -> "Erm when you go down from your spawn \npoint, in the area where the Dracores are, \nthere is a path to a hut. \n+4 health";
             case 9 -> "Erm leveling up increases your defence and \nattack values, but so do swords and shields. \n+4 health";
             default -> "Erm something went wrong. \n+4 health";
-        };
+        });
 
         if (game.player.health + value > game.player.maxHealth) {
             game.player.health = game.player.maxHealth;

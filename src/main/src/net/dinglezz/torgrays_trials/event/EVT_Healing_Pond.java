@@ -15,10 +15,12 @@ public class EVT_Healing_Pond extends Event {
 
     @Override
     public void whileHit() {
+        Main.game.ui.uiState = States.UIStates.INTERACT;
+
         if (Main.game.inputHandler.interactKeyPressed) {
-            Main.game.gameState = States.GameStates.DIALOGUE;
+            Main.game.ui.uiState = States.UIStates.DIALOGUE;
             Main.game.player.attackCanceled = true;
-            Main.game.ui.currentDialogue = "*Drinks water* \nHuh, nothing happened :/";
+            Main.game.ui.setCurrentDialogue("*Drinks water* \nHuh, nothing happened :/");
             // Disabled Stuff
             // Main.game.player.health = Main.game.player.maxHealth;
             // Main.game.assetSetter.setMonsters();
@@ -26,5 +28,7 @@ public class EVT_Healing_Pond extends Event {
     }
 
     @Override
-    public void onLeave() {}
+    public void onLeave() {
+        Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
+    }
 }

@@ -54,7 +54,7 @@ public class UtilityTool {
             throw new RuntimeException(exception);
         }
     }
-    public static Entity generateLootTableEntity(String path, String lootTable) {
+    public static Entity generateEntity(String path, String lootTable) {
         try {
             Class<?> clazz = Class.forName(path);
             return (Entity) clazz.getDeclaredConstructor(Game.class, String.class).newInstance(Main.game, lootTable);
