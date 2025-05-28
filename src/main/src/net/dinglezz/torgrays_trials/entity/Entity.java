@@ -1,9 +1,6 @@
 package net.dinglezz.torgrays_trials.entity;
 
-import net.dinglezz.torgrays_trials.main.CollisionChecker;
-import net.dinglezz.torgrays_trials.main.Game;
-import net.dinglezz.torgrays_trials.main.Sound;
-import net.dinglezz.torgrays_trials.main.UtilityTool;
+import net.dinglezz.torgrays_trials.main.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -33,7 +30,7 @@ public abstract class Entity {
     public boolean attacking = false;
     public boolean alive = true;
     public boolean dying = false;
-    boolean healthBarOn = false;
+    boolean healthBar = false;
     public boolean onPath = false;
     public boolean knockBack = false;
 
@@ -79,6 +76,7 @@ public abstract class Entity {
     public int maxStack = 1;
     public int amount = 1;
     public int price = 0;
+    public boolean interactPrompt = false;
 
     public Entity(Game game) {
         this.game = game;
@@ -187,6 +185,14 @@ public abstract class Entity {
         if (this.type == EntityTypes.TYPE_MONSTER && contactPlayer) {
             damagePlayer(attack);
         }
+
+        if (interactPrompt) {
+            if (contactPlayer) {
+                game.ui.uiState = States.UIStates.INTERACT;
+            } else if (game.ui.uiState == States.UIStates.INTERACT) {
+                game.ui.uiState = States.UIStates.JUST_DEFAULT;
+            }
+        }
     }
 
     public void update() {
@@ -265,8 +271,8 @@ public abstract class Entity {
                 case "right": if (spriteNumber == 1) {image = right1;} else if (spriteNumber == 2) {image = right2;} else if (spriteNumber == 3) {image = right3;} break;
             }
 
-            // Mob Health Bar
-            if (type == EntityTypes.TYPE_MONSTER && healthBarOn) {
+            // Health Bar
+            if (healthBar) {
                 double oneScale = (double) game.tileSize / maxHealth;
                 double hpBarValue = oneScale * health;
 
@@ -278,12 +284,12 @@ public abstract class Entity {
                 healthBarCounter++;
                 if (healthBarCounter > 100) {
                     healthBarCounter = 0;
-                    healthBarOn = false;
+                    healthBar = false;
                 }
             }
 
             if (invincible) {
-                healthBarOn = true;
+                healthBar = true;
                 healthBarCounter = 0;
                 changeAlpha(graphics2D, 0.4f);
             }

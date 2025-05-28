@@ -146,7 +146,7 @@ public class AssetSetter {
      * and processes each event to generate it within the game. For each event, the method identifies
      * its configuration details such as file path, grid position (column and row), and optional parameters.
      * Events are generated through a utility method that handles their creation and placement on the map.
-     *
+     * <p>
      * If the map file does not contain event data or there is an error in processing the JSON data, the
      * method logs an error message to the console.
      */

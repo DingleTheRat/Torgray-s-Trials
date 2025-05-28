@@ -256,21 +256,26 @@ public class Player extends Entity{
     }
     public void pickUpObject(int i) {
         if (i != 999) {
-            if (game.object.get(game.currentMap).get(i).tags.contains(EntityTags.TAG_OBSTACLE)) {
+            Entity object = game.object.get(game.currentMap).get(i);
+            if (object.tags.contains(EntityTags.TAG_OBSTACLE)) {
                 if (inputHandler.interactKeyPressed) {
-                    game.object.get(game.currentMap).get(i).interact();
+                    object.interact();
+                } else if (object.interactPrompt) {
+                    game.ui.uiState = States.UIStates.INTERACT;
                 }
             }
-            else if (game.object.get(game.currentMap).get(i).tags.contains(EntityTags.TAG_PICKUP_ONLY)) {
-                game.object.get(game.currentMap).get(i).use(this);
+            else if (object.tags.contains(EntityTags.TAG_PICKUP_ONLY)) {
+                object.use(this);
                 game.object.get(game.currentMap).put(i, null);
             }
-            else if (canObtainItem(game.object.get(game.currentMap).get(i))) {
+            else if (canObtainItem(object)) {
                 Sound.playSFX("Coin");
-                String text = "+1 " + game.object.get(game.currentMap).get(i).name;
+                String text = "+1 " + object.name;
                 game.ui.addMiniNotification(text);
                 game.object.get(game.currentMap).put(i, null);
             }
+        } else if (game.ui.uiState == States.UIStates.INTERACT) {
+            game.ui.uiState = States.UIStates.JUST_DEFAULT;
         }
     }
     public void interactNPC(int i) {
