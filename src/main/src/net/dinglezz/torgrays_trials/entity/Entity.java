@@ -68,6 +68,7 @@ public abstract class Entity {
     public Entity currentLight;
     public ArrayList<Entity> inventory = new ArrayList<>();
     public final int maxInventorySize = 25;
+    public boolean moveOffScreen = false;
 
     // Item Attributes
     public int value;
@@ -190,50 +191,55 @@ public abstract class Entity {
     }
 
     public void update() {
-        if (knockBack) {
-            checkCollision();
-
-            if (collisionOn || knockBackCounter == 10) {
-                knockBackCounter = 0;
-                knockBack = false;
-                speed = defaultSpeed;
+        if (worldX + game.tileSize > game.player.worldX - game.player.screenX &&
+                worldX - game.tileSize < game.player.worldX + game.player.screenX &&
+                worldY + game.tileSize > game.player.worldY - game.player.screenY &&
+                worldY - game.tileSize < game.player.worldY + game.player.screenY || moveOffScreen) {
+            if (knockBack) {
+                checkCollision();
+                
+                if (collisionOn || knockBackCounter == 10) {
+                    knockBackCounter = 0;
+                    knockBack = false;
+                    speed = defaultSpeed;
+                } else {
+                    switch (game.player.direction) {
+                        case "up" -> worldY -= speed;
+                        case "down" -> worldY += speed;
+                        case "left" -> worldX -= speed;
+                        case "right" -> worldX += speed;
+                    }
+                    knockBackCounter++;
+                }
             } else {
-                switch (game.player.direction) {
-                    case "up" -> worldY -= speed;
-                    case "down" -> worldY += speed;
-                    case "left" -> worldX -= speed;
-                    case "right" -> worldX += speed;
-                }
-                knockBackCounter++;
-            }
-        } else {
-            setAction();
-            checkCollision();
-
-            // If collisionOn is false, move the entity
-            if (!collisionOn) {
-                switch (direction) {
-                    case "up" -> worldY -= speed;
-                    case "down" -> worldY += speed;
-                    case "left" -> worldX -= speed;
-                    case "right" -> worldX += speed;
+                setAction();
+                checkCollision();
+                
+                // If collisionOn is false, move the entity
+                if (!collisionOn) {
+                    switch (direction) {
+                        case "up" -> worldY -= speed;
+                        case "down" -> worldY += speed;
+                        case "left" -> worldX -= speed;
+                        case "right" -> worldX += speed;
+                    }
                 }
             }
-        }
-
-        spriteCounter ++;
-        if (spriteCounter > spriteSpeed) {
-            if (spriteNumber == 1) spriteNumber = 2;
-            else if (spriteNumber == 2) spriteNumber = 3;
-            else if (spriteNumber == 3) spriteNumber = 1;
-            spriteCounter = 0;
-        }
-
-        if (invincible) {
-            invincibilityCounter++;
-            if (invincibilityCounter > 40) {
-                invincible = false;
-                invincibilityCounter = 0;
+            
+            spriteCounter++;
+            if (spriteCounter > spriteSpeed) {
+                if (spriteNumber == 1) spriteNumber = 2;
+                else if (spriteNumber == 2) spriteNumber = 3;
+                else if (spriteNumber == 3) spriteNumber = 1;
+                spriteCounter = 0;
+            }
+            
+            if (invincible) {
+                invincibilityCounter++;
+                if (invincibilityCounter > 40) {
+                    invincible = false;
+                    invincibilityCounter = 0;
+                }
             }
         }
     }

@@ -154,7 +154,6 @@ public static int checkObject(Entity entity, boolean player) {
 
 public static int checkEntity(Entity entity, HashMap<String, HashMap<Integer, Entity>> target) {
     int index = 999;
-    long start = System.nanoTime();
     if (target.get(Main.game.currentMap) != null) {
         for (int i = 0; i < target.get(Main.game.currentMap).size(); i++) {
             Entity checkedEntity = target.get(Main.game.currentMap).get(i);
@@ -183,7 +182,6 @@ public static int checkEntity(Entity entity, HashMap<String, HashMap<Integer, En
             }
         }
     }
-    System.out.println(System.nanoTime() - start);
 
     return index;
 }
