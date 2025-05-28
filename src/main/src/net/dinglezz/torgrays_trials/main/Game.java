@@ -175,6 +175,7 @@ public class Game extends JPanel implements Runnable {
             timer += elapsedTime;
 
             while (delta >= 1) {
+                long start = System.nanoTime();
                 update();
                 if (BRendering && gameState != States.GameStates.TITLE) {
                     drawToTempScreen();
@@ -183,6 +184,7 @@ public class Game extends JPanel implements Runnable {
                     repaint();
                 }
                 delta--;
+                System.out.println(System.nanoTime() - start);
             }
 
             if (timer >= 1_000_000_000) {
