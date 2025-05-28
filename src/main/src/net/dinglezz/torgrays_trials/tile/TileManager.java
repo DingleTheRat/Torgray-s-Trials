@@ -7,6 +7,9 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.IntStream;
 
 public class TileManager {
     public static HashMap<Integer, Tile> tile = new HashMap<>();
@@ -99,31 +102,27 @@ public class TileManager {
             if (TileManager.mapTileNumbers.get(layer).get(new TilePoint(Main.game.currentMap, 0, 0)) == null && layer.equals("foreground")) {
                 continue;
             }
-
-            for (int worldRow = 0; worldRow < Main.game.maxWorldRow; worldRow++) {
-                for (int worldCol = 0; worldCol < Main.game.maxWorldCol; worldCol++) {
-                    int tileNumber = mapTileNumbers.get(layer).get(new TilePoint(Main.game.currentMap, worldCol, worldRow));
-                    int worldX = worldCol * tileSize;
-                    int worldY = worldRow * tileSize;
-                    int screenX = worldX - playerWorldX + playerScreenX;
-                    int screenY = worldY - playerWorldY + playerScreenY;
-
-                    // Check if the tile is within the visible screen
-                    if (worldX + tileSize > playerWorldX - playerScreenX &&
-                            worldX - tileSize < playerWorldX + playerScreenX &&
-                            worldY + tileSize > playerWorldY - playerScreenY &&
-                            worldY - tileSize < playerWorldY + playerScreenY) {
-
-                        Tile currentTile = tile.get(tileNumber);
-                        graphics2D.drawImage(currentTile.image, screenX, screenY, null);
-
-                        if (Main.game.debugHitBoxes && currentTile.collision && layer.equals("foreground")) {
-                            graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
-                            graphics2D.fillRect(screenX, screenY, tileSize, tileSize);
-                        }
+            
+            IntStream.range(0, Main.game.maxWorldRow).parallel().forEach(
+                worldRow -> IntStream.range(0, Main.game.maxWorldCol).parallel().forEach(worldCol -> {
+                int tileNumber = mapTileNumbers.get(layer).get(new TilePoint(Main.game.currentMap, worldCol, worldRow));
+                int worldX = worldCol * tileSize;
+                int worldY = worldRow * tileSize;
+                int screenX = worldX - playerWorldX + playerScreenX;
+                int screenY = worldY - playerWorldY + playerScreenY;
+                // Check if the tile is within the visible screen
+                if (worldX + tileSize > playerWorldX - playerScreenX &&
+                        worldX - tileSize < playerWorldX + playerScreenX &&
+                        worldY + tileSize > playerWorldY - playerScreenY &&
+                        worldY - tileSize < playerWorldY + playerScreenY) {
+                    Tile currentTile = tile.get(tileNumber);
+                    graphics2D.drawImage(currentTile.image, screenX, screenY, null);
+                    if (Main.game.debugHitBoxes && currentTile.collision && layer.equals("foreground")) {
+                        graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
+                        graphics2D.fillRect(screenX, screenY, tileSize, tileSize);
                     }
                 }
-            }
+            }));
         }
 
         if (Main.game.debugPathfinding) {

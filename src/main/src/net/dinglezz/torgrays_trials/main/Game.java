@@ -259,9 +259,6 @@ public class Game extends JPanel implements Runnable {
             if (gameState != States.GameStates.GAME_END) {
                 entityList.add(player);
             }
-            // npc.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
-            // object.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
-            // monster.getOrDefault(currentMap, new HashMap<>()).values().stream().filter(Objects::nonNull).forEach(entityList::add);
             
             entityList.addAll(npc.getOrDefault(currentMap, new HashMap<>()).values());
             entityList.addAll(object.getOrDefault(currentMap, new HashMap<>()).values());
