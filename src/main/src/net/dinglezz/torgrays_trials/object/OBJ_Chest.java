@@ -39,7 +39,7 @@ public class OBJ_Chest extends Entity {
         if (!opened) {
             Sound.playSFX("Unlock");
             game.ui.uiState = States.UIStates.DIALOGUE;
-            game.player.attackCanceled = true;
+            game.player.inventoryCanceled = true;
 
             StringBuilder stringBuilder = new StringBuilder();
 

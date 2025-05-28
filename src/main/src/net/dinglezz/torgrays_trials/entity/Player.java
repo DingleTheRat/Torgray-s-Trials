@@ -21,6 +21,7 @@ public class Player extends Entity{
     public final int screenY;
     int standCounter = 0;
     public boolean attackCanceled = false;
+    public boolean inventoryCanceled = false;
 
     public Player(Game game, InputHandler inputHandler) {
         super(game);
@@ -156,7 +157,7 @@ public class Player extends Entity{
             int monsterIndex = CollisionChecker.checkEntity(this, game.monster);
             contactMonster(monsterIndex);
 
-            if (!collisionOn && !inputHandler.spacePressed && !inputHandler.interactKeyPressed) {
+            if (!collisionOn && !inputHandler.interactKeyPressed) {
                 switch (direction) {
                     case "up left" -> {worldX -= (speed - 1); worldY -= (speed - 1);}
                     case "up right" -> {worldX += (speed - 1); worldY -= (speed - 1);}
@@ -170,9 +171,10 @@ public class Player extends Entity{
             }
 
             // Inventory
-            if (inputHandler.interactKeyPressed && !attackCanceled) {
+            if (inputHandler.interactKeyPressed && !inventoryCanceled) {
                 game.ui.uiState = States.UIStates.CHARACTER;
             }
+            inventoryCanceled = false;
 
             game.inputHandler.interactKeyPressed = false;
 
@@ -281,7 +283,7 @@ public class Player extends Entity{
     public void interactNPC(int i) {
         if (game.inputHandler.interactKeyPressed) {
             if (i != 999) {
-                attackCanceled = true;
+                inventoryCanceled = true;
                 game.ui.uiState = States.UIStates.DIALOGUE;
                 game.npc.get(game.currentMap).get(i).speak(false);
             }
