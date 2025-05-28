@@ -12,7 +12,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class Game extends JPanel implements Runnable {
     // Screen settings
@@ -48,7 +47,8 @@ public class Game extends JPanel implements Runnable {
     public boolean debugHitBoxes = false;
 
     // FPS
-    int FPS = 60;
+    float FPS;
+    float deltaTime;
     public long drawStart;
 
     // System
@@ -162,48 +162,38 @@ public class Game extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        final double drawInterval = 1_000_000_000.0 / FPS;
         long lastTime = System.nanoTime();
-        long timer = 0;
-        double delta = 0;
-        long sumNano = 0;
-        long totalNano = 0;
+        int frame = 0;
+        // long sumNano = 0;
+        // long totalNano = 0;
 
         while (gameThread != null) {
+            // FPS calculations
+            frame++;
             long currentTime = System.nanoTime();
-            long elapsedTime = currentTime - lastTime;
+            deltaTime = (currentTime - lastTime) / 1_000_000_000.0f;
+            if (frame % 200_000 == 0) FPS = 1 / deltaTime;
             lastTime = currentTime;
-
-            delta += elapsedTime / drawInterval;
-            timer += elapsedTime;
-
-            while (delta >= 1) {
-                long start = System.nanoTime();
-                update();
-                if (BRendering && gameState != States.GameStates.TITLE) {
-                    drawToTempScreen();
-                    drawToScreen();
-                } else {
-                    repaint();
-                }
-                delta--;
-                
-                if (gameState != States.GameStates.TITLE) {
-                    // no getting hit, no hitting, a few pits, open bottom chest, collect bottom key, drink
-                    sumNano += System.nanoTime() - start;
-                    totalNano++;
-                    
-                    if (totalNano % 2000 == 0) {
-                        System.out.println(Math.round((float) sumNano / totalNano / 1000));
-                        sumNano = 0;
-                        totalNano = 0;
-                    }
-                }
+            
+            update();
+            if (BRendering && gameState != States.GameStates.TITLE) {
+                drawToTempScreen();
+                drawToScreen();
+            } else {
+                repaint();
             }
-
-            if (timer >= 1_000_000_000) {
-                timer = 0;
-            }
+            
+            // if (gameState != States.GameStates.TITLE) {
+            //     // no getting hit, no hitting, a few pits, open bottom chest, collect bottom key, drink
+            //     sumNano += System.nanoTime() - currentTime;
+            //     totalNano++;
+            //
+            //     if (totalNano % 2000 == 0) {
+            //         System.out.println(Math.round((float) sumNano / totalNano / 1000));
+            //         sumNano = 0;
+            //         totalNano = 0;
+            //     }
+            // }
         }
     }
     public void update() {
