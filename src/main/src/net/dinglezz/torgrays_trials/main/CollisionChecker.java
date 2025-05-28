@@ -120,11 +120,12 @@ public static int checkObject(Entity entity, boolean player) {
     int index = 999;
 
     for (int i = 0; i < Main.game.object.get(Main.game.currentMap).size(); i++) {
-        if (Main.game.object.get(Main.game.currentMap).get(i) != null) {
+        Entity object = Main.game.object.get(Main.game.currentMap).get(i);
+        if (object != null) {
             entity.solidArea.x = entity.worldX + entity.solidAreaDefaultX;
             entity.solidArea.y = entity.worldY + entity.solidAreaDefaultY;
-            Main.game.object.get(Main.game.currentMap).get(i).solidArea.x = Main.game.object.get(Main.game.currentMap).get(i).worldX + Main.game.object.get(Main.game.currentMap).get(i).solidAreaDefaultX;
-            Main.game.object.get(Main.game.currentMap).get(i).solidArea.y = Main.game.object.get(Main.game.currentMap).get(i).worldY + Main.game.object.get(Main.game.currentMap).get(i).solidAreaDefaultY;
+            object.solidArea.x = object.worldX + object.solidAreaDefaultX;
+            object.solidArea.y = object.worldY + object.solidAreaDefaultY;
 
             switch (entity.direction) {
                 case "up": entity.solidArea.y -= entity.speed; break;
@@ -132,8 +133,8 @@ public static int checkObject(Entity entity, boolean player) {
                 case "left": entity.solidArea.x -= entity.speed; break;
                 case "right": entity.solidArea.x += entity.speed; break;
             }
-            if (entity.solidArea.intersects(Main.game.object.get(Main.game.currentMap).get(i).solidArea)) {
-                if (Main.game.object.get(Main.game.currentMap).get(i).collision) {
+            if (entity.solidArea.intersects(object.solidArea)) {
+                if (object.collision) {
                     entity.collisionOn = true;
                 }
                 if (player) {
@@ -143,8 +144,8 @@ public static int checkObject(Entity entity, boolean player) {
 
             entity.solidArea.x = entity.solidAreaDefaultX;
             entity.solidArea.y = entity.solidAreaDefaultY;
-            Main.game.object.get(Main.game.currentMap).get(i).solidArea.x = Main.game.object.get(Main.game.currentMap).get(i).solidAreaDefaultX;
-            Main.game.object.get(Main.game.currentMap).get(i).solidArea.y = Main.game.object.get(Main.game.currentMap).get(i).solidAreaDefaultY;
+            object.solidArea.x = object.solidAreaDefaultX;
+            object.solidArea.y = object.solidAreaDefaultY;
         }
     }
 
