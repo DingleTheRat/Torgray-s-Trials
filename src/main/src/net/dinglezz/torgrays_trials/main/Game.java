@@ -188,13 +188,16 @@ public class Game extends JPanel implements Runnable {
                 }
                 delta--;
                 
-                sumNano += System.nanoTime() - start;
-                totalNano++;
-                
-                if (totalNano % 100 == 0) {
-                    System.out.println(Math.round((float) sumNano / totalNano / 1000));
-                    sumNano = 0;
-                    totalNano = 0;
+                if (gameState != States.GameStates.TITLE) {
+                    // no getting hit, no hitting, a few pits, open bottom chest, collect bottom key, drink
+                    sumNano += System.nanoTime() - start;
+                    totalNano++;
+                    
+                    if (totalNano % 2000 == 0) {
+                        System.out.println(Math.round((float) sumNano / totalNano / 1000));
+                        sumNano = 0;
+                        totalNano = 0;
+                    }
                 }
             }
 
