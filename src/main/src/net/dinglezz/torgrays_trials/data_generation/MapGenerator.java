@@ -179,7 +179,7 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 						new Event(EVT_Healing_Pond.class, 23, 12),
 						
 						new Event(EVT_Teleport.class, 10, 39, new HashMap<>(){{
-							put("map", "Coiner's Shop");put("direction", "up");}})
+							put("map", "Coiner's Shop");put("direction", "up");put("required direction", "up");}})
 				});
 		register("coiner's_shop",
 				new String[]{
@@ -300,7 +300,7 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 				new Entity[] {},
 				new Event[]{
 					new Event(EVT_Teleport.class, 12, 13, new HashMap<>(){{
-						put("map", "Main Island");put("direction", "down");
+						put("map", "Main Island");put("direction", "down");put("required direction", "down");
 						put("col", 10); put("row", 39);}
 					}),
 					new Event(EVT_Speak.class, 12, 11, new HashMap<>(){{

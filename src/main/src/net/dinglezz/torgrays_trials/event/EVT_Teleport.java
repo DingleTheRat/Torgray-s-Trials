@@ -6,6 +6,7 @@ import net.dinglezz.torgrays_trials.tile.TilePoint;
 import org.json.JSONObject;
 
 import java.awt.*;
+import java.util.Objects;
 
 public class EVT_Teleport extends Event {
     public static String nextMap;
@@ -19,26 +20,28 @@ public class EVT_Teleport extends Event {
 
     @Override
     public void onHit() {
-        // Play the sound (important)
-        Sound.playSFX("Teleport");
+        if (Objects.equals(getParameter("required direction", String.class), Main.game.player.direction)) {
+            // Play the sound (important)
+            Sound.playSFX("Teleport");
 
-        // Set all the necessary values
-        nextMap = getParameter("map", String.class);
-        nextDirection = getParameter("direction", String.class);
-        if (hasParameter("col") && hasParameter("row")) {
-            // Then set the col and row to the provided values
-            nextCol = getParameter("col", Integer.class);
-            nextRow = getParameter("row", Integer.class);
-        } else {
-            // Otherwise, set the col and row to the lowest point so it's set to the spawn point
-            nextCol = Integer.MIN_VALUE;
-            nextRow = Integer.MIN_VALUE;
+            // Set all the necessary values
+            nextMap = getParameter("map", String.class);
+            nextDirection = getParameter("direction", String.class);
+            if (hasParameter("col") && hasParameter("row")) {
+                // Then set the col and row to the provided values
+                nextCol = getParameter("col", Integer.class) * Main.game.tileSize;
+                nextRow = getParameter("row", Integer.class) * Main.game.tileSize;
+            } else {
+                // Otherwise, set the col and row to the lowest point so it's set to the spawn point
+                nextCol = Integer.MIN_VALUE;
+                nextRow = Integer.MIN_VALUE;
+            }
+
+            // Set the transition settings
+            Main.game.ui.transitioning = true;
+            Main.game.ui.setTransitionSettings(Color.BLACK, 0.02f, 0.02f);
+            Main.game.ui.actionMethod = "transitionTeleport";
         }
-
-        // Set the transition settings
-        Main.game.ui.transitioning = true;
-        Main.game.ui.setTransitionSettings(Color.BLACK, 0.02f, 0.02f);
-        Main.game.ui.actionMethod = "transitionTeleport";
     }
 
     @Override

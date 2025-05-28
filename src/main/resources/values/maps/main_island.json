@@ -296,6 +296,7 @@
       "row": "39",
       "parameters": {
         "map": "Coiner's Shop",
+        "required direction": "up",
         "direction": "up"
       }
     }
