@@ -154,13 +154,15 @@ public static int checkObject(Entity entity, boolean player) {
 
 public static int checkEntity(Entity entity, HashMap<String, HashMap<Integer, Entity>> target) {
     int index = 999;
+    long start = System.nanoTime();
     if (target.get(Main.game.currentMap) != null) {
         for (int i = 0; i < target.get(Main.game.currentMap).size(); i++) {
-            if (target.get(Main.game.currentMap).get(i) != null) {
+            Entity checkedEntity = target.get(Main.game.currentMap).get(i);
+            if (checkedEntity != null) {
                 entity.solidArea.x = entity.worldX + entity.solidAreaDefaultX;
                 entity.solidArea.y = entity.worldY + entity.solidAreaDefaultY;
-                target.get(Main.game.currentMap).get(i).solidArea.x = target.get(Main.game.currentMap).get(i).worldX + target.get(Main.game.currentMap).get(i).solidAreaDefaultX;
-                target.get(Main.game.currentMap).get(i).solidArea.y = target.get(Main.game.currentMap).get(i).worldY + target.get(Main.game.currentMap).get(i).solidAreaDefaultY;
+                checkedEntity.solidArea.x = checkedEntity.worldX + checkedEntity.solidAreaDefaultX;
+                checkedEntity.solidArea.y = checkedEntity.worldY + checkedEntity.solidAreaDefaultY;
 
                 switch (entity.direction) {
                     case "up": entity.solidArea.y -= entity.speed; break;
@@ -168,19 +170,20 @@ public static int checkEntity(Entity entity, HashMap<String, HashMap<Integer, En
                     case "left": entity.solidArea.x -= entity.speed; break;
                     case "right": entity.solidArea.x += entity.speed; break;
                 }
-                if (entity.solidArea.intersects(target.get(Main.game.currentMap).get(i).solidArea)) {
-                    if (target.get(Main.game.currentMap).get(i) != entity) {
+                if (entity.solidArea.intersects(checkedEntity.solidArea)) {
+                    if (checkedEntity != entity) {
                         entity.collisionOn = true;
                         index = i;
                     }
                 }
                 entity.solidArea.x = entity.solidAreaDefaultX;
                 entity.solidArea.y = entity.solidAreaDefaultY;
-                target.get(Main.game.currentMap).get(i).solidArea.x = target.get(Main.game.currentMap).get(i).solidAreaDefaultX;
-                target.get(Main.game.currentMap).get(i).solidArea.y = target.get(Main.game.currentMap).get(i).solidAreaDefaultY;
+                checkedEntity.solidArea.x = checkedEntity.solidAreaDefaultX;
+                checkedEntity.solidArea.y = checkedEntity.solidAreaDefaultY;
             }
         }
     }
+    System.out.println(System.nanoTime() - start);
 
     return index;
 }
