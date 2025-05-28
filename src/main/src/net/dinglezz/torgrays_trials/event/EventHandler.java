@@ -28,7 +28,7 @@ public class EventHandler {
      * <p>
      * The method iteratively checks all events for potential interaction.
      */
-    public static void checkEvent() {
+    public static void checkEvents() {
         // Check if player is more then one tile away from the last event
         int xDistance = Math.abs(Main.game.player.worldX - previousEventX);
         int yDistance = Math.abs(Main.game.player.worldY - previousEventY);

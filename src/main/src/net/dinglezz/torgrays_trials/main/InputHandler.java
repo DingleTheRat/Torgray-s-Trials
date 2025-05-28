@@ -166,14 +166,7 @@ public class InputHandler implements KeyListener {
             case KeyEvent.VK_S -> downPressed = true;
             case KeyEvent.VK_D -> rightPressed = true;
             case KeyEvent.VK_E -> interactKeyPressed = true;
-            case KeyEvent.VK_SPACE -> {
-                if (!game.player.attackCanceled && !game.player.attacking) {
-                    Sound.playSFX("Swing");
-                    game.player.attacking = true;
-                    game.player.spriteCounter = 0;
-                }
-                game.player.attackCanceled = false;
-            }
+            case KeyEvent.VK_SPACE -> spacePressed = true;
             case KeyEvent.VK_ESCAPE -> {
                 if (game.ui.uiState == States.UIStates.JUST_DEFAULT || game.ui.uiState == States.UIStates.INTERACT) {
                     game.gameState = States.GameStates.PAUSE;
