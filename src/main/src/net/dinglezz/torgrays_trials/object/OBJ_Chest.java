@@ -31,6 +31,7 @@ public class OBJ_Chest extends Entity {
         image2 = registerEntitySprite("/object/chest/chest_opened");
         down1 = image;
         collision = true;
+        interactPrompt = true;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class OBJ_Chest extends Entity {
         if (!opened) {
             Sound.playSFX("Unlock");
             game.ui.uiState = States.UIStates.DIALOGUE;
-            game.player.attackCanceled = true;
+            game.player.inventoryCanceled = true;
 
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -64,6 +65,7 @@ public class OBJ_Chest extends Entity {
             game.ui.setCurrentDialogue(stringBuilder.toString());
             down1 = image2;
             opened = true;
+            interactPrompt = false;
         }
     }
 }

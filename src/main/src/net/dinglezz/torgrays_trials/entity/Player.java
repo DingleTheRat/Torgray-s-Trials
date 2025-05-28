@@ -21,6 +21,7 @@ public class Player extends Entity{
     public final int screenY;
     int standCounter = 0;
     public boolean attackCanceled = false;
+    public boolean inventoryCanceled = false;
 
     public Player(Game game, InputHandler inputHandler) {
         super(game);
@@ -124,10 +125,34 @@ public class Player extends Entity{
     public int getDefence() {
         return defence = dexterity * currentShield.defenceValue;
     }
+
+    @Override
+    public void checkCollision() {
+        // Check tile collision
+        collisionOn = false;
+        CollisionChecker.checkTile(this);
+
+        // Check OBJ collision
+        int objectIndex = CollisionChecker.checkObject(this, true);
+        pickUpObject(objectIndex);
+
+        // Check NPC collision
+        int npcIndex = CollisionChecker.checkEntity(this, game.npc);
+        interactNPC(npcIndex);
+
+        // Check Events
+        EventHandler.checkEvents();
+
+        // Check Mob Collision
+        int monsterIndex = CollisionChecker.checkEntity(this, game.monster);
+        contactMonster(monsterIndex);
+
+    }
     public void update() {
         if (attacking) {
             attack();
-        } else if (inputHandler.upPressed || inputHandler.downPressed || inputHandler.leftPressed || inputHandler.rightPressed || inputHandler.interactKeyPressed) {
+        } else if (inputHandler.upPressed || inputHandler.downPressed || inputHandler.leftPressed || inputHandler.rightPressed) {
+            // Set direction based on input
             if (inputHandler.upPressed && inputHandler.leftPressed) direction = "up left";
             else if (inputHandler.upPressed && inputHandler.rightPressed) direction = "up right";
             else if (inputHandler.downPressed && inputHandler.leftPressed) direction = "down left";
@@ -135,28 +160,13 @@ public class Player extends Entity{
             else if (inputHandler.upPressed) direction = "up";
             else if (inputHandler.downPressed) direction = "down";
             else if (inputHandler.leftPressed) direction = "left";
-            else if (inputHandler.rightPressed) direction = "right";
+            else direction = "right";
 
-            // Check tile collision
-            collisionOn = false;
-            CollisionChecker.checkTile(this);
+            // Check collision
+            checkCollision();
 
-            // Check OBJ collision
-            int objectIndex = CollisionChecker.checkObject(this, true);
-            pickUpObject(objectIndex);
-
-            // Check NPC collision
-            int npcIndex = CollisionChecker.checkEntity(this, game.npc);
-            interactNPC(npcIndex);
-
-            // Check Event
-            EventHandler.checkEvent();
-
-            // Check Mob Collision
-            int monsterIndex = CollisionChecker.checkEntity(this, game.monster);
-            contactMonster(monsterIndex);
-
-            if (!collisionOn && !inputHandler.spacePressed && !inputHandler.interactKeyPressed) {
+            // If no collision, move the player
+            if (!collisionOn) {
                 switch (direction) {
                     case "up left" -> {worldX -= (speed - 1); worldY -= (speed - 1);}
                     case "up right" -> {worldX += (speed - 1); worldY -= (speed - 1);}
@@ -169,22 +179,15 @@ public class Player extends Entity{
                 }
             }
 
-            // Inventory
-            if (inputHandler.interactKeyPressed && !attackCanceled) {
-                game.ui.uiState = States.UIStates.CHARACTER;
-            }
-
-            game.inputHandler.interactKeyPressed = false;
-
+            // Animate the player sprite
             spriteCounter ++;
             if (spriteCounter > 10) {
-                if (spriteNumber == 1) {
-                    spriteNumber = 2;
-                } else if (spriteNumber == 2) {
-                    spriteNumber = 3;
-                } else if (spriteNumber == 3) {
-                    spriteNumber = 1;
-                }
+                spriteNumber = switch (spriteNumber) {
+                    case 1 -> 2;
+                    case 2 -> 3;
+                    case 3 -> 1;
+                    default -> throw new IllegalStateException("Unexpected value: " + spriteNumber);
+                };
                 spriteCounter = 0;
             }
         } else {
@@ -210,6 +213,34 @@ public class Player extends Entity{
             Sound.playSFX("Game Over");
             game.ui.commandNumber = -1;
             Sound.stopMusic();
+        }
+
+        // Attacking
+        if (inputHandler.spacePressed) {
+            checkCollision();
+
+            if (!game.player.attackCanceled && !attacking) {
+                Sound.playSFX("Swing");
+                game.player.attacking = true;
+                game.player.spriteCounter = 0;
+            }
+
+            // Reset Values
+            attackCanceled = false;
+            game.inputHandler.spacePressed = false;
+        }
+
+        // Inventory
+        if (inputHandler.interactKeyPressed) {
+            checkCollision();
+
+            if (!inventoryCanceled && game.ui.uiState == States.UIStates.JUST_DEFAULT) {
+                game.ui.uiState = States.UIStates.CHARACTER;
+            }
+
+            // Reset Values
+            inventoryCanceled = false;
+            game.inputHandler.interactKeyPressed = false;
         }
     }
     public void attack() {
@@ -256,27 +287,32 @@ public class Player extends Entity{
     }
     public void pickUpObject(int i) {
         if (i != 999) {
-            if (game.object.get(game.currentMap).get(i).tags.contains(EntityTags.TAG_OBSTACLE)) {
+            Entity object = game.object.get(game.currentMap).get(i);
+            if (object.tags.contains(EntityTags.TAG_OBSTACLE)) {
                 if (inputHandler.interactKeyPressed) {
-                    game.object.get(game.currentMap).get(i).interact();
+                    object.interact();
+                } else if (object.interactPrompt) {
+                    game.ui.uiState = States.UIStates.INTERACT;
                 }
             }
-            else if (game.object.get(game.currentMap).get(i).tags.contains(EntityTags.TAG_PICKUP_ONLY)) {
-                game.object.get(game.currentMap).get(i).use(this);
+            else if (object.tags.contains(EntityTags.TAG_PICKUP_ONLY)) {
+                object.use(this);
                 game.object.get(game.currentMap).put(i, null);
             }
-            else if (canObtainItem(game.object.get(game.currentMap).get(i))) {
+            else if (canObtainItem(object)) {
                 Sound.playSFX("Coin");
-                String text = "+1 " + game.object.get(game.currentMap).get(i).name;
+                String text = "+1 " + object.name;
                 game.ui.addMiniNotification(text);
                 game.object.get(game.currentMap).put(i, null);
             }
+        } else if (game.ui.uiState == States.UIStates.INTERACT) {
+            game.ui.uiState = States.UIStates.JUST_DEFAULT;
         }
     }
     public void interactNPC(int i) {
         if (game.inputHandler.interactKeyPressed) {
             if (i != 999) {
-                attackCanceled = true;
+                inventoryCanceled = true;
                 game.ui.uiState = States.UIStates.DIALOGUE;
                 game.npc.get(game.currentMap).get(i).speak(false);
             }
