@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Game extends JPanel implements Runnable {
     // Screen settings
@@ -165,6 +166,8 @@ public class Game extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         long timer = 0;
         double delta = 0;
+        long sumNano = 0;
+        long totalNano = 0;
 
         while (gameThread != null) {
             long currentTime = System.nanoTime();
@@ -184,7 +187,15 @@ public class Game extends JPanel implements Runnable {
                     repaint();
                 }
                 delta--;
-                System.out.println(System.nanoTime() - start);
+                
+                sumNano += System.nanoTime() - start;
+                totalNano++;
+                
+                if (totalNano % 100 == 0) {
+                    System.out.println(Math.round((float) sumNano / totalNano / 1000));
+                    sumNano = 0;
+                    totalNano = 0;
+                }
             }
 
             if (timer >= 1_000_000_000) {
