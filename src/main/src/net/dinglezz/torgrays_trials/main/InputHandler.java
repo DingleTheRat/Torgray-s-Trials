@@ -334,8 +334,8 @@ public class InputHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
             if (game.ui.commandNumber == 0) {
-                game.gameState = States.GameStates.PLAY;
                 game.restart();
+                game.gameState = States.GameStates.PLAY;
                 Sound.playMapMusic();
             } else if (game.ui.commandNumber == maxCommandNumber) {
                 game.gameState = States.GameStates.TITLE;
@@ -343,8 +343,8 @@ public class InputHandler implements KeyListener {
                 game.restart();
                 Sound.playMusic("Tech Geek");
             } else if (game.ui.commandNumber == 1) {
-                game.gameState = States.GameStates.PLAY;
                 game.respawn();
+                game.gameState = States.GameStates.PLAY;
                 Sound.playMapMusic();
             }
         }

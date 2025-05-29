@@ -207,6 +207,7 @@ public class Player extends Entity{
         }
         if (health <= 0) {
             game.gameState = States.GameStates.GAME_END;
+            
             Sound.playSFX("Game Over");
             game.ui.commandNumber = -1;
             Sound.stopMusic();

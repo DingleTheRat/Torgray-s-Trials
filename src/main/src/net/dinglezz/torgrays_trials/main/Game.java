@@ -203,14 +203,8 @@ public class Game extends JPanel implements Runnable {
 
             // NPCs
             npc.getOrDefault(currentMap, new HashMap<>()).values().stream()
-                    .parallel()
                     .filter(Objects::nonNull)
                     .forEach(Entity::update);
-            
-            // Respawn if all monsters are dead
-            if (monster.get(currentMap).values().stream().allMatch(Objects::isNull)) {
-                AssetSetter.setMonsters(false);
-            }
             
             // Monsters
             ArrayList<Integer> toRemove = new ArrayList<>();
@@ -224,8 +218,13 @@ public class Game extends JPanel implements Runnable {
                     }
                 }
             });
+            // Remove dead monsters
             for (int key : toRemove) {
                 monster.getOrDefault(currentMap, new HashMap<>()).remove(key);
+            }
+            // Respawn if all monsters are dead
+            if (monster.get(currentMap).values().stream().allMatch(Objects::isNull)) {
+                AssetSetter.setMonsters(false);
             }
 
             // Particles
