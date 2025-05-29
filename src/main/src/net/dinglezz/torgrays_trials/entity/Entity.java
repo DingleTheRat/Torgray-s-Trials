@@ -39,7 +39,7 @@ public abstract class Entity {
 
 
     // Counters
-    public int spriteCounter = 0;
+    public float spriteCounter = 0;
     public int spriteSpeed = 10;
     public float actionLockCounter = 0;
     public float invincibilityCounter = 0;
@@ -226,7 +226,7 @@ public abstract class Entity {
                 }
             }
             
-            spriteCounter++;
+            spriteCounter += game.deltaTime * 60;
             if (spriteCounter > spriteSpeed) {
                 if (spriteNumber == 1) spriteNumber = 2;
                 else if (spriteNumber == 2) spriteNumber = 3;

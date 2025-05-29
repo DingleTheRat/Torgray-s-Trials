@@ -176,7 +176,7 @@ public class Player extends Entity{
 
             game.inputHandler.interactKeyPressed = false;
 
-            spriteCounter ++;
+            spriteCounter += game.deltaTime * 60;
             if (spriteCounter > 10) {
                 if (spriteNumber == 1) {
                     spriteNumber = 2;
@@ -188,7 +188,7 @@ public class Player extends Entity{
                 spriteCounter = 0;
             }
         } else {
-            spriteCounter++;
+            spriteCounter += game.deltaTime * 60;
 
             if (spriteCounter > 20) {
                 spriteNumber = 1;
@@ -213,7 +213,7 @@ public class Player extends Entity{
         }
     }
     public void attack() {
-        spriteCounter ++;
+        spriteCounter += game.deltaTime * 60;
 
         if (spriteCounter <= 5) {
             spriteNumber = 1;
