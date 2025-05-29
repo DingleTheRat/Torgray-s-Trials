@@ -17,7 +17,7 @@ public class Lighting {
     // Main Darkness Stuff
     public States.DarknessStates darknessState = States.DarknessStates.NIGHT;
     public States.DarknessStates nextGloom;
-    public int darknessCounter = 0;
+    public float darknessCounter = 0;
 
     // Darkness Settings
     public int nightLength = 12000;
@@ -156,7 +156,7 @@ public class Lighting {
 
     public void updateDarknessState(States.DarknessStates nextDarknessState, int threshold, boolean transitionWhenDone) {
         if (game.ui.transitioning) return;
-        darknessCounter++;
+        darknessCounter += game.deltaTime * 60;
         if (darknessCounter < threshold)  return;
 
         darknessCounter = 0;
