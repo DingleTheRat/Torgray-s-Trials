@@ -306,7 +306,7 @@ public abstract class Entity {
         }
     }
     public void dyingAnimation(Graphics2D g2, int i) {
-        dyingCounter += game.deltaTime * 12000;
+        dyingCounter += game.deltaTime * 24000;
 
         if (dyingCounter <= i) {changeAlpha(g2, 0f);}
         if (dyingCounter > i && dyingCounter <= i * 2) {changeAlpha(g2, 1f);}

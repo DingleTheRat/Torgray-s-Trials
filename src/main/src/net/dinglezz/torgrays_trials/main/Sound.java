@@ -46,7 +46,14 @@ public class Sound {
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundLibrary.get(soundName));
                 clip = AudioSystem.getClip();
                 clip.open(audioInputStream);
-                floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+                    floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                } else if (clip.isControlSupported(FloatControl.Type.VOLUME)) {
+                    floatControl = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
+                } else {
+                    floatControl = null;
+                    System.err.println("Warning: No supported volume control for clip \"" + soundName + "\"");
+                }
                 checkVolume();
             } else {
                 System.err.println("Warning: \"" + soundName + "\" is not a valid sfx.");

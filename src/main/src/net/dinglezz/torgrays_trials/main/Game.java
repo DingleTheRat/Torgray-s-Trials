@@ -206,25 +206,27 @@ public class Game extends JPanel implements Runnable {
                     .parallel()
                     .filter(Objects::nonNull)
                     .forEach(Entity::update);
-
+            
+            // Respawn if all monsters are dead
+            if (monster.get(currentMap).values().stream().allMatch(Objects::isNull)) {
+                AssetSetter.setMonsters(false);
+            }
+            
             // Monsters
-            monster.getOrDefault(currentMap, new HashMap<>()).entrySet().removeIf(entry -> {
-                Entity entity = entry.getValue();
+            ArrayList<Integer> toRemove = new ArrayList<>();
+            monster.getOrDefault(currentMap, new HashMap<>()).forEach((key, entity) -> {
                 if (entity != null) {
                     if (entity.alive && !entity.dying) {
                         entity.update();
                     } else if (!entity.alive) {
                         entity.checkDrop();
-
-                        // Respawn if all monsters are dead
-                        if (monster.get(currentMap).values().stream().allMatch(Objects::isNull)) {
-                            AssetSetter.setMonsters(false);
-                        }
-                        return true;
+                        toRemove.add(key);
                     }
                 }
-                return false;
             });
+            for (int key : toRemove) {
+                monster.getOrDefault(currentMap, new HashMap<>()).remove(key);
+            }
 
             // Particles
             particleList.removeIf(particle -> particle == null || !particle.alive);
