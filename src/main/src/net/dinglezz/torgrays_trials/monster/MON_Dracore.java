@@ -89,7 +89,7 @@ public class MON_Dracore extends Entity {
             searchPath(goalCol, goalRow, false);
         } else {
             actionLockCounter += game.deltaTime * 60;
-            if (Math.round(actionLockCounter) == 120) {
+            if (actionLockCounter >= 120) {
                 int random = new Random().nextInt(100);
 
                 if (random <= 25) {

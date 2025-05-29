@@ -198,7 +198,7 @@ public abstract class Entity {
             if (knockBack) {
                 checkCollision();
                 
-                if (collisionOn || Math.round(knockBackCounter) == 10) {
+                if (collisionOn || knockBackCounter >= 10) {
                     knockBackCounter = 0;
                     knockBack = false;
                     speed = defaultSpeed;
@@ -281,7 +281,7 @@ public abstract class Entity {
                 graphics2D.setColor(Color.white);
                 graphics2D.fillRect(Math.round(screenX), Math.round(screenY - 15), (int)hpBarValue, 10);
 
-                healthBarCounter += game.deltaTime * 60;
+                healthBarCounter += game.deltaTime * 6000;
                 if (healthBarCounter > 100) {
                     healthBarCounter = 0;
                     healthBarOn = false;
@@ -306,7 +306,7 @@ public abstract class Entity {
         }
     }
     public void dyingAnimation(Graphics2D g2, int i) {
-        dyingCounter += game.deltaTime * 60;
+        dyingCounter += game.deltaTime * 12000;
 
         if (dyingCounter <= i) {changeAlpha(g2, 0f);}
         if (dyingCounter > i && dyingCounter <= i * 2) {changeAlpha(g2, 1f);}

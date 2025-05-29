@@ -168,7 +168,7 @@ public class Game extends JPanel implements Runnable {
         // long totalNano = 0;
 
         while (gameThread != null) {
-            // FPS calculations
+	        // FPS calculations
             frame++;
             long currentTime = System.nanoTime();
             deltaTime = (currentTime - lastTime) / 1_000_000_000.0f;
@@ -203,24 +203,27 @@ public class Game extends JPanel implements Runnable {
 
             // NPCs
             npc.getOrDefault(currentMap, new HashMap<>()).values().stream()
+                    .parallel()
                     .filter(Objects::nonNull)
                     .forEach(Entity::update);
 
             // Monsters
-            monster.getOrDefault(currentMap, new HashMap<>()).forEach((key, entity) -> {
+            monster.getOrDefault(currentMap, new HashMap<>()).entrySet().removeIf(entry -> {
+                Entity entity = entry.getValue();
                 if (entity != null) {
                     if (entity.alive && !entity.dying) {
                         entity.update();
                     } else if (!entity.alive) {
                         entity.checkDrop();
-                        monster.get(currentMap).put(key, null);
 
                         // Respawn if all monsters are dead
                         if (monster.get(currentMap).values().stream().allMatch(Objects::isNull)) {
                             AssetSetter.setMonsters(false);
                         }
+                        return true;
                     }
                 }
+                return false;
             });
 
             // Particles
