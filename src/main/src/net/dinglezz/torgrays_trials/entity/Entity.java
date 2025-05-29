@@ -204,10 +204,10 @@ public abstract class Entity {
                     speed = defaultSpeed;
                 } else {
                     switch (game.player.direction) {
-                        case "up" -> worldY -= speed;
-                        case "down" -> worldY += speed;
-                        case "left" -> worldX -= speed;
-                        case "right" -> worldX += speed;
+                        case "up" -> worldY -= speed * game.deltaTime * 60;
+                        case "down" -> worldY += speed * game.deltaTime * 60;
+                        case "left" -> worldX -= speed * game.deltaTime * 60;
+                        case "right" -> worldX += speed * game.deltaTime * 60;
                     }
                     knockBackCounter++;
                 }
@@ -218,10 +218,10 @@ public abstract class Entity {
                 // If collisionOn is false, move the entity
                 if (!collisionOn) {
                     switch (direction) {
-                        case "up" -> worldY -= speed;
-                        case "down" -> worldY += speed;
-                        case "left" -> worldX -= speed;
-                        case "right" -> worldX += speed;
+                        case "up" -> worldY -= speed * game.deltaTime * 60;
+                        case "down" -> worldY += speed * game.deltaTime * 60;
+                        case "left" -> worldX -= speed * game.deltaTime * 60;
+                        case "right" -> worldX += speed * game.deltaTime * 60;
                     }
                 }
             }

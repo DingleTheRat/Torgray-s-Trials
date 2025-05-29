@@ -48,7 +48,7 @@ public class Game extends JPanel implements Runnable {
 
     // FPS
     float FPS;
-    float deltaTime;
+    public float deltaTime;
     public long drawStart;
 
     // System

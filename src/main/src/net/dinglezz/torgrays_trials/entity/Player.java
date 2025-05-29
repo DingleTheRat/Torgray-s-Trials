@@ -158,14 +158,14 @@ public class Player extends Entity{
 
             if (!collisionOn && !inputHandler.spacePressed && !inputHandler.interactKeyPressed) {
                 switch (direction) {
-                    case "up left" -> {worldX -= (speed - 1); worldY -= (speed - 1);}
-                    case "up right" -> {worldX += (speed - 1); worldY -= (speed - 1);}
-                    case "down left" -> {worldX -= (speed - 1); worldY += (speed - 1);}
-                    case "down right" -> {worldX += (speed - 1); worldY += (speed - 1);}
-                    case "up" -> worldY -= speed;
-                    case "down" -> worldY += speed;
-                    case "left" -> worldX -= speed;
-                    case "right" -> worldX += speed;
+                    case "up left" -> {worldX -= (speed - 1) * game.deltaTime * 60; worldY -= (speed - 1) * game.deltaTime * 60;}
+                    case "up right" -> {worldX += (speed - 1) * game.deltaTime * 60; worldY -= (speed - 1) * game.deltaTime * 60;}
+                    case "down left" -> {worldX -= (speed - 1) * game.deltaTime * 60; worldY += (speed - 1) * game.deltaTime * 60;}
+                    case "down right" -> {worldX += (speed - 1) * game.deltaTime * 60; worldY += (speed - 1) * game.deltaTime * 60;}
+                    case "up" -> worldY -= speed * game.deltaTime * 60;
+                    case "down" -> worldY += speed * game.deltaTime * 60;
+                    case "left" -> worldX -= speed * game.deltaTime * 60;
+                    case "right" -> worldX += speed * game.deltaTime * 60;
                 }
             }
 

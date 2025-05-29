@@ -206,8 +206,10 @@ public class UI {
             graphics2D.drawString("Map: " + game.currentMap, x, y); y += lineHeight;
             graphics2D.drawString("World X: " + game.player.worldX, x, y); y += lineHeight;
             graphics2D.drawString("World Y: " + game.player.worldY, x, y);  y += lineHeight;
-            graphics2D.drawString("Col: " + (game.player.worldX + game.player.solidArea.x) / game.tileSize, x, y);  y += lineHeight;
-            graphics2D.drawString("Row: " + (game.player.worldY + game.player.solidArea.y) / game.tileSize, x, y); y += lineHeight;
+            graphics2D.drawString("Col: " + Math.round(game.player.worldX + game.player.solidArea.x) / game.tileSize, x,
+                    y);  y += lineHeight;
+            graphics2D.drawString("Row: " + Math.round(game.player.worldY + game.player.solidArea.y) / game.tileSize, x,
+                    y); y += lineHeight;
         }
     }
 
