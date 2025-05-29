@@ -41,11 +41,11 @@ public abstract class Entity {
     // Counters
     public int spriteCounter = 0;
     public int spriteSpeed = 10;
-    public int actionLockCounter = 0;
-    public int invincibilityCounter = 0;
-    int dyingCounter = 0;
-    int healthBarCounter = 0;
-    int knockBackCounter = 0;
+    public float actionLockCounter = 0;
+    public float invincibilityCounter = 0;
+    float dyingCounter = 0;
+    float healthBarCounter = 0;
+    float knockBackCounter = 0;
 
     // Attributes
     public String name;
@@ -198,7 +198,7 @@ public abstract class Entity {
             if (knockBack) {
                 checkCollision();
                 
-                if (collisionOn || knockBackCounter == 10) {
+                if (collisionOn || Math.round(knockBackCounter) == 10) {
                     knockBackCounter = 0;
                     knockBack = false;
                     speed = defaultSpeed;
@@ -209,7 +209,7 @@ public abstract class Entity {
                         case "left" -> worldX -= speed * game.deltaTime * 60;
                         case "right" -> worldX += speed * game.deltaTime * 60;
                     }
-                    knockBackCounter++;
+                    knockBackCounter += game.deltaTime * 60;
                 }
             } else {
                 setAction();
@@ -235,7 +235,7 @@ public abstract class Entity {
             }
             
             if (invincible) {
-                invincibilityCounter++;
+                invincibilityCounter += game.deltaTime * 60;
                 if (invincibilityCounter > 40) {
                     invincible = false;
                     invincibilityCounter = 0;
@@ -281,7 +281,7 @@ public abstract class Entity {
                 graphics2D.setColor(Color.white);
                 graphics2D.fillRect(Math.round(screenX), Math.round(screenY - 15), (int)hpBarValue, 10);
 
-                healthBarCounter++;
+                healthBarCounter += game.deltaTime * 60;
                 if (healthBarCounter > 100) {
                     healthBarCounter = 0;
                     healthBarOn = false;
@@ -306,7 +306,7 @@ public abstract class Entity {
         }
     }
     public void dyingAnimation(Graphics2D g2, int i) {
-        dyingCounter++;
+        dyingCounter += game.deltaTime * 60;
 
         if (dyingCounter <= i) {changeAlpha(g2, 0f);}
         if (dyingCounter > i && dyingCounter <= i * 2) {changeAlpha(g2, 1f);}

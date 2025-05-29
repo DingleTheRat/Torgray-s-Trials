@@ -196,7 +196,7 @@ public class Player extends Entity{
             }
         }
         if (invincible) {
-            invincibilityCounter++;
+            invincibilityCounter += game.deltaTime * 60;
             if (invincibilityCounter > 60) {
                 invincible = false;
                 invincibilityCounter = 0;
