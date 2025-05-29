@@ -1,5 +1,6 @@
 package net.dinglezz.torgrays_trials.main;
 
+import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,10 +12,12 @@ public class AssetSetter {
     /// Calls all the asset settings methods
     /// @param removePrevious If true, the previous objects, NPCs, and Monsters in the current map will be all cleared
     public static void setAssets(boolean removePrevious) {
+        long startTime = System.currentTimeMillis();
         AssetSetter.setObjects(removePrevious);
         AssetSetter.setNPCs(removePrevious);
         AssetSetter.setMonsters(removePrevious);
         AssetSetter.setEvents();
+        System.out.println("Assets set in " + (float) (System.currentTimeMillis() - startTime) / 1000 + " seconds");
     }
     /**
      * Initializes and sets up game objects for the current map based on its JSON configuration.
@@ -29,9 +32,10 @@ public class AssetSetter {
     public static void setObjects(boolean removePrevious) {
         JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
         if (file != null) {
+            HashMap<Integer, Entity> objectMap = Main.game.object.getOrDefault(Main.game.currentMap, new HashMap<>());
             Main.game.object.putIfAbsent(Main.game.currentMap, new HashMap<>());
             if (removePrevious) {
-                Main.game.object.get(Main.game.currentMap).clear();
+                objectMap.clear();
             }
 
             try {
@@ -45,12 +49,12 @@ public class AssetSetter {
 
                     if (object.has("loot table")) {
                         String lootTable = object.getString("loot table");
-                        Main.game.object.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path, lootTable));
+                        objectMap.putIfAbsent(i, UtilityTool.generateEntity(path, lootTable));
                     } else {
-                        Main.game.object.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path));
+                        objectMap.putIfAbsent(i, UtilityTool.generateEntity(path));
                     }
-                    Main.game.object.get(Main.game.currentMap).get(i).worldX = col * Main.game.tileSize;
-                    Main.game.object.get(Main.game.currentMap).get(i).worldY = row * Main.game.tileSize;
+                    objectMap.get(i).worldX = col * Main.game.tileSize;
+                    objectMap.get(i).worldY = row * Main.game.tileSize;
                 }
             } catch (JSONException e) {
                 System.err.println("Couldn't load objects");
@@ -69,9 +73,10 @@ public class AssetSetter {
     public static void setNPCs(boolean removePrevious) {
         JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
         if (file != null) {
+            HashMap<Integer, Entity> npcMap = Main.game.npc.getOrDefault(Main.game.currentMap, new HashMap<>());
             Main.game.npc.putIfAbsent(Main.game.currentMap, new HashMap<>());
             if (removePrevious) {
-                Main.game.npc.get(Main.game.currentMap).clear();
+                npcMap.clear();
             }
 
             try {
@@ -85,13 +90,13 @@ public class AssetSetter {
 
                     if (npc.has("loot table")) {
                         String lootTable = npc.getString("loot table");
-                        Main.game.npc.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path, lootTable));
+                        npcMap.putIfAbsent(i, UtilityTool.generateEntity(path, lootTable));
                     } else {
-                        Main.game.npc.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path));
+                        npcMap.putIfAbsent(i, UtilityTool.generateEntity(path));
                     }
-                    Main.game.npc.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path));
-                    Main.game.npc.get(Main.game.currentMap).get(i).worldX = col * Main.game.tileSize;
-                    Main.game.npc.get(Main.game.currentMap).get(i).worldY = row * Main.game.tileSize;
+                    npcMap.putIfAbsent(i, UtilityTool.generateEntity(path));
+                    npcMap.get(i).worldX = col * Main.game.tileSize;
+                    npcMap.get(i).worldY = row * Main.game.tileSize;
                 }
             } catch (JSONException e) {
                 System.err.println("Couldn't load npcs");
@@ -110,9 +115,10 @@ public class AssetSetter {
     public static void setMonsters(boolean removePrevious) {
         JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
         if (file != null) {
+            HashMap<Integer, Entity> monsterMap = Main.game.monster.getOrDefault(Main.game.currentMap, new HashMap<>());
             Main.game.monster.putIfAbsent(Main.game.currentMap, new HashMap<>());
             if (removePrevious) {
-                Main.game.monster.get(Main.game.currentMap).clear();
+                monsterMap.clear();
             }
 
             try {
@@ -126,12 +132,12 @@ public class AssetSetter {
 
                     if (monster.has("loot table")) {
                         String lootTable = monster.getString("loot table");
-                        Main.game.monster.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path, lootTable));
+                        monsterMap.putIfAbsent(i, UtilityTool.generateEntity(path, lootTable));
                     } else {
-                        Main.game.monster.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path));
+                        monsterMap.putIfAbsent(i, UtilityTool.generateEntity(path));
                     }
-                    Main.game.monster.get(Main.game.currentMap).get(i).worldX = col * Main.game.tileSize;
-                    Main.game.monster.get(Main.game.currentMap).get(i).worldY = row * Main.game.tileSize;
+                    monsterMap.get(i).worldX = col * Main.game.tileSize;
+                    monsterMap.get(i).worldY = row * Main.game.tileSize;
                 }
             } catch (JSONException e) {
                 System.err.println("Couldn't load monsters");
