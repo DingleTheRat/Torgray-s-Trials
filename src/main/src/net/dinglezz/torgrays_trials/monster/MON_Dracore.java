@@ -65,9 +65,9 @@ public class MON_Dracore extends Entity {
 
         // Pathfinding
         if (game.pathFinding) {
-            int xDistance = Math.abs(worldX - game.player.worldX);
-            int yDistance = Math.abs(worldY - game.player.worldY);
-            int tileDistance = (xDistance + yDistance) / game.tileSize;
+            float xDistance = Math.abs(worldX - game.player.worldX);
+            float yDistance = Math.abs(worldY - game.player.worldY);
+            float tileDistance = (xDistance + yDistance) / game.tileSize;
 
             if (!onPath && tileDistance < 5) {
                 int random = new Random().nextInt(2);
@@ -83,8 +83,8 @@ public class MON_Dracore extends Entity {
     @Override
     public void setAction() {
         if (onPath) {
-            int goalCol = (game.player.worldX + game.player.solidArea.x) / game.tileSize;
-            int goalRow = (game.player.worldY + game.player.solidArea.y) / game.tileSize;
+            int goalCol = Math.round(game.player.worldX + game.player.solidArea.x) / game.tileSize;
+            int goalRow = Math.round(game.player.worldY + game.player.solidArea.y) / game.tileSize;
 
             searchPath(goalCol, goalRow, false);
         } else {

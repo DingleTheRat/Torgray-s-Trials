@@ -91,8 +91,8 @@ public class TileManager {
     }
 
     public static void draw(Graphics2D graphics2D) {
-        int playerWorldX = Main.game.player.worldX;
-        int playerWorldY = Main.game.player.worldY;
+        float playerWorldX = Main.game.player.worldX;
+        float playerWorldY = Main.game.player.worldY;
         int playerScreenX = Main.game.player.screenX;
         int playerScreenY = Main.game.player.screenY;
         int tileSize = Main.game.tileSize;
@@ -108,18 +108,18 @@ public class TileManager {
                 int tileNumber = mapTileNumbers.get(layer).get(new TilePoint(Main.game.currentMap, worldCol, worldRow));
                 int worldX = worldCol * tileSize;
                 int worldY = worldRow * tileSize;
-                int screenX = worldX - playerWorldX + playerScreenX;
-                int screenY = worldY - playerWorldY + playerScreenY;
+                float screenX = worldX - playerWorldX + playerScreenX;
+                float screenY = worldY - playerWorldY + playerScreenY;
                 // Check if the tile is within the visible screen
                 if (worldX + tileSize > playerWorldX - playerScreenX &&
                         worldX - tileSize < playerWorldX + playerScreenX &&
                         worldY + tileSize > playerWorldY - playerScreenY &&
                         worldY - tileSize < playerWorldY + playerScreenY) {
                     Tile currentTile = tile.get(tileNumber);
-                    graphics2D.drawImage(currentTile.image, screenX, screenY, null);
+                    graphics2D.drawImage(currentTile.image, Math.round(screenX), Math.round(screenY), null);
                     if (Main.game.debugHitBoxes && currentTile.collision && layer.equals("foreground")) {
                         graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
-                        graphics2D.fillRect(screenX, screenY, tileSize, tileSize);
+                        graphics2D.fillRect(Math.round(screenX), Math.round(screenY), tileSize, tileSize);
                     }
                 }
             }));
@@ -130,10 +130,10 @@ public class TileManager {
             for (var pathNode : Main.game.pathFinder.pathList) {
                 int worldX = pathNode.col * tileSize;
                 int worldY = pathNode.row * tileSize;
-                int screenX = worldX - playerWorldX + playerScreenX;
-                int screenY = worldY - playerWorldY + playerScreenY;
+                float screenX = worldX - playerWorldX + playerScreenX;
+                float screenY = worldY - playerWorldY + playerScreenY;
 
-                graphics2D.fillRect(screenX, screenY, tileSize, tileSize);
+                graphics2D.fillRect(Math.round(screenX), Math.round(screenY), tileSize, tileSize);
             }
         }
     }

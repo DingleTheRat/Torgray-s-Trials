@@ -12,21 +12,21 @@ public class CollisionChecker {
             return;
         }
 
-        int entityLeftWordX = entity.worldX + entity.solidArea.x;
-        int entityRightWordX = entity.worldX + entity.solidArea.x + entity.solidArea.width;
-        int entityTopWordY = entity.worldY + entity.solidArea.y;
-        int entityBottomWordY = entity.worldY + entity.solidArea.y + entity.solidArea.height;
+        float entityLeftWordX = entity.worldX + entity.solidArea.x;
+        float entityRightWordX = entity.worldX + entity.solidArea.x + entity.solidArea.width;
+        float entityTopWordY = entity.worldY + entity.solidArea.y;
+        float entityBottomWordY = entity.worldY + entity.solidArea.y + entity.solidArea.height;
 
-        int entityLeftCol = entityLeftWordX / Main.game.tileSize;
-        int entityRightCol = entityRightWordX / Main.game.tileSize;
-        int entityTopRow = entityTopWordY / Main.game.tileSize;
-        int entityBottomRow = entityBottomWordY / Main.game.tileSize;
+        int entityLeftCol = (int) (entityLeftWordX / Main.game.tileSize);
+        int entityRightCol = (int) (entityRightWordX / Main.game.tileSize);
+        int entityTopRow = (int) (entityTopWordY / Main.game.tileSize);
+        int entityBottomRow = (int) (entityBottomWordY / Main.game.tileSize);
 
         int tileNumber1, tileNumber2;
 
         switch (entity.direction) {
             case "up":
-                entityTopRow = (entityTopWordY - entity.speed) / Main.game.tileSize;
+                entityTopRow = (int) ((entityTopWordY - entity.speed) / Main.game.tileSize);
                 tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
                 tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityTopRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
@@ -34,13 +34,13 @@ public class CollisionChecker {
                 }
                 break;
             case  "up left":
-                entityTopRow = (entityTopWordY - entity.speed) / Main.game.tileSize;
+                entityTopRow = (int) ((entityTopWordY - entity.speed) / Main.game.tileSize);
                 tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
                 tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityTopRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }
-                entityLeftCol = (entityLeftWordX - entity.speed) / Main.game.tileSize;
+                entityLeftCol = (int) ((entityLeftWordX - entity.speed) / Main.game.tileSize);
                 tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
                 tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
@@ -48,13 +48,13 @@ public class CollisionChecker {
                 }
                 break;
             case "up right":
-                entityTopRow = (entityTopWordY - entity.speed) / Main.game.tileSize;
+                entityTopRow = (int) ((entityTopWordY - entity.speed) / Main.game.tileSize);
                 tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
                 tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityTopRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }
-                entityRightCol = (entityRightWordX + entity.speed) / Main.game.tileSize;
+                entityRightCol = (int) ((entityRightWordX + entity.speed) / Main.game.tileSize);
                 tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
                 tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
@@ -62,7 +62,7 @@ public class CollisionChecker {
                 }
                 break;
             case "down":
-                entityBottomRow = (entityBottomWordY + entity.speed) / Main.game.tileSize;
+                entityBottomRow = (int) ((entityBottomWordY + entity.speed) / Main.game.tileSize);
                 tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityBottomRow));
                 tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
@@ -70,13 +70,13 @@ public class CollisionChecker {
                 }
                 break;
             case "down left":
-                entityBottomRow = (entityBottomWordY + entity.speed) / Main.game.tileSize;
+                entityBottomRow = (int) ((entityBottomWordY + entity.speed) / Main.game.tileSize);
                 tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityBottomRow));
                 tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }
-                entityLeftCol = (entityLeftWordX - entity.speed) / Main.game.tileSize;
+                entityLeftCol = (int) ((entityLeftWordX - entity.speed) / Main.game.tileSize);
                 tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
                 tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
@@ -84,13 +84,13 @@ public class CollisionChecker {
                 }
                 break;
             case  "down right":
-                entityBottomRow = (entityBottomWordY + entity.speed) / Main.game.tileSize;
+                entityBottomRow = (int) ((entityBottomWordY + entity.speed) / Main.game.tileSize);
                 tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityBottomRow));
                 tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
                     entity.collisionOn = true;
                 }
-                entityRightCol = (entityRightWordX + entity.speed) / Main.game.tileSize;
+                entityRightCol = (int) ((entityRightWordX + entity.speed) / Main.game.tileSize);
                 tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityBottomRow));
                 tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
@@ -98,7 +98,7 @@ public class CollisionChecker {
                 }
                 break;
             case "left":
-                entityLeftCol = (entityLeftWordX - entity.speed) / Main.game.tileSize;
+                entityLeftCol = (int) ((entityLeftWordX - entity.speed) / Main.game.tileSize);
                 tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
                 tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
@@ -106,7 +106,7 @@ public class CollisionChecker {
                 }
                 break;
             case "right":
-                entityRightCol = (entityRightWordX + entity.speed) / Main.game.tileSize;
+                entityRightCol = (int) ((entityRightWordX + entity.speed) / Main.game.tileSize);
                 tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityLeftCol, entityTopRow));
                 tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, entityRightCol, entityBottomRow));
                 if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
@@ -122,10 +122,10 @@ public static int checkObject(Entity entity, boolean player) {
     for (int i = 0; i < Main.game.object.get(Main.game.currentMap).size(); i++) {
         Entity object = Main.game.object.get(Main.game.currentMap).get(i);
         if (object != null) {
-            entity.solidArea.x = entity.worldX + entity.solidAreaDefaultX;
-            entity.solidArea.y = entity.worldY + entity.solidAreaDefaultY;
-            object.solidArea.x = object.worldX + object.solidAreaDefaultX;
-            object.solidArea.y = object.worldY + object.solidAreaDefaultY;
+            entity.solidArea.x = Math.round(entity.worldX + entity.solidAreaDefaultX);
+            entity.solidArea.y = Math.round(entity.worldY + entity.solidAreaDefaultY);
+            object.solidArea.x = Math.round(object.worldX + object.solidAreaDefaultX);
+            object.solidArea.y = Math.round(object.worldY + object.solidAreaDefaultY);
 
             switch (entity.direction) {
                 case "up": entity.solidArea.y -= entity.speed; break;
@@ -158,10 +158,10 @@ public static int checkEntity(Entity entity, HashMap<String, HashMap<Integer, En
         for (int i = 0; i < target.get(Main.game.currentMap).size(); i++) {
             Entity checkedEntity = target.get(Main.game.currentMap).get(i);
             if (checkedEntity != null) {
-                entity.solidArea.x = entity.worldX + entity.solidAreaDefaultX;
-                entity.solidArea.y = entity.worldY + entity.solidAreaDefaultY;
-                checkedEntity.solidArea.x = checkedEntity.worldX + checkedEntity.solidAreaDefaultX;
-                checkedEntity.solidArea.y = checkedEntity.worldY + checkedEntity.solidAreaDefaultY;
+                entity.solidArea.x = Math.round(entity.worldX + entity.solidAreaDefaultX);
+                entity.solidArea.y = Math.round(entity.worldY + entity.solidAreaDefaultY);
+                checkedEntity.solidArea.x = Math.round(checkedEntity.worldX + checkedEntity.solidAreaDefaultX);
+                checkedEntity.solidArea.y = Math.round(checkedEntity.worldY + checkedEntity.solidAreaDefaultY);
 
                 switch (entity.direction) {
                     case "up": entity.solidArea.y -= entity.speed; break;
@@ -188,10 +188,10 @@ public static int checkEntity(Entity entity, HashMap<String, HashMap<Integer, En
     public static boolean checkPlayer(Entity entity) {
         boolean contactPlayer = false;
 
-        entity.solidArea.x = entity.worldX + entity.solidArea.x;
-        entity.solidArea.y = entity.worldY + entity.solidArea.y;
-        Main.game.player.solidArea.x = Main.game.player.worldX + Main.game.player.solidArea.x;
-        Main.game.player.solidArea.y = Main.game.player.worldY + Main.game.player.solidArea.y;
+        entity.solidArea.x = Math.round(entity.worldX + entity.solidArea.x);
+        entity.solidArea.y = Math.round(entity.worldY + entity.solidArea.y);
+        Main.game.player.solidArea.x = Math.round(Main.game.player.worldX + Main.game.player.solidArea.x);
+        Main.game.player.solidArea.y = Math.round(Main.game.player.worldY + Main.game.player.solidArea.y);
 
         switch (entity.direction) {
             case "up": entity.solidArea.y -= entity.speed; break;

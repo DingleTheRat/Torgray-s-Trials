@@ -47,8 +47,8 @@ public class NPC_GateKeeper extends Entity {
     @Override
     public void setAction() {
         if (onPath) {
-            int goalCol = (game.player.worldX + game.player.solidArea.x) / game.tileSize;
-            int goalRow = (game.player.worldY + game.player.solidArea.y) / game.tileSize;
+            int goalCol = Math.round(game.player.worldX + game.player.solidArea.x) / game.tileSize;
+            int goalRow = Math.round(game.player.worldY + game.player.solidArea.y) / game.tileSize;
 
             searchPath(goalCol, goalRow, false);
         } else {

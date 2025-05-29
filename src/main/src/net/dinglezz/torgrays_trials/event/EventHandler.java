@@ -10,7 +10,7 @@ import java.util.Objects;
 public class EventHandler {
     public static final HashMap<TilePoint, EventRectangle> eventRectangles = new HashMap<>();
     public static final ArrayList<Event> events = new ArrayList<>();
-    private static int previousEventX, previousEventY;
+    private static float previousEventX, previousEventY;
     private static boolean canTouchEvent;
 
     /**
@@ -30,9 +30,9 @@ public class EventHandler {
      */
     public static void checkEvent() {
         // Check if player is more then one tile away from the last event
-        int xDistance = Math.abs(Main.game.player.worldX - previousEventX);
-        int yDistance = Math.abs(Main.game.player.worldY - previousEventY);
-        int distance = Math.max(xDistance, yDistance);
+        float xDistance = Math.abs(Main.game.player.worldX - previousEventX);
+        float yDistance = Math.abs(Main.game.player.worldY - previousEventY);
+        float distance = Math.max(xDistance, yDistance);
         if (distance > Main.game.tileSize) canTouchEvent = true;
 
         // Loop through all the events and see if the player is in an event
@@ -73,8 +73,8 @@ public class EventHandler {
         boolean hit = false;
 
         if (Objects.equals(tilePoint.map(), Main.game.currentMap)) {
-            Main.game.player.solidArea.x = Main.game.player.worldX + Main.game.player.solidArea.x;
-            Main.game.player.solidArea.y = Main.game.player.worldY + Main.game.player.solidArea.y;
+            Main.game.player.solidArea.x = Math.round(Main.game.player.worldX + Main.game.player.solidArea.x);
+            Main.game.player.solidArea.y = Math.round(Main.game.player.worldY + Main.game.player.solidArea.y);
             eventRectangles.get(tilePoint).x = tilePoint.col() * Main.game.tileSize + eventRectangles.get(tilePoint).x;
             eventRectangles.get(tilePoint).y = tilePoint.row() * Main.game.tileSize + eventRectangles.get(tilePoint).y;
 

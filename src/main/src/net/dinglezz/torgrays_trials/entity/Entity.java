@@ -24,7 +24,7 @@ public abstract class Entity {
     public HashMap<Integer, String> dialogues = new HashMap<>();
 
     // States
-    public int worldX, worldY;
+    public float worldX, worldY;
     public String direction = "down";
     public int spriteNumber = 1;
     int dialogueIndex = 0;
@@ -105,12 +105,12 @@ public abstract class Entity {
         image3 = registerEntitySprite("/disabled");
     }
 
-    public int getLeftX() {return worldX + solidArea.x;}
-    public int getRightX() {return worldX + solidArea.x + solidArea.width;}
-    public int getTopY() {return worldY + solidArea.y;}
-    public int getBottomY() {return worldY + solidArea.y + solidArea.height;}
-    public int getCol() {return (worldX + solidArea.x) / game.tileSize;}
-    public int getRow() {return (worldY + solidArea.y) / game.tileSize;}
+    public float getLeftX() {return worldX + solidArea.x;}
+    public float getRightX() {return worldX + solidArea.x + solidArea.width;}
+    public float getTopY() {return worldY + solidArea.y;}
+    public float getBottomY() {return worldY + solidArea.y + solidArea.height;}
+    public float getCol() {return (worldX + solidArea.x) / game.tileSize;}
+    public float getRow() {return (worldY + solidArea.y) / game.tileSize;}
 
     public void setAction() {}
     public void damageReaction() {}
@@ -257,8 +257,8 @@ public abstract class Entity {
     }
     public void draw(Graphics2D graphics2D) {
         BufferedImage image = null;
-        int screenX = worldX - game.player.worldX + game.player.screenX;
-        int screenY = worldY - game.player.worldY + game.player.screenY;
+        float screenX = worldX - game.player.worldX + game.player.screenX;
+        float screenY = worldY - game.player.worldY + game.player.screenY;
 
         if (worldX + game.tileSize > game.player.worldX - game.player.screenX &&
                 worldX - game.tileSize < game.player.worldX + game.player.screenX &&
@@ -277,9 +277,9 @@ public abstract class Entity {
                 double hpBarValue = oneScale * health;
 
                 graphics2D.setColor(Color.black);
-                graphics2D.fillRect( screenX - 2, screenY - 17, game.tileSize + 4, 14);
+                graphics2D.fillRect(Math.round(screenX - 2), Math.round(screenY - 17), game.tileSize + 4, 14);
                 graphics2D.setColor(Color.white);
-                graphics2D.fillRect(screenX, screenY - 15, (int)hpBarValue, 10);
+                graphics2D.fillRect(Math.round(screenX), Math.round(screenY - 15), (int)hpBarValue, 10);
 
                 healthBarCounter++;
                 if (healthBarCounter > 100) {
@@ -295,12 +295,13 @@ public abstract class Entity {
             }
             if (dying) dyingAnimation(graphics2D, 5);
 
-            graphics2D.drawImage(image, screenX, screenY, null);
+            graphics2D.drawImage(image, Math.round(screenX), Math.round(screenY), null);
             changeAlpha(graphics2D, 1f);
 
             if (game.debugHitBoxes) {
                 graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
-                graphics2D.fillRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+                graphics2D.fillRect(Math.round(screenX + solidArea.x), Math.round(screenY + solidArea.y),
+                        solidArea.width, solidArea.height);
             }
         }
     }
@@ -355,8 +356,8 @@ public abstract class Entity {
         int index = 999;
 
         // Check surrounding objects
-        int nextWorldX = user.getLeftX();
-        int nextWorldY = user.getTopY();
+        float nextWorldX = user.getLeftX();
+        float nextWorldY = user.getTopY();
 
         switch (user.direction) {
             case "up" -> nextWorldY = user.getTopY() - 10;
@@ -364,8 +365,8 @@ public abstract class Entity {
             case "left" -> nextWorldX = user.getLeftX() - 10;
             case "right" -> nextWorldY = user.getRightX() + 10;
         }
-        int col = nextWorldX / game.tileSize;
-        int row = nextWorldY / game.tileSize;
+        float col = nextWorldX / game.tileSize;
+        float row = nextWorldY / game.tileSize;
 
         for (int i = 0; i < target.size(); i++) {
             if (target.get(i) != null) {
@@ -380,9 +381,9 @@ public abstract class Entity {
         return index;
     }
     public void searchPath(int goalCol, int goalRow, boolean endSearch) {
-        int startCol = (worldX + solidArea.x) / game.tileSize;
-        int startRow = (worldY + solidArea.y) / game.tileSize;
-        game.pathFinder.setNodes(startCol, startRow, goalCol, goalRow);
+        float startCol = (worldX + solidArea.x) / game.tileSize;
+        float startRow = (worldY + solidArea.y) / game.tileSize;
+        game.pathFinder.setNodes(Math.round(startCol), Math.round(startRow), goalCol, goalRow);
 
         if (game.pathFinder.search()) {
             // Next worldX & worldY
@@ -390,10 +391,10 @@ public abstract class Entity {
             int nextY = game.pathFinder.pathList.getFirst().row * game.tileSize;
 
             // Entity's solidArea position
-            int enLeftX = worldX + solidArea.x;
-            int enRightX = worldX + solidArea.x + solidArea.width;
-            int enTopY = worldY + solidArea.y;
-            int enBottomY = worldY + solidArea.y + solidArea.height;
+            float enLeftX = worldX + solidArea.x;
+            float enRightX = worldX + solidArea.x + solidArea.width;
+            float enTopY = worldY + solidArea.y;
+            float enBottomY = worldY + solidArea.y + solidArea.height;
 
             if (enTopY > nextY && enLeftX >= nextX && enRightX < nextX + game.tileSize) {
                 direction = "up";

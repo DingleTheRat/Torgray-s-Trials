@@ -258,7 +258,7 @@ public class Game extends JPanel implements Runnable {
             // Sort and draw entities
             entityList.stream()
                     .filter(Objects::nonNull)
-                    .sorted(Comparator.comparingInt(e -> e.worldY))
+                    .sorted(Comparator.comparingDouble(e -> e.worldY))
                     .forEach(entity -> entity.draw(graphics2D));
 
             // Empty Entity List

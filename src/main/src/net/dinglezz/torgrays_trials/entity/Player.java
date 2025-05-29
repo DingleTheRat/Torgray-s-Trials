@@ -222,8 +222,8 @@ public class Player extends Entity{
             spriteNumber = 2;
 
             // Save current worldX, worldY and solidArea
-            int currentWorldX = worldX;
-            int currentWorldY = worldY;
+            float currentWorldX = worldX;
+            float currentWorldY = worldY;
             int solidAreaWidth = solidArea.width;
             int solidAreaHeight = solidArea.height;
 
