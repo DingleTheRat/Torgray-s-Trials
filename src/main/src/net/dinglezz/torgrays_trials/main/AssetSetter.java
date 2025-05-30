@@ -5,6 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AssetSetter {
@@ -29,7 +30,7 @@ public class AssetSetter {
     public static void setObjects(boolean removePrevious) {
         JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
         if (file != null) {
-            Main.game.object.putIfAbsent(Main.game.currentMap, new HashMap<>());
+            Main.game.object.putIfAbsent(Main.game.currentMap, new ArrayList<>());
             if (removePrevious) {
                 Main.game.object.get(Main.game.currentMap).clear();
             }
@@ -45,9 +46,9 @@ public class AssetSetter {
 
                     if (object.has("loot table")) {
                         String lootTable = object.getString("loot table");
-                        Main.game.object.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path, lootTable));
+                        Main.game.object.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path, lootTable));
                     } else {
-                        Main.game.object.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path));
+                        Main.game.object.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path));
                     }
                     Main.game.object.get(Main.game.currentMap).get(i).worldX = col * Main.game.tileSize;
                     Main.game.object.get(Main.game.currentMap).get(i).worldY = row * Main.game.tileSize;
@@ -69,7 +70,7 @@ public class AssetSetter {
     public static void setNPCs(boolean removePrevious) {
         JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
         if (file != null) {
-            Main.game.npc.putIfAbsent(Main.game.currentMap, new HashMap<>());
+            Main.game.npc.putIfAbsent(Main.game.currentMap, new ArrayList<>());
             if (removePrevious) {
                 Main.game.npc.get(Main.game.currentMap).clear();
             }
@@ -85,11 +86,11 @@ public class AssetSetter {
 
                     if (npc.has("loot table")) {
                         String lootTable = npc.getString("loot table");
-                        Main.game.npc.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path, lootTable));
+                        Main.game.npc.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path, lootTable));
                     } else {
-                        Main.game.npc.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path));
+                        Main.game.npc.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path));
                     }
-                    Main.game.npc.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path));
+                    Main.game.npc.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path));
                     Main.game.npc.get(Main.game.currentMap).get(i).worldX = col * Main.game.tileSize;
                     Main.game.npc.get(Main.game.currentMap).get(i).worldY = row * Main.game.tileSize;
                 }
@@ -110,7 +111,7 @@ public class AssetSetter {
     public static void setMonsters(boolean removePrevious) {
         JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
         if (file != null) {
-            Main.game.monster.putIfAbsent(Main.game.currentMap, new HashMap<>());
+            Main.game.monster.putIfAbsent(Main.game.currentMap, new ArrayList<>());
             if (removePrevious) {
                 Main.game.monster.get(Main.game.currentMap).clear();
             }
@@ -126,9 +127,9 @@ public class AssetSetter {
 
                     if (monster.has("loot table")) {
                         String lootTable = monster.getString("loot table");
-                        Main.game.monster.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path, lootTable));
+                        Main.game.monster.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path, lootTable));
                     } else {
-                        Main.game.monster.get(Main.game.currentMap).putIfAbsent(i, UtilityTool.generateEntity(path));
+                        Main.game.monster.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path));
                     }
                     Main.game.monster.get(Main.game.currentMap).get(i).worldX = col * Main.game.tileSize;
                     Main.game.monster.get(Main.game.currentMap).get(i).worldY = row * Main.game.tileSize;

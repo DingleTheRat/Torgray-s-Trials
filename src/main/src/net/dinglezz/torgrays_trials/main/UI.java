@@ -75,10 +75,10 @@ public class UI {
         miniNotifications.add(message);
         miniNotificationCounter.add(0);
     }
-    public void draw(Graphics2D g2) {
-        this.graphics2D = g2;
-        g2.setFont(maruMonica);
-        g2.setColor(Color.white);
+    public void draw(Graphics2D graphics2D) {
+        this.graphics2D = graphics2D;
+        graphics2D.setFont(maruMonica);
+        graphics2D.setColor(Color.white);
 
         if (transitioning) {
             drawTransitionScreen();

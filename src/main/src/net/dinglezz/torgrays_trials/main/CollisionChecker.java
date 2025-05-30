@@ -4,6 +4,7 @@ import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.tile.TileManager;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CollisionChecker {
@@ -152,7 +153,7 @@ public static int checkObject(Entity entity, boolean player) {
     return index;
 }
 
-public static int checkEntity(Entity entity, HashMap<String, HashMap<Integer, Entity>> target) {
+public static int checkEntity(Entity entity, HashMap<String, ArrayList<Entity>> target) {
     int index = 999;
     if (target.get(Main.game.currentMap) != null) {
         for (int i = 0; i < target.get(Main.game.currentMap).size(); i++) {

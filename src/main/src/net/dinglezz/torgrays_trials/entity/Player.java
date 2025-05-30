@@ -19,7 +19,6 @@ public class Player extends Entity{
 
     public final int screenX;
     public final int screenY;
-    int standCounter = 0;
     public boolean attackCanceled = false;
     public boolean inventoryCanceled = false;
 
@@ -297,13 +296,13 @@ public class Player extends Entity{
             }
             else if (object.tags.contains(EntityTags.TAG_PICKUP_ONLY)) {
                 object.use(this);
-                game.object.get(game.currentMap).put(i, null);
+                game.object.get(game.currentMap).set(i, null);
             }
             else if (canObtainItem(object)) {
                 Sound.playSFX("Coin");
                 String text = "+1 " + object.name;
                 game.ui.addMiniNotification(text);
-                game.object.get(game.currentMap).put(i, null);
+                game.object.get(game.currentMap).set(i, null);
             }
         } else if (game.ui.uiState == States.UIStates.INTERACT) {
             game.ui.uiState = States.UIStates.JUST_DEFAULT;

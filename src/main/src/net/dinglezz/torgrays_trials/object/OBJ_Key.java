@@ -27,7 +27,7 @@ public class OBJ_Key extends Entity {
         if (objIndex != 999) {
             game.ui.addMiniNotification("-1 Key");
             Sound.playSFX("Unlock");
-            game.object.get(game.currentMap).put(objIndex, null);
+            game.object.get(game.currentMap).set(objIndex, null);
             return true;
         } else {
             return false;

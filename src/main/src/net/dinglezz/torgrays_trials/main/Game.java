@@ -61,9 +61,9 @@ public class Game extends JPanel implements Runnable {
 
     // Entities and Objects
     public Player player = new Player(this, inputHandler);
-    public HashMap<String, HashMap<Integer, Entity>> npc = new HashMap<>();
-    public HashMap<String, HashMap<Integer, Entity>> object = new HashMap<>();
-    public HashMap<String, HashMap<Integer, Entity>> monster = new HashMap<>();
+    public HashMap<String, ArrayList<Entity>> npc = new HashMap<>();
+    public HashMap<String, ArrayList<Entity>> object = new HashMap<>();
+    public HashMap<String, ArrayList<Entity>> monster = new HashMap<>();
     public ArrayList<Entity> particleList = new ArrayList<>();
     public ArrayList<Entity> entityList = new ArrayList<>();
 
@@ -212,26 +212,28 @@ public class Game extends JPanel implements Runnable {
             player.update();
 
             // NPCs
-            npc.getOrDefault(currentMap, new HashMap<>()).values().stream()
+            npc.getOrDefault(currentMap, new ArrayList<>()).stream()
                     .filter(Objects::nonNull)
                     .forEach(Entity::update);
 
             // Monsters
-            monster.getOrDefault(currentMap, new HashMap<>()).forEach((key, entity) -> {
+            ArrayList<Entity> monsters = monster.getOrDefault(currentMap, new ArrayList<>());
+            for (int i = 0; i < monsters.size(); i++) {
+                Entity entity = monsters.get(i);
                 if (entity != null) {
                     if (entity.alive && !entity.dying) {
                         entity.update();
                     } else if (!entity.alive) {
                         entity.checkDrop();
-                        monster.get(currentMap).put(key, null);
+                        monsters.set(i, null);
 
                         // Respawn if all monsters are dead
-                        if (monster.get(currentMap).values().stream().allMatch(Objects::isNull)) {
+                        if (monsters.stream().allMatch(Objects::isNull)) {
                             AssetSetter.setMonsters(false);
                         }
                     }
                 }
-            });
+            }
 
             // Particles
             particleList.removeIf(particle -> particle == null || !particle.alive);
@@ -260,9 +262,9 @@ public class Game extends JPanel implements Runnable {
                 entityList.add(player);
             }
             
-            entityList.addAll(npc.getOrDefault(currentMap, new HashMap<>()).values());
-            entityList.addAll(object.getOrDefault(currentMap, new HashMap<>()).values());
-            entityList.addAll(monster.getOrDefault(currentMap, new HashMap<>()).values());
+            entityList.addAll(npc.getOrDefault(currentMap, new ArrayList<>()));
+            entityList.addAll(object.getOrDefault(currentMap, new ArrayList<>()));
+            entityList.addAll(monster.getOrDefault(currentMap, new ArrayList<>()));
             entityList.addAll(particleList);
 
             // Sort and draw entities

@@ -133,7 +133,7 @@ public abstract class Entity {
         if (game.object.get(game.currentMap) != null) {
             for (int i = 0; i < game.object.get(game.currentMap).size(); i++) {
                 if (game.object.get(game.currentMap).get(i) == null) {
-                    game.object.get(game.currentMap).put(i, droppedItem);
+                    game.object.get(game.currentMap).add(i, droppedItem);
                     droppedItem.worldX = worldX;
                     droppedItem.worldY = worldY;
                     break;
@@ -357,7 +357,7 @@ public abstract class Entity {
         return image;
     }
 
-    public int getDetected(Entity user, HashMap<Integer, Entity> target, String targetName) {
+    public int getDetected(Entity user, ArrayList<Entity> target, String targetName) {
         int index = 999;
 
         // Check surrounding objects
