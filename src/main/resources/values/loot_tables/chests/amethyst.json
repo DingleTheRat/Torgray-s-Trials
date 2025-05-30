@@ -6,7 +6,7 @@
       "loot": [{
         "amount": 1,
         "chance": 1,
-        "object": "net.dinglezz.torgrays_trials.object.weapon.OBJ_Sword_Amethyst"
+        "object": "net.dinglezz.torgrays_trials.object.weapon.Sword_Amethyst"
       }]
     },
     {
@@ -22,7 +22,7 @@
       "loot": [{
         "amount": 4,
         "chance": 1,
-        "object": "net.dinglezz.torgrays_trials.object.OBJ_Coins"
+        "object": "net.dinglezz.torgrays_trials.object.Coins"
       }]
     }
   ]

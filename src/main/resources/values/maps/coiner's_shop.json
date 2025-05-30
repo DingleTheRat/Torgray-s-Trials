@@ -7,19 +7,19 @@
   },
   "entities": {
     "npcs": [{
-      "path": "net.dinglezz.torgrays_trials.npc.NPC_Coiner",
+      "path": "net.dinglezz.torgrays_trials.npc.Coiner",
       "col": 12,
       "row": 9
     }],
     "monsters": [],
     "objects": [
       {
-        "path": "net.dinglezz.torgrays_trials.object.OBJ_Table",
+        "path": "net.dinglezz.torgrays_trials.object.Table",
         "col": 12,
         "row": 10
       },
       {
-        "path": "net.dinglezz.torgrays_trials.object.OBJ_Dark_Chest",
+        "path": "net.dinglezz.torgrays_trials.object.Dark_Chest",
         "col": 10,
         "row": 9,
         "loot table": "Normal Dark Chest"
