@@ -6,10 +6,11 @@ import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.Sound;
 
-public class OBJ_Key extends Entity {
+
+public class Key extends Entity {
     Game game;
 
-    public OBJ_Key(Game game) {
+    public Key(Game game) {
         super(game);
         this.game = game;
 

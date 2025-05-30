@@ -5,8 +5,8 @@ import net.dinglezz.torgrays_trials.entity.EntityTags;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
 
-public class OBJ_Sword_Iron extends Entity {
-    public OBJ_Sword_Iron(Game game) {
+public class Sword_Iron extends Entity {
+    public Sword_Iron(Game game) {
         super(game);
 
         name = "Iron Sword";

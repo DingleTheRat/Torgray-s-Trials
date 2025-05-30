@@ -2,10 +2,10 @@ package net.dinglezz.torgrays_trials.entity;
 
 import net.dinglezz.torgrays_trials.event.EventHandler;
 import net.dinglezz.torgrays_trials.main.*;
-import net.dinglezz.torgrays_trials.object.OBJ_Coins;
-import net.dinglezz.torgrays_trials.object.OBJ_Lantern;
+import net.dinglezz.torgrays_trials.object.Coins;
+import net.dinglezz.torgrays_trials.object.Lantern;
 import net.dinglezz.torgrays_trials.object.shield.OBJ_Shield_Iron;
-import net.dinglezz.torgrays_trials.object.weapon.OBJ_Sword_Iron;
+import net.dinglezz.torgrays_trials.object.weapon.Sword_Iron;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -87,9 +87,9 @@ public class Player extends Entity{
         exp = 0;
         nextLevelExp = 5;
         coins = 2;
-        currentWeapon = new OBJ_Sword_Iron(game);
+        currentWeapon = new Sword_Iron(game);
         currentShield = new OBJ_Shield_Iron(game);
-        currentLight = new OBJ_Lantern(game);
+        currentLight = new Lantern(game);
         attack = getAttack();
         defence = getDefence();
     }
@@ -112,7 +112,7 @@ public class Player extends Entity{
     }
     public void setItems() {
         inventory.clear();
-        inventory.add(new OBJ_Coins(game, 2));
+        inventory.add(new Coins(game, 2));
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(currentLight);

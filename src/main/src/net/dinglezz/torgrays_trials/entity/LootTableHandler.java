@@ -1,8 +1,6 @@
 package net.dinglezz.torgrays_trials.entity;
 
-import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.UtilityTool;
-import net.dinglezz.torgrays_trials.object.OBJ_Coins;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,7 +8,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Random;
 
 public class LootTableHandler {
