@@ -46,10 +46,10 @@ public class NPC_GateKeeper extends Entity {
         right3 = registerEntitySprite("/npc/gatekeeper/gatekeeper_right_3");
     }
     public void setDialogue() {
-        dialogues.put(0, "Hey there partner!");
-        dialogues.put(1, "This place is quite dark isn't it?");
-        dialogues.put(2, "I heard that it's some sort of curse that \nwas placed upon this village");
-        dialogues.put(3, "Who did it though?");
+        dialogues.addFirst("Hey there partner!");
+        dialogues.add(1, "This place is quite dark isn't it?");
+        dialogues.add(2, "I heard that it's some sort of curse that \nwas placed upon this village");
+        dialogues.add(3, "Who did it though?");
     }
 
     @Override

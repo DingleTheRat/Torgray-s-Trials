@@ -18,7 +18,7 @@ public abstract class Entity {
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collision = false;
-    public HashMap<Integer, String> dialogues = new HashMap<>();
+    public ArrayList <String> dialogues = new ArrayList<>();
 
     // States
     public int worldX, worldY;
@@ -113,7 +113,7 @@ public abstract class Entity {
     public void setAction() {}
     public void damageReaction() {}
     public void speak(boolean facePlayer) {
-        if (dialogues.get(dialogueIndex) == null) dialogueIndex = 0;
+        if (dialogueIndex >= dialogues.size()) dialogueIndex = 0;
         game.ui.setCurrentDialogue(dialogues.get(dialogueIndex));
         dialogueIndex++;
 
