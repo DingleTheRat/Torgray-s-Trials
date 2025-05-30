@@ -5,8 +5,8 @@ import net.dinglezz.torgrays_trials.entity.EntityTags;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
 
-public class OBJ_Stick extends Entity {
-    public OBJ_Stick(Game game) {
+public class Stick extends Entity {
+    public Stick(Game game) {
         super(game);
 
         name = "Stick";

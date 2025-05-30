@@ -5,10 +5,10 @@ import net.dinglezz.torgrays_trials.entity.EntityTags;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
 
-public class OBJ_Gate extends Entity {
+public class Gate extends Entity {
     Game game;
 
-    public OBJ_Gate(Game game) {
+    public Gate(Game game) {
         super(game);
         this.game = game;
 

@@ -6,10 +6,10 @@ import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.States;
 
-public class OBJ_Map extends Entity {
+public class Map extends Entity {
     Game game;
 
-    public OBJ_Map(Game game) {
+    public Map(Game game) {
         super(game);
         this.game = game;
 

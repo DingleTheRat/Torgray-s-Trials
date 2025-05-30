@@ -10,12 +10,12 @@ import net.dinglezz.torgrays_trials.main.States;
 
 import java.util.ArrayList;
 
-public class OBJ_Dark_Chest extends Entity {
+public class Dark_Chest extends Entity {
     Game game;
     String lootTable;
     boolean opened = false;
 
-    public OBJ_Dark_Chest(Game game, String lootTable) {
+    public Dark_Chest(Game game, String lootTable) {
         super(game);
         this.game = game;
         this.lootTable = lootTable;

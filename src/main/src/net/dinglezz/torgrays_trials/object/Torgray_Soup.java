@@ -10,10 +10,10 @@ import net.dinglezz.torgrays_trials.main.States;
 import java.awt.*;
 import java.util.Random;
 
-public class OBJ_Torgray_Soup extends Entity {
+public class Torgray_Soup extends Entity {
     Game game;
 
-    public OBJ_Torgray_Soup(Game game) {
+    public Torgray_Soup(Game game) {
         super(game);
         this.game = game;
 

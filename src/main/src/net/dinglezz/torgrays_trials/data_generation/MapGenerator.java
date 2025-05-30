@@ -128,8 +128,8 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 				true,
 				new Entity[] {
 					// Keys
-					new Entity(OBJ_Key.class, 23, 40, null),
-					new Entity(OBJ_Key.class, 38, 8, null),
+					new Entity(Key.class, 23, 40, null),
+					new Entity(Key.class, 38, 8, null),
 
 					// Gates
 					new Entity(Gate.class, 10, 12, null),

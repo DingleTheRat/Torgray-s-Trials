@@ -10,11 +10,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class MON_Dracore extends Entity {
+public class Dracore extends Entity {
     Game game;
     String lootTable;
 
-    public MON_Dracore(Game game, String lootTable) {
+    public Dracore(Game game, String lootTable) {
         super(game);
         this.game = game;
         this.lootTable = lootTable;

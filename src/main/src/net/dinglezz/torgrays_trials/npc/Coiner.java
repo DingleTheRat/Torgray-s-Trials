@@ -4,15 +4,15 @@ import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.States;
-import net.dinglezz.torgrays_trials.object.OBJ_Key;
-import net.dinglezz.torgrays_trials.object.OBJ_Map;
-import net.dinglezz.torgrays_trials.object.weapon.OBJ_Stick;
-import net.dinglezz.torgrays_trials.object.OBJ_Torgray_Soup;
+import net.dinglezz.torgrays_trials.object.Key;
+import net.dinglezz.torgrays_trials.object.Map;
+import net.dinglezz.torgrays_trials.object.Torgray_Soup;
+import net.dinglezz.torgrays_trials.object.weapon.Stick;
 
-public class NPC_Coiner extends Entity {
+public class Coiner extends Entity {
     Game game;
 
-    public NPC_Coiner(Game game) {
+    public Coiner(Game game) {
         super(game);
         this.game = game;
         type = EntityTypes.TYPE_NPC;
@@ -42,10 +42,10 @@ public class NPC_Coiner extends Entity {
         dialogues.addFirst("Hey there partner, I'm Coiner! \nWanna buy or sell something? :D");
     }
     public void setItem() {
-        inventory.add(new OBJ_Torgray_Soup(game));
-        inventory.add(new OBJ_Key(game));
-        inventory.add(new OBJ_Stick(game));
-        inventory.add(new OBJ_Map(game));
+        inventory.add(new Torgray_Soup(game));
+        inventory.add(new Key(game));
+        inventory.add(new Stick(game));
+        inventory.add(new Map(game));
     }
     @Override
     public void speak(boolean facePlayer) {

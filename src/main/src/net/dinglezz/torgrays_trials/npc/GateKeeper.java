@@ -6,10 +6,10 @@ import net.dinglezz.torgrays_trials.main.Game;
 
 import java.util.Random;
 
-public class NPC_GateKeeper extends Entity {
+public class GateKeeper extends Entity {
     Game game;
 
-    public NPC_GateKeeper(Game game) {
+    public GateKeeper(Game game) {
         super(game);
         this.game = game;
         type = EntityTypes.TYPE_NPC;

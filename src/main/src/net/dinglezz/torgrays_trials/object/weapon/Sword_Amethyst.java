@@ -5,8 +5,8 @@ import net.dinglezz.torgrays_trials.entity.EntityTags;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
 
-public class OBJ_Sword_Amethyst extends Entity {
-    public OBJ_Sword_Amethyst(Game game) {
+public class Sword_Amethyst extends Entity {
+    public Sword_Amethyst(Game game) {
         super(game);
 
         name = "Amethyst Sword";

@@ -6,10 +6,10 @@ import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.Sound;
 
-public class OBJ_Coins extends Entity {
+public class Coins extends Entity {
     Game game;
 
-    public OBJ_Coins(Game game, int amount) {
+    public Coins(Game game, int amount) {
         super(game);
         this.game = game;
         this.amount = amount;
@@ -22,7 +22,7 @@ public class OBJ_Coins extends Entity {
         down1 = registerEntitySprite("/object/coin");
         description = "Precious pieces of gold";
     }
-    public OBJ_Coins(Game game) {
+    public Coins(Game game) {
         super(game);
         this.game = game;
 

@@ -4,8 +4,8 @@ import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
 
-public class OBJ_Heart extends Entity {
-    public OBJ_Heart(Game game) {
+public class Heart extends Entity {
+    public Heart(Game game) {
         super(game);
         name = "Heart";
         type = EntityTypes.TYPE_OBJECT;
