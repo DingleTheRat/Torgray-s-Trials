@@ -13,6 +13,7 @@ public class Sound {
     Clip clip;
     public HashMap<String, URL> soundLibrary = new HashMap<>();
     FloatControl floatControl;
+    boolean floatControlSupported = true;
     int volumeScale = 3;
     float volume;
 
@@ -48,10 +49,13 @@ public class Sound {
                 clip.open(audioInputStream);
                 if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
                     floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                    floatControlSupported = true;
                 } else if (clip.isControlSupported(FloatControl.Type.VOLUME)) {
                     floatControl = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
+                    floatControlSupported = true;
                 } else {
                     floatControl = null;
+                    floatControlSupported = false;
                     System.err.println("Warning: No supported volume control for clip \"" + soundName + "\"");
                 }
                 checkVolume();
@@ -69,7 +73,7 @@ public class Sound {
             System.err.println("Warning: No clip found to play");}
     }
     public void loop() {
-        if ( clip != null) {
+        if (clip != null) {
             clip.loop(Clip.LOOP_CONTINUOUSLY);
         } else {
             System.err.println("Warning: No clip found to loop");
@@ -87,7 +91,7 @@ public class Sound {
             case 4 -> volume = 1f;
             case 5 -> volume = 6f;
         }
-        floatControl.setValue(volume);
+        if (floatControlSupported) floatControl.setValue(volume);
     }
 
     // Static Stuff
