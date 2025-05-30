@@ -93,12 +93,12 @@
     ],
     "objects": [
       {
-        "path": "net.dinglezz.torgrays_trials.object.Key",
+        "path": "net.dinglezz.torgrays_trials.object.Gate_Key",
         "col": 23,
         "row": 40
       },
       {
-        "path": "net.dinglezz.torgrays_trials.object.Key",
+        "path": "net.dinglezz.torgrays_trials.object.Gate_Key",
         "col": 38,
         "row": 8
       },
