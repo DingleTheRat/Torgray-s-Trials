@@ -134,11 +134,18 @@ public class Game extends JPanel implements Runnable {
         environmentManager.lightUpdated = true;
     }
     public void restart() {
+        // Set default stuff
         player.setDefaultValues();
         player.setItems();
-        AssetSetter.setAssets(true);
         currentMap = "Main Island";
         player.setDefaultPosition();
+
+        // Set Assets
+        object.clear();
+        npc.clear();
+        monster.clear();
+        AssetSetter.setAssets(true);
+
 
         // Darkness reset
         environmentManager.lightUpdated = true;
