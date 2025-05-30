@@ -4,8 +4,8 @@ import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.States;
-import net.dinglezz.torgrays_trials.object.Key;
-import net.dinglezz.torgrays_trials.object.Map;
+import net.dinglezz.torgrays_trials.object.Gate_Key;
+import net.dinglezz.torgrays_trials.object.World_Map;
 import net.dinglezz.torgrays_trials.object.Torgray_Soup;
 import net.dinglezz.torgrays_trials.object.weapon.Stick;
 
@@ -43,9 +43,9 @@ public class Coiner extends Entity {
     }
     public void setItem() {
         inventory.add(new Torgray_Soup(game));
-        inventory.add(new Key(game));
+        inventory.add(new Gate_Key(game));
         inventory.add(new Stick(game));
-        inventory.add(new Map(game));
+        inventory.add(new World_Map(game));
     }
     @Override
     public void speak(boolean facePlayer) {

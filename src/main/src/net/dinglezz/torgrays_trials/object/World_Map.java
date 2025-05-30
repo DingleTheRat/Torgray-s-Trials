@@ -6,14 +6,14 @@ import net.dinglezz.torgrays_trials.entity.EntityTypes;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.States;
 
-public class Map extends Entity {
+public class World_Map extends Entity {
     Game game;
 
-    public Map(Game game) {
+    public World_Map(Game game) {
         super(game);
         this.game = game;
 
-        name = "Map";
+        name = "World Map";
         down1 = registerEntitySprite("/object/map");
         type = EntityTypes.TYPE_OBJECT;
         tags.add(EntityTags.TAG_CONSUMABLE);

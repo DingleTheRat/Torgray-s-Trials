@@ -203,7 +203,7 @@ public class UI {
             graphics2D.drawString("UI State: " + uiState, x ,y); y += lineHeight;
             graphics2D.drawString("Sub-UI State: " + subUIState, x ,y); y += lineHeight;
             y += lineHeight;
-            graphics2D.drawString("Map: " + game.currentMap, x, y); y += lineHeight;
+            graphics2D.drawString("World_Map: " + game.currentMap, x, y); y += lineHeight;
             graphics2D.drawString("World X: " + game.player.worldX, x, y); y += lineHeight;
             graphics2D.drawString("World Y: " + game.player.worldY, x, y);  y += lineHeight;
             graphics2D.drawString("Col: " + (game.player.worldX + game.player.solidArea.x) / game.tileSize, x, y);  y += lineHeight;
