@@ -1,8 +1,8 @@
 package net.dinglezz.torgrays_trials.main;
 
-import net.dinglezz.torgrays_trials.entity.Entity;
-import net.dinglezz.torgrays_trials.entity.LootTableHandler;
-import net.dinglezz.torgrays_trials.entity.Player;
+import net.dinglezz.torgrays_trials.entity.*;
+import net.dinglezz.torgrays_trials.entity.item.Item;
+import net.dinglezz.torgrays_trials.entity.monster.Monster;
 import net.dinglezz.torgrays_trials.environment.EnvironmentManager;
 import net.dinglezz.torgrays_trials.pathfinding.Pathfinder;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
@@ -12,7 +12,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class Game extends JPanel implements Runnable {
     // Screen settings
@@ -52,24 +51,25 @@ public class Game extends JPanel implements Runnable {
     public long drawStart;
 
     // System
-    public UI ui = new UI(this);
-    public Config config = new Config(this);
-    public Pathfinder pathFinder = new Pathfinder(this);
-    public InputHandler inputHandler = new InputHandler(this);
-    public EnvironmentManager environmentManager = new EnvironmentManager(this);
+    public UI ui;
+    public Config config;
+    public Pathfinder pathFinder;
+    public InputHandler inputHandler;
+    public EnvironmentManager environmentManager;
     Thread gameThread;
 
-    // Entities and Objects
-    public Player player = new Player(this, inputHandler);
-    public HashMap<String, ArrayList<Entity>> npc = new HashMap<>();
-    public HashMap<String, ArrayList<Entity>> object = new HashMap<>();
-    public HashMap<String, ArrayList<Entity>> monster = new HashMap<>();
-    public ArrayList<Entity> particleList = new ArrayList<>();
+    // Entities
+    public Player player;
+    public HashMap<String, ArrayList<Entity>> objects = new HashMap<>();
+    public HashMap<String, ArrayList<Item>> items = new HashMap<>();
+    public HashMap<String, ArrayList<Mob>> npcs = new HashMap<>();
+    public HashMap<String, ArrayList<Monster>> monsters = new HashMap<>();
     public ArrayList<Entity> entityList = new ArrayList<>();
+    public ArrayList<Particle> particleList = new ArrayList<>();
 
     public States.GameStates gameState = States.GameStates.TITLE;
     public States.ExceptionStates exceptionState = States.ExceptionStates.ONLY_IGNORABLE;
-    public String exceptionStackTrace = "";
+    String exceptionStackTrace = "";
     public String currentMap = "Main Island";
     public String gameMode;
 
@@ -77,11 +77,11 @@ public class Game extends JPanel implements Runnable {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
-        this.addKeyListener(inputHandler);
         this.setFocusable(true);
     }
 
     public void setupGame() {
+        // Setup classes
         setupExceptionHandling();
         TileManager.setup();
         MapHandler.loadMaps();
@@ -90,6 +90,9 @@ public class Game extends JPanel implements Runnable {
 
         // Set Assets
         AssetSetter.setAssets(true);
+
+        // Add listener
+        this.addKeyListener(inputHandler);
 
         Sound.playMusic("Tech Geek");
         gameState = States.GameStates.TITLE;
@@ -101,6 +104,14 @@ public class Game extends JPanel implements Runnable {
         }
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         graphics2D = (Graphics2D) tempScreen.getGraphics();
+    }
+    public void init() {
+        ui = new UI(this);
+        config = new Config(this);
+        pathFinder = new Pathfinder(this);
+        inputHandler = new InputHandler();
+        environmentManager = new EnvironmentManager(this);
+        player = new Player();
     }
     private void setupExceptionHandling() {
         Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
@@ -128,7 +139,8 @@ public class Game extends JPanel implements Runnable {
         });
     }
     public void respawn() {
-        player.restoreHealth();
+        player.heal(player.maxHealth);
+        player.invincible = false;
         currentMap = "Main Island";
         player.setDefaultPosition();
         environmentManager.lightUpdated = true;
@@ -141,9 +153,10 @@ public class Game extends JPanel implements Runnable {
         player.setDefaultPosition();
 
         // Set Assets
-        object.clear();
-        npc.clear();
-        monster.clear();
+        objects.clear();
+        items.clear();
+        npcs.clear();
+        monsters.clear();
         AssetSetter.setAssets(true);
 
 
@@ -199,7 +212,7 @@ public class Game extends JPanel implements Runnable {
                     // no getting hit, no hitting, a few pits, open bottom chest, collect bottom key, drink
                     sumNano += System.nanoTime() - start;
                     totalNano++;
-                    
+
                     if (totalNano % 2000 == 0) {
                         System.out.println(Math.round((float) sumNano / totalNano / 1000));
                         sumNano = 0;
@@ -218,20 +231,30 @@ public class Game extends JPanel implements Runnable {
             // Player
             player.update();
 
+            // Items
+            items.getOrDefault(currentMap, new ArrayList<>()).stream()
+                    .filter(Objects::nonNull)
+                    .forEach(Entity::update);
+
+            // Objects
+            objects.getOrDefault(currentMap, new ArrayList<>()).stream()
+                    .filter(Objects::nonNull)
+                    .forEach(Entity::update);
+
             // NPCs
-            npc.getOrDefault(currentMap, new ArrayList<>()).stream()
+            npcs.getOrDefault(currentMap, new ArrayList<>()).stream()
                     .filter(Objects::nonNull)
                     .forEach(Entity::update);
 
             // Monsters
-            ArrayList<Entity> monsters = monster.getOrDefault(currentMap, new ArrayList<>());
+            ArrayList<Monster> monsters = this.monsters.getOrDefault(currentMap, new ArrayList<>());
             for (int i = 0; i < monsters.size(); i++) {
-                Entity entity = monsters.get(i);
-                if (entity != null) {
-                    if (entity.alive && !entity.dying) {
-                        entity.update();
-                    } else if (!entity.alive) {
-                        entity.checkDrop();
+                Monster monster = monsters.get(i);
+                if (monster != null) {
+                    if (monster.alive && !monster.dying) {
+                        monster.update();
+                    } else if (!monster.alive) {
+                        monster.checkDrop();
                         monsters.set(i, null);
 
                         // Respawn if all monsters are dead
@@ -243,8 +266,9 @@ public class Game extends JPanel implements Runnable {
             }
 
             // Particles
-            particleList.removeIf(particle -> particle == null || !particle.alive);
-            particleList.forEach(Entity::update);
+            particleList.stream()
+                    .filter(particle -> particle != null && particle.exists)
+                    .forEach(Entity::update);
 
             environmentManager.update();
         }
@@ -252,27 +276,28 @@ public class Game extends JPanel implements Runnable {
 
     public void draw(Graphics2D graphics2D) {
         // Debug
-        if (debug) {
-            drawStart = System.nanoTime();
-        }
+        if (debug) drawStart = System.nanoTime();
 
         // Title Screen
-        if (gameState == States.GameStates.TITLE) {
-            ui.draw(graphics2D);
-        } else {
+        if (gameState == States.GameStates.TITLE) ui.draw(graphics2D);
+        else {
             // Draw :)
             TileManager.draw(graphics2D);
 
-            // Add entities to the list
+            // Add entities to the list 
             entityList.clear(); // Clear once at the start
-            if (gameState != States.GameStates.GAME_END) {
-                entityList.add(player);
-            }
-            
-            entityList.addAll(npc.getOrDefault(currentMap, new ArrayList<>()));
-            entityList.addAll(object.getOrDefault(currentMap, new ArrayList<>()));
-            entityList.addAll(monster.getOrDefault(currentMap, new ArrayList<>()));
-            entityList.addAll(particleList);
+            if (gameState != States.GameStates.GAME_END) entityList.add(player);
+
+            entityList.addAll(npcs.getOrDefault(currentMap, new ArrayList<>()));
+            entityList.addAll(items.getOrDefault(currentMap, new ArrayList<>()));
+            entityList.addAll(objects.getOrDefault(currentMap, new ArrayList<>()));
+            entityList.addAll(monsters.getOrDefault(currentMap, new ArrayList<>()));
+
+            // Filter out null particles before adding
+            particleList.stream()
+                    .filter(Objects::nonNull)
+                    .filter(particle -> particle.exists)
+                    .forEach(particle -> particle.draw(graphics2D));
 
             // Sort and draw entities
             entityList.stream()

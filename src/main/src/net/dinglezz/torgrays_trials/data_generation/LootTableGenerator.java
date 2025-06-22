@@ -3,11 +3,11 @@ package net.dinglezz.torgrays_trials.data_generation;
 import com.ususstudios.torgrays_datagen.DataGenerationException;
 import com.ususstudios.torgrays_datagen.dataclasses.LootTableItem;
 import com.ususstudios.torgrays_datagen.dataclasses.SpecialLootTableItem;
-import net.dinglezz.torgrays_trials.object.Coins;
-import net.dinglezz.torgrays_trials.object.Torgray_Soup;
-import net.dinglezz.torgrays_trials.object.shield.OBJ_Shield_Amethyst;
-import net.dinglezz.torgrays_trials.object.weapon.Stick;
-import net.dinglezz.torgrays_trials.object.weapon.Sword_Amethyst;
+import net.dinglezz.torgrays_trials.entity.item.Coins;
+import net.dinglezz.torgrays_trials.entity.item.Torgray_Soup;
+import net.dinglezz.torgrays_trials.entity.item.shield.Shield_Amethyst;
+import net.dinglezz.torgrays_trials.entity.item.weapon.Stick;
+import net.dinglezz.torgrays_trials.entity.item.weapon.Sword_Amethyst;
 
 public class LootTableGenerator extends com.ususstudios.torgrays_datagen.generators.LootTableGenerator {
 	
@@ -15,7 +15,7 @@ public class LootTableGenerator extends com.ususstudios.torgrays_datagen.generat
 	public void registerAll() throws DataGenerationException {
 		registerMultiSelect("chests/amethyst", "Amethyst Chest", new LootTableItem[]{
 				new LootTableItem(Sword_Amethyst.class, 1, 1),
-				new LootTableItem(OBJ_Shield_Amethyst.class, 1, 1),
+				new LootTableItem(Shield_Amethyst.class, 1, 1),
 				new LootTableItem(Coins.class, 1, 4)
 		});
 		

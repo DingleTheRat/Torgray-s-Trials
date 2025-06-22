@@ -1,36 +1,32 @@
-package net.dinglezz.torgrays_trials.object;
+package net.dinglezz.torgrays_trials.entity.item;
 
-import net.dinglezz.torgrays_trials.entity.Entity;
-import net.dinglezz.torgrays_trials.entity.EntityTags;
-import net.dinglezz.torgrays_trials.entity.EntityTypes;
-import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.entity.Mob;
+import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
+import net.dinglezz.torgrays_trials.tile.TilePoint;
 
 import java.awt.*;
 import java.util.Random;
 
-public class Torgray_Soup extends Entity {
-    Game game;
+public class Torgray_Soup extends Item {
+    public Torgray_Soup(TilePoint tilePoint) {
+        super("Torgray's Soup", tilePoint);
 
-    public Torgray_Soup(Game game) {
-        super(game);
-        this.game = game;
-
-        name = "Torgray's Soup";
-        value = 4;
-        type = EntityTypes.TYPE_OBJECT;
-        tags.add(EntityTags.TAG_CONSUMABLE);
-        down1 = registerEntitySprite("/object/torgray_soup");
-        description = "Torgray's wisest soup. \nIt's warm and a bit hearty. \nHealing: +" + value;
+        tags.add(ItemTags.TAG_CONSUMABLE);
+        icon = registerEntitySprite("entity/item/torgray_soup");
+        currentImage = icon;
+        description = "Torgray's wisest soup. \nIt's warm and a bit hearty. \nHealing: +4";
         maxStack = 12;
         price = 2;
     }
-    public boolean use(Entity entity) {
-        game.ui.uiState = States.UIStates.DIALOGUE;
+
+    @Override
+    public boolean use(Mob mob) {
+        Main.game.ui.uiState = States.UIStates.DIALOGUE;
         int random = new Random().nextInt(9) + 1;
 
-        game.ui.setCurrentDialogue(switch (random) {
+        Main.game.ui.setCurrentDialogue(switch (random) {
             case 1 -> "Erm the last two keys have to be bought. \n+4 health";
             case 2 -> "Erm by pressing F3 you can enter debug \nmode. \n+4 health";
             case 3 -> "Erm when it's gloom, Dracores respawn, \nhave their health quadrupled, and do half a \nheart more damage. \n+4 health";
@@ -43,12 +39,8 @@ public class Torgray_Soup extends Entity {
             default -> "Erm something went wrong. \n+4 health";
         });
 
-        if (game.player.health + value > game.player.maxHealth) {
-            game.player.health = game.player.maxHealth;
-        } else {
-            game.player.health += value;
-        }
-        game.player.generateParticles(this, game.player);
+        Main.game.player.heal(4);
+        Main.game.player.generateParticles(this, Main.game.player);
         Sound.playSFX("Power Up");
         return true;
     }

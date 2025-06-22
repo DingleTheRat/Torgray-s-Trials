@@ -1,5 +1,6 @@
 package net.dinglezz.torgrays_trials.entity;
 
+import net.dinglezz.torgrays_trials.entity.item.Item;
 import net.dinglezz.torgrays_trials.main.UtilityTool;
 
 import org.json.JSONArray;
@@ -43,9 +44,9 @@ public class LootTableHandler {
              }
          }
      }
-    public static ArrayList<Entity> generateLoot(JSONObject lootTable) {
+    public static ArrayList<Item> generateLoot(JSONObject lootTable) {
         // The return array list
-        ArrayList<Entity> finalLoot = new ArrayList<>();
+        ArrayList<Item> finalLoot = new ArrayList<>();
 
         // Get the multi-select loot array
         JSONArray multiSelectLoot;
@@ -59,12 +60,8 @@ public class LootTableHandler {
         // Get optional minimum and maximum
         int minimum = 0;
         int maximum = 0;
-        if (lootTable.has("minimum")) {
-            minimum = lootTable.getInt("minimum");
-        }
-        if (lootTable.has("maximum")) {
-            maximum = lootTable.getInt("maximum");
-        }
+        if (lootTable.has("minimum")) minimum = lootTable.getInt("minimum");
+        if (lootTable.has("maximum")) maximum = lootTable.getInt("maximum");
 
         int step = 0;
         int selects = 0;
@@ -80,12 +77,8 @@ public class LootTableHandler {
                     if (multiRandom <= loot.getFloat("chance")) {
                         // Minimum and maximum
                         selects++;
-                        if (selects < minimum && minimum != 0) {
-                            break;
-                        }
-                        if (selects > maximum && maximum != 0) {
-                            break;
-                        }
+                        if (selects < minimum && minimum != 0) break;
+                        if (selects > maximum && maximum != 0) break;
 
                         JSONArray singleSelectLoot = loot.optJSONArray("loot");
 
@@ -97,12 +90,12 @@ public class LootTableHandler {
                             if (lootItem.has("chance")) {
                                 totalChance += lootItem.getFloat("chance");
                             } else {
-                                System.err.println("Missing loot item chance in " + lootItem + " in loot table by the name of '" + lootTable.getString("name") + "'");
+                                System.err.println("Missing loot items chance in " + lootItem + " in loot table by the name of '" + lootTable.getString("name") + "'");
                                 return finalLoot;
                             }
                         }
                         if (totalChance != 1f) {
-                            System.err.println("Loot item chances do not add up to 1f in " + singleSelectLoot + " in loot table by the name of '" + lootTable.getString("name") + "'");
+                            System.err.println("Loot items chances do not add up to 1f in " + singleSelectLoot + " in loot table by the name of '" + lootTable.getString("name") + "'");
                             return finalLoot;
                         }
 
@@ -117,31 +110,29 @@ public class LootTableHandler {
                                 cumulativeChance += chance;
 
                                 if (singleRandom <= cumulativeChance) {
-                                    String object = lootItem.getString("object");
+                                    String itemPath = lootItem.getString("item");
 
-                                    if (!object.isEmpty()) {
-                                        Entity entity = UtilityTool.generateEntity(object);
-                                        entity.amount = lootItem.getInt("amount");
-                                        finalLoot.add(entity);
-                                    } else {
-                                        finalLoot.add(null);
-                                    }
+                                    if (!itemPath.isEmpty()) {
+                                        Item item = UtilityTool.generateEntity(itemPath, null);
+                                        item.amount = lootItem.getInt("amount");
+                                        finalLoot.add(item);
+                                    } else finalLoot.add(null);
                                     break;
                                 }
                             } catch (JSONException | NullPointerException exception) {
-                                System.err.println("Couldn't load loot item");
-                                System.err.println("Missing loot item data in " + lootItem + " in loot table by the name of '" + lootTable.getString("name") + "'");
+                                System.err.println("Couldn't load loot items");
+                                System.err.println("Missing loot items data in " + lootItem + " in loot table by the name of '" + lootTable.getString("name") + "'");
                                 return finalLoot;
                             } catch (NumberFormatException exception) {
-                                System.err.println("Invalid coin format in loot item. Ensure it is 'COIN_X', where X is a number.");
+                                System.err.println("Invalid coin format in loot items. Ensure it is 'COIN_X', where X is a number.");
                                 return finalLoot;
                             }
                         }
 
                     }
                 } catch (JSONException | NullPointerException exception) {
-                    System.err.println("Couldn't load loot item");
-                    System.err.println("Missing loot item data in " + loot + " in loot table by the name of '" + lootTable.getString("name") + "'");
+                    System.err.println("Couldn't load loot items");
+                    System.err.println("Missing loot items data in " + loot + " in loot table by the name of '" + lootTable.getString("name") + "'");
                     return finalLoot;
                 }
             }

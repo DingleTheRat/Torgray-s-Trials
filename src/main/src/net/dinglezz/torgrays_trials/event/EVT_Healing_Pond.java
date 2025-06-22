@@ -19,7 +19,7 @@ public class EVT_Healing_Pond extends Event {
 
         if (Main.game.inputHandler.interactKeyPressed) {
             Main.game.ui.uiState = States.UIStates.DIALOGUE;
-            Main.game.player.attackCanceled = true;
+            Main.game.player.cancelAttack();
             Main.game.ui.setCurrentDialogue("*Drinks water* \nHuh, nothing happened :/");
             // Disabled Stuff
             // Main.game.player.health = Main.game.player.maxHealth;

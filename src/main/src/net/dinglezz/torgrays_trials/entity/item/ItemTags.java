@@ -1,7 +1,6 @@
-package net.dinglezz.torgrays_trials.entity;
+package net.dinglezz.torgrays_trials.entity.item;
 
-public enum EntityTags {
-    TAG_OBSTACLE,
+public enum ItemTags {
     TAG_LIGHT,
     TAG_WEAPON,
     TAG_SHIELD,

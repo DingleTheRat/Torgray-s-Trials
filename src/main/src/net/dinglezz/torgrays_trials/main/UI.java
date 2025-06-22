@@ -1,10 +1,12 @@
 package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
-import net.dinglezz.torgrays_trials.entity.EntityTags;
+import net.dinglezz.torgrays_trials.entity.Mob;
+import net.dinglezz.torgrays_trials.entity.item.Item;
 import net.dinglezz.torgrays_trials.event.EVT_Teleport;
-import net.dinglezz.torgrays_trials.object.Coins;
-import net.dinglezz.torgrays_trials.object.Heart;
+import net.dinglezz.torgrays_trials.entity.item.Coins;
+import net.dinglezz.torgrays_trials.entity.object.Heart;
+import net.dinglezz.torgrays_trials.entity.item.ItemTags;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
 
 import java.awt.*;
@@ -38,9 +40,9 @@ public class UI {
     // Inventory
     public int playerSlotCol = 0;
     public int playerSlotRow = 0;
-    public int entitySlotCol = 0;
-    public int entitySlotRow = 0;
-    public Entity npc;
+    public int mobSlotCol = 0;
+    public int mobSlotRow = 0;
+    public Mob npc;
 
     // Transitions
     private float transitionCounter = 0f;
@@ -62,12 +64,12 @@ public class UI {
         }
 
         // Make some HUD objects
-        Entity obj_heart = new Heart(game);
+        Entity obj_heart = new Heart(null);
         heart = obj_heart.image;
         half_heart = obj_heart.image2;
         lost_heart = obj_heart.image3;
-        Entity Coin = new Coins(game, 1);
-        coin = Coin.down1;
+        Item coins = new Coins(null, 1);
+        coin = coins.icon;
     }
 
     /// Adds a mini notification message to the side of the screen
@@ -139,10 +141,10 @@ public class UI {
         i = 0;
 
         // Draw current health
-        while (i < game.player.health) {
+        while (i < game.player.getHealth()) {
             graphics2D.drawImage(half_heart, x, y, null);
             i++;
-            if (i < game.player.health) {
+            if (i < game.player.getHealth()) {
                 graphics2D.drawImage(heart, x, y, null);
             }
             i++;
@@ -200,7 +202,7 @@ public class UI {
             y += lineHeight;
             graphics2D.drawString("Game State: " + game.gameState, x ,y); y += lineHeight;
             graphics2D.drawString("Time State: " + game.environmentManager.lighting.darknessState, x ,y); y += lineHeight;
-            graphics2D.drawString("UI State: " + uiState, x ,y); y += lineHeight;
+            graphics2D.drawString("UI State: " + uiState + " (" + uiState.defaultUI + ", " + uiState.defaultKeyboardInput + ")", x ,y); y += lineHeight;
             graphics2D.drawString("Sub-UI State: " + subUIState, x ,y); y += lineHeight;
             y += lineHeight;
             graphics2D.drawString("World_Map: " + game.currentMap, x, y); y += lineHeight;
@@ -774,7 +776,7 @@ public class UI {
         graphics2D.drawString(value, textX, textY);
         textY += lineHeight * 2;
 
-        value = game.player.health + "/" + game.player.maxHealth;
+        value = game.player.getHealth() + "/" + game.player.maxHealth;
         textX = alignXToRight(value, tailX);
         graphics2D.drawString(value, textX, textY);
         textY += lineHeight;
@@ -784,11 +786,11 @@ public class UI {
         graphics2D.drawString(value, textX, textY);
         textY += lineHeight * 2 - (lineHeight / 4);
 
-       graphics2D.drawImage(game.player.currentWeapon.down1, tailX - game.tileSize, textY - 37, null);
+       graphics2D.drawImage(game.player.currentWeapon.icon, tailX - game.tileSize, textY - 37, null);
        textY += game.tileSize;
-       graphics2D.drawImage(game.player.currentShield.down1, tailX - game.tileSize, textY - 37, null);
+       graphics2D.drawImage(game.player.currentShield.icon, tailX - game.tileSize, textY - 37, null);
     }
-    public void drawInventory(Entity entity, boolean cursor) {
+    public void drawInventory(Mob mob, boolean cursor) {
         // Frame
         int frameX;
         int frameY;
@@ -796,7 +798,7 @@ public class UI {
         int frameHeight;
         int slotCol;
         int slotRow;
-        if (entity == game.player) {
+        if (mob == game.player) {
             frameX = game.tileSize / 2 + game.tileSize * 13;
             frameY = game.tileSize / 2;
             frameWidth = game.tileSize * 6;
@@ -808,8 +810,8 @@ public class UI {
             frameY = game.tileSize / 2;
             frameWidth = game.tileSize * 6;
             frameHeight = game.tileSize * 6;
-            slotCol = entitySlotCol;
-            slotRow = entitySlotRow;
+            slotCol = mobSlotCol;
+            slotRow = mobSlotRow;
         }
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
@@ -821,28 +823,28 @@ public class UI {
         int slotSize = game.tileSize + 3;
 
         // Draw Items
-        for (int i = 0; i < entity.inventory.size(); i++) {
+        for (int i = 0; i < mob.getInventory().size(); i++) {
             // Equip Cursor
-            if (entity.inventory.get(i) == entity.currentWeapon ||
-                    entity.inventory.get(i) == entity.currentShield ||
-                    entity.inventory.get(i) == entity.currentLight) {
+            if (mob.getInventory().get(i) == mob.currentWeapon ||
+                    mob.getInventory().get(i) == mob.currentShield ||
+                    mob.getInventory().get(i) == mob.currentLight) {
                 graphics2D.setColor(new Color(240, 190, 90));
                 graphics2D.fillRoundRect(slotX, slotY, game.tileSize, game.tileSize, 10, 10);
             }
 
-            graphics2D.drawImage(entity.inventory.get(i).down1, slotX, slotY, null);
+            graphics2D.drawImage(mob.getInventory().get(i).icon, slotX, slotY, null);
 
             // Draw Amount
-            if (entity.inventory.get(i).amount > 1) {
+            if (mob.getInventory().get(i).amount > 1) {
                 graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 28f));
                 int amountX;
                 int amountY;
 
                 String string;
-                if (Objects.equals(entity.inventory.get(i).name, "Coins")) {
-                    string = "" + entity.coins;
+                if (Objects.equals(mob.getInventory().get(i).name, "Coins")) {
+                    string = "" + mob.coins;
                 } else {
-                    string = "" + entity.inventory.get(i).amount;
+                    string = "" + mob.getInventory().get(i).amount;
                 }
                 amountX = alignXToRight(string, slotX + 44);
                 amountY = slotY + game.tileSize;
@@ -885,16 +887,16 @@ public class UI {
             int textY = dFrameY + game.tileSize;
 
             int itemIndex = getItemIndex(slotCol, slotRow);
-            if (itemIndex < entity.inventory.size()) {
+            if (itemIndex < mob.getInventory().size()) {
                 // Window + Title
                 drawSubWindow(frameX, dFrameY, frameWidth, dFrameHeight);
                 graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 30f));
-                graphics2D.drawString(entity.inventory.get(itemIndex).name, textX, textY);
+                graphics2D.drawString(mob.getInventory().get(itemIndex).name, textX, textY);
                 textY += 40;
 
                 // Description
                 graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 20f));
-                for (String line : entity.inventory.get(itemIndex).description.split("\n")) {
+                for (String line : mob.getInventory().get(itemIndex).description.split("\n")) {
                     graphics2D.drawString(line, textX, textY);
                     textY += 30;
                 }
@@ -1039,11 +1041,8 @@ public class UI {
     }
     public void drawTransitionScreen() {
         // Update transition counter
-        if (!fadeBack) {
-            transitionCounter = Math.min(transitionCounter + transitionOpenSpeed, 1f);
-        } else {
-            transitionCounter = Math.max(transitionCounter - transitionCloseSpeed, 0f);
-        }
+        if (!fadeBack) transitionCounter = Math.min(transitionCounter + transitionOpenSpeed, 1f);
+        else transitionCounter = Math.max(transitionCounter - transitionCloseSpeed, 0f);
 
         // Handle state transitions
         if (transitionCounter == 1f && !fadeBack) {
@@ -1077,11 +1076,14 @@ public class UI {
         return fadeBack;
     }
     public void drawTradeScreen() {
+        game.player.cancelAttackCheck();
+
         switch (subUIState) {
-            case "Select": drawTradeSelectScreen(); break;
-            case "Buy": drawTradeBuyScreen(); break;
-            case "Sell": drawTradeSellScreen(); break;
+            case "Select" -> drawTradeSelectScreen();
+            case "Buy" -> drawTradeBuyScreen();
+            case "Sell" -> drawTradeSellScreen();
         }
+
         game.inputHandler.spacePressed = false;
     }
     public void drawTradeSelectScreen() {
@@ -1110,9 +1112,7 @@ public class UI {
         graphics2D.drawString("Sell", x, y);
         if (commandNumber == 1) {
             graphics2D.drawString(">", x - 24, y);
-            if (game.inputHandler.spacePressed) {
-                subUIState = "Sell";
-            }
+            if (game.inputHandler.spacePressed) subUIState = "Sell";
         }
 
         // Leave Text
@@ -1142,8 +1142,8 @@ public class UI {
 
         // Price Window
         graphics2D.setFont(graphics2D.getFont().deriveFont(27f));
-        int itemIndex = getItemIndex(entitySlotCol, entitySlotRow);
-        if (itemIndex < npc.inventory.size()) {
+        int itemIndex = getItemIndex(mobSlotCol, mobSlotRow);
+        if (itemIndex < npc.getInventory().size()) {
             x = game.tileSize * 5;
             y = game.tileSize * 6;
             width = (game.tileSize * 2) + (game.tileSize / 2);
@@ -1151,18 +1151,18 @@ public class UI {
             drawSubWindow(x, y, width, height);
             graphics2D.drawImage(coin, x + 10, y + 8, 32, 32, null);
 
-            int price = npc.inventory.get(itemIndex).price;
+            int price = npc.getInventory().get(itemIndex).price;
             String text = String.valueOf(price);
             x = alignXToRight(text, game.tileSize * 7 - 20);
             graphics2D.drawString(text, x, y + 34);
 
-            // Buy an item
+            // Buy an items
             if (game.inputHandler.spacePressed) {
-                if (npc.inventory.get(itemIndex).price > game.player.coins) {
+                if (npc.getInventory().get(itemIndex).price > game.player.coins) {
                     setCurrentDialogue("Sorry partner, your wallet declined :(");
                     uiState = States.UIStates.DIALOGUE;
                     game.ui.commandNumber = 0;
-                } else if (game.player.canObtainItem(npc.inventory.get(itemIndex))) {
+                } else if (game.player.giveItem(npc.getInventory().get(itemIndex))) {
                     game.player.coins -= price;
                 } else {
                     setCurrentDialogue("Sorry partner, I don't think you can \ncarry this :(");
@@ -1188,7 +1188,7 @@ public class UI {
         // Price Window
         graphics2D.setFont(graphics2D.getFont().deriveFont(27f));
         int itemIndex = getItemIndex(playerSlotCol, playerSlotRow);
-        if (itemIndex < game.player.inventory.size()) {
+        if (itemIndex < game.player.getInventory().size()) {
             x = game.tileSize * 13;
             y = game.tileSize * 6;
             width = (game.tileSize * 2) + (game.tileSize / 2);
@@ -1196,30 +1196,26 @@ public class UI {
             drawSubWindow(x, y, width, height);
             graphics2D.drawImage(coin, x + 10, y + 8, 32, 32, null);
 
-            int price = game.player.inventory.get(itemIndex).price / 2;
+            int price = game.player.getInventory().get(itemIndex).price / 2;
             String text = String.valueOf(price);
             x = alignXToRight(text, game.tileSize * 15 - 20);
             graphics2D.drawString(text, x, y + 34);
 
-            // Sell an item
+            // Sell an items
             if (game.inputHandler.spacePressed) {
-                if (game.player.inventory.get(itemIndex) == game.player.currentWeapon ||
-                        game.player.inventory.get(itemIndex) == game.player.currentShield ||
-                        game.player.inventory.get(itemIndex) == game.player.currentLight) {
+                if (game.player.getInventory().get(itemIndex) == game.player.currentWeapon ||
+                        game.player.getInventory().get(itemIndex) == game.player.currentShield ||
+                        game.player.getInventory().get(itemIndex) == game.player.currentLight) {
                     setCurrentDialogue("Sorry partner, I can't buy equipped \nitems :(");
                     uiState = States.UIStates.DIALOGUE;
                     game.ui.commandNumber = 0;
-                } else if (game.player.inventory.get(itemIndex).tags.contains(EntityTags.TAG_NON_SELLABLE)) {
+                } else if (game.player.getInventory().get(itemIndex).tags.contains(ItemTags.TAG_NON_SELLABLE)) {
                     setCurrentDialogue("Sorry partner, I can't buy this item :(");
                     uiState = States.UIStates.DIALOGUE;
                     game.ui.commandNumber = 0;
                 } else {
                     game.player.coins += price;
-                    if (game.player.inventory.get(itemIndex).amount > 1) {
-                        game.player.inventory.get(itemIndex).amount--;
-                    } else {
-                        game.player.inventory.remove(itemIndex);
-                    }
+                    game.player.removeItem(itemIndex);
                 }
             }
         }
@@ -1286,16 +1282,7 @@ public class UI {
         Sound.playMapMusic();
 
         // Load entities and events if not already loaded
-        if (game.object.getOrDefault(game.currentMap, null) == null) {
-            AssetSetter.setObjects(false);
-        }
-        if (game.npc.getOrDefault(game.currentMap, null) == null) {
-            AssetSetter.setNPCs(false);
-        }
-        if (game.monster.getOrDefault(game.currentMap, null) == null) {
-            AssetSetter.setMonsters(false);
-        }
-        AssetSetter.setEvents();
+        AssetSetter.loadAssets();
     }
     @SuppressWarnings("unused")
     public void transitionDarkness() {

@@ -7,24 +7,25 @@
   },
   "entities": {
     "npcs": [{
-      "path": "net.dinglezz.torgrays_trials.npc.Coiner",
+      "path": "net.dinglezz.torgrays_trials.entity.npc.Coiner",
       "col": 12,
       "row": 9
     }],
     "monsters": [],
     "objects": [
       {
-        "path": "net.dinglezz.torgrays_trials.object.Table",
+        "path": "net.dinglezz.torgrays_trials.entity.object.Table",
         "col": 12,
         "row": 10
       },
       {
-        "path": "net.dinglezz.torgrays_trials.object.Dark_Chest",
+        "path": "net.dinglezz.torgrays_trials.entity.object.Dark_Chest",
         "col": 10,
         "row": 9,
         "loot table": "Normal Dark Chest"
       }
-    ]
+    ],
+    "items": []
   },
   "name": "Coiner's Shop",
   "light radius": 500,

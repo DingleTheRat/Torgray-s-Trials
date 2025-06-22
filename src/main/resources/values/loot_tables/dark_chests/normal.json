@@ -7,7 +7,7 @@
       "loot": [{
         "amount": 1,
         "chance": 1,
-        "object": "net.dinglezz.torgrays_trials.object.Torgray_Soup"
+        "item": "net.dinglezz.torgrays_trials.entity.item.Torgray_Soup"
       }]
     },
     {
@@ -16,27 +16,27 @@
         {
           "amount": 1,
           "chance": 0.4,
-          "object": "net.dinglezz.torgrays_trials.object.Coins"
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
         },
         {
           "amount": 2,
           "chance": 0.3,
-          "object": "net.dinglezz.torgrays_trials.object.Coins"
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
         },
         {
           "amount": 3,
           "chance": 0.2,
-          "object": "net.dinglezz.torgrays_trials.object.Coins"
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
         },
         {
           "amount": 4,
           "chance": 0.07,
-          "object": "net.dinglezz.torgrays_trials.object.Coins"
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
         },
         {
           "amount": 5,
           "chance": 0.03,
-          "object": "net.dinglezz.torgrays_trials.object.Coins"
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
         }
       ]
     },
@@ -45,7 +45,7 @@
       "loot": [{
         "amount": 1,
         "chance": 1,
-        "object": "net.dinglezz.torgrays_trials.object.weapon.Stick"
+        "item": "net.dinglezz.torgrays_trials.entity.item.weapon.Stick"
       }]
     }
   ]

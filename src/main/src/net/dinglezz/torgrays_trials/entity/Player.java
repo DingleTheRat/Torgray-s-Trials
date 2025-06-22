@@ -1,33 +1,38 @@
 package net.dinglezz.torgrays_trials.entity;
 
+import net.dinglezz.torgrays_trials.entity.item.Item;
+import net.dinglezz.torgrays_trials.entity.monster.Monster;
 import net.dinglezz.torgrays_trials.event.EventHandler;
 import net.dinglezz.torgrays_trials.main.*;
-import net.dinglezz.torgrays_trials.object.Coins;
-import net.dinglezz.torgrays_trials.object.Lantern;
-import net.dinglezz.torgrays_trials.object.shield.OBJ_Shield_Iron;
-import net.dinglezz.torgrays_trials.object.weapon.Sword_Iron;
+import net.dinglezz.torgrays_trials.entity.item.Coins;
+import net.dinglezz.torgrays_trials.entity.item.Lantern;
+import net.dinglezz.torgrays_trials.entity.item.ItemTags;
+import net.dinglezz.torgrays_trials.entity.item.shield.Shield_Iron;
+import net.dinglezz.torgrays_trials.entity.item.weapon.Sword_Iron;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
+import net.dinglezz.torgrays_trials.tile.TilePoint;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.Objects;
 
-public class Player extends Entity{
-    InputHandler inputHandler;
+public class Player extends Mob {
+    // Attributes
+    public int exp;
+    public int level;
+    public int nextLevelExp;
 
     public final int screenX;
     public final int screenY;
-    public boolean attackCanceled = false;
-    public boolean inventoryCanceled = false;
+    private boolean attackCanceled = false;
+    private boolean inventoryCanceled = false;
+    private boolean attackCheckCanceled = false;
 
-    public Player(Game game, InputHandler inputHandler) {
-        super(game);
-        this.inputHandler = inputHandler;
+    public Player() {
+        super("Player", null);
 
-        screenX = this.game.screenWidth / 2 - (this.game.tileSize / 2);
-        screenY = this.game.screenHeight / 2 - (this.game.tileSize / 2);
+        screenX = Main.game.screenWidth / 2 - (Main.game.tileSize / 2);
+        screenY = Main.game.screenHeight / 2 - (Main.game.tileSize / 2);
 
         // Solid Area
         solidArea = new Rectangle();
@@ -46,76 +51,72 @@ public class Player extends Entity{
 
     public void getImage() {
         // Up
-        up1 = registerEntitySprite("/player/walking/torgray_up_1");
-        up2 = registerEntitySprite("/player/walking/torgray_up_2");
-        up3 = registerEntitySprite("/player/walking/torgray_up_3");
+        up1 = registerEntitySprite("entity/player/walking/torgray_up_1");
+        up2 = registerEntitySprite("entity/player/walking/torgray_up_2");
+        up3 = registerEntitySprite("entity/player/walking/torgray_up_3");
 
         // Down
-        down1 = registerEntitySprite("/player/walking/torgray_down_1");
-        down2 = registerEntitySprite("/player/walking/torgray_down_2");
-        down3 = registerEntitySprite("/player/walking/torgray_down_3");
+        down1 = registerEntitySprite("entity/player/walking/torgray_down_1");
+        down2 = registerEntitySprite("entity/player/walking/torgray_down_2");
+        down3 = registerEntitySprite("entity/player/walking/torgray_down_3");
 
         // Left
-        left1 = registerEntitySprite("/player/walking/torgray_left_1");
-        left2 = registerEntitySprite("/player/walking/torgray_left_2");
-        left3 = registerEntitySprite("/player/walking/torgray_left_3");
+        left1 = registerEntitySprite("entity/player/walking/torgray_left_1");
+        left2 = registerEntitySprite("entity/player/walking/torgray_left_2");
+        left3 = registerEntitySprite("entity/player/walking/torgray_left_3");
 
         // Right
-        right1 = registerEntitySprite("/player/walking/torgray_right_1");
-        right2 = registerEntitySprite("/player/walking/torgray_right_2");
-        right3 = registerEntitySprite("/player/walking/torgray_right_3");
+        right1 = registerEntitySprite("entity/player/walking/torgray_right_1");
+        right2 = registerEntitySprite("entity/player/walking/torgray_right_2");
+        right3 = registerEntitySprite("entity/player/walking/torgray_right_3");
     }
     public void getAttackImage() {
         // It takes the weapon name and replaces spaces for "_" to get the path for the sprite
         String modifiedName = currentWeapon.name.toLowerCase().replace(" ", "_");
-        attackUp = registerEntitySprite("/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_up", game.tileSize, game.tileSize * 2);
-        attackDown = registerEntitySprite("/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_down", game.tileSize, game.tileSize * 2);
-        attackLeft = registerEntitySprite("/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_left", game.tileSize * 2, game.tileSize);
-        attackRight = registerEntitySprite("/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_right", game.tileSize * 2, game.tileSize);
+        attackUp = registerEntitySprite("entity/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_up", Main.game.tileSize, Main.game.tileSize * 2);
+        attackDown = registerEntitySprite("entity/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_down", Main.game.tileSize, Main.game.tileSize * 2);
+        attackLeft = registerEntitySprite("entity/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_left", Main.game.tileSize * 2, Main.game.tileSize);
+        attackRight = registerEntitySprite("entity/player/attack/" + modifiedName + "/torgray_" + modifiedName + "_attack_right", Main.game.tileSize * 2, Main.game.tileSize);
     }
     public void setDefaultValues() {
-        type = EntityTypes.TYPE_PLAYER;
         defaultSpeed = 4;
         speed = defaultSpeed;
 
         // Player Stats
         level = 1;
         maxHealth = 12;
-        health = maxHealth;
+        heal(maxHealth);
+        dying = false;
         strength = 1;
         dexterity = 1;
         exp = 0;
         nextLevelExp = 5;
         coins = 2;
-        currentWeapon = new Sword_Iron(game);
-        currentShield = new OBJ_Shield_Iron(game);
-        currentLight = new Lantern(game);
+        currentWeapon = new Sword_Iron(null);
+        currentShield = new Shield_Iron(null);
+        currentLight = new Lantern(null);
         attack = getAttack();
         defence = getDefence();
     }
     public void setDefaultPosition() {
-        JSONObject file = MapHandler.mapFiles.get(game.currentMap);
+        JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
         try {
-            worldX = game.tileSize * file.getJSONObject("spawn point").getInt("col");
-            worldY = game.tileSize * file.getJSONObject("spawn point").getInt("row");
+            worldX = Main.game.tileSize * file.getJSONObject("spawn point").getInt("col");
+            worldY = Main.game.tileSize * file.getJSONObject("spawn point").getInt("row");
         } catch (JSONException jsonException) {
             file = MapHandler.mapFiles.get("Disabled");
-            worldX = game.tileSize * file.getJSONObject("spawn point").getInt("col");
-            worldY = game.tileSize * file.getJSONObject("spawn point").getInt("row");
+            worldX = Main.game.tileSize * file.getJSONObject("spawn point").getInt("col");
+            worldY = Main.game.tileSize * file.getJSONObject("spawn point").getInt("row");
         }
-
+        tilePoint = new TilePoint(Main.game.currentMap, worldX / Main.game.tileSize, worldY / Main.game.tileSize);
         direction = "down";
     }
-    public void restoreHealth() {
-        health = maxHealth;
-        invincible = false;
-    }
     public void setItems() {
-        inventory.clear();
-        inventory.add(new Coins(game, 2));
-        inventory.add(currentWeapon);
-        inventory.add(currentShield);
-        inventory.add(currentLight);
+        clearInventory();
+        inventory.add(new Coins(null, 2));
+        giveItem(currentWeapon);
+        giveItem(currentShield);
+        giveItem(currentLight);
     }
     public int getAttack() {
         attackArea = currentWeapon.attackArea;
@@ -128,44 +129,55 @@ public class Player extends Entity{
     @Override
     public void checkCollision() {
         // Check tile collision
-        collisionOn = false;
+        colliding = false;
         CollisionChecker.checkTile(this);
 
-        // Check OBJ collision
-        int objectIndex = CollisionChecker.checkObject(this, true);
-        pickUpObject(objectIndex);
+        // Check Entity collision and call the necessary methods
+        // Objects
+        Entity collidingObject = CollisionChecker.checkEntity(this, Main.game.objects.get(Main.game.currentMap));
+        if (collidingObject != null && Main.game.inputHandler.interactKeyPressed) collidingObject.onInteract();
+        if (collidingObject != null) collidingObject.onPlayerHit();
 
-        // Check NPC collision
-        int npcIndex = CollisionChecker.checkEntity(this, game.npc);
-        interactNPC(npcIndex);
+        // Items
+        Item collidingItem = CollisionChecker.checkEntity(this, Main.game.items.get(Main.game.currentMap));
+        if (collidingItem != null && Main.game.inputHandler.interactKeyPressed) collidingItem.onInteract();
+        if (collidingItem != null) collidingItem.onPlayerHit();
 
-        // Check Events
+        // NPCs
+        Mob collidingNPC = CollisionChecker.checkEntity(this, Main.game.npcs.get(Main.game.currentMap));
+        if (collidingNPC != null) collidingNPC.onPlayerHit();
+        if (collidingNPC != null && Main.game.inputHandler.interactKeyPressed) collidingNPC.onInteract();
+
+        // Monsters
+        Monster collidingMonster = CollisionChecker.checkEntity(this, Main.game.monsters.get(Main.game.currentMap));
+        if (collidingMonster != null) collidingMonster.onPlayerHit();
+        if (collidingMonster != null && Main.game.inputHandler.interactKeyPressed) collidingMonster.onInteract();
+
+        contactMonster(collidingMonster);
+
+        // Check if the player is on an event
         EventHandler.checkEvents();
-
-        // Check Mob Collision
-        int monsterIndex = CollisionChecker.checkEntity(this, game.monster);
-        contactMonster(monsterIndex);
-
     }
+
+    @Override
     public void update() {
-        if (attacking) {
-            attack();
-        } else if (inputHandler.upPressed || inputHandler.downPressed || inputHandler.leftPressed || inputHandler.rightPressed) {
+        if (attacking) attack();
+        else if (Main.game.inputHandler.upPressed || Main.game.inputHandler.downPressed || Main.game.inputHandler.leftPressed || Main.game.inputHandler.rightPressed) {
             // Set direction based on input
-            if (inputHandler.upPressed && inputHandler.leftPressed) direction = "up left";
-            else if (inputHandler.upPressed && inputHandler.rightPressed) direction = "up right";
-            else if (inputHandler.downPressed && inputHandler.leftPressed) direction = "down left";
-            else if (inputHandler.downPressed && inputHandler.rightPressed) direction = "down right";
-            else if (inputHandler.upPressed) direction = "up";
-            else if (inputHandler.downPressed) direction = "down";
-            else if (inputHandler.leftPressed) direction = "left";
+            if (Main.game.inputHandler.upPressed && Main.game.inputHandler.leftPressed) direction = "up left";
+            else if (Main.game.inputHandler.upPressed && Main.game.inputHandler.rightPressed) direction = "up right";
+            else if (Main.game.inputHandler.downPressed && Main.game.inputHandler.leftPressed) direction = "down left";
+            else if (Main.game.inputHandler.downPressed && Main.game.inputHandler.rightPressed) direction = "down right";
+            else if (Main.game.inputHandler.upPressed) direction = "up";
+            else if (Main.game.inputHandler.downPressed) direction = "down";
+            else if (Main.game.inputHandler.leftPressed) direction = "left";
             else direction = "right";
 
             // Check collision
             checkCollision();
 
             // If no collision, move the player
-            if (!collisionOn) {
+            if (!colliding) {
                 switch (direction) {
                     case "up left" -> {worldX -= (speed - 1); worldY -= (speed - 1);}
                     case "up right" -> {worldX += (speed - 1); worldY -= (speed - 1);}
@@ -204,42 +216,41 @@ public class Player extends Entity{
                 invincibilityCounter = 0;
             }
         }
-        if (health > maxHealth) {
-            health = maxHealth;
-        }
-        if (health <= 0) {
-            game.gameState = States.GameStates.GAME_END;
-            Sound.playSFX("Game Over");
-            game.ui.commandNumber = -1;
+        if (getHealth() <= 0) {
             Sound.stopMusic();
+            Main.game.gameState = States.GameStates.GAME_END;
+            Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
+            Sound.playSFX("Game Over");
+            Main.game.ui.commandNumber = -1;
         }
 
         // Attacking
-        if (inputHandler.spacePressed) {
+        if (Main.game.inputHandler.spacePressed && !attackCheckCanceled) {
             checkCollision();
 
-            if (!game.player.attackCanceled && !attacking) {
+            if (!attacking && !attackCanceled) {
                 Sound.playSFX("Swing");
-                game.player.attacking = true;
-                game.player.spriteCounter = 0;
+                Main.game.player.attacking = true;
+                Main.game.player.spriteCounter = 0;
             }
 
             // Reset Values
+            Main.game.inputHandler.spacePressed = false;
             attackCanceled = false;
-            game.inputHandler.spacePressed = false;
         }
+        attackCheckCanceled = false;
 
         // Inventory
-        if (inputHandler.interactKeyPressed) {
+        if (Main.game.inputHandler.interactKeyPressed) {
             checkCollision();
 
-            if (!inventoryCanceled && game.ui.uiState == States.UIStates.JUST_DEFAULT) {
-                game.ui.uiState = States.UIStates.CHARACTER;
+            if (!inventoryCanceled && Main.game.ui.uiState == States.UIStates.JUST_DEFAULT) {
+                Main.game.ui.uiState = States.UIStates.CHARACTER;
             }
 
             // Reset Values
             inventoryCanceled = false;
-            game.inputHandler.interactKeyPressed = false;
+            Main.game.inputHandler.interactKeyPressed = false;
         }
     }
     public void attack() {
@@ -269,8 +280,8 @@ public class Player extends Entity{
             solidArea.height = attackArea.height;
 
             // Check collision with the updates
-            int monsterIndex = CollisionChecker.checkEntity(this, game.monster);
-            damageMonster(monsterIndex, currentWeapon.knockBackPower);
+            Monster collidingMonster = CollisionChecker.checkEntity(this, Main.game.monsters.get(Main.game.currentMap));
+            damageMonster(collidingMonster, currentWeapon.knockBackPower);
 
             // Restore original data
             worldX = currentWorldX;
@@ -284,90 +295,43 @@ public class Player extends Entity{
             attacking = false;
         }
     }
-    public void pickUpObject(int i) {
-        if (i != 999) {
-            Entity object = game.object.get(game.currentMap).get(i);
-            if (object.tags.contains(EntityTags.TAG_OBSTACLE)) {
-                if (inputHandler.interactKeyPressed) {
-                    object.interact();
-                } else if (object.interactPrompt) {
-                    game.ui.uiState = States.UIStates.INTERACT;
-                }
-            }
-            else if (object.tags.contains(EntityTags.TAG_PICKUP_ONLY)) {
-                object.use(this);
-                game.object.get(game.currentMap).set(i, null);
-            }
-            else if (canObtainItem(object)) {
-                Sound.playSFX("Coin");
-                String text = "+1 " + object.name;
-                game.ui.addMiniNotification(text);
-                game.object.get(game.currentMap).set(i, null);
-            }
-        } else if (game.ui.uiState == States.UIStates.INTERACT) {
-            game.ui.uiState = States.UIStates.JUST_DEFAULT;
-        }
-    }
-    public void interactNPC(int i) {
-        if (game.inputHandler.interactKeyPressed) {
-            if (i != 999) {
-                inventoryCanceled = true;
-                game.ui.uiState = States.UIStates.DIALOGUE;
-                game.npc.get(game.currentMap).get(i).speak(false);
-            }
-        }
-    }
-    public void contactMonster(int i) {
-        if (i != 999) {
-            if (!invincible && !game.monster.get(game.currentMap).get(i).dying) {
-                Sound.playSFX("Receive Damage");
 
-                int damage = game.monster.get(game.currentMap).get(i).attack - defence;
-                if (damage < 0) {
-                    damage = 0;
-                }
-                health -= damage;
-                generateParticles(game.player, game.player);
-                invincible = true;
-            }
+    public void cancelAttack() {attackCanceled = true;}
+    public void cancelInventory() {inventoryCanceled = true;}
+    public void cancelAttackCheck() {attackCheckCanceled = true;}
+
+    public void contactMonster(Monster monster) {
+        if (monster != null && !monster.dying) {
+            damage(monster.attack, true);
         }
     }
 
-    public void damageMonster(int i, int knockBackPower) {
-        if (i != 999) {
-            if (!game.monster.get(game.currentMap).get(i).invincible) {
-                Sound.playSFX("Hit Monster");
+    public void damageMonster(Monster monster, int knockBackPower) {
+        if (monster != null && !monster.dying && !monster.invincible) {
+            // KnockBack :D
+            if (knockBackPower > 0) knockBack(monster, knockBackPower);
 
-                // KnockBack :D
-                if (knockBackPower > 0) {
-                    knockBack(game.monster.get(game.currentMap).get(i), knockBackPower);
-                }
+            // Attack time!
+            monster.damage(attack, true);
 
-                int damage = attack - game.monster.get(game.currentMap).get(i).defence;
-                if (damage < 0) {
-                    damage = 0;
-                }
-                game.monster.get(game.currentMap).get(i).health -= damage;
+            // If the monsters is dead, then set it to dying
+            if (monster.getHealth() <= 0) {
+                monster.dying = true;
 
-                game.monster.get(game.currentMap).get(i).invincible = true;
-                game.monster.get(game.currentMap).get(i).damageReaction();
+                // Give player some exp
+                exp += monster.exp;
+                checkLevelUp();
 
-                generateParticles(game.monster.get(game.currentMap).get(i), game.monster.get(game.currentMap).get(i));
-
-                if (game.monster.get(game.currentMap).get(i).health <= 0) {
-                    game.monster.get(game.currentMap).get(i).dying = true;
-                    game.ui.addMiniNotification("Killed " + game.monster.get(game.currentMap).get(i).name);
-                    game.ui.addMiniNotification("+" + game.monster.get(game.currentMap).get(i).exp + " exp");
-                    exp += game.monster.get(game.currentMap).get(i).exp;
-                    checkLevelUp();
-                }
+                // Add a notification
+                Main.game.ui.addMiniNotification("Killed " + monster.name);
+                Main.game.ui.addMiniNotification("+" + monster.exp + " exp");
             }
         }
     }
-    public void knockBack(Entity entity, int knockBackPower) {
-        entity.direction = direction;
-        entity.speed += knockBackPower;
-        entity.knockBack = true;
+    public void knockBack(Mob mob, int knockBackPower) {
+        mob.direction = direction;
+        mob.speed += knockBackPower;
+        mob.knockBack = true;
     }
     public void checkLevelUp() {
         if (exp >= nextLevelExp) {
@@ -378,152 +342,104 @@ public class Player extends Entity{
             dexterity++;
             attack = getAttack();
             defence = getDefence();
-            game.ui.addMiniNotification("Level Up!");
-
-            if (health >= maxHealth) {
-                health = maxHealth;
-            }
+            Main.game.ui.addMiniNotification("Level Up!");
         }
     }
     public void selectItem() {
-        int itemIndex = game.ui.getItemIndex(game.ui.playerSlotCol, game.ui.playerSlotRow);
+        int itemIndex = Main.game.ui.getItemIndex(Main.game.ui.playerSlotCol, Main.game.ui.playerSlotRow);
 
-        if (itemIndex < inventory.size()) {
-            Entity selectedItem = inventory.get(itemIndex);
+        if (itemIndex < getInventory().size()) {
+            Item selectedItem = getInventory().get(itemIndex);
 
-            if (selectedItem.tags.contains(EntityTags.TAG_WEAPON)) {
+            if (selectedItem.tags.contains(ItemTags.TAG_WEAPON)) {
                 currentWeapon = selectedItem;
                 attack = getAttack();
                 getAttackImage();
             }
-            if (selectedItem.tags.contains(EntityTags.TAG_SHIELD)) {
+            if (selectedItem.tags.contains(ItemTags.TAG_SHIELD)) {
                 currentShield = selectedItem;
                 defence = getDefence();
             }
-            if (selectedItem.tags.contains(EntityTags.TAG_LIGHT)) {
+            if (selectedItem.tags.contains(ItemTags.TAG_LIGHT)) {
                 if (currentLight == selectedItem) {
                     currentLight = null;
                 } else {
                     currentLight = selectedItem;
                 }
-                game.environmentManager.lightUpdated = true;
+                Main.game.environmentManager.lightUpdated = true;
             }
-            if (selectedItem.tags.contains(EntityTags.TAG_CONSUMABLE)) {
+            if (selectedItem.tags.contains(ItemTags.TAG_CONSUMABLE)) {
                 if (selectedItem.use(this)) {
-                    if (selectedItem.amount > 1) {
-                        selectedItem.amount--;
-                    } else {
-                        inventory.remove(itemIndex);
-                    }
+                    removeItem(selectedItem);
                 }
             }
         }
     }
-    public int searchInInventory(String itemName) {
-        int itemIndex = 999;
-        for (int i = 0; i < inventory.size(); i++) {
-            if (inventory.get(i).name.equals(itemName)) {
-                itemIndex = i;
-                break;
-            }
-        }
-        return itemIndex;
-    }
-    public boolean canObtainItem(Entity item) {
-        boolean canObtain = false;
 
-        // Check if maxStack
-        if (!(item.amount >= item.maxStack) && !Objects.equals(item.name, "Coins")) {
-            int index = searchInInventory(item.name);
-
-            if (index != 999) {
-                inventory.get(index).amount++;
-                canObtain = true;
-            }
-            else { // New item, so check vacancy
-                if (inventory.size() != maxInventorySize) {
-                    inventory.add(item);
-                    canObtain = true;
-                }
-            }
-        } else if (Objects.equals(item.name, "Coins")) {
-            coins += item.amount;
-            canObtain = true;
-        } else { // Not maxStack, so check vacancy
-            if (inventory.size() != maxInventorySize) {
-                inventory.add(item);
-                canObtain = true;
-            }
-        }
-        return canObtain;
-     }
-
+     @Override
     public void draw(Graphics2D graphics2D) {
-        BufferedImage image = null;
         int temporaryScreenX = screenX;
         int temporaryScreenY = screenY;
 
         switch (direction) {
             case "up" -> {
                 if (!attacking) {
-                    if (spriteNumber == 1) {image = up1;}
-                    else if (spriteNumber == 2) {image = up2;}
-                    else if (spriteNumber == 3) {image = up3;}
+                    if (spriteNumber == 1) currentImage = up1;
+                    else if (spriteNumber == 2) currentImage = up2;
+                    else if (spriteNumber == 3) currentImage = up3;
                 } if (attacking) {
-                    temporaryScreenY = screenY - game.tileSize;
-                    if (spriteNumber == 1) {image = attackUp;}
-                    if (spriteNumber == 2) {image = attackUp;}
-                    if (spriteNumber == 3) {image = attackUp;}
+                    temporaryScreenY = screenY - Main.game.tileSize;
+                    if (spriteNumber == 1) currentImage = attackUp;
+                    if (spriteNumber == 2) currentImage = attackUp;
+                    if (spriteNumber == 3) currentImage = attackUp;
                 }
             }
             case "down" -> {
                 if (!attacking) {
-                    if (spriteNumber == 1) {image = down1;}
-                    else if (spriteNumber == 2) {image = down2;}
-                    else if (spriteNumber == 3) {image = down3;}
+                    if (spriteNumber == 1) currentImage = down1;
+                    else if (spriteNumber == 2) currentImage = down2;
+                    else if (spriteNumber == 3) currentImage = down3;
                 }
                 if (attacking) {
-                    if (spriteNumber == 1) {image = attackDown;}
-                    if (spriteNumber == 2) {image = attackDown;}
-                    if (spriteNumber == 3) {image = attackDown;}
+                    if (spriteNumber == 1) currentImage = attackDown;
+                    if (spriteNumber == 2) currentImage = attackDown;
+                    if (spriteNumber == 3) currentImage = attackDown;
                 }
             }
             case "left", "up left", "down left" -> {
                 if (!attacking) {
-                    if (spriteNumber == 1) {image = left1;}
-                    else if (spriteNumber == 2) {image = left2;}
-                    else if (spriteNumber == 3) {image = left3;}
+                    if (spriteNumber == 1) currentImage = left1;
+                    else if (spriteNumber == 2) currentImage = left2;
+                    else if (spriteNumber == 3) currentImage = left3;
                 }
                 if (attacking) {
-                    temporaryScreenX = screenX - game.tileSize;
-                    if (spriteNumber == 1) {image = attackLeft;}
-                    if (spriteNumber == 2) {image = attackLeft;}
-                    if (spriteNumber == 3) {image = attackLeft;}
+                    temporaryScreenX = screenX - Main.game.tileSize;
+                    if (spriteNumber == 1) currentImage = attackLeft;
+                    if (spriteNumber == 2) currentImage = attackLeft;
+                    if (spriteNumber == 3) currentImage = attackLeft;
                 }
             }
             case "right", "up right", "down right" -> {
                 if (!attacking) {
-                    if (spriteNumber == 1) {image = right1;}
-                    else if (spriteNumber == 2) {image = right2;}
-                    else if (spriteNumber == 3) {image = right3;}
+                    if (spriteNumber == 1) currentImage = right1;
+                    else if (spriteNumber == 2) currentImage = right2;
+                    else if (spriteNumber == 3) currentImage = right3;
                 }
                 if (attacking) {
-                    if (spriteNumber == 1) {image = attackRight;}
-                    if (spriteNumber == 2) {image = attackRight;}
-                    if (spriteNumber == 3) {image = attackRight;}
+                    if (spriteNumber == 1) currentImage = attackRight;
+                    if (spriteNumber == 2) currentImage = attackRight;
+                    if (spriteNumber == 3) currentImage = attackRight;
                 }
             }
         }
-        if (invincible) {
-            graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
-        }
-        graphics2D.drawImage(image, temporaryScreenX, temporaryScreenY, null);
-        graphics2D.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        if (invincible) changeAlpha(graphics2D, 0.4f);
+        graphics2D.drawImage(currentImage, temporaryScreenX, temporaryScreenY, null);
+        changeAlpha(graphics2D, 1f);
 
-        if (game.debugHitBoxes) {
-            graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
-            graphics2D.fillRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
-        }
+         if (Main.game.debugHitBoxes) {
+             graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
+             graphics2D.fillRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+         }
     }
 
     // Particles

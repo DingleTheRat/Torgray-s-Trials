@@ -1,51 +1,60 @@
 package net.dinglezz.torgrays_trials.entity;
 
-import net.dinglezz.torgrays_trials.main.Game;
+import net.dinglezz.torgrays_trials.main.Main;
+import net.dinglezz.torgrays_trials.tile.TilePoint;
 
 import java.awt.*;
 
 public class Particle extends Entity{
     Entity generator;
     Color color;
+    int speed;
+    int maxTime;
+    int time;
+    public boolean exists = true;
     int size;
     int xd;
     int yd;
 
-    public Particle(Game game, Entity generator, Color color, int size, int speed, int maxHealth, int xd, int yd) {
-        super(game);
+    public Particle(Entity generator, Color color, int size, int speed, int maxTime, int xd, int yd) {
+        super("Particle", null);
+
+        // Position
+        int offset = (Main.game.tileSize / 2) - (size / 2);
+        worldX = generator.worldX + offset;
+        worldY = generator.worldY + offset;
 
         this.generator = generator;
         this.color = color;
         this.size = size;
         this.speed = speed;
-        this.maxHealth = maxHealth;
+        this.maxTime = maxTime;
         this.xd = xd;
         this.yd = yd;
-
-        health = maxHealth;
-        int offset = (game.tileSize / 2) - (size / 2);
-        worldX = generator.worldX + offset;
-        worldY = generator.worldY + offset;
+        time = maxTime;
     }
+
+    @Override
+    public void onPlayerHit() {}
+
     public void update() {
-        health--;
+        super.update();
+        time--;
 
-        if (health == maxHealth / 3) {
-            yd++;
-        }
-
+        if (time == maxTime / 3) yd--;
         worldX += xd * speed;
         worldY += yd * speed;
-
-        if (health == 0) {
-            alive = false;
-        }
+        if (time == 0) exists = false;
     }
-    public void draw(Graphics2D graphics2D) {
-        int screenX = worldX - game.player.worldX + game.player.screenX;
-        int screenY = worldY - game.player.worldY + game.player.screenY;
 
-        graphics2D.setColor(color);
-        graphics2D.fillRect(screenX, screenY, size, size);
+    @Override
+    public void draw(Graphics2D graphics2D) {
+        if (true) {
+            int screenX = worldX - Main.game.player.worldX + Main.game.player.screenX;
+            int screenY = worldY - Main.game.player.worldY + Main.game.player.screenY;
+
+            graphics2D.setColor(color);
+            graphics2D.fillRect(screenX, screenY, size, size);
+        }
     }
 }

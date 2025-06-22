@@ -2,14 +2,16 @@ package net.dinglezz.torgrays_trials.data_generation;
 
 import com.ususstudios.torgrays_datagen.dataclasses.Entity;
 import com.ususstudios.torgrays_datagen.dataclasses.Event;
+import net.dinglezz.torgrays_trials.entity.item.Gate_Key;
+import net.dinglezz.torgrays_trials.entity.object.Chest;
+import net.dinglezz.torgrays_trials.entity.object.*;
 import net.dinglezz.torgrays_trials.event.EVT_Healing_Pond;
 import net.dinglezz.torgrays_trials.event.EVT_Pit;
 import net.dinglezz.torgrays_trials.event.EVT_Speak;
 import net.dinglezz.torgrays_trials.event.EVT_Teleport;
-import net.dinglezz.torgrays_trials.monster.Dracore;
-import net.dinglezz.torgrays_trials.npc.Coiner;
-import net.dinglezz.torgrays_trials.npc.GateKeeper;
-import net.dinglezz.torgrays_trials.object.*;
+import net.dinglezz.torgrays_trials.entity.monster.Dracore;
+import net.dinglezz.torgrays_trials.entity.npc.Coiner;
+import net.dinglezz.torgrays_trials.entity.npc.GateKeeper;
 
 import java.util.HashMap;
 

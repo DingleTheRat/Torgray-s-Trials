@@ -1,12 +1,13 @@
 package net.dinglezz.torgrays_trials.main;
 
+import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
+import net.dinglezz.torgrays_trials.tile.TilePoint;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class AssetSetter {
     /// Calls all the asset settings methods
@@ -15,6 +16,26 @@ public class AssetSetter {
         AssetSetter.setObjects(removePrevious);
         AssetSetter.setNPCs(removePrevious);
         AssetSetter.setMonsters(removePrevious);
+        AssetSetter.setItems(removePrevious);
+        AssetSetter.setEvents();
+    }
+    /**
+     * Loads assets for the current map, ensuring that all necessary game resources are initialized.
+     * This method verifies the existence of objects, items, NPCs, and monsters for the current map
+     * and initializes them with default configurations if they are not already set. It also sets up
+     * events for the current map.
+     * <p>
+     * - If objects, items, NPCs, or monsters for the current map are missing, their respective setter
+     *   methods (setObjects, setItems, setNPCs, setMonsters) are invoked with a `false` parameter
+     *   to ensure previously existing data is retained.
+     * <p>
+     * - Events for the current map are initialized by calling the `setEvents` method.
+     */
+    public static void loadAssets() {
+        if (Main.game.objects.get(Main.game.currentMap) == null) AssetSetter.setObjects(false);
+        if (Main.game.items.get(Main.game.currentMap) == null) AssetSetter.setItems(false);
+        if (Main.game.npcs.get(Main.game.currentMap) == null) AssetSetter.setNPCs(false);
+        if (Main.game.monsters.get(Main.game.currentMap) == null) AssetSetter.setMonsters(false);
         AssetSetter.setEvents();
     }
     /**
@@ -30,9 +51,9 @@ public class AssetSetter {
     public static void setObjects(boolean removePrevious) {
         JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
         if (file != null) {
-            Main.game.object.putIfAbsent(Main.game.currentMap, new ArrayList<>());
+            Main.game.objects.putIfAbsent(Main.game.currentMap, new ArrayList<>());
             if (removePrevious) {
-                Main.game.object.get(Main.game.currentMap).clear();
+                Main.game.objects.get(Main.game.currentMap).clear();
             }
 
             try {
@@ -46,16 +67,58 @@ public class AssetSetter {
 
                     if (object.has("loot table")) {
                         String lootTable = object.getString("loot table");
-                        Main.game.object.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path, lootTable));
+                        Main.game.objects.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path, new TilePoint(file.getString("name"), col, row), lootTable));
                     } else {
-                        Main.game.object.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path));
+                        Main.game.objects.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path, new TilePoint(file.getString("name"), col, row)));
                     }
-                    Main.game.object.get(Main.game.currentMap).get(i).worldX = col * Main.game.tileSize;
-                    Main.game.object.get(Main.game.currentMap).get(i).worldY = row * Main.game.tileSize;
+                    Main.game.objects.get(Main.game.currentMap).get(i).worldX = col * Main.game.tileSize;
+                    Main.game.objects.get(Main.game.currentMap).get(i).worldY = row * Main.game.tileSize;
                 }
-            } catch (JSONException e) {
+            } catch (JSONException jsonException) {
                 System.err.println("Couldn't load objects");
-                System.err.println("Missing object data in loot table by the name of '" + file.getString("name") + "'");
+                System.err.println("Missing objects data in loot table by the name of '" + file.getString("name") + "'");
+            }
+        }
+    }
+    /**
+     * Initializes and sets up game items for the current map based on its JSON configuration.
+     * This method reads the map's JSON file and processes its "entities" section to locate
+     * and position items on the current map. The items can have optional attributes such as
+     * a loot table, and their settings are managed through utility methods.
+     * The method also handles clearing previously existing items if specified.
+     *
+     * @param removePrevious If true, all previously existing items in the current map
+     *                       are cleared before setting up the new items.
+     */
+    public static void setItems(boolean removePrevious) {
+        JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
+        if (file != null) {
+            Main.game.items.putIfAbsent(Main.game.currentMap, new ArrayList<>());
+            if (removePrevious) {
+                Main.game.items.get(Main.game.currentMap).clear();
+            }
+
+            try {
+                JSONArray items = file.getJSONObject("entities").getJSONArray("items");
+
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject object = items.getJSONObject(i);
+                    String path = object.getString("path");
+                    int col = object.getInt("col");
+                    int row = object.getInt("row");
+
+                    if (object.has("loot table")) {
+                        String lootTable = object.getString("loot table");
+                        Main.game.items.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path, new TilePoint(file.getString("name"), col, row), lootTable));
+                    } else {
+                        Main.game.items.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path, new TilePoint(file.getString("name"), col, row)));
+                    }
+                    Main.game.items.get(Main.game.currentMap).get(i).worldX = col * Main.game.tileSize;
+                    Main.game.items.get(Main.game.currentMap).get(i).worldY = row * Main.game.tileSize;
+                }
+            } catch (JSONException jsonException) {
+                System.err.println("Couldn't load items");
+                System.err.println("Missing items data in loot table by the name of '" + file.getString("name") + "'");
             }
         }
     }
@@ -70,9 +133,9 @@ public class AssetSetter {
     public static void setNPCs(boolean removePrevious) {
         JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
         if (file != null) {
-            Main.game.npc.putIfAbsent(Main.game.currentMap, new ArrayList<>());
+            Main.game.npcs.putIfAbsent(Main.game.currentMap, new ArrayList<>());
             if (removePrevious) {
-                Main.game.npc.get(Main.game.currentMap).clear();
+                Main.game.npcs.get(Main.game.currentMap).clear();
             }
 
             try {
@@ -86,17 +149,16 @@ public class AssetSetter {
 
                     if (npc.has("loot table")) {
                         String lootTable = npc.getString("loot table");
-                        Main.game.npc.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path, lootTable));
+                        Main.game.npcs.get(Main.game.currentMap).add(i, (Mob) UtilityTool.generateEntity(path, new TilePoint(file.getString("name"), col, row), lootTable));
                     } else {
-                        Main.game.npc.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path));
+                        Main.game.npcs.get(Main.game.currentMap).add(i, (Mob) UtilityTool.generateEntity(path,new TilePoint(file.getString("name"), col, row)));
                     }
-                    Main.game.npc.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path));
-                    Main.game.npc.get(Main.game.currentMap).get(i).worldX = col * Main.game.tileSize;
-                    Main.game.npc.get(Main.game.currentMap).get(i).worldY = row * Main.game.tileSize;
+                    Main.game.npcs.get(Main.game.currentMap).get(i).worldX = col * Main.game.tileSize;
+                    Main.game.npcs.get(Main.game.currentMap).get(i).worldY = row * Main.game.tileSize;
                 }
-            } catch (JSONException e) {
+            } catch (JSONException jsonException) {
                 System.err.println("Couldn't load npcs");
-                System.err.println("Missing npc data in loot table by the name of '" + file.getString("name") + "'");
+                System.err.println("Missing npcs data in loot table by the name of '" + file.getString("name") + "'");
             }
         }
     }
@@ -111,9 +173,9 @@ public class AssetSetter {
     public static void setMonsters(boolean removePrevious) {
         JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
         if (file != null) {
-            Main.game.monster.putIfAbsent(Main.game.currentMap, new ArrayList<>());
+            Main.game.monsters.putIfAbsent(Main.game.currentMap, new ArrayList<>());
             if (removePrevious) {
-                Main.game.monster.get(Main.game.currentMap).clear();
+                Main.game.monsters.get(Main.game.currentMap).clear();
             }
 
             try {
@@ -127,16 +189,16 @@ public class AssetSetter {
 
                     if (monster.has("loot table")) {
                         String lootTable = monster.getString("loot table");
-                        Main.game.monster.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path, lootTable));
+                        Main.game.monsters.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path, new TilePoint(file.getString("name"), col, row),lootTable));
                     } else {
-                        Main.game.monster.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path));
+                        Main.game.monsters.get(Main.game.currentMap).add(i, UtilityTool.generateEntity(path, new TilePoint(file.getString("name"), col, row)));
                     }
-                    Main.game.monster.get(Main.game.currentMap).get(i).worldX = col * Main.game.tileSize;
-                    Main.game.monster.get(Main.game.currentMap).get(i).worldY = row * Main.game.tileSize;
+                    Main.game.monsters.get(Main.game.currentMap).get(i).worldX = col * Main.game.tileSize;
+                    Main.game.monsters.get(Main.game.currentMap).get(i).worldY = row * Main.game.tileSize;
                 }
-            } catch (JSONException e) {
+            } catch (JSONException jsonException) {
                 System.err.println("Couldn't load monsters");
-                System.err.println("Missing monster data in loot table by the name of '" + file.getString("name") + "'");
+                System.err.println("Missing monsters data in loot table by the name of '" + file.getString("name") + "'");
             }
         }
     }
@@ -158,7 +220,7 @@ public class AssetSetter {
                 JSONArray events = file.getJSONArray("events");
 
                 for (int i = 0; i < events.length(); i++) {
-                    // Event object
+                    // Event objects
                     JSONObject event = events.getJSONObject(i);
 
                     // Settings
@@ -176,7 +238,7 @@ public class AssetSetter {
                     UtilityTool.generateEvent(path, Main.game.currentMap, col, row, parameters);
 
                 }
-            } catch (JSONException exception) {
+            } catch (JSONException jsonException) {
                 System.err.println("Couldn't load events");
                 System.err.println("Missing event data in loot table by the name of '" + file.getString("name") + "'");
             }

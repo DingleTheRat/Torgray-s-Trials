@@ -14,6 +14,7 @@ public class Main {
         window.setTitle("Torgray's Trials");
 
         game = new Game();
+        game.init();
         window.add(game);
 
         game.config.loadConfig();
