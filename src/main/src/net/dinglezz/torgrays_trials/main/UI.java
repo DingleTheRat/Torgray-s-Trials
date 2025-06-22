@@ -1226,7 +1226,8 @@ public class UI {
         int x = game.screenWidth / 2 - width / 2;
         int y = game.screenHeight / 2 - height / 2;
         drawSubWindow(x - 20, y - 20, width + 40, height + 40);
-        graphics2D.drawImage(MapHandler.worldMap.get(game.currentMap), x, y, width, height, null);
+        graphics2D.drawImage(MapHandler.worldMap.get(game.currentMap).get("ground"), x, y, width, height, null);
+        graphics2D.drawImage(MapHandler.worldMap.get(game.currentMap).get("foreground"), x, y, width, height, null);
     }
 
     // Action
@@ -1319,7 +1320,6 @@ public class UI {
     public int getCentreX(String text) {
         int length = (int) graphics2D.getFontMetrics().getStringBounds(text, graphics2D).getWidth();
         return game.screenWidth / 2 - length / 2;
-
     }
     public int alignXToRight(String text, int tailX) {
         int length = (int) graphics2D.getFontMetrics().getStringBounds(text, graphics2D).getWidth();
