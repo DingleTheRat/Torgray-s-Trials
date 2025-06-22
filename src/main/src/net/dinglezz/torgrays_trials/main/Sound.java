@@ -56,17 +56,12 @@ public class Sound {
         }
     }
     public void play() {
-        if (clip != null) {
-            clip.start();
-        } else {
-            System.err.println("Warning: No clip found to play");}
+        if (clip != null) clip.start();
+        else System.err.println("Warning: No clip found to play");
     }
     public void loop() {
-        if ( clip != null) {
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
-        } else {
-            System.err.println("Warning: No clip found to loop");
-        }
+        if (clip != null) clip.loop(Clip.LOOP_CONTINUOUSLY);
+        else System.err.println("Warning: No clip found to loop");
     }
     public void stop() {
         if (clip != null) clip.stop();

@@ -222,11 +222,14 @@ public abstract class Mob extends Entity {
     // Health
     public int getHealth() {return health;}
     /**
-     * Inflicts damage on the mob. If the defence parameter is true, the damage is reduced by the mob's defence value.
-     * Damage will only be inflicted if the mob is not invincible. When the mob has health below 0, it is marked as dead.
+     * Applies damage to the mob, taking into account its defense if specified.
+     * The method ensures that the mob's health cannot drop below zero and handles
+     * death-related state changes if the mob's health reaches zero. Additionally,
+     * it triggers sound effects, visual particles, and reaction behaviors upon
+     * taking damage unless the mob is invincible or already dying.
      *
-     * @param damage the amount of damage to be inflicted on the mob.
-     * @param defence if true, the damage is reduced by the mob's defense value.
+     * @param damage  the amount of damage to be applied to the mob.
+     * @param defence whether the mob's defense stat should be applied to reduce the damage.
      */
     public void damage(int damage, boolean defence) {
         // If the mob is invincible, do not apply damage
@@ -236,6 +239,9 @@ public abstract class Mob extends Entity {
 
             // Make it affected by defense (if needed)
             if (defence) damage = damage - this.defence;
+
+            // Ensure that the damage is not negative
+            if (damage < 0) damage = 0;
 
             // Make sure the damage is not negative and kill it if it is
             health -= damage;
@@ -254,15 +260,19 @@ public abstract class Mob extends Entity {
         }
     }
     /**
-     * Restores health to the mob. Ensures the health does not exceed the maximum allowed value.
+     * Restores the health of the mob by a specified amount.
+     * Ensures that the resulting health value does not exceed the maximum health allowed.
+     * If the given health value is negative, the mob's health will not be reduced below zero.
      *
-     * @param health the amount of health to be restored. If the resulting health exceeds the maximum health,
-     *               it will be set to the maximum health value.
+     * @param health the amount of health to be restored to the mob.
      */
     public void heal(int health) {
+        // Make sure that health is not negative
+        if (health < 0) this.health = 0;
+
         this.health += health;
 
-        // Ensure health does not exceed maxHealth
+        // Ensure this.health does not exceed maxHealth
         if (this.health > maxHealth) {
             this.health = maxHealth;
         }
