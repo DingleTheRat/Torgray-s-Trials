@@ -176,7 +176,7 @@ public class Lighting {
             float openSpeed = (darknessState == States.DarknessStates.NEW_DUSK) ? 0.005f : 0.01f;
             float closeSpeed = (darknessState == States.DarknessStates.DUSK) ? 0.01f : 0.005f;
             game.ui.setTransitionSettings(new Color(0, 0, 0.1f), openSpeed, closeSpeed);
-            game.ui.actionMethod = "transitionDarkness";
+            game.ui.transitionAction = () -> game.environmentManager.lightUpdated = true;
         }
     }
 

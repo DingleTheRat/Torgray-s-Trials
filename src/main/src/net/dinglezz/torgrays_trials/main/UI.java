@@ -14,8 +14,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -27,7 +25,10 @@ public class UI {
     BufferedImage heart, half_heart, lost_heart, coin;
     private String currentDialogue = "";
     public int commandNumber = 0;
-    public String actionMethod;
+
+    // Action Methods
+    public Runnable yesAction;
+    public Runnable transitionAction;
 
     // Mini Notifications
     ArrayList<String> miniNotifications = new ArrayList<>();
@@ -379,7 +380,14 @@ public class UI {
                         commandNumber = 1;
                         subUIState = "Confirm";
                         setCurrentDialogue("Are you sure you wanna \nend this game? Your data \nwon't be saved.");
-                        actionMethod = "yesGameEnd";
+                        yesAction = () -> {
+                            game.gameState = States.GameStates.TITLE;
+                            uiState = States.UIStates.JUST_DEFAULT;
+                            subUIState = "Main Title";
+                            Sound.music.stop();
+                            Sound.playMusic("Tech Geek");
+                            game.restart();
+                        };
                     }
                 }
 
@@ -439,13 +447,20 @@ public class UI {
             graphics2D.drawString(">", textX - 30, textY);
 
             if (game.inputHandler.spacePressed) {
+                // Set the yesAction to toggle full screen
+                yesAction = () -> {
+                    game.fullScreen = !game.fullScreen;
+                    subUIState = "Notification";
+                    commandNumber = 0;
+                    setCurrentDialogue("Full Screen will only be \nenabled/disabled when \nrelaunching the game.");
+                };
+
                 if (!game.fullScreen && !game.BRendering) {
                     commandNumber = 1;
                     subUIState = "Confirm";
                     setCurrentDialogue("Are you sure you wanna \nenter full screen? It won't \nscale without BRendering.");
-                    actionMethod = "yesFullScreen";
                 } else {
-                    yesFullScreen();
+                    yesAction.run();
                 }
             }
         }
@@ -457,13 +472,23 @@ public class UI {
             graphics2D.drawString(">", textX - 30, textY);
 
             if (game.inputHandler.spacePressed) {
+                // Set the yesAction to toggle BRendering
+                yesAction = () -> {
+                    game.BRendering = !game.BRendering;
+                    commandNumber = 0;
+
+                    if (game.BRendering) {
+                        subUIState = "Notification";
+                        setCurrentDialogue("You can emergency \ndisable BRendering by \npressing F3 and R.");
+                    } else subUIState = "Settings Main";
+                };
+
                 if (!game.BRendering) {
                     commandNumber = 1;
                     subUIState = "Confirm";
                     setCurrentDialogue("BRendering is a highly \nexperimental mode that \ncan break the game if on");
-                    actionMethod = "yesBRendering";
                 } else {
-                    yesBRendering();
+                    yesAction.run();
                 }
             }
         }
@@ -474,13 +499,19 @@ public class UI {
             graphics2D.drawString(">", textX - 30, textY);
 
             if (game.inputHandler.spacePressed) {
+                // Set the yesAction to toggle pathfinding
+                yesAction = () -> {
+                    game.pathFinding = !game.pathFinding;
+                    subUIState = "Settings Main";
+                    commandNumber = 0;
+                };
+
                 if (!game.pathFinding) {
                     commandNumber = 1;
                     subUIState = "Confirm";
                     setCurrentDialogue("Pathfinding is a highly \nexperimental mode that \nmay not work correctly");
-                    actionMethod = "yesPathfinding";
                 } else {
-                    yesPathfinding();
+                    yesAction.run();
                 }
             }
         }
@@ -593,7 +624,7 @@ public class UI {
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
             if (game.inputHandler.spacePressed) {
-                invokeActionMethod();
+                yesAction.run();
             }
         }
 
@@ -1046,7 +1077,7 @@ public class UI {
 
         // Handle state transitions
         if (transitionCounter == 1f && !fadeBack) {
-            invokeActionMethod();
+            transitionAction.run();
             fadeBack = true;
             if (game.environmentManager.lighting.darknessState == States.DarknessStates.DUSK ||
                     game.environmentManager.lighting.darknessState == States.DarknessStates.NEW_DUSK) {
@@ -1230,66 +1261,6 @@ public class UI {
         graphics2D.drawImage(MapHandler.worldMap.get(game.currentMap).get("foreground"), x, y, width, height, null);
     }
 
-    // Action
-    @SuppressWarnings("unused")
-    public void yesGameEnd() {
-        game.gameState = States.GameStates.TITLE;
-        uiState = States.UIStates.JUST_DEFAULT;
-        subUIState = "Main Title";
-        Sound.music.stop();
-        Sound.playMusic("Tech Geek");
-        game.restart();
-    }
-    @SuppressWarnings("unused")
-    public void yesFullScreen() {
-        game.fullScreen = !game.fullScreen;
-        subUIState = "Notification";
-        commandNumber = 0;
-        setCurrentDialogue("Full Screen will only be \nenabled/disabled when \nrelaunching the game.");
-    }
-    @SuppressWarnings("unused")
-    public void yesBRendering() {
-        game.BRendering = !game.BRendering;
-        commandNumber = 0;
-
-        if (game.BRendering) {
-            subUIState = "Notification";
-            setCurrentDialogue("You can emergency \ndisable BRendering by \npressing F3 and R.");
-        } else {
-            subUIState = "Settings Main";
-        }
-    }
-    @SuppressWarnings("unused")
-    public void yesPathfinding() {
-        game.pathFinding = !game.pathFinding;
-        subUIState = "Settings Main";
-        commandNumber = 0;
-    }
-    @SuppressWarnings("unused")
-    public void transitionTeleport() {
-        game.currentMap = EVT_Teleport.nextMap;
-
-        // Set player position
-        if (EVT_Teleport.nextCol == Integer.MIN_VALUE || EVT_Teleport.nextRow == Integer.MIN_VALUE) {
-            game.player.setDefaultPosition();
-        } else {
-            game.player.worldX = EVT_Teleport.nextCol;
-            game.player.worldY = EVT_Teleport.nextRow;
-        }
-        game.player.direction = EVT_Teleport.nextDirection;
-        game.environmentManager.lightUpdated = true;
-
-        // Play map music
-        Sound.playMapMusic();
-
-        // Load entities and events if not already loaded
-        AssetSetter.loadAssets();
-    }
-    @SuppressWarnings("unused")
-    public void transitionDarkness() {
-        game.environmentManager.lightUpdated = true;
-    }
-
     // Helpers
     public int getItemIndex(int slotCol, int slotRow) {
         return slotCol + (slotRow * 5);
@@ -1304,17 +1275,6 @@ public class UI {
         graphics2D.setColor(color);
         graphics2D.setStroke(new BasicStroke(5));
         graphics2D.drawRoundRect(x + 5, y + 5, width - 10, height - 10 ,25, 25);
-    }
-    /// Invokes the method defined in the "action method" variable
-    public void invokeActionMethod() {
-        try {
-            Method method = this.getClass().getMethod(actionMethod);
-            method.invoke(this);
-        } catch (NoSuchMethodException exception) {
-            System.err.println("There is no such method as '" + actionMethod + "' in the UI class.");
-        } catch (IllegalAccessException | InvocationTargetException exception) {
-            throw new RuntimeException(exception);
-        }
     }
 
     public int getCentreX(String text) {

@@ -196,7 +196,6 @@ public class CollisionChecker {
         return contactPlayer;
     }
 
-
     public static <T extends Entity> T getDetected(Mob user, ArrayList<T> targets, String targetName) {
         T detected = null;
 
@@ -215,7 +214,6 @@ public class CollisionChecker {
 
         for (T target : targets) {
             if (target != null) {
-                System.out.println(target.name);
                 if (target.getCol() == col && target.getRow() == row && target.name.equals(targetName)) {
                     detected = target;
                     break;
