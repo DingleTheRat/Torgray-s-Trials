@@ -129,10 +129,6 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 				-1,
 				true,
 				new Entity[] {
-					// Keys
-					new Entity(Gate_Key.class, 23, 40, null),
-					new Entity(Gate_Key.class, 38, 8, null),
-
 					// Gates
 					new Entity(Gate.class, 10, 12, null),
 					new Entity(Gate.class, 14, 28, null),
@@ -148,26 +144,30 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 					new Entity(GateKeeper.class, 21, 21, null)
 				},
 				new Entity[] {
-					// In grass thing
-					new Entity(Dracore.class, 23, 36, "Dracores"),
-					new Entity(Dracore.class, 24, 37, "Dracores"),
-					new Entity(Dracore.class, 25, 38, "Dracores"),
-
-					// In path thing
-					new Entity(Dracore.class, 35, 10, "Dracores"),
-					new Entity(Dracore.class, 37, 8, "Dracores"),
-					new Entity(Dracore.class, 39, 10, "Dracores"),
-
-					// Inside the gates
-					new Entity(Dracore.class, 10, 29, "Dracores"),
-					new Entity(Dracore.class, 11, 29, "Dracores"),
-					new Entity(Dracore.class, 12, 29, "Dracores"),
-
-					// In the tree thing
-					new Entity(Dracore.class, 36, 36, "Dracores"),
-					new Entity(Dracore.class, 36, 32, "Dracores"),
-					new Entity(Dracore.class, 37, 41, "Dracores"),
-					new Entity(Dracore.class, 31, 40, "Dracores")
+						// In grass thing
+						new Entity(Dracore.class, 23, 36, "Dracores"),
+						new Entity(Dracore.class, 24, 37, "Dracores"),
+						new Entity(Dracore.class, 25, 38, "Dracores"),
+						
+						// In path thing
+						new Entity(Dracore.class, 35, 10, "Dracores"),
+						new Entity(Dracore.class, 37, 8, "Dracores"),
+						new Entity(Dracore.class, 39, 10, "Dracores"),
+						
+						// Inside the gates
+						new Entity(Dracore.class, 10, 29, "Dracores"),
+						new Entity(Dracore.class, 11, 29, "Dracores"),
+						new Entity(Dracore.class, 12, 29, "Dracores"),
+						
+						// In the tree thing
+						new Entity(Dracore.class, 36, 36, "Dracores"),
+						new Entity(Dracore.class, 36, 32, "Dracores"),
+						new Entity(Dracore.class, 37, 41, "Dracores"),
+						new Entity(Dracore.class, 31, 40, "Dracores")
+				},
+				new Entity[] {
+						new Entity(Gate_Key.class, 23, 40, null),
+						new Entity(Gate_Key.class, 38, 8, null)
 				},
 				new Event[]{
 						new Event(EVT_Pit.class, 23, 19),
@@ -300,6 +300,7 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 						new Entity(Coiner.class, 12, 9, null)
 				},
 				new Entity[] {},
+				new Entity[] {},
 				new Event[]{
 					new Event(EVT_Teleport.class, 12, 13, new HashMap<>(){{
 						put("map", "Main Island");put("direction", "down");put("required direction", "down");
@@ -418,6 +419,7 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 				0, 0,
 				500,
 				true,
+				new Entity[] {},
 				new Entity[] {},
 				new Entity[] {},
 				new Entity[] {},

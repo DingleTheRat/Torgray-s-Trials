@@ -12,6 +12,7 @@
       "row": 9
     }],
     "monsters": [],
+    "items": [],
     "objects": [
       {
         "path": "net.dinglezz.torgrays_trials.entity.object.Table",
@@ -24,8 +25,7 @@
         "row": 9,
         "loot table": "Normal Dark Chest"
       }
-    ],
-    "items": []
+    ]
   },
   "name": "Coiner's Shop",
   "light radius": 500,
@@ -138,8 +138,8 @@
   "events": [
     {
       "path": "net.dinglezz.torgrays_trials.event.EVT_Teleport",
-      "col": "12",
-      "row": "13",
+      "col": 12,
+      "row": 13,
       "parameters": {
         "col": 10,
         "row": 39,
@@ -150,8 +150,8 @@
     },
     {
       "path": "net.dinglezz.torgrays_trials.event.EVT_Speak",
-      "col": "12",
-      "row": "11",
+      "col": 12,
+      "row": 11,
       "parameters": {
         "type": "npc",
         "index": 0

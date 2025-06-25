@@ -21,7 +21,7 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation("org.json:json:20250107") // Json Json 2025
-    implementation("com.github.UsUsStudios:Torgrays-Datagen:v0.15")
+    implementation("com.github.UsUsStudios:Torgrays-Datagen:v1.0")
 }
 
 tasks.test {

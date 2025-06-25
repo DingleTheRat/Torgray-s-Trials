@@ -6,7 +6,7 @@
       "loot": [{
         "amount": 1,
         "chance": 1,
-        "item": "net.dinglezz.torgrays_trials.entity.item.weapon.Sword_Amethyst"
+        "object": "net.dinglezz.torgrays_trials.entity.item.weapon.Sword_Amethyst"
       }]
     },
     {
@@ -14,7 +14,7 @@
       "loot": [{
         "amount": 1,
         "chance": 1,
-        "item": "net.dinglezz.torgrays_trials.entity.item.shield.Shield_Amethyst"
+        "object": "net.dinglezz.torgrays_trials.entity.item.shield.Shield_Amethyst"
       }]
     },
     {
@@ -22,7 +22,7 @@
       "loot": [{
         "amount": 4,
         "chance": 1,
-        "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
+        "object": "net.dinglezz.torgrays_trials.entity.item.Coins"
       }]
     }
   ]
