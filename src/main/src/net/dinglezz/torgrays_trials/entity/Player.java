@@ -301,30 +301,30 @@ public class Player extends Entity{
 
     public void damageMonster(int i, int knockBackPower) {
         if (i != 999) {
-            if (!game.monster.get(game.currentMap).get(i).invincible) {
+            Entity monster = game.monster.get(game.currentMap).get(i);
+            if (!monster.invincible) {
                 Sound.playSFX("Hit Monster");
 
                 // KnockBack :D
                 if (knockBackPower > 0) {
-                    knockBack(game.monster.get(game.currentMap).get(i), knockBackPower);
+                    knockBack(monster, knockBackPower);
                 }
-
-                int damage = attack - game.monster.get(game.currentMap).get(i).defence;
+                int damage = attack - monster.defence;
                 if (damage < 0) {
                     damage = 0;
                 }
-                game.monster.get(game.currentMap).get(i).health -= damage;
+                monster.health -= damage;
 
-                game.monster.get(game.currentMap).get(i).invincible = true;
-                game.monster.get(game.currentMap).get(i).damageReaction();
+                // monster.invincible = true;
+                // monster.damageReaction();
 
-                generateParticles(game.monster.get(game.currentMap).get(i), game.monster.get(game.currentMap).get(i));
+                generateParticles(monster, monster);
 
-                if (game.monster.get(game.currentMap).get(i).health <= 0) {
-                    game.monster.get(game.currentMap).get(i).dying = true;
-                    game.ui.addMiniNotification("Killed " + game.monster.get(game.currentMap).get(i).name);
-                    game.ui.addMiniNotification("+" + game.monster.get(game.currentMap).get(i).exp + " exp");
-                    exp += game.monster.get(game.currentMap).get(i).exp;
+                if (monster.health <= 0) {
+                    monster.dying = true;
+                    game.ui.addMiniNotification("Killed " + monster.name);
+                    game.ui.addMiniNotification("+" + monster.exp + " exp");
+                    exp += monster.exp;
                     checkLevelUp();
                 }
             }

@@ -168,11 +168,16 @@ public class Game extends JPanel implements Runnable {
         // long totalNano = 0;
 
         while (gameThread != null) {
+	        try {
+		        Thread.sleep(4);
+	        } catch (InterruptedException e) {
+		        throw new RuntimeException(e);
+	        }
 	        // FPS calculations
             frame++;
             long currentTime = System.nanoTime();
             deltaTime = (currentTime - lastTime) / 1_000_000_000.0f;
-            if (frame % 200_000 == 0) FPS = 1 / deltaTime;
+            if (frame % Math.round((FPS == 0) ? 1 : FPS) == 0) FPS = 1 / deltaTime;
             lastTime = currentTime;
             
             update();
