@@ -7,7 +7,7 @@
       "loot": [{
         "amount": 1,
         "chance": 1,
-        "object": ""
+        "item": ""
       }]
     },
     {
@@ -16,17 +16,17 @@
         {
           "amount": 1,
           "chance": 0.55,
-          "object": "net.dinglezz.torgrays_trials.entity.item.Coins"
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
         },
         {
           "amount": 2,
           "chance": 0.35,
-          "object": "net.dinglezz.torgrays_trials.entity.item.Coins"
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
         },
         {
           "amount": 3,
           "chance": 0.1,
-          "object": "net.dinglezz.torgrays_trials.entity.item.Coins"
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
         }
       ]
     },
@@ -35,7 +35,7 @@
       "loot": [{
         "amount": 1,
         "chance": 1,
-        "object": "net.dinglezz.torgrays_trials.entity.item.Torgray_Soup"
+        "item": "net.dinglezz.torgrays_trials.entity.item.Torgray_Soup"
       }]
     }
   ]
