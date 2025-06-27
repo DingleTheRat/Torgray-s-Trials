@@ -99,9 +99,7 @@ public class Game extends JPanel implements Runnable {
         player.setDefaultPosition();
 
         // Load Config
-        if (fullScreen) {
-            setFullScreen();
-        }
+        if (fullScreen) setFullScreen();
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         graphics2D = (Graphics2D) tempScreen.getGraphics();
     }
@@ -268,7 +266,7 @@ public class Game extends JPanel implements Runnable {
             // Particles
             particleList.stream()
                     .filter(particle -> particle != null && particle.exists)
-                    .forEach(Entity::update);
+                    .forEach(Particle::update);
 
             environmentManager.update();
         }

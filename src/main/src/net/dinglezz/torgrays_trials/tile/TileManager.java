@@ -72,7 +72,7 @@ public class TileManager {
             registerTile(43, "grass/grass_pit", false);
             registerTile(44, "grass/grass_healing", false);
 
-            registerTile(45, "lil_hut", false);
+            registerTile(45, "coiner's_hut", false);
     }
     public static void registerTile(int i, String imageName, boolean collision) {
         try {

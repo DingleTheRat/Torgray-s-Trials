@@ -10,6 +10,6 @@ public class Lantern extends Item {
         lightRadius = 150;
         icon = registerEntitySprite("entity/item/lantern");
         currentImage = icon;
-        description = "SHINE BRIGHTTTTTT \nTONIGHTTTTTT /lyr \nLight Radius: " + lightRadius;
+        description = "SHINE BRIGHTTTTTT TONIGHTTTTTT /lyr \nLight Radius: " + lightRadius;
     }
 }
