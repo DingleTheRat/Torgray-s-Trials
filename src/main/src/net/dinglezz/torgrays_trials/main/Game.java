@@ -105,7 +105,7 @@ public class Game extends JPanel implements Runnable {
     }
     public void init() {
         ui = new UI(this);
-        config = new Config(this);
+        config = new Config();
         pathFinder = new Pathfinder(this);
         inputHandler = new InputHandler();
         environmentManager = new EnvironmentManager(this);

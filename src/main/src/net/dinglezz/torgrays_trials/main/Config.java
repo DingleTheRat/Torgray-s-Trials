@@ -3,12 +3,6 @@ package net.dinglezz.torgrays_trials.main;
 import java.io.*;
 
 public class Config {
-    Game game;
-
-    public Config(Game game) {
-        this.game = game;
-    }
-
     public void saveConfig() {
         try {
             String userHome = System.getProperty("user.home");
@@ -25,15 +19,15 @@ public class Config {
             bufferedWriter.newLine();
 
             // Full screen
-            bufferedWriter.write(String.valueOf(game.fullScreen));
+            bufferedWriter.write(String.valueOf(Main.game.fullScreen));
             bufferedWriter.newLine();
 
             // BRendering
-            bufferedWriter.write(String.valueOf(game.BRendering));
+            bufferedWriter.write(String.valueOf(Main.game.BRendering));
             bufferedWriter.newLine();
 
             // Pathfinding
-            bufferedWriter.write(String.valueOf(game.pathFinding));
+            bufferedWriter.write(String.valueOf(Main.game.pathFinding));
             bufferedWriter.newLine();
 
             bufferedWriter.close();
@@ -67,15 +61,15 @@ public class Config {
 
             // Full screen
             s = bufferedReader.readLine();
-            game.fullScreen = s.equals("true");
+            Main.game.fullScreen = s.equals("true");
 
             // BRendering
             s = bufferedReader.readLine();
-            game.BRendering = s.equals("true");
+            Main.game.BRendering = s.equals("true");
 
             // Pathfinding
             s = bufferedReader.readLine();
-            game.pathFinding = s.equals("true");
+            Main.game.pathFinding = s.equals("true");
 
             bufferedReader.close();
         } catch (IOException exception) {
