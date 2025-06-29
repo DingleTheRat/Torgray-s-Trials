@@ -71,7 +71,7 @@ public class Game extends JPanel implements Runnable {
     String exceptionStackTrace = "";
     public int saveSlot = 0;
     public String currentMap = "Main Island";
-    public String gameMode;
+    public String difficulty;
 
     public Game() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -103,13 +103,6 @@ public class Game extends JPanel implements Runnable {
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         graphics2D = (Graphics2D) tempScreen.getGraphics();
     }
-    public void init() {
-        ui = new UI(this);
-        pathFinder = new Pathfinder(this);
-        inputHandler = new InputHandler();
-        environmentManager = new EnvironmentManager(this);
-        player = new Player();
-    }
     private void setupExceptionHandling() {
         Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
             if (exceptionState != States.ExceptionStates.NOTHING) {
@@ -134,6 +127,51 @@ public class Game extends JPanel implements Runnable {
                 startGameThread();
             }
         });
+    }
+    public void init() {
+        ui = new UI(this);
+        pathFinder = new Pathfinder(this);
+        inputHandler = new InputHandler();
+        environmentManager = new EnvironmentManager(this);
+        player = new Player();
+    }
+    public void adjustDifficulty() {
+        if (difficulty.equals("Easy")) {
+            System.out.println("Imagine Picking Easy");
+
+            // Modified Stats
+            player.strength = 2;
+            player.dexterity = 2;
+            player.nextLevelExp = 4;
+            player.attack = player.getAttack();
+            player.defence = player.getDefence();
+
+            // Modified Darkness State Stuff
+            environmentManager.lighting.nightLength = 18000;
+            environmentManager.lighting.gloomLength = 9000;
+
+            environmentManager.lighting.gloomChance = 35;
+            environmentManager.lighting.lightGloomChance = 50;
+            environmentManager.lighting.darkGloomChance = 15;
+        } else if (difficulty.equals("Medium")) {
+            System.out.println("Kinda a mid game mode lol");
+            // No modified stats since Medium is the default
+        } else if (difficulty.equals("Hard")) {
+            System.out.println("You really think you are \"hardcore\"?");
+
+            // Modified Stats
+            Main.game.player.dexterity = 0;
+            Main.game.player.nextLevelExp = 6;
+            Main.game.player.defence = Main.game.player.getDefence();
+
+            // Modified State Stuff
+            Main.game.environmentManager.lighting.nightLength = 7200;
+            Main.game.environmentManager.lighting.gloomLength = 144000;
+
+            Main.game.environmentManager.lighting.gloomChance = 35;
+            Main.game.environmentManager.lighting.lightGloomChance = 10;
+            Main.game.environmentManager.lighting.darkGloomChance = 55;
+        }
     }
     public void respawn() {
         player.heal(player.maxHealth);

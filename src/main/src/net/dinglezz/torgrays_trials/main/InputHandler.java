@@ -101,49 +101,19 @@ public class InputHandler implements KeyListener {
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                 if (Main.game.ui.commandNumber == 0) {
                     Main.game.gameState = States.GameStates.PLAY;
-                    Main.game.gameMode = "Easy";
+                    Main.game.difficulty = "Easy";
+                    Main.game.adjustDifficulty();
                     Sound.playMapMusic();
-                    System.out.println("Imagine Picking Easy");
-
-                    // Modified Stats
-                    Main.game.player.strength = 2;
-                    Main.game.player.dexterity = 2;
-                    Main.game.player.nextLevelExp = 4;
-                    Main.game.player.attack = Main.game.player.getAttack();
-                    Main.game.player.defence = Main.game.player.getDefence();
-
-                    // Modified Darkness State Stuff
-                    Main.game.environmentManager.lighting.nightLength = 18000;
-                    Main.game.environmentManager.lighting.gloomLength = 9000;
-
-                    Main.game.environmentManager.lighting.gloomChance = 35;
-                    Main.game.environmentManager.lighting.lightGloomChance = 50;
-                    Main.game.environmentManager.lighting.darkGloomChance = 15;
                 } else if (Main.game.ui.commandNumber == 1) {
                     Main.game.gameState = States.GameStates.PLAY;
-                    Main.game.gameMode = "Medium";
+                    Main.game.difficulty = "Medium";
+                    Main.game.adjustDifficulty();
                     Sound.playMapMusic();
-                    System.out.println("Kinda a mid game mode lol");
-
-                    // No modified stats since Medium is the default
                 } else if (Main.game.ui.commandNumber == 2) {
                     Main.game.gameState = States.GameStates.PLAY;
-                    Main.game.gameMode = "Hard";
+                    Main.game.difficulty = "Hard";
+                    Main.game.adjustDifficulty();
                     Sound.playMapMusic();
-                    System.out.println("You really think you are \"hardcore\"?");
-
-                    // Modified Stats
-                    Main.game.player.dexterity = 0;
-                    Main.game.player.nextLevelExp = 6;
-                    Main.game.player.defence = Main.game.player.getDefence();
-
-                    // Modified State Stuff
-                    Main.game.environmentManager.lighting.nightLength = 7200;
-                    Main.game.environmentManager.lighting.gloomLength = 144000;
-
-                    Main.game.environmentManager.lighting.gloomChance = 35;
-                    Main.game.environmentManager.lighting.lightGloomChance = 10;
-                    Main.game.environmentManager.lighting.darkGloomChance = 55;
                 } else if (Main.game.ui.commandNumber == 3) {
                     Main.game.ui.subUIState = "Main Title";
                     Main.game.ui.commandNumber = 0;
@@ -162,11 +132,20 @@ public class InputHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                 if (Main.game.ui.commandNumber == 0) {
-
+                    DataManager.loadData(1);
+                    Main.game.gameState = States.GameStates.PLAY;
+                    Main.game.adjustDifficulty();
+                    Sound.playMapMusic();
                 } else if (Main.game.ui.commandNumber == 1) {
-
+                    DataManager.loadData(2);
+                    Main.game.gameState = States.GameStates.PLAY;
+                    Main.game.adjustDifficulty();
+                    Sound.playMapMusic();
                 } else if (Main.game.ui.commandNumber == 2) {
-
+                    DataManager.loadData(3);
+                    Main.game.gameState = States.GameStates.PLAY;
+                    Main.game.adjustDifficulty();
+                    Sound.playMapMusic();
                 } else if (Main.game.ui.commandNumber == 3) {
                     Main.game.ui.subUIState = "Main Title";
                     Main.game.ui.commandNumber = 0;
@@ -320,7 +299,7 @@ public class InputHandler implements KeyListener {
     }
 
     public void gameOverState(int code) {
-        if (Main.game.gameMode.equals("Easy")) {
+        if (Main.game.difficulty.equals("Easy")) {
             maxCommandNumber = 2;
         } else {
             maxCommandNumber = 1;

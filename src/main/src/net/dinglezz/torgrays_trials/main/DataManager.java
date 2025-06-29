@@ -5,6 +5,7 @@ import java.io.*;
 public class DataManager implements Serializable {
     // Stuff to save/load
     int slot;
+    String difficulty;
 
     // Save/load data methods
     public static void saveData(int slot) {
@@ -23,12 +24,36 @@ public class DataManager implements Serializable {
             // Make a new data manager class instance and store the necessary data
             DataManager dataManager = new DataManager();
             dataManager.slot = slot;
+            dataManager.difficulty = Main.game.difficulty;
 
             // Write the data to the file
             objectOutputStream.writeObject(dataManager);
 
         } catch (IOException exception) {
             throw new RuntimeException(exception);
+        }
+    }
+
+    public static void loadData(int slot) {
+        // Return if the slot is higher than the limit
+        if (slot < 0 | slot > 3) return;
+
+        try {
+            // Make a .torgray directory if it doesn't exist
+            String userHome = System.getProperty("user.home");
+            File directory = new File(userHome, ".torgray");
+            if (!directory.exists()) directory.mkdir();
+
+            // Get input stream to read the data from
+            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(new File(directory, "torgrays-trials-save-" + slot + ".dat")));
+
+            // Read the data from the file and retrieve the necessary data
+            DataManager dataManager = (DataManager) objectInputStream.readObject();
+            Main.game.saveSlot = slot;
+            Main.game.difficulty = dataManager.difficulty;
+
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 

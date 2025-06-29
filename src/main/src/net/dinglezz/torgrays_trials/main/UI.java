@@ -200,6 +200,7 @@ public class UI {
                 case NIGHT -> game.environmentManager.lighting.nightLength;
                 default -> game.environmentManager.lighting.gloomLength;
             }, x, y); y += lineHeight;
+            graphics2D.drawString("Difficulty: " + game.difficulty, x ,y); y += lineHeight;
             y += lineHeight;
             graphics2D.drawString("Game State: " + game.gameState, x ,y); y += lineHeight;
             graphics2D.drawString("Time State: " + game.environmentManager.lighting.darknessState, x ,y); y += lineHeight;
@@ -1088,7 +1089,7 @@ public class UI {
         }
 
         // Respawn
-        if (game.gameMode.equals("Easy")) {
+        if (game.difficulty.equals("Easy")) {
             text = "Respawn";
             x = getCentreX(text);
             y += 55;
