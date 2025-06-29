@@ -164,9 +164,7 @@ public class Lighting {
         if (nextDarknessState == nextGloom) {
             nextGloom = chooseNextGloom();
             AssetSetter.setMonsters(true);
-        } else if (nextDarknessState == States.DarknessStates.NIGHT) {
-            AssetSetter.setMonsters(false);
-        }
+        } else if (nextDarknessState == States.DarknessStates.NIGHT) AssetSetter.setMonsters(false);
 
 
         if (transitionWhenDone) {
@@ -187,17 +185,11 @@ public class Lighting {
             default -> 0;
         };
         if (darknessState == States.DarknessStates.NEW_DUSK && game.ui.isFadingBack()) {
-            if (nextGloom == States.DarknessStates.LIGHT_GLOOM) {
-                lightRadiusAdjustment = 50;
-            } else if (nextGloom == States.DarknessStates.DARK_GLOOM) {
-                lightRadiusAdjustment = -50;
-            }
+            if (nextGloom == States.DarknessStates.LIGHT_GLOOM) lightRadiusAdjustment = 50;
+            else if (nextGloom == States.DarknessStates.DARK_GLOOM) lightRadiusAdjustment = -50;
         } else if (darknessState == States.DarknessStates.DUSK && !game.ui.isFadingBack()) {
-            if (nextGloom == States.DarknessStates.LIGHT_GLOOM) {
-                lightRadiusAdjustment = 50;
-            } else if (nextGloom == States.DarknessStates.DARK_GLOOM) {
-                lightRadiusAdjustment = -50;
-            }
+            if (nextGloom == States.DarknessStates.LIGHT_GLOOM) lightRadiusAdjustment = 50;
+            else if (nextGloom == States.DarknessStates.DARK_GLOOM) lightRadiusAdjustment = -50;
         }
         return lightRadiusAdjustment;
     }

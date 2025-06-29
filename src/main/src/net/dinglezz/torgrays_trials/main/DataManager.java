@@ -2,7 +2,7 @@ package net.dinglezz.torgrays_trials.main;
 
 import java.io.*;
 
-public class Config {
+public class DataManager implements Serializable {
     public void saveConfig() {
         try {
             String userHome = System.getProperty("user.home");

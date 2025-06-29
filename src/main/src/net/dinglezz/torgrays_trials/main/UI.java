@@ -3,7 +3,6 @@ package net.dinglezz.torgrays_trials.main;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.entity.item.Item;
-import net.dinglezz.torgrays_trials.event.EVT_Teleport;
 import net.dinglezz.torgrays_trials.entity.item.Coins;
 import net.dinglezz.torgrays_trials.entity.object.Heart;
 import net.dinglezz.torgrays_trials.entity.item.ItemTags;
@@ -570,7 +569,7 @@ public class UI {
         }
 
         // Save Data
-        game.config.saveConfig();
+        game.dataManager.saveConfig();
     }
     public void settingsNotification(int frameX, int frameY) {
         // Title

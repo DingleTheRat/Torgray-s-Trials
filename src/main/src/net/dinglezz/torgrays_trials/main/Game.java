@@ -52,7 +52,7 @@ public class Game extends JPanel implements Runnable {
 
     // System
     public UI ui;
-    public Config config;
+    public DataManager dataManager = new DataManager();
     public Pathfinder pathFinder;
     public InputHandler inputHandler;
     public EnvironmentManager environmentManager;
@@ -98,14 +98,13 @@ public class Game extends JPanel implements Runnable {
         gameState = States.GameStates.TITLE;
         player.setDefaultPosition();
 
-        // Load Config
+        // Load DataManager
         if (fullScreen) setFullScreen();
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         graphics2D = (Graphics2D) tempScreen.getGraphics();
     }
     public void init() {
         ui = new UI(this);
-        config = new Config();
         pathFinder = new Pathfinder(this);
         inputHandler = new InputHandler();
         environmentManager = new EnvironmentManager(this);

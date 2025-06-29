@@ -17,7 +17,7 @@ public class Main {
         game.init();
         window.add(game);
 
-        game.config.loadConfig();
+        game.dataManager.loadConfig();
         if (game.fullScreen) {
             window.setExtendedState(JFrame.MAXIMIZED_BOTH);
             window.setUndecorated(true);
