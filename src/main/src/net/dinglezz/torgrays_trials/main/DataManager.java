@@ -3,10 +3,43 @@ package net.dinglezz.torgrays_trials.main;
 import java.io.*;
 
 public class DataManager implements Serializable {
-    public void saveConfig() {
+    // Stuff to save/load
+    int slot;
+
+    // Save/load data methods
+    public static void saveData(int slot) {
+        // Return if the slot is higher than the limit
+        if (slot < 0 | slot > 3) return;
+
         try {
+            // Make a .torgray directory if it doesn't exist
             String userHome = System.getProperty("user.home");
-            File configFile = new File(userHome, "torgrays-trials-config.txt");
+            File directory = new File(userHome, ".torgray");
+            if (!directory.exists()) directory.mkdir();
+
+            // Get output stream to save the data in
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(new File(directory, "torgrays-trials-save-" + slot + ".dat")));
+
+            // Make a new data manager class instance and store the necessary data
+            DataManager dataManager = new DataManager();
+            dataManager.slot = slot;
+
+            // Write the data to the file
+            objectOutputStream.writeObject(dataManager);
+
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    public static void saveConfig() {
+        try {
+            // Make a .torgray directory if it doesn't exist
+            String userHome = System.getProperty("user.home");
+            File directory = new File(userHome, ".torgray");
+            if (!directory.exists()) directory.mkdir();
+
+            File configFile = new File(directory, "torgrays-trials-config.txt");
             
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(configFile));
 
@@ -36,10 +69,14 @@ public class DataManager implements Serializable {
             throw new RuntimeException(exception);
         }
     }
-    public void loadConfig() {
+    public static void loadConfig() {
         try {
+            // Make a .torgray directory, if it doesn't exist
             String userHome = System.getProperty("user.home");
-            File configFile = new File(userHome, "torgrays-trials-config.txt");
+            File directory = new File(userHome, ".torgray");
+            if (!directory.exists()) directory.mkdir();
+
+            File configFile = new File(directory, "torgrays-trials-config.txt");
             if (configFile.createNewFile()) {
                 FileWriter fileWriter = new FileWriter(configFile);
                 fileWriter.write("3\n");
@@ -78,7 +115,8 @@ public class DataManager implements Serializable {
             System.err.println("Error: Couldn't read config file, creating a new one.");
             try {
                 String userHome = System.getProperty("user.home");
-                File configFile = new File(userHome, "torgrays-trials-config.txt");
+                File directory = new File(userHome, ".torgray");
+                File configFile = new File(directory, "torgrays-trials-config.txt");
                 FileWriter fileWriter = new FileWriter(configFile);
                 fileWriter.write("3\n");
                 fileWriter.write("3\n");

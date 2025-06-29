@@ -34,6 +34,7 @@ public class InputHandler implements KeyListener {
             case TRADE -> tradeState(code);
             case CHARACTER -> characterState(code);
             case MAP -> mapState(code);
+            case SAVE -> saveState(code);
         }
 
         // F3 Stuff
@@ -75,11 +76,10 @@ public class InputHandler implements KeyListener {
                 if (Main.game.ui.commandNumber == 0) {
                     Main.game.ui.subUIState = "Modes";
                     Main.game.ui.commandNumber = 1;
-                }
-                if (Main.game.ui.commandNumber == 1) {
-                    // For later
-                }
-                if (Main.game.ui.commandNumber == 2) {
+                } else if (Main.game.ui.commandNumber == 1) {
+                    Main.game.ui.subUIState = "Saves";
+                    Main.game.ui.commandNumber = 0;
+                } else if (Main.game.ui.commandNumber == 2) {
                     System.exit(0);
                 }
             }
@@ -119,16 +119,14 @@ public class InputHandler implements KeyListener {
                     Main.game.environmentManager.lighting.gloomChance = 35;
                     Main.game.environmentManager.lighting.lightGloomChance = 50;
                     Main.game.environmentManager.lighting.darkGloomChance = 15;
-                }
-                if (Main.game.ui.commandNumber == 1) {
+                } else if (Main.game.ui.commandNumber == 1) {
                     Main.game.gameState = States.GameStates.PLAY;
                     Main.game.gameMode = "Medium";
                     Sound.playMapMusic();
                     System.out.println("Kinda a mid game mode lol");
 
                     // No modified stats since Medium is the default
-                }
-                if (Main.game.ui.commandNumber == 2) {
+                } else if (Main.game.ui.commandNumber == 2) {
                     Main.game.gameState = States.GameStates.PLAY;
                     Main.game.gameMode = "Hard";
                     Sound.playMapMusic();
@@ -146,8 +144,30 @@ public class InputHandler implements KeyListener {
                     Main.game.environmentManager.lighting.gloomChance = 35;
                     Main.game.environmentManager.lighting.lightGloomChance = 10;
                     Main.game.environmentManager.lighting.darkGloomChance = 55;
+                } else if (Main.game.ui.commandNumber == 3) {
+                    Main.game.ui.subUIState = "Main Title";
+                    Main.game.ui.commandNumber = 0;
                 }
-                if (Main.game.ui.commandNumber == 3) {
+            }
+        } else if (Objects.equals(Main.game.ui.subUIState, "Saves")) {
+            if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+                Main.game.ui.commandNumber--;
+                Sound.playSFX("Cursor");
+                if (Main.game.ui.commandNumber < 0) Main.game.ui.commandNumber = 3;
+            }
+            if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+                Main.game.ui.commandNumber++;
+                Sound.playSFX("Cursor");
+                if (Main.game.ui.commandNumber > 3) Main.game.ui.commandNumber = 0;
+            }
+            if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
+                if (Main.game.ui.commandNumber == 0) {
+
+                } else if (Main.game.ui.commandNumber == 1) {
+
+                } else if (Main.game.ui.commandNumber == 2) {
+
+                } else if (Main.game.ui.commandNumber == 3) {
                     Main.game.ui.subUIState = "Main Title";
                     Main.game.ui.commandNumber = 0;
                 }
@@ -394,6 +414,22 @@ public class InputHandler implements KeyListener {
     }
     public void mapState(int code) {
         if (code == KeyEvent.VK_ESCAPE) Main.game.ui.uiState = States.UIStates.CHARACTER;
+    }
+
+    public void saveState(int code) {
+        maxCommandNumber = 3;
+
+        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
+            Main.game.ui.commandNumber--;
+            if (Main.game.ui.commandNumber < 0) Main.game.ui.commandNumber = maxCommandNumber;
+            Sound.playSFX("Cursor");
+        }
+        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
+            Main.game.ui.commandNumber++;
+            if (Main.game.ui.commandNumber > maxCommandNumber) Main.game.ui.commandNumber = 0;
+            Sound.playSFX("Cursor");
+        }
+        if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) spacePressed = true;
     }
 
     @Override

@@ -102,6 +102,7 @@ public class UI {
             case TRADE -> drawTradeScreen();
             case CHARACTER -> drawCharacterScreen();
             case MAP -> drawMapScreen();
+            case SAVE -> drawSaveScreen();
         }
     }
 
@@ -267,12 +268,14 @@ public class UI {
         } else if (Objects.equals(subUIState, "Modes")) {
             // GameMode Selection
             graphics2D.setColor(Color.white);
-            graphics2D.setFont(graphics2D.getFont().deriveFont(42f));
+            graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 42f));
 
             String text = "Select a GameMode";
             int x = getCentreX(text);
             int y = game.tileSize * 3;
             graphics2D.drawString(text, x, y);
+
+            graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 42f));
 
             text = "Easy";
             x = getCentreX(text);
@@ -304,6 +307,40 @@ public class UI {
             if (commandNumber == 3) {
                 graphics2D.drawString(">", x - game.tileSize, y);
             }
+        } else if (Objects.equals(subUIState, "Saves")) {
+            // Slot Selection
+            graphics2D.setColor(Color.white);
+            graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 42f));
+
+            String text = "Select a Save Slot";
+            int x = getCentreX(text);
+            int y = game.tileSize * 3;
+            graphics2D.drawString(text, x, y);
+
+            graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 42f));
+
+            text = "Slot 1";
+            x = getCentreX(text);
+            y += game.tileSize * 3;
+            graphics2D.drawString(text, x, y);
+            if (commandNumber == 0) graphics2D.drawString(">", x - game.tileSize, y);
+
+            text = "Slot 2";
+            x = getCentreX(text);
+            y += game.tileSize;
+            graphics2D.drawString(text, x, y);
+            if (commandNumber == 1) graphics2D.drawString(">", x - game.tileSize, y);
+
+            text = "Slot 3";
+            x = getCentreX(text);
+            y += game.tileSize;
+            graphics2D.drawString(text, x, y);
+            if (commandNumber == 2) graphics2D.drawString(">", x - game.tileSize, y);
+
+            text = "Back";
+            y += game.tileSize * 2;
+            graphics2D.drawString(text, x, y);
+            if (commandNumber == 3) graphics2D.drawString(">", x - game.tileSize, y);
         }
 
     }
@@ -569,7 +606,7 @@ public class UI {
         }
 
         // Save Data
-        game.dataManager.saveConfig();
+        DataManager.saveConfig();
     }
     public void settingsNotification(int frameX, int frameY) {
         // Title
@@ -718,6 +755,91 @@ public class UI {
         graphics2D.setColor(Color.white);
         graphics2D.drawString(text, x, y);
     }
+    public void drawSaveScreen() {
+        // Cancel attack check
+        game.player.cancelAttackCheck();
+
+        // Background
+        graphics2D.setColor(new Color(0, 0, 0, 0.35f));
+        graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
+
+        // Sub-Window
+        int frameX = game.tileSize * 6;
+        int frameY = game.tileSize * 2;
+        int frameWidth = game.tileSize * 8;
+        int frameHeight = game.tileSize * 7 + 40;
+
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        // Title
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 48f));
+        String text = "Save";
+        int textX = getCentreX(text);
+        int textY = frameY + game.tileSize + (game.tileSize / 4);
+        graphics2D.drawString(text, textX, textY);
+
+        // Text
+        textX = frameX + game.tileSize / 2;
+        textY = frameY + game.tileSize * 2 + (game.tileSize / 4);
+        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN,28f));
+
+        graphics2D.drawString("Please select a slot to save your", textX, textY);
+        textY += 40;
+        graphics2D.drawString("game inside. Later, you will be able", textX, textY);
+        textY += 40;
+        graphics2D.drawString("to access it in the title screen.", textX, textY);
+
+        // Slot 1
+        textY = frameY = game.tileSize * 7 - (game.tileSize / 4);
+        textX += game.tileSize / 2;
+        graphics2D.drawString("Slot 1", textX, textY);
+        if (commandNumber == 0) {
+            graphics2D.drawString(">", textX - 30, textY);
+            if (game.inputHandler.spacePressed) {
+                save(1);
+            }
+        }
+
+        // Slot 2
+        textY += 40;
+        graphics2D.drawString("Slot 2", textX, textY);
+        if (commandNumber == 1) {
+            graphics2D.drawString(">", textX - 30, textY);
+            if (game.inputHandler.spacePressed) {
+                save(2);
+            }
+        }
+
+        // Slot 3
+        textY += 40;
+        graphics2D.drawString("Slot 3", textX, textY);
+        if (commandNumber == 2) {
+            graphics2D.drawString(">", textX - 30, textY);
+            if (game.inputHandler.spacePressed) {
+                save(3);
+            }
+        }
+
+        // Ignore
+        textY += 40;
+        graphics2D.drawString("Ignore", textX, textY);
+        if (commandNumber == 3) {
+            graphics2D.drawString(">", textX - 30, textY);
+            if (game.inputHandler.spacePressed) {
+                uiState = States.UIStates.JUST_DEFAULT;
+                commandNumber = 0;
+            }
+        }
+
+        game.inputHandler.spacePressed = false;
+    }
+    private void save(int slot) {
+        game.saveSlot = slot;
+        DataManager.saveData(slot);
+        Main.game.ui.setCurrentDialogue("*Drinks water* \nI feel.. safe, almost like the world took a \nsnapshot of me");
+        Main.game.ui.uiState = States.UIStates.DIALOGUE;
+    }
+
     public void drawCharacterScreen() {
         // Inventory
         drawInventory(game.player, true);

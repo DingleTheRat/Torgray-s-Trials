@@ -1,6 +1,7 @@
 package net.dinglezz.torgrays_trials.event;
 
 import net.dinglezz.torgrays_trials.main.AssetSetter;
+import net.dinglezz.torgrays_trials.main.DataManager;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
@@ -54,6 +55,12 @@ public class EVT_Teleport extends Event {
                 }
                 Main.game.player.direction = EVT_Teleport.nextDirection;
                 Main.game.environmentManager.lightUpdated = true;
+
+                // Save game (if a slot is selected)
+                if (Main.game.saveSlot != 0) {
+                    DataManager.saveData(Main.game.saveSlot);
+                    Main.game.ui.addMiniNotification("Game auto-saved!");
+                }
 
                 // Play map music
                 Sound.playMapMusic();

@@ -16,7 +16,8 @@ public class States {
         PAUSE(true, true),
         CHARACTER(false, false),
         TRADE(false, false),
-        MAP(false, false),;
+        MAP(false, false),
+        SAVE(false, false),;
 
         final boolean defaultKeyboardInput;
         final boolean defaultUI;

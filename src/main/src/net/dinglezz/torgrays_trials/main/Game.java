@@ -52,7 +52,6 @@ public class Game extends JPanel implements Runnable {
 
     // System
     public UI ui;
-    public DataManager dataManager = new DataManager();
     public Pathfinder pathFinder;
     public InputHandler inputHandler;
     public EnvironmentManager environmentManager;
@@ -70,6 +69,7 @@ public class Game extends JPanel implements Runnable {
     public States.GameStates gameState = States.GameStates.TITLE;
     public States.ExceptionStates exceptionState = States.ExceptionStates.ONLY_IGNORABLE;
     String exceptionStackTrace = "";
+    public int saveSlot = 0;
     public String currentMap = "Main Island";
     public String gameMode;
 

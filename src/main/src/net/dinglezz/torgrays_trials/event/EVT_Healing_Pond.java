@@ -1,5 +1,6 @@
 package net.dinglezz.torgrays_trials.event;
 
+import net.dinglezz.torgrays_trials.main.DataManager;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
@@ -20,10 +21,14 @@ public class EVT_Healing_Pond extends Event {
         if (Main.game.inputHandler.interactKeyPressed) {
             Main.game.ui.uiState = States.UIStates.DIALOGUE;
             Main.game.player.cancelAttack();
-            Main.game.ui.setCurrentDialogue("*Drinks water* \nHuh, nothing happened :/");
-            // Disabled Stuff
-            // Main.game.player.health = Main.game.player.maxHealth;
-            // Main.game.assetSetter.setMonsters();
+            if (Main.game.saveSlot != 0) {
+                Main.game.ui.setCurrentDialogue("*Drinks water* \nI feel.. safe, almost like the world took a \nsnapshot of me");
+                Main.game.ui.uiState = States.UIStates.DIALOGUE;
+                DataManager.saveData(Main.game.saveSlot);
+            } else {
+                Main.game.ui.uiState = States.UIStates.SAVE;
+                Main.game.ui.commandNumber = 0;
+            }
         }
     }
 
