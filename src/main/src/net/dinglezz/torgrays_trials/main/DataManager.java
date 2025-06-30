@@ -22,7 +22,6 @@ public class DataManager implements Serializable {
     public HashMap<String, ArrayList<Item>> items;
     public HashMap<String, ArrayList<Mob>> npcs;
     public HashMap<String, ArrayList<Monster>> monsters;
-    int e;
 
     // Save/load data methods
     public static void saveData(int slot) {
@@ -88,7 +87,6 @@ public class DataManager implements Serializable {
             Main.game.environmentManager.lighting.darknessState = dataManager.darknessState;
             Main.game.difficulty = dataManager.difficulty;
 
-            Main.game.ui.commandNumber = dataManager.e;
             Main.game.player = dataManager.player;
             Main.game.objects = dataManager.objects;
             Main.game.items = dataManager.items;
@@ -102,6 +100,8 @@ public class DataManager implements Serializable {
 
             // Store the old save file in the archive
             new File(directory, "torgrays-trials-save-" + slot + ".dat").renameTo(new File(archive, "torgrays-trials-save-archive-" + slot + ".dat"));
+
+            System.err.println("Warning: Save file for slot " + slot + " doesn't contain the right data, saving to archive.");
 
             // Act like nothing happened!
             return false;
