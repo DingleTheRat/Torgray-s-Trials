@@ -9,13 +9,14 @@ import net.dinglezz.torgrays_trials.tile.TilePoint;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public abstract class Mob extends Entity {
+public abstract class Mob extends Entity implements Serializable {
     // Sprites
-    public BufferedImage up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
-    public BufferedImage attackUp, attackDown, attackLeft, attackRight;
+    public byte[] up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
+    public byte[] attackUp, attackDown, attackLeft, attackRight;
     protected int spriteCounter = 0;
     protected int spriteNumber = 1;
     protected int spriteSpeed = 10;
@@ -67,6 +68,7 @@ public abstract class Mob extends Entity {
 
     // Other
     public String hitSound = "Receive Damage";
+    public String lootTable;
 
     public Mob(String name, TilePoint tilePoint) {
         super(name, tilePoint);

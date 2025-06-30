@@ -8,11 +8,12 @@ import net.dinglezz.torgrays_trials.tile.TilePoint;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class Item extends Entity {
+public abstract class Item extends Entity implements Serializable {
     // Icon
-    public BufferedImage icon;
+    public byte[] icon;
 
     // Collision
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);

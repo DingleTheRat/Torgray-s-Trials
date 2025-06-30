@@ -186,6 +186,7 @@ public class Game extends JPanel implements Runnable {
         player.setItems();
         currentMap = "Main Island";
         player.setDefaultPosition();
+        saveSlot = 0;
 
         // Set Assets
         objects.clear();

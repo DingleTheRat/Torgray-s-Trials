@@ -15,8 +15,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Player extends Mob {
+public class Player extends Mob implements Serializable {
     // Attributes
     public int exp;
     public int level;
@@ -433,7 +434,7 @@ public class Player extends Mob {
             }
         }
         if (invincible) changeAlpha(graphics2D, 0.4f);
-        graphics2D.drawImage(currentImage, temporaryScreenX, temporaryScreenY, null);
+        graphics2D.drawImage(UtilityTool.deserializeImage(currentImage), temporaryScreenX, temporaryScreenY, null);
         changeAlpha(graphics2D, 1f);
 
          if (Main.game.debugHitBoxes) {

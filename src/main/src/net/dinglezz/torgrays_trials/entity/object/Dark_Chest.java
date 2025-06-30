@@ -8,9 +8,10 @@ import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Dark_Chest extends Entity {
+public class Dark_Chest extends Entity implements Serializable {
     String lootTable;
     boolean opened = false;
 

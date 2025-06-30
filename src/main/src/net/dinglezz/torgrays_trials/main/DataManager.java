@@ -1,11 +1,27 @@
 package net.dinglezz.torgrays_trials.main;
 
+import net.dinglezz.torgrays_trials.entity.Entity;
+import net.dinglezz.torgrays_trials.entity.Mob;
+import net.dinglezz.torgrays_trials.entity.Player;
+import net.dinglezz.torgrays_trials.entity.item.Item;
+import net.dinglezz.torgrays_trials.entity.monster.Monster;
+
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DataManager implements Serializable {
     // Stuff to save/load
     int slot;
+    int darknessCounter;
+    States.DarknessStates darknessState;
     String difficulty;
+
+    Player player;
+    public HashMap<String, ArrayList<Entity>> objects;
+    public HashMap<String, ArrayList<Item>> items;
+    public HashMap<String, ArrayList<Mob>> npcs;
+    public HashMap<String, ArrayList<Monster>> monsters;
 
     // Save/load data methods
     public static void saveData(int slot) {
@@ -24,7 +40,15 @@ public class DataManager implements Serializable {
             // Make a new data manager class instance and store the necessary data
             DataManager dataManager = new DataManager();
             dataManager.slot = slot;
+            dataManager.darknessCounter = Main.game.environmentManager.lighting.darknessCounter;
+            dataManager.darknessState = Main.game.environmentManager.lighting.darknessState;
             dataManager.difficulty = Main.game.difficulty;
+
+            dataManager.player = Main.game.player;
+            dataManager.objects = Main.game.objects;
+            dataManager.items = Main.game.items;
+            dataManager.npcs = Main.game.npcs;
+            dataManager.monsters = Main.game.monsters;
 
             // Write the data to the file
             objectOutputStream.writeObject(dataManager);
@@ -50,10 +74,18 @@ public class DataManager implements Serializable {
             // Read the data from the file and retrieve the necessary data
             DataManager dataManager = (DataManager) objectInputStream.readObject();
             Main.game.saveSlot = slot;
+            Main.game.environmentManager.lighting.darknessCounter = dataManager.darknessCounter;
+            Main.game.environmentManager.lighting.darknessState = dataManager.darknessState;
             Main.game.difficulty = dataManager.difficulty;
 
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            Main.game.player = dataManager.player;
+            Main.game.objects = dataManager.objects;
+            Main.game.items = dataManager.items;
+            Main.game.npcs = dataManager.npcs;
+            Main.game.monsters = dataManager.monsters;
+
+        } catch (IOException | ClassNotFoundException exception) {
+            throw new RuntimeException(exception);
         }
     }
 

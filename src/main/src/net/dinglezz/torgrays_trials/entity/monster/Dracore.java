@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Dracore extends Monster {
-    String lootTable;
-
     public Dracore(TilePoint tilePoint, String lootTable) {
         super("Dracore", tilePoint);
         this.lootTable = lootTable;

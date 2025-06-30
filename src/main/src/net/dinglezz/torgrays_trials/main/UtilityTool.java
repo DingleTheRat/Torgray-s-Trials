@@ -5,14 +5,11 @@ import net.dinglezz.torgrays_trials.event.Event;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 import org.json.JSONObject;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public class UtilityTool {
 
@@ -89,6 +86,25 @@ public class UtilityTool {
             }
         } catch (IOException exception) {
             throw new RuntimeException(exception);
+        }
+    }
+
+    // Image serialization
+    public static byte[] serializeImage(BufferedImage image) {
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", byteArrayOutputStream); // You can use "jpg", "bmp", etc.
+            return byteArrayOutputStream.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static BufferedImage deserializeImage(byte[] data) {
+        try {
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
+            return ImageIO.read(byteArrayInputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

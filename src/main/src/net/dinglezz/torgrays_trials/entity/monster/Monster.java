@@ -4,7 +4,9 @@ import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 
-public abstract class Monster extends Mob {
+import java.io.Serializable;
+
+public abstract class Monster extends Mob implements Serializable {
     public Monster(String name, TilePoint tilePoint) {
         super(name, tilePoint);
 

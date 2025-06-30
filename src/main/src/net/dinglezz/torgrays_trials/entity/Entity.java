@@ -7,12 +7,12 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.Serializable;
 
-public abstract class Entity {
+public abstract class Entity implements Serializable {
     // Images
-    public BufferedImage image, image2, image3;
-    public BufferedImage currentImage = image;
+    public byte[] image, image2, image3;
+    public byte[] currentImage = image;
 
     // Collision
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
@@ -79,7 +79,7 @@ public abstract class Entity {
     public int getRow() {return (worldY + solidArea.y) / Main.game.tileSize;}
 
     // Sprite Registration
-    public BufferedImage registerEntitySprite(String imagePath) {
+    public byte[] registerEntitySprite(String imagePath) {
         BufferedImage image;
         try {
             try {
@@ -92,9 +92,10 @@ public abstract class Entity {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
-        return image;
+        // Serialize the image to a byte array
+        return UtilityTool.serializeImage(image);
     }
-    public BufferedImage registerEntitySprite(String imagePath, int width, int height) {
+    public byte[] registerEntitySprite(String imagePath, int width, int height) {
         BufferedImage image;
         try {
             try {
@@ -107,7 +108,8 @@ public abstract class Entity {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
-        return image;
+        // Serialize the image to a byte array
+        return UtilityTool.serializeImage(image);
     }
     public void checkCollision() {
         colliding = false;
@@ -144,7 +146,7 @@ public abstract class Entity {
         if (onScreen) {
             // Draw the entity
             if (currentImage != null) {
-                graphics2D.drawImage(currentImage, screenX, screenY, null);
+                graphics2D.drawImage(UtilityTool.deserializeImage(currentImage), screenX, screenY, null);
             }
 
             // Reset alpha to 1.0f
