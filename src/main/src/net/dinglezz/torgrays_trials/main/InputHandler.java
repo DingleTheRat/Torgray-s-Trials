@@ -133,18 +133,21 @@ public class InputHandler implements KeyListener {
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                 if (Main.game.ui.commandNumber == 0) {
                     if (DataManager.loadData(1)) {
+                        Main.game.environmentManager.lightUpdated = true;
                         Main.game.gameState = States.GameStates.PLAY;
                         Main.game.adjustDifficulty();
                         Sound.playMapMusic();
                     }
                 } else if (Main.game.ui.commandNumber == 1) {
                     if (DataManager.loadData(2)) {
+                        Main.game.environmentManager.lightUpdated = true;
                         Main.game.gameState = States.GameStates.PLAY;
                         Main.game.adjustDifficulty();
                         Sound.playMapMusic();
                     }
                 } else if (Main.game.ui.commandNumber == 2) {
                     if (DataManager.loadData(3)) {
+                        Main.game.environmentManager.lightUpdated = true;
                         Main.game.gameState = States.GameStates.PLAY;
                         Main.game.adjustDifficulty();
                         Sound.playMapMusic();
