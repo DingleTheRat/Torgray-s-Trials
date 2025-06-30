@@ -11,6 +11,7 @@ import net.dinglezz.torgrays_trials.tile.TileManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.*;
 
 public class Game extends JPanel implements Runnable {
@@ -180,7 +181,20 @@ public class Game extends JPanel implements Runnable {
         player.setDefaultPosition();
         environmentManager.lightUpdated = true;
     }
-    public void restart() {
+    void restart(boolean deleteSave) {
+        // Delete save (if needed)
+        if (deleteSave && saveSlot != 0) {
+            // Delete the save file
+            String userHome = System.getProperty("user.home");
+            File directory = new File(userHome, ".torgray");
+            File saveFile = new File(directory, "torgrays-trials-save-" + saveSlot + ".dat");
+            if (saveFile.exists()) {
+                if (!saveFile.delete()) {
+                    System.err.println("Failed to delete save file: " + saveFile.getAbsolutePath());
+                }
+            }
+        }
+
         // Set default stuff
         player.setDefaultValues();
         player.setItems();
@@ -194,7 +208,6 @@ public class Game extends JPanel implements Runnable {
         npcs.clear();
         monsters.clear();
         AssetSetter.setAssets(true);
-
 
         // Darkness reset
         environmentManager.lightUpdated = true;

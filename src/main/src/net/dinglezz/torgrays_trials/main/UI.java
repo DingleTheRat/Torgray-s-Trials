@@ -429,7 +429,7 @@ public class UI {
                             subUIState = "Main Title";
                             Sound.music.stop();
                             Sound.playMusic("Tech Geek");
-                            game.restart();
+                            game.restart(false);
                         };
                     }
                 }

@@ -325,12 +325,12 @@ public class InputHandler implements KeyListener {
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
             if (Main.game.ui.commandNumber == 0) {
                 Main.game.gameState = States.GameStates.PLAY;
-                Main.game.restart();
+                Main.game.restart(true);
                 Sound.playMapMusic();
             } else if (Main.game.ui.commandNumber == maxCommandNumber) {
                 Main.game.gameState = States.GameStates.TITLE;
                 Main.game.ui.subUIState = "Main Title";
-                Main.game.restart();
+                Main.game.restart(true);
                 Sound.playMusic("Tech Geek");
             } else if (Main.game.ui.commandNumber == 1) {
                 Main.game.gameState = States.GameStates.PLAY;
