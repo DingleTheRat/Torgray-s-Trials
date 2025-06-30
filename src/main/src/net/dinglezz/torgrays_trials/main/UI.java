@@ -1190,6 +1190,7 @@ public class UI {
             if (commandNumber == 2 || (commandNumber == 1 && game.exceptionState == States.ExceptionStates.ONLY_QUITABLE)) {
                 graphics2D.drawString(">", textX - 30, textY);
                 if (game.inputHandler.spacePressed) {
+                    if (game.saveSlot != 0) DataManager.saveData(game.saveSlot);
                     System.exit(0);
                 }
             }

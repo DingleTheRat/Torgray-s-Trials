@@ -340,29 +340,20 @@ public class InputHandler implements KeyListener {
         }
     }
     public void exceptionState(int code) {
-        if (Main.game.exceptionState == States.ExceptionStates.IGNORABLE_QUITABLE) {
-            maxCommandNumber = 2;
-        } else {
-            maxCommandNumber = 1;
-        }
+        if (Main.game.exceptionState == States.ExceptionStates.IGNORABLE_QUITABLE) maxCommandNumber = 2;
+        else maxCommandNumber = 1;
 
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
             Main.game.ui.commandNumber--;
-            if (Main.game.ui.commandNumber < 0) {
-                Main.game.ui.commandNumber = maxCommandNumber;
-            }
+            if (Main.game.ui.commandNumber < 0) Main.game.ui.commandNumber = maxCommandNumber;
             Sound.playSFX("Cursor");
         }
         if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
             Main.game.ui.commandNumber++;
-            if (Main.game.ui.commandNumber > maxCommandNumber) {
-                Main.game.ui.commandNumber = 0;
-            }
+            if (Main.game.ui.commandNumber > maxCommandNumber) Main.game.ui.commandNumber = 0;
             Sound.playSFX("Cursor");
         }
-        if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
-            spacePressed = true;
-        }
+        if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) spacePressed = true;
     }
     public void tradeState(int code) {
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) spacePressed = true;
