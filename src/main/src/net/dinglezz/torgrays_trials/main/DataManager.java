@@ -57,6 +57,12 @@ public class DataManager implements Serializable {
             throw new RuntimeException(exception);
         }
     }
+    public static void autoSaveData() {
+        if (Main.game.saveSlot != 0) {
+            saveData(Main.game.saveSlot);
+            Main.game.ui.addMiniNotification("Game auto-saved!");
+        }
+    }
 
     public static void loadData(int slot) {
         // Return if the slot is higher than the limit

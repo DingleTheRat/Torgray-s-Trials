@@ -1,6 +1,7 @@
 package net.dinglezz.torgrays_trials.environment;
 
 import net.dinglezz.torgrays_trials.main.AssetSetter;
+import net.dinglezz.torgrays_trials.main.DataManager;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
@@ -157,10 +158,11 @@ public class Lighting {
     public void updateDarknessState(States.DarknessStates nextDarknessState, int threshold, boolean transitionWhenDone) {
         if (game.ui.transitioning) return;
         darknessCounter++;
-        if (darknessCounter < threshold)  return;
+        if (darknessCounter < threshold) return;
 
         darknessCounter = 0;
         darknessState = nextDarknessState;
+        DataManager.autoSaveData();
         if (nextDarknessState == nextGloom) {
             nextGloom = chooseNextGloom();
             AssetSetter.setMonsters(true);

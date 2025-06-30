@@ -57,10 +57,7 @@ public class EVT_Teleport extends Event {
                 Main.game.environmentManager.lightUpdated = true;
 
                 // Save game (if a slot is selected)
-                if (Main.game.saveSlot != 0) {
-                    DataManager.saveData(Main.game.saveSlot);
-                    Main.game.ui.addMiniNotification("Game auto-saved!");
-                }
+                DataManager.autoSaveData();
 
                 // Play map music
                 Sound.playMapMusic();
