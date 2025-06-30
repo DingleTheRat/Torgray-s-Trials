@@ -27,6 +27,7 @@ public class UI {
 
     // Action Methods
     public Runnable yesAction;
+    public Runnable noAction;
     public Runnable transitionAction;
 
     // Mini Notifications
@@ -392,6 +393,11 @@ public class UI {
                     if (game.inputHandler.spacePressed) {
                         subUIState = "Settings Main";
                         commandNumber = 0;
+
+                        noAction = () -> {
+                            subUIState = "Main Pause";
+                            commandNumber = 0;
+                        };
                     }
                 }
 
@@ -416,7 +422,7 @@ public class UI {
                     if (game.inputHandler.spacePressed) {
                         commandNumber = 1;
                         subUIState = "Confirm";
-                        setCurrentDialogue("Are you sure you wanna \nend this game? Your data \nwon't be saved.");
+                        setCurrentDialogue("Ending the game without saving \nmay result in you loosing progress. \nPLEASE SAVE BEFORE CONTINUING!!!!!!");
                         yesAction = () -> {
                             game.gameState = States.GameStates.TITLE;
                             uiState = States.UIStates.JUST_DEFAULT;
@@ -671,8 +677,7 @@ public class UI {
         if (commandNumber == 1) {
             graphics2D.drawString(">", textX - 30, textY);
             if (game.inputHandler.spacePressed) {
-                subUIState = "Main Pause";
-                commandNumber = 0;
+                noAction.run();
             }
         }
     }
