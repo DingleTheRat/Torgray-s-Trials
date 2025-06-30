@@ -132,20 +132,23 @@ public class InputHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                 if (Main.game.ui.commandNumber == 0) {
-                    DataManager.loadData(1);
-                    Main.game.gameState = States.GameStates.PLAY;
-                    Main.game.adjustDifficulty();
-                    Sound.playMapMusic();
+                    if (DataManager.loadData(1)) {
+                        Main.game.gameState = States.GameStates.PLAY;
+                        Main.game.adjustDifficulty();
+                        Sound.playMapMusic();
+                    }
                 } else if (Main.game.ui.commandNumber == 1) {
-                    DataManager.loadData(2);
-                    Main.game.gameState = States.GameStates.PLAY;
-                    Main.game.adjustDifficulty();
-                    Sound.playMapMusic();
+                    if (DataManager.loadData(2)) {
+                        Main.game.gameState = States.GameStates.PLAY;
+                        Main.game.adjustDifficulty();
+                        Sound.playMapMusic();
+                    }
                 } else if (Main.game.ui.commandNumber == 2) {
-                    DataManager.loadData(3);
-                    Main.game.gameState = States.GameStates.PLAY;
-                    Main.game.adjustDifficulty();
-                    Sound.playMapMusic();
+                    if (DataManager.loadData(3)) {
+                        Main.game.gameState = States.GameStates.PLAY;
+                        Main.game.adjustDifficulty();
+                        Sound.playMapMusic();
+                    }
                 } else if (Main.game.ui.commandNumber == 3) {
                     Main.game.ui.subUIState = "Main Title";
                     Main.game.ui.commandNumber = 0;

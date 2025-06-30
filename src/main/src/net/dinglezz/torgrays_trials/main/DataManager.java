@@ -22,6 +22,7 @@ public class DataManager implements Serializable {
     public HashMap<String, ArrayList<Item>> items;
     public HashMap<String, ArrayList<Mob>> npcs;
     public HashMap<String, ArrayList<Monster>> monsters;
+    int e;
 
     // Save/load data methods
     public static void saveData(int slot) {
@@ -64,16 +65,19 @@ public class DataManager implements Serializable {
         }
     }
 
-    public static void loadData(int slot) {
+    public static boolean loadData(int slot) {
         // Return if the slot is higher than the limit
-        if (slot < 0 | slot > 3) return;
+        if (slot < 0 | slot > 3) return false;
+
+        // Make a .torgray directory if it doesn't exist
+        String userHome = System.getProperty("user.home");
+        File directory = new File(userHome, ".torgray");
+        if (!directory.exists()) directory.mkdir();
+
+        // Return if the save file doesn't exist
+        if (!new File(directory, "torgrays-trials-save-" + slot + ".dat").exists()) return false;
 
         try {
-            // Make a .torgray directory if it doesn't exist
-            String userHome = System.getProperty("user.home");
-            File directory = new File(userHome, ".torgray");
-            if (!directory.exists()) directory.mkdir();
-
             // Get input stream to read the data from
             ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(new File(directory, "torgrays-trials-save-" + slot + ".dat")));
 
@@ -84,12 +88,23 @@ public class DataManager implements Serializable {
             Main.game.environmentManager.lighting.darknessState = dataManager.darknessState;
             Main.game.difficulty = dataManager.difficulty;
 
+            Main.game.ui.commandNumber = dataManager.e;
             Main.game.player = dataManager.player;
             Main.game.objects = dataManager.objects;
             Main.game.items = dataManager.items;
             Main.game.npcs = dataManager.npcs;
             Main.game.monsters = dataManager.monsters;
+            return true;
+        } catch (InvalidClassException exception) {
+            // Make an archive directory (if it doesn't exist)
+            File archive = new File(directory, "archive");
+            if (!archive.exists()) archive.mkdir();
 
+            // Store the old save file in the archive
+            new File(directory, "torgrays-trials-save-" + slot + ".dat").renameTo(new File(archive, "torgrays-trials-save-archive-" + slot + ".dat"));
+
+            // Act like nothing happened!
+            return false;
         } catch (IOException | ClassNotFoundException exception) {
             throw new RuntimeException(exception);
         }
