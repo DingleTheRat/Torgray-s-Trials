@@ -333,7 +333,7 @@ public class Game extends JPanel implements Runnable {
             // Draw :)
             TileManager.draw(graphics2D);
 
-            // Add entities to the list 
+            // Add entities to the list
             entityList.clear(); // Clear once at the start
             if (gameState != States.GameStates.GAME_END) entityList.add(player);
 
