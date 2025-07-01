@@ -235,8 +235,7 @@ public class Game extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         long timer = 0;
         double delta = 0;
-        long sumNano = 0;
-        long totalNano = 0;
+        long tick = 0;
 
         while (gameThread != null) {
             long currentTime = System.nanoTime();
@@ -256,17 +255,10 @@ public class Game extends JPanel implements Runnable {
                     repaint();
                 }
                 delta--;
+                tick++;
                 
-                if (gameState != States.GameStates.TITLE) {
-                    // no getting hit, no hitting, a few pits, open bottom chest, collect bottom key, drink
-                    sumNano += System.nanoTime() - start;
-                    totalNano++;
-
-                    if (totalNano % 2000 == 0) {
-                        System.out.println(Math.round((float) sumNano / totalNano / 1000));
-                        sumNano = 0;
-                        totalNano = 0;
-                    }
+                if (debug && tick % 60 == 0) {
+                    FPS = Math.round(1_000_000_000F / (System.nanoTime() - start));
                 }
             }
 
