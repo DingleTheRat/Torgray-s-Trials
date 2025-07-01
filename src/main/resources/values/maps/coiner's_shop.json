@@ -7,19 +7,20 @@
   },
   "entities": {
     "npcs": [{
-      "path": "net.dinglezz.torgrays_trials.npc.NPC_Coiner",
+      "path": "net.dinglezz.torgrays_trials.entity.npc.Coiner",
       "col": 12,
       "row": 9
     }],
     "monsters": [],
+    "items": [],
     "objects": [
       {
-        "path": "net.dinglezz.torgrays_trials.object.OBJ_Table",
+        "path": "net.dinglezz.torgrays_trials.entity.object.Table",
         "col": 12,
         "row": 10
       },
       {
-        "path": "net.dinglezz.torgrays_trials.object.OBJ_Dark_Chest",
+        "path": "net.dinglezz.torgrays_trials.entity.object.Dark_Chest",
         "col": 10,
         "row": 9,
         "loot table": "Normal Dark Chest"
@@ -137,8 +138,8 @@
   "events": [
     {
       "path": "net.dinglezz.torgrays_trials.event.EVT_Teleport",
-      "col": "12",
-      "row": "13",
+      "col": 12,
+      "row": 13,
       "parameters": {
         "col": 10,
         "row": 39,
@@ -149,8 +150,8 @@
     },
     {
       "path": "net.dinglezz.torgrays_trials.event.EVT_Speak",
-      "col": "12",
-      "row": "11",
+      "col": 12,
+      "row": 11,
       "parameters": {
         "type": "npc",
         "index": 0

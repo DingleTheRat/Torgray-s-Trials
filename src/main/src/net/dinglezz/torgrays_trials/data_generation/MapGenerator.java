@@ -2,14 +2,16 @@ package net.dinglezz.torgrays_trials.data_generation;
 
 import com.ususstudios.torgrays_datagen.dataclasses.Entity;
 import com.ususstudios.torgrays_datagen.dataclasses.Event;
+import net.dinglezz.torgrays_trials.entity.item.Gate_Key;
+import net.dinglezz.torgrays_trials.entity.object.Chest;
+import net.dinglezz.torgrays_trials.entity.object.*;
 import net.dinglezz.torgrays_trials.event.EVT_Healing_Pond;
 import net.dinglezz.torgrays_trials.event.EVT_Pit;
 import net.dinglezz.torgrays_trials.event.EVT_Speak;
 import net.dinglezz.torgrays_trials.event.EVT_Teleport;
-import net.dinglezz.torgrays_trials.monster.MON_Dracore;
-import net.dinglezz.torgrays_trials.npc.NPC_Coiner;
-import net.dinglezz.torgrays_trials.npc.NPC_GateKeeper;
-import net.dinglezz.torgrays_trials.object.*;
+import net.dinglezz.torgrays_trials.entity.monster.Dracore;
+import net.dinglezz.torgrays_trials.entity.npc.Coiner;
+import net.dinglezz.torgrays_trials.entity.npc.GateKeeper;
 
 import java.util.HashMap;
 
@@ -127,45 +129,45 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 				-1,
 				true,
 				new Entity[] {
-					// Keys
-					new Entity(OBJ_Key.class, 23, 40, null),
-					new Entity(OBJ_Key.class, 38, 8, null),
-
 					// Gates
-					new Entity(OBJ_Gate.class, 10, 12, null),
-					new Entity(OBJ_Gate.class, 14, 28, null),
-					new Entity(OBJ_Gate.class, 8, 28, null),
-					new Entity(OBJ_Gate.class, 12, 23, null),
+					new Entity(Gate.class, 10, 12, null),
+					new Entity(Gate.class, 14, 28, null),
+					new Entity(Gate.class, 8, 28, null),
+					new Entity(Gate.class, 12, 23, null),
 
 					// Chests
-					new Entity(OBJ_Chest.class, 10, 10, "Amethyst Chest"),
-					new Entity(OBJ_Dark_Chest.class, 37, 40, "Normal Dark Chest"),
-					new Entity(OBJ_Dark_Chest.class, 31, 10, "Normal Dark Chest")
+					new Entity(Chest.class, 10, 10, "Amethyst Chest"),
+					new Entity(Dark_Chest.class, 37, 40, "Normal Dark Chest"),
+					new Entity(Dark_Chest.class, 31, 10, "Normal Dark Chest")
 				},
 				new Entity[] {
-					new Entity(NPC_GateKeeper.class, 21, 21, null)
+					new Entity(GateKeeper.class, 21, 21, null)
 				},
 				new Entity[] {
-					// In grass thing
-					new Entity(MON_Dracore.class, 23, 36, "Dracores"),
-					new Entity(MON_Dracore.class, 24, 37, "Dracores"),
-					new Entity(MON_Dracore.class, 25, 38, "Dracores"),
-
-					// In path thing
-					new Entity(MON_Dracore.class, 35, 10, "Dracores"),
-					new Entity(MON_Dracore.class, 37, 8, "Dracores"),
-					new Entity(MON_Dracore.class, 39, 10, "Dracores"),
-
-					// Inside the gates
-					new Entity(MON_Dracore.class, 10, 29, "Dracores"),
-					new Entity(MON_Dracore.class, 11, 29, "Dracores"),
-					new Entity(MON_Dracore.class, 12, 29, "Dracores"),
-
-					// In the tree thing
-					new Entity(MON_Dracore.class, 36, 36, "Dracores"),
-					new Entity(MON_Dracore.class, 36, 32, "Dracores"),
-					new Entity(MON_Dracore.class, 37, 41, "Dracores"),
-					new Entity(MON_Dracore.class, 31, 40, "Dracores")
+						// In grass thing
+						new Entity(Dracore.class, 23, 36, "Dracores"),
+						new Entity(Dracore.class, 24, 37, "Dracores"),
+						new Entity(Dracore.class, 25, 38, "Dracores"),
+						
+						// In path thing
+						new Entity(Dracore.class, 35, 10, "Dracores"),
+						new Entity(Dracore.class, 37, 8, "Dracores"),
+						new Entity(Dracore.class, 39, 10, "Dracores"),
+						
+						// Inside the gates
+						new Entity(Dracore.class, 10, 29, "Dracores"),
+						new Entity(Dracore.class, 11, 29, "Dracores"),
+						new Entity(Dracore.class, 12, 29, "Dracores"),
+						
+						// In the tree thing
+						new Entity(Dracore.class, 36, 36, "Dracores"),
+						new Entity(Dracore.class, 36, 32, "Dracores"),
+						new Entity(Dracore.class, 37, 41, "Dracores"),
+						new Entity(Dracore.class, 31, 40, "Dracores")
+				},
+				new Entity[] {
+						new Entity(Gate_Key.class, 23, 40, null),
+						new Entity(Gate_Key.class, 38, 8, null)
 				},
 				new Event[]{
 						new Event(EVT_Pit.class, 23, 19),
@@ -291,12 +293,13 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 				500,
 				false,
 				new Entity[] {
-						new Entity(OBJ_Table.class, 12, 10, null),
-						new Entity(OBJ_Dark_Chest.class, 10, 9, "Normal Dark Chest")
+						new Entity(Table.class, 12, 10, null),
+						new Entity(Dark_Chest.class, 10, 9, "Normal Dark Chest")
 				},
 				new Entity[] {
-						new Entity(NPC_Coiner.class, 12, 9, null)
+						new Entity(Coiner.class, 12, 9, null)
 				},
+				new Entity[] {},
 				new Entity[] {},
 				new Event[]{
 					new Event(EVT_Teleport.class, 12, 13, new HashMap<>(){{
@@ -416,6 +419,7 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 				0, 0,
 				500,
 				true,
+				new Entity[] {},
 				new Entity[] {},
 				new Entity[] {},
 				new Entity[] {},

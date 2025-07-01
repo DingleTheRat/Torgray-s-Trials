@@ -13,7 +13,6 @@ public class Sound {
     Clip clip;
     public HashMap<String, URL> soundLibrary = new HashMap<>();
     FloatControl floatControl;
-    boolean floatControlSupported = true;
     int volumeScale = 3;
     float volume;
 
@@ -47,17 +46,7 @@ public class Sound {
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundLibrary.get(soundName));
                 clip = AudioSystem.getClip();
                 clip.open(audioInputStream);
-                if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
-                    floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                    floatControlSupported = true;
-                } else if (clip.isControlSupported(FloatControl.Type.VOLUME)) {
-                    floatControl = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
-                    floatControlSupported = true;
-                } else {
-                    floatControl = null;
-                    floatControlSupported = false;
-                    System.err.println("Warning: No supported volume control for clip \"" + soundName + "\"");
-                }
+                floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
                 checkVolume();
             } else {
                 System.err.println("Warning: \"" + soundName + "\" is not a valid sfx.");
@@ -67,17 +56,12 @@ public class Sound {
         }
     }
     public void play() {
-        if (clip != null) {
-            clip.start();
-        } else {
-            System.err.println("Warning: No clip found to play");}
+        if (clip != null) clip.start();
+        else System.err.println("Warning: No clip found to play");
     }
     public void loop() {
-        if (clip != null) {
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
-        } else {
-            System.err.println("Warning: No clip found to loop");
-        }
+        if (clip != null) clip.loop(Clip.LOOP_CONTINUOUSLY);
+        else System.err.println("Warning: No clip found to loop");
     }
     public void stop() {
         if (clip != null) clip.stop();
@@ -91,7 +75,7 @@ public class Sound {
             case 4 -> volume = 1f;
             case 5 -> volume = 6f;
         }
-        if (floatControlSupported) floatControl.setValue(volume);
+        floatControl.setValue(volume);
     }
 
     // Static Stuff

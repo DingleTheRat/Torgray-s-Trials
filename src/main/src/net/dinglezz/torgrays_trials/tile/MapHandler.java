@@ -15,7 +15,7 @@ public class MapHandler {
     public static final HashMap<String, JSONObject> mapFiles = new HashMap<>();
     public static final ArrayList<String> maps = new ArrayList<>();
 
-    public static HashMap<String, BufferedImage> worldMap = new HashMap<>();
+    public static HashMap<String, HashMap<String, BufferedImage>> worldMap = new HashMap<>();
 
     public static void loadMaps() {
         String[] mapFiles = UtilityTool.getResourceFileNames("/values/maps");
@@ -34,7 +34,8 @@ public class MapHandler {
             }
         }
 
-        createWorldMap();
+        createWorldMap("ground");
+        createWorldMap("foreground");
     }
 
     public static void loadMap(String fileName) {
@@ -111,31 +112,32 @@ public class MapHandler {
         maps.add(name);
     }
 
-    public static void createWorldMap() {
+    public static void createWorldMap(String layer) {
         int worldMapWidth = Main.game.tileSize * Main.game.maxWorldCol;
         int worldMapHeight = Main.game.tileSize * Main.game.maxWorldRow;
 
         for (String map : maps) {
-            MapHandler.worldMap.put(map, new BufferedImage(worldMapWidth, worldMapHeight, BufferedImage.TYPE_INT_ARGB));
-            Graphics2D graphics2D = MapHandler.worldMap.get(map).createGraphics();
+            HashMap<String, BufferedImage> layerMap = worldMap.computeIfAbsent(map, k -> new HashMap<>());
+            layerMap.put(layer, new BufferedImage(worldMapWidth, worldMapHeight, BufferedImage.TYPE_INT_ARGB));
+            Graphics2D graphics2D = layerMap.get(layer).createGraphics();
 
             int col = 0;
             int row = 0;
-            while (col < Main.game.maxWorldCol && row < Main.game.maxWorldRow) {
-                int tileNumber = TileManager.mapTileNumbers.get("ground").get(new TilePoint(map, col, row));
-                int x = col * Main.game.tileSize;
-                int y = row * Main.game.tileSize;
+            while (row < Main.game.maxWorldRow) {
+                while (col < Main.game.maxWorldCol) {
+                    int tileNumber = TileManager.mapTileNumbers.get(layer).get(new TilePoint(map, col, row));
+                    int x = col * Main.game.tileSize;
+                    int y = row * Main.game.tileSize;
 
-                // Draw Tiles
-                if (TileManager.tile.get(tileNumber) != null) {
-                    graphics2D.drawImage(TileManager.tile.get(tileNumber).image, x, y, null);
+                    // Draw Tiles
+                    if (TileManager.tile.get(tileNumber) != null)
+                        graphics2D.drawImage(TileManager.tile.get(tileNumber).image, x, y, null);
+                    col++;
                 }
-                col++;
-                if (col == Main.game.maxWorldCol) {
-                    col = 0;
-                    row++;
-                }
+                col = 0;
+                row++;
             }
+            graphics2D.dispose();
         }
     }
 }

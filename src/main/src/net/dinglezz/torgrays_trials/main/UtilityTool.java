@@ -5,21 +5,19 @@ import net.dinglezz.torgrays_trials.event.Event;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 import org.json.JSONObject;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 
 public class UtilityTool {
 
     public static BufferedImage scaleImage(BufferedImage original, int width, int height) {
-        BufferedImage scaledImage = new BufferedImage(width, height, original.getType());
-        Graphics2D g2 = scaledImage.createGraphics();
-        g2.drawImage(original, 0, 0, width, height, null);
-        g2.dispose();
+        BufferedImage scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics2D = scaledImage.createGraphics();
+        graphics2D.drawImage(original, 0, 0, width, height, null);
+        graphics2D.dispose();
 
         return scaledImage;
     }
@@ -45,22 +43,23 @@ public class UtilityTool {
         }
     }
 
-    public static Entity generateEntity(String path) {
+    @SuppressWarnings("unchecked")
+    public static <T extends Entity> T generateEntity(String path, TilePoint tilePoint) {
         try {
             Class<?> clazz = Class.forName(path);
-            return (Entity) clazz.getDeclaredConstructor(Game.class).newInstance(Main.game);
+            return (T) clazz.getDeclaredConstructor(TilePoint.class).newInstance(tilePoint);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                 NoSuchMethodException | ClassNotFoundException exception) {
+                 NoSuchMethodException | ClassNotFoundException | ClassCastException exception) {
             throw new RuntimeException(exception);
         }
     }
-    public static Entity generateEntity(String path, String lootTable) {
+    @SuppressWarnings("unchecked")
+    public static <T extends Entity> T generateEntity(String path, TilePoint tilePoint, String lootTable) {
         try {
             Class<?> clazz = Class.forName(path);
-            return (Entity) clazz.getDeclaredConstructor(Game.class, String.class).newInstance(Main.game, lootTable);
+            return (T) clazz.getDeclaredConstructor(TilePoint.class, String.class).newInstance(tilePoint, lootTable);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException
-                 | NoSuchMethodException |
-                 ClassNotFoundException exception) {
+                 | NoSuchMethodException | ClassNotFoundException | ClassCastException exception) {
             throw new RuntimeException(exception);
         }
     }
@@ -87,6 +86,25 @@ public class UtilityTool {
             }
         } catch (IOException exception) {
             throw new RuntimeException(exception);
+        }
+    }
+
+    // Image serialization
+    public static byte[] serializeImage(BufferedImage image) {
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", byteArrayOutputStream); // You can use "jpg", "bmp", etc.
+            return byteArrayOutputStream.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static BufferedImage deserializeImage(byte[] data) {
+        try {
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
+            return ImageIO.read(byteArrayInputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

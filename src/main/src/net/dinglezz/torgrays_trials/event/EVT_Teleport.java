@@ -1,5 +1,7 @@
 package net.dinglezz.torgrays_trials.event;
 
+import net.dinglezz.torgrays_trials.main.AssetSetter;
+import net.dinglezz.torgrays_trials.main.DataManager;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
@@ -40,7 +42,29 @@ public class EVT_Teleport extends Event {
             // Set the transition settings
             Main.game.ui.transitioning = true;
             Main.game.ui.setTransitionSettings(Color.BLACK, 0.02f, 0.02f);
-            Main.game.ui.actionMethod = "transitionTeleport";
+
+            Main.game.ui.transitionAction = () -> {
+                Main.game.currentMap = EVT_Teleport.nextMap;
+
+                // Set player position
+                if (EVT_Teleport.nextCol == Integer.MIN_VALUE || EVT_Teleport.nextRow == Integer.MIN_VALUE) {
+                    Main.game.player.setDefaultPosition();
+                } else {
+                    Main.game.player.worldX = EVT_Teleport.nextCol;
+                    Main.game.player.worldY = EVT_Teleport.nextRow;
+                }
+                Main.game.player.direction = EVT_Teleport.nextDirection;
+                Main.game.environmentManager.lightUpdated = true;
+
+                // Save game (if a slot is selected)
+                DataManager.autoSaveData();
+
+                // Play map music
+                Sound.playMapMusic();
+
+                // Load entities and events if not already loaded
+                AssetSetter.loadAssets();
+            };
         }
     }
 

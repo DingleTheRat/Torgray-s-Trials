@@ -72,7 +72,7 @@ public class TileManager {
             registerTile(43, "grass/grass_pit", false);
             registerTile(44, "grass/grass_healing", false);
 
-            registerTile(45, "lil_hut", false);
+            registerTile(45, "coiner's_hut", false);
     }
     public static void registerTile(int i, String imageName, boolean collision) {
         try {
@@ -99,9 +99,7 @@ public class TileManager {
 
         for (String layer : TileManager.mapTileNumbers.keySet()) {
             // Skip the layer if it is not present in the map
-            if (TileManager.mapTileNumbers.get(layer).get(new TilePoint(Main.game.currentMap, 0, 0)) == null && layer.equals("foreground")) {
-                continue;
-            }
+            if (TileManager.mapTileNumbers.get(layer).get(new TilePoint(Main.game.currentMap, 0, 0)) == null && layer.equals("foreground")) continue;
             
             IntStream.range(0, Main.game.maxWorldRow).parallel().forEach(
                 worldRow -> IntStream.range(0, Main.game.maxWorldCol).parallel().forEach(worldCol -> {

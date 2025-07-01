@@ -1,8 +1,8 @@
 package net.dinglezz.torgrays_trials.main;
 
-import net.dinglezz.torgrays_trials.entity.Entity;
-import net.dinglezz.torgrays_trials.entity.LootTableHandler;
-import net.dinglezz.torgrays_trials.entity.Player;
+import net.dinglezz.torgrays_trials.entity.*;
+import net.dinglezz.torgrays_trials.entity.item.Item;
+import net.dinglezz.torgrays_trials.entity.monster.Monster;
 import net.dinglezz.torgrays_trials.environment.EnvironmentManager;
 import net.dinglezz.torgrays_trials.pathfinding.Pathfinder;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
@@ -11,6 +11,7 @@ import net.dinglezz.torgrays_trials.tile.TileManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.*;
 
 public class Game extends JPanel implements Runnable {
@@ -47,41 +48,41 @@ public class Game extends JPanel implements Runnable {
     public boolean debugHitBoxes = false;
 
     // FPS
-    float FPS;
-    public float deltaTime;
+    int FPS = 60;
     public long drawStart;
 
     // System
-    public UI ui = new UI(this);
-    public Config config = new Config(this);
-    public Pathfinder pathFinder = new Pathfinder(this);
-    public InputHandler inputHandler = new InputHandler(this);
-    public EnvironmentManager environmentManager = new EnvironmentManager(this);
+    public UI ui;
+    public Pathfinder pathFinder;
+    public InputHandler inputHandler;
+    public EnvironmentManager environmentManager;
     Thread gameThread;
 
-    // Entities and Objects
-    public Player player = new Player(this, inputHandler);
-    public HashMap<String, HashMap<Integer, Entity>> npc = new HashMap<>();
-    public HashMap<String, HashMap<Integer, Entity>> object = new HashMap<>();
-    public HashMap<String, HashMap<Integer, Entity>> monster = new HashMap<>();
-    public ArrayList<Entity> particleList = new ArrayList<>();
+    // Entities
+    public Player player;
+    public HashMap<String, ArrayList<Entity>> objects = new HashMap<>();
+    public HashMap<String, ArrayList<Item>> items = new HashMap<>();
+    public HashMap<String, ArrayList<Mob>> npcs = new HashMap<>();
+    public HashMap<String, ArrayList<Monster>> monsters = new HashMap<>();
     public ArrayList<Entity> entityList = new ArrayList<>();
+    public ArrayList<Particle> particleList = new ArrayList<>();
 
     public States.GameStates gameState = States.GameStates.TITLE;
     public States.ExceptionStates exceptionState = States.ExceptionStates.ONLY_IGNORABLE;
-    public String exceptionStackTrace = "";
+    String exceptionStackTrace = "";
+    public int saveSlot = 0;
     public String currentMap = "Main Island";
-    public String gameMode;
+    public String difficulty;
 
     public Game() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
-        this.addKeyListener(inputHandler);
         this.setFocusable(true);
     }
 
     public void setupGame() {
+        // Setup classes
         setupExceptionHandling();
         TileManager.setup();
         MapHandler.loadMaps();
@@ -91,14 +92,15 @@ public class Game extends JPanel implements Runnable {
         // Set Assets
         AssetSetter.setAssets(true);
 
+        // Add listener
+        this.addKeyListener(inputHandler);
+
         Sound.playMusic("Tech Geek");
         gameState = States.GameStates.TITLE;
         player.setDefaultPosition();
 
-        // Load Config
-        if (fullScreen) {
-            setFullScreen();
-        }
+        // Load DataManager
+        if (fullScreen) setFullScreen();
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
         graphics2D = (Graphics2D) tempScreen.getGraphics();
     }
@@ -127,18 +129,85 @@ public class Game extends JPanel implements Runnable {
             }
         });
     }
+    public void init() {
+        ui = new UI(this);
+        pathFinder = new Pathfinder(this);
+        inputHandler = new InputHandler();
+        environmentManager = new EnvironmentManager(this);
+        player = new Player();
+    }
+    public void adjustDifficulty() {
+        if (difficulty.equals("Easy")) {
+            System.out.println("Imagine Picking Easy");
+
+            // Modified Stats
+            player.strength = 2;
+            player.dexterity = 2;
+            player.nextLevelExp = 4;
+            player.attack = player.getAttack();
+            player.defence = player.getDefence();
+
+            // Modified Darkness State Stuff
+            environmentManager.lighting.nightLength = 18000;
+            environmentManager.lighting.gloomLength = 9000;
+
+            environmentManager.lighting.gloomChance = 35;
+            environmentManager.lighting.lightGloomChance = 50;
+            environmentManager.lighting.darkGloomChance = 15;
+        } else if (difficulty.equals("Medium")) {
+            System.out.println("Kinda a mid game mode lol");
+            // No modified stats since Medium is the default
+        } else if (difficulty.equals("Hard")) {
+            System.out.println("You really think you are \"hardcore\"?");
+
+            // Modified Stats
+            Main.game.player.dexterity = 0;
+            Main.game.player.nextLevelExp = 6;
+            Main.game.player.defence = Main.game.player.getDefence();
+
+            // Modified State Stuff
+            Main.game.environmentManager.lighting.nightLength = 7200;
+            Main.game.environmentManager.lighting.gloomLength = 144000;
+
+            Main.game.environmentManager.lighting.gloomChance = 35;
+            Main.game.environmentManager.lighting.lightGloomChance = 10;
+            Main.game.environmentManager.lighting.darkGloomChance = 55;
+        }
+    }
     public void respawn() {
-        player.restoreHealth();
+        player.heal(player.maxHealth);
+        player.invincible = false;
         currentMap = "Main Island";
         player.setDefaultPosition();
         environmentManager.lightUpdated = true;
     }
-    public void restart() {
+    void restart(boolean deleteSave) {
+        // Delete save (if needed)
+        if (deleteSave && saveSlot != 0) {
+            // Delete the save file
+            String userHome = System.getProperty("user.home");
+            File directory = new File(userHome, ".torgray");
+            File saveFile = new File(directory, "torgrays-trials-save-" + saveSlot + ".dat");
+            if (saveFile.exists()) {
+                if (!saveFile.delete()) {
+                    System.err.println("Failed to delete save file: " + saveFile.getAbsolutePath());
+                }
+            }
+        }
+
+        // Set default stuff
         player.setDefaultValues();
         player.setItems();
-        AssetSetter.setAssets(true);
         currentMap = "Main Island";
         player.setDefaultPosition();
+        saveSlot = 0;
+
+        // Set Assets
+        objects.clear();
+        items.clear();
+        npcs.clear();
+        monsters.clear();
+        AssetSetter.setAssets(true);
 
         // Darkness reset
         environmentManager.lightUpdated = true;
@@ -162,38 +231,48 @@ public class Game extends JPanel implements Runnable {
 
     @Override
     public void run() {
+        final double drawInterval = 1_000_000_000.0 / FPS;
         long lastTime = System.nanoTime();
-        int frame = 0;
-        // long sumNano = 0;
-        // long totalNano = 0;
+        long timer = 0;
+        double delta = 0;
+        long sumNano = 0;
+        long totalNano = 0;
 
         while (gameThread != null) {
-	        // FPS calculations
-            frame++;
             long currentTime = System.nanoTime();
-            deltaTime = (currentTime - lastTime) / 1_000_000_000.0f;
-            if (frame % 200_000 == 0) FPS = 1 / deltaTime;
+            long elapsedTime = currentTime - lastTime;
             lastTime = currentTime;
-            
-            update();
-            if (BRendering && gameState != States.GameStates.TITLE) {
-                drawToTempScreen();
-                drawToScreen();
-            } else {
-                repaint();
+
+            delta += elapsedTime / drawInterval;
+            timer += elapsedTime;
+
+            while (delta >= 1) {
+                long start = System.nanoTime();
+                update();
+                if (BRendering && gameState != States.GameStates.TITLE) {
+                    drawToTempScreen();
+                    drawToScreen();
+                } else {
+                    repaint();
+                }
+                delta--;
+                
+                if (gameState != States.GameStates.TITLE) {
+                    // no getting hit, no hitting, a few pits, open bottom chest, collect bottom key, drink
+                    sumNano += System.nanoTime() - start;
+                    totalNano++;
+
+                    if (totalNano % 2000 == 0) {
+                        System.out.println(Math.round((float) sumNano / totalNano / 1000));
+                        sumNano = 0;
+                        totalNano = 0;
+                    }
+                }
             }
-            
-            // if (gameState != States.GameStates.TITLE) {
-            //     // no getting hit, no hitting, a few pits, open bottom chest, collect bottom key, drink
-            //     sumNano += System.nanoTime() - currentTime;
-            //     totalNano++;
-            //
-            //     if (totalNano % 2000 == 0) {
-            //         System.out.println(Math.round((float) sumNano / totalNano / 1000));
-            //         sumNano = 0;
-            //         totalNano = 0;
-            //     }
-            // }
+
+            if (timer >= 1_000_000_000) {
+                timer = 0;
+            }
         }
     }
     public void update() {
@@ -201,35 +280,44 @@ public class Game extends JPanel implements Runnable {
             // Player
             player.update();
 
-            // NPCs
-            npc.getOrDefault(currentMap, new HashMap<>()).values().stream()
+            // Items
+            items.getOrDefault(currentMap, new ArrayList<>()).stream()
                     .filter(Objects::nonNull)
                     .forEach(Entity::update);
-            
+
+            // Objects
+            objects.getOrDefault(currentMap, new ArrayList<>()).stream()
+                    .filter(Objects::nonNull)
+                    .forEach(Entity::update);
+
+            // NPCs
+            npcs.getOrDefault(currentMap, new ArrayList<>()).stream()
+                    .filter(Objects::nonNull)
+                    .forEach(Entity::update);
+
             // Monsters
-            ArrayList<Integer> toRemove = new ArrayList<>();
-            monster.getOrDefault(currentMap, new HashMap<>()).forEach((key, entity) -> {
-                if (entity != null) {
-                    if (entity.alive && !entity.dying) {
-                        entity.update();
-                    } else if (!entity.alive) {
-                        entity.checkDrop();
-                        toRemove.add(key);
+            ArrayList<Monster> monsters = this.monsters.getOrDefault(currentMap, new ArrayList<>());
+            for (int i = 0; i < monsters.size(); i++) {
+                Monster monster = monsters.get(i);
+                if (monster != null) {
+                    if (monster.alive && !monster.dying) {
+                        monster.update();
+                    } else if (!monster.alive) {
+                        monster.checkDrop();
+                        monsters.set(i, null);
+
+                        // Respawn if all monsters are dead
+                        if (monsters.stream().allMatch(Objects::isNull)) {
+                            AssetSetter.setMonsters(false);
+                        }
                     }
                 }
-            });
-            // Remove dead monsters
-            for (int key : toRemove) {
-                monster.getOrDefault(currentMap, new HashMap<>()).remove(key);
-            }
-            // Respawn if all monsters are dead
-            if (monster.get(currentMap).values().stream().allMatch(Objects::isNull)) {
-                AssetSetter.setMonsters(false);
             }
 
             // Particles
-            particleList.removeIf(particle -> particle == null || !particle.alive);
-            particleList.forEach(Entity::update);
+            particleList.stream()
+                    .filter(particle -> particle != null && particle.exists)
+                    .forEach(Particle::update);
 
             environmentManager.update();
         }
@@ -237,32 +325,33 @@ public class Game extends JPanel implements Runnable {
 
     public void draw(Graphics2D graphics2D) {
         // Debug
-        if (debug) {
-            drawStart = System.nanoTime();
-        }
+        if (debug) drawStart = System.nanoTime();
 
         // Title Screen
-        if (gameState == States.GameStates.TITLE) {
-            ui.draw(graphics2D);
-        } else {
+        if (gameState == States.GameStates.TITLE) ui.draw(graphics2D);
+        else {
             // Draw :)
             TileManager.draw(graphics2D);
 
-            // Add entities to the list
+            // Add entities to the list 
             entityList.clear(); // Clear once at the start
-            if (gameState != States.GameStates.GAME_END) {
-                entityList.add(player);
-            }
-            
-            entityList.addAll(npc.getOrDefault(currentMap, new HashMap<>()).values());
-            entityList.addAll(object.getOrDefault(currentMap, new HashMap<>()).values());
-            entityList.addAll(monster.getOrDefault(currentMap, new HashMap<>()).values());
-            entityList.addAll(particleList);
+            if (gameState != States.GameStates.GAME_END) entityList.add(player);
+
+            entityList.addAll(npcs.getOrDefault(currentMap, new ArrayList<>()));
+            entityList.addAll(items.getOrDefault(currentMap, new ArrayList<>()));
+            entityList.addAll(objects.getOrDefault(currentMap, new ArrayList<>()));
+            entityList.addAll(monsters.getOrDefault(currentMap, new ArrayList<>()));
+
+            // Filter out null particles before adding
+            particleList.stream()
+                    .filter(Objects::nonNull)
+                    .filter(particle -> particle.exists)
+                    .forEach(particle -> particle.draw(graphics2D));
 
             // Sort and draw entities
             entityList.stream()
                     .filter(Objects::nonNull)
-                    .sorted(Comparator.comparingDouble(e -> e.worldY))
+                    .sorted(Comparator.comparingInt(e -> e.worldY))
                     .forEach(entity -> entity.draw(graphics2D));
 
             // Empty Entity List

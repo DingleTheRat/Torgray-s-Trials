@@ -1,3 +1,5 @@
 package net.dinglezz.torgrays_trials.tile;
 
-public record TilePoint(String map, int col, int row) {}
+import java.io.Serializable;
+
+public record TilePoint(String map, int col, int row) implements Serializable {}

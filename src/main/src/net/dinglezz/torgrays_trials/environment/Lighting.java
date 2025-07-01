@@ -1,6 +1,7 @@
 package net.dinglezz.torgrays_trials.environment;
 
 import net.dinglezz.torgrays_trials.main.AssetSetter;
+import net.dinglezz.torgrays_trials.main.DataManager;
 import net.dinglezz.torgrays_trials.main.Game;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
@@ -17,7 +18,7 @@ public class Lighting {
     // Main Darkness Stuff
     public States.DarknessStates darknessState = States.DarknessStates.NIGHT;
     public States.DarknessStates nextGloom;
-    public float darknessCounter = 0;
+    public int darknessCounter = 0;
 
     // Darkness Settings
     public int nightLength = 12000;
@@ -156,17 +157,16 @@ public class Lighting {
 
     public void updateDarknessState(States.DarknessStates nextDarknessState, int threshold, boolean transitionWhenDone) {
         if (game.ui.transitioning) return;
-        darknessCounter += game.deltaTime * 60;
-        if (darknessCounter < threshold)  return;
+        darknessCounter++;
+        if (darknessCounter < threshold) return;
 
         darknessCounter = 0;
         darknessState = nextDarknessState;
+        DataManager.autoSaveData();
         if (nextDarknessState == nextGloom) {
             nextGloom = chooseNextGloom();
             AssetSetter.setMonsters(true);
-        } else if (nextDarknessState == States.DarknessStates.NIGHT) {
-            AssetSetter.setMonsters(false);
-        }
+        } else if (nextDarknessState == States.DarknessStates.NIGHT) AssetSetter.setMonsters(false);
 
 
         if (transitionWhenDone) {
@@ -176,7 +176,7 @@ public class Lighting {
             float openSpeed = (darknessState == States.DarknessStates.NEW_DUSK) ? 0.005f : 0.01f;
             float closeSpeed = (darknessState == States.DarknessStates.DUSK) ? 0.01f : 0.005f;
             game.ui.setTransitionSettings(new Color(0, 0, 0.1f), openSpeed, closeSpeed);
-            game.ui.actionMethod = "transitionDarkness";
+            game.ui.transitionAction = () -> game.environmentManager.lightUpdated = true;
         }
     }
 
@@ -187,17 +187,11 @@ public class Lighting {
             default -> 0;
         };
         if (darknessState == States.DarknessStates.NEW_DUSK && game.ui.isFadingBack()) {
-            if (nextGloom == States.DarknessStates.LIGHT_GLOOM) {
-                lightRadiusAdjustment = 50;
-            } else if (nextGloom == States.DarknessStates.DARK_GLOOM) {
-                lightRadiusAdjustment = -50;
-            }
+            if (nextGloom == States.DarknessStates.LIGHT_GLOOM) lightRadiusAdjustment = 50;
+            else if (nextGloom == States.DarknessStates.DARK_GLOOM) lightRadiusAdjustment = -50;
         } else if (darknessState == States.DarknessStates.DUSK && !game.ui.isFadingBack()) {
-            if (nextGloom == States.DarknessStates.LIGHT_GLOOM) {
-                lightRadiusAdjustment = 50;
-            } else if (nextGloom == States.DarknessStates.DARK_GLOOM) {
-                lightRadiusAdjustment = -50;
-            }
+            if (nextGloom == States.DarknessStates.LIGHT_GLOOM) lightRadiusAdjustment = 50;
+            else if (nextGloom == States.DarknessStates.DARK_GLOOM) lightRadiusAdjustment = -50;
         }
         return lightRadiusAdjustment;
     }
