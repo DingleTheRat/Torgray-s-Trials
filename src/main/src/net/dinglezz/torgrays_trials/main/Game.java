@@ -140,13 +140,6 @@ public class Game extends JPanel implements Runnable {
         if (difficulty.equals("Easy")) {
             System.out.println("Imagine Picking Easy");
 
-            // Modified Stats
-            player.strength = 2;
-            player.dexterity = 2;
-            player.nextLevelExp = 4;
-            player.attack = player.getAttack();
-            player.defence = player.getDefence();
-
             // Modified Darkness State Stuff
             environmentManager.lighting.nightLength = 18000;
             environmentManager.lighting.gloomLength = 9000;
@@ -159,11 +152,6 @@ public class Game extends JPanel implements Runnable {
             // No modified stats since Medium is the default
         } else if (difficulty.equals("Hard")) {
             System.out.println("You really think you are \"hardcore\"?");
-
-            // Modified Stats
-            Main.game.player.dexterity = 0;
-            Main.game.player.nextLevelExp = 6;
-            Main.game.player.defence = Main.game.player.getDefence();
 
             // Modified State Stuff
             Main.game.environmentManager.lighting.nightLength = 7200;

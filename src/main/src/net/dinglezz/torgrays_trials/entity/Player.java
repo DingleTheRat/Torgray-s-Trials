@@ -21,7 +21,6 @@ public class Player extends Mob implements Serializable {
     // Attributes
     public int exp;
     public int level;
-    public int nextLevelExp;
 
     public final int screenX;
     public final int screenY;
@@ -88,16 +87,11 @@ public class Player extends Mob implements Serializable {
         maxHealth = 12;
         heal(maxHealth);
         dying = false;
-        strength = 1;
-        dexterity = 1;
         exp = 0;
-        nextLevelExp = 5;
         coins = 2;
         currentWeapon = new Sword_Iron(null);
         currentShield = new Shield_Iron(null);
         currentLight = new Lantern(null);
-        attack = getAttack();
-        defence = getDefence();
     }
     public void setDefaultPosition() {
         JSONObject file = MapHandler.mapFiles.get(Main.game.currentMap);
@@ -118,13 +112,6 @@ public class Player extends Mob implements Serializable {
         giveItem(currentWeapon);
         giveItem(currentShield);
         giveItem(currentLight);
-    }
-    public int getAttack() {
-        attackArea = currentWeapon.attackArea;
-        return attack = strength * currentWeapon.attackValue;
-    }
-    public int getDefence() {
-        return defence = dexterity * currentShield.defenceValue;
     }
 
     @Override
@@ -303,7 +290,7 @@ public class Player extends Mob implements Serializable {
 
     public void contactMonster(Monster monster) {
         if (monster != null && !monster.dying) {
-            damage(monster.attack, true);
+            damage(monster.attack);
         }
     }
 
@@ -313,19 +300,14 @@ public class Player extends Mob implements Serializable {
             if (knockBackPower > 0) knockBack(monster, knockBackPower);
 
             // Attack time!
-            monster.damage(attack, true);
+            monster.damage(currentWeapon.attackValue);
 
             // If the monsters is dead, then set it to dying
             if (monster.getHealth() <= 0) {
                 monster.dying = true;
 
-                // Give player some exp
-                exp += monster.exp;
-                checkLevelUp();
-
                 // Add a notification
                 Main.game.ui.addMiniNotification("Killed " + monster.name);
-                Main.game.ui.addMiniNotification("+" + monster.exp + " exp");
             }
         }
     }
@@ -333,18 +315,6 @@ public class Player extends Mob implements Serializable {
         mob.direction = direction;
         mob.speed += knockBackPower;
         mob.knockBack = true;
-    }
-    public void checkLevelUp() {
-        if (exp >= nextLevelExp) {
-            level++;
-            exp = 0;
-            nextLevelExp = nextLevelExp * 2;
-            strength++;
-            dexterity++;
-            attack = getAttack();
-            defence = getDefence();
-            Main.game.ui.addMiniNotification("Level Up!");
-        }
     }
     public void selectItem() {
         int itemIndex = Main.game.ui.getItemIndex(Main.game.ui.playerSlotCol, Main.game.ui.playerSlotRow);
@@ -354,12 +324,10 @@ public class Player extends Mob implements Serializable {
 
             if (selectedItem.tags.contains(ItemTags.TAG_WEAPON)) {
                 currentWeapon = selectedItem;
-                attack = getAttack();
                 getAttackImage();
             }
             if (selectedItem.tags.contains(ItemTags.TAG_SHIELD)) {
                 currentShield = selectedItem;
-                defence = getDefence();
             }
             if (selectedItem.tags.contains(ItemTags.TAG_LIGHT)) {
                 if (currentLight == selectedItem) {

@@ -25,14 +25,9 @@ public abstract class Mob extends Entity implements Serializable {
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
 
     // Attributes
-    public int exp;
     public int defaultSpeed;
     public int speed;
     public int maxHealth;
-    public int strength;
-    public int dexterity;
-    public int attack;
-    public int defence;
     public int coins;
 
     // Health
@@ -223,23 +218,19 @@ public abstract class Mob extends Entity implements Serializable {
     // Health
     public int getHealth() {return health;}
     /**
-     * Applies damage to the mob, taking into account its defense if specified.
+     * Applies damage to the mob.
      * The method ensures that the mob's health cannot drop below zero and handles
      * death-related state changes if the mob's health reaches zero. Additionally,
      * it triggers sound effects, visual particles, and reaction behaviors upon
      * taking damage unless the mob is invincible or already dying.
      *
      * @param damage  the amount of damage to be applied to the mob.
-     * @param defence whether the mob's defense stat should be applied to reduce the damage.
      */
-    public void damage(int damage, boolean defence) {
+    public void damage(int damage) {
         // If the mob is invincible, do not apply damage
         if (!invincible && !dying) {
             // Enable invincibility
             invincible = true;
-
-            // Make it affected by defense (if needed)
-            if (defence) damage = damage - this.defence;
 
             // Ensure that the damage is not negative
             if (damage < 0) damage = 0;

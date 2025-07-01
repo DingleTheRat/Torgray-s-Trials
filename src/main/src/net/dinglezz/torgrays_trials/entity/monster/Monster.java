@@ -7,6 +7,8 @@ import net.dinglezz.torgrays_trials.tile.TilePoint;
 import java.io.Serializable;
 
 public abstract class Monster extends Mob implements Serializable {
+    public int attack;
+
     public Monster(String name, TilePoint tilePoint) {
         super(name, tilePoint);
 
@@ -39,7 +41,7 @@ public abstract class Monster extends Mob implements Serializable {
 
         // If it's touching the player, then attack
         if (contactPlayer) {
-            Main.game.player.damage(attack, true);
+            Main.game.player.damage(attack);
         }
     }
 }

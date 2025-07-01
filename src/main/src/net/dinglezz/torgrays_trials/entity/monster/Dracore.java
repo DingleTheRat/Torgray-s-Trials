@@ -19,8 +19,6 @@ public class Dracore extends Monster {
         maxHealth = 5;
         heal(maxHealth);
         attack = 4;
-        defence = 0;
-        exp = 2;
 
         if (Main.game.environmentManager.lighting != null) {
             if (Main.game.environmentManager.lighting.darknessState == States.DarknessStates.GLOOM ||

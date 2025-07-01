@@ -851,103 +851,103 @@ public class UI {
         // Inventory
         drawInventory(game.player, true);
 
-        // Make a frame
-        final int frameX = game.tileSize / 2;
-        final int frameY = game.tileSize / 2;
-        final int frameWidth = game.tileSize * 6;
-        final int frameHeight = game.tileSize * 11;
-        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
-
-        // Text
-        graphics2D.setColor(Color.white);
-        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 30f));
-
-        int textX = frameX + 20;
-        int textY = frameY + game.tileSize;
-        final int lineHeight = 35;
-
-        // Titles
-        graphics2D.drawString("Level", textX, textY);
-        textY += lineHeight;
-        graphics2D.drawString("Next Level", textX, textY);
-        textY += lineHeight;
-        graphics2D.drawString("Exp", textX, textY);
-        textY += lineHeight;
-        graphics2D.drawString("--------", textX, textY);
-        textY += lineHeight;
-        graphics2D.drawString("Strength", textX, textY);
-        textY += lineHeight;
-        graphics2D.drawString("Dexterity", textX, textY);
-        textY += lineHeight;
-        graphics2D.drawString("Attack", textX, textY);
-        textY += lineHeight;
-        graphics2D.drawString("Defence", textX, textY);
-        textY += lineHeight;
-        graphics2D.drawString("--------", textX, textY);
-        textY += lineHeight;
-        graphics2D.drawString("Health", textX, textY);
-        textY += lineHeight;
-        graphics2D.drawString("Coins", textX, textY);
-        textY += lineHeight;
-        graphics2D.drawString("--------", textX, textY);
-        textY += lineHeight;
-        graphics2D.drawString("Weapon", textX, textY);
-        textY += lineHeight;
-        graphics2D.drawString("Shield", textX, textY);
-
-        // Values
-        int tailX = (frameX + frameWidth) - 30;
-        textY = frameY + game.tileSize;
-        String value;
-
-        value = String.valueOf(game.player.level);
-        textX = alignXToRight(value, tailX);
-        graphics2D.drawString(value, textX, textY);
-        textY += lineHeight;
-
-        value = String.valueOf(game.player.nextLevelExp);
-        textX = alignXToRight(value, tailX);
-        graphics2D.drawString(value, textX, textY);
-        textY += lineHeight;
-
-        value = String.valueOf(game.player.exp);
-        textX = alignXToRight(value, tailX);
-        graphics2D.drawString(value, textX, textY);
-        textY += lineHeight * 2;
-
-        value = String.valueOf(game.player.strength);
-        textX = alignXToRight(value, tailX);
-        graphics2D.drawString(value, textX, textY);
-        textY += lineHeight;
-
-        value = String.valueOf(game.player.dexterity);
-        textX = alignXToRight(value, tailX);
-        graphics2D.drawString(value, textX, textY);
-        textY += lineHeight;
-
-        value = String.valueOf(game.player.attack);
-        textX = alignXToRight(value, tailX);
-        graphics2D.drawString(value, textX, textY);
-        textY += lineHeight;
-
-        value = String.valueOf(game.player.defence);
-        textX = alignXToRight(value, tailX);
-        graphics2D.drawString(value, textX, textY);
-        textY += lineHeight * 2;
-
-        value = game.player.getHealth() + "/" + game.player.maxHealth;
-        textX = alignXToRight(value, tailX);
-        graphics2D.drawString(value, textX, textY);
-        textY += lineHeight;
-
-        value = String.valueOf(game.player.coins);
-        textX = alignXToRight(value, tailX);
-        graphics2D.drawString(value, textX, textY);
-        textY += lineHeight * 2 - (lineHeight / 4);
-
-       graphics2D.drawImage(game.player.currentWeapon.icon.getImage(), tailX - game.tileSize, textY - 37, null);
-       textY += game.tileSize;
-       graphics2D.drawImage(game.player.currentShield.icon.getImage(), tailX - game.tileSize, textY - 37, null);
+//        // Make a frame
+//        final int frameX = game.tileSize / 2;
+//        final int frameY = game.tileSize / 2;
+//        final int frameWidth = game.tileSize * 6;
+//        final int frameHeight = game.tileSize * 11;
+//        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+//
+//        // Text
+//        graphics2D.setColor(Color.white);
+//        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 30f));
+//
+//        int textX = frameX + 20;
+//        int textY = frameY + game.tileSize;
+//        final int lineHeight = 35;
+//
+//        // Titles
+//        graphics2D.drawString("Level", textX, textY);
+//        textY += lineHeight;
+//        graphics2D.drawString("Next Level", textX, textY);
+//        textY += lineHeight;
+//        graphics2D.drawString("Exp", textX, textY);
+//        textY += lineHeight;
+//        graphics2D.drawString("--------", textX, textY);
+//        textY += lineHeight;
+//        graphics2D.drawString("Strength", textX, textY);
+//        textY += lineHeight;
+//        graphics2D.drawString("Dexterity", textX, textY);
+//        textY += lineHeight;
+//        graphics2D.drawString("Attack", textX, textY);
+//        textY += lineHeight;
+//        graphics2D.drawString("Defence", textX, textY);
+//        textY += lineHeight;
+//        graphics2D.drawString("--------", textX, textY);
+//        textY += lineHeight;
+//        graphics2D.drawString("Health", textX, textY);
+//        textY += lineHeight;
+//        graphics2D.drawString("Coins", textX, textY);
+//        textY += lineHeight;
+//        graphics2D.drawString("--------", textX, textY);
+//        textY += lineHeight;
+//        graphics2D.drawString("Weapon", textX, textY);
+//        textY += lineHeight;
+//        graphics2D.drawString("Shield", textX, textY);
+//
+//        // Values
+//        int tailX = (frameX + frameWidth) - 30;
+//        textY = frameY + game.tileSize;
+//        String value;
+//
+//        value = String.valueOf(game.player.level);
+//        textX = alignXToRight(value, tailX);
+//        graphics2D.drawString(value, textX, textY);
+//        textY += lineHeight;
+//
+//        value = String.valueOf(game.player.nextLevelExp);
+//        textX = alignXToRight(value, tailX);
+//        graphics2D.drawString(value, textX, textY);
+//        textY += lineHeight;
+//
+//        value = String.valueOf(game.player.exp);
+//        textX = alignXToRight(value, tailX);
+//        graphics2D.drawString(value, textX, textY);
+//        textY += lineHeight * 2;
+//
+//        value = String.valueOf(game.player.strength);
+//        textX = alignXToRight(value, tailX);
+//        graphics2D.drawString(value, textX, textY);
+//        textY += lineHeight;
+//
+//        value = String.valueOf(game.player.dexterity);
+//        textX = alignXToRight(value, tailX);
+//        graphics2D.drawString(value, textX, textY);
+//        textY += lineHeight;
+//
+//        value = String.valueOf(game.player.attack);
+//        textX = alignXToRight(value, tailX);
+//        graphics2D.drawString(value, textX, textY);
+//        textY += lineHeight;
+//
+//        value = String.valueOf(game.player.defence);
+//        textX = alignXToRight(value, tailX);
+//        graphics2D.drawString(value, textX, textY);
+//        textY += lineHeight * 2;
+//
+//        value = game.player.getHealth() + "/" + game.player.maxHealth;
+//        textX = alignXToRight(value, tailX);
+//        graphics2D.drawString(value, textX, textY);
+//        textY += lineHeight;
+//
+//        value = String.valueOf(game.player.coins);
+//        textX = alignXToRight(value, tailX);
+//        graphics2D.drawString(value, textX, textY);
+//        textY += lineHeight * 2 - (lineHeight / 4);
+//
+//       graphics2D.drawImage(game.player.currentWeapon.icon.getImage(), tailX - game.tileSize, textY - 37, null);
+//       textY += game.tileSize;
+//       graphics2D.drawImage(game.player.currentShield.icon.getImage(), tailX - game.tileSize, textY - 37, null);
     }
     public void drawInventory(Mob mob, boolean cursor) {
         // Frame

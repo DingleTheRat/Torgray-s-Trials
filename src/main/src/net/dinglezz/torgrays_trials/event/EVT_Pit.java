@@ -18,7 +18,7 @@ public class EVT_Pit extends Event {
         Main.game.ui.setCurrentDialogue("Dang it, I feel into a pit!");
 
         // Take some health >:)
-        Main.game.player.damage(1, false);
+        Main.game.player.damage(1);
     }
 
     @Override
