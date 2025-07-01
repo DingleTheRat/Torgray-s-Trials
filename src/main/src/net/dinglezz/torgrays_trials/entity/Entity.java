@@ -11,8 +11,8 @@ import java.io.Serializable;
 
 public abstract class Entity implements Serializable {
     // Images
-    public byte[] image, image2, image3;
-    public byte[] currentImage = image;
+    public Image image, image2, image3;
+    public Image currentImage = image;
 
     // Collision
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
@@ -79,7 +79,7 @@ public abstract class Entity implements Serializable {
     public int getRow() {return (worldY + solidArea.y) / Main.game.tileSize;}
 
     // Sprite Registration
-    public byte[] registerEntitySprite(String imagePath) {
+    public Image registerEntitySprite(String imagePath) {
         BufferedImage image;
         try {
             try {
@@ -93,9 +93,9 @@ public abstract class Entity implements Serializable {
             throw new RuntimeException(exception);
         }
         // Serialize the image to a byte array
-        return UtilityTool.serializeImage(image);
+        return new Image(UtilityTool.serializeImage(image));
     }
-    public byte[] registerEntitySprite(String imagePath, int width, int height) {
+    public Image registerEntitySprite(String imagePath, int width, int height) {
         BufferedImage image;
         try {
             try {
@@ -109,7 +109,7 @@ public abstract class Entity implements Serializable {
             throw new RuntimeException(exception);
         }
         // Serialize the image to a byte array
-        return UtilityTool.serializeImage(image);
+        return new Image(UtilityTool.serializeImage(image));
     }
     public void checkCollision() {
         colliding = false;
@@ -146,7 +146,7 @@ public abstract class Entity implements Serializable {
         if (onScreen) {
             // Draw the entity
             if (currentImage != null) {
-                graphics2D.drawImage(UtilityTool.deserializeImage(currentImage), screenX, screenY, null);
+                graphics2D.drawImage(currentImage.getImage(), screenX, screenY, null);
             }
 
             // Reset alpha to 1.0f

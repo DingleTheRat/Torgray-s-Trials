@@ -434,7 +434,7 @@ public class Player extends Mob implements Serializable {
             }
         }
         if (invincible) changeAlpha(graphics2D, 0.4f);
-        graphics2D.drawImage(UtilityTool.deserializeImage(currentImage), temporaryScreenX, temporaryScreenY, null);
+        graphics2D.drawImage(currentImage.getImage(), temporaryScreenX, temporaryScreenY, null);
         changeAlpha(graphics2D, 1f);
 
          if (Main.game.debugHitBoxes) {

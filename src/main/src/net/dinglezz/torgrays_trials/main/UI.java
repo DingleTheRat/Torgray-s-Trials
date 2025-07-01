@@ -1,6 +1,7 @@
 package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
+import net.dinglezz.torgrays_trials.entity.Image;
 import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.entity.item.Item;
 import net.dinglezz.torgrays_trials.entity.item.Coins;
@@ -10,7 +11,6 @@ import net.dinglezz.torgrays_trials.tile.MapHandler;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class UI {
     Game game;
     Graphics2D graphics2D;
     Font maruMonica;
-    byte[] heart, half_heart, lost_heart, coin;
+    Image heart, half_heart, lost_heart, coin;
     private String currentDialogue = "";
     public int commandNumber = 0;
 
@@ -132,7 +132,7 @@ public class UI {
 
         // Draw max health
         while (i < game.player.maxHealth / 2) {
-            graphics2D.drawImage(UtilityTool.deserializeImage(lost_heart), x, y, null);
+            graphics2D.drawImage(lost_heart.getImage(), x, y, null);
             i++;
             x += game.tileSize;
         }
@@ -144,17 +144,17 @@ public class UI {
 
         // Draw current health
         while (i < game.player.getHealth()) {
-            graphics2D.drawImage(UtilityTool.deserializeImage(half_heart), x, y, null);
+            graphics2D.drawImage(half_heart.getImage(), x, y, null);
             i++;
             if (i < game.player.getHealth()) {
-                graphics2D.drawImage(UtilityTool.deserializeImage(heart), x, y, null);
+                graphics2D.drawImage(heart.getImage(), x, y, null);
             }
             i++;
             x += game.tileSize;
         }
     }
 
-    /// Draws the the messages on the side of your screen
+    /// Draws the messages on the side of your screen
     public void drawMiniNotifications() {
         int messageX = game.tileSize / 2;
         int messageY = game.tileSize * 12 - game.tileSize / 2;
@@ -237,7 +237,7 @@ public class UI {
             // Torgray Image
             x = game.screenWidth / 2 - (game.tileSize * 2) / 2;
             y += game.tileSize + (game.tileSize / 2);
-            graphics2D.drawImage(UtilityTool.deserializeImage(game.player.down1), x, y, game.tileSize * 2, game.tileSize * 2, null);
+            graphics2D.drawImage(game.player.down1.getImage(), x, y, game.tileSize * 2, game.tileSize * 2, null);
 
             // Menu
             graphics2D.setColor(Color.white);
@@ -946,9 +946,9 @@ public class UI {
         graphics2D.drawString(value, textX, textY);
         textY += lineHeight * 2 - (lineHeight / 4);
 
-       graphics2D.drawImage(UtilityTool.deserializeImage(game.player.currentWeapon.icon), tailX - game.tileSize, textY - 37, null);
+       graphics2D.drawImage(game.player.currentWeapon.icon.getImage(), tailX - game.tileSize, textY - 37, null);
        textY += game.tileSize;
-       graphics2D.drawImage(UtilityTool.deserializeImage(game.player.currentShield.icon), tailX - game.tileSize, textY - 37, null);
+       graphics2D.drawImage(game.player.currentShield.icon.getImage(), tailX - game.tileSize, textY - 37, null);
     }
     public void drawInventory(Mob mob, boolean cursor) {
         // Frame
@@ -992,7 +992,7 @@ public class UI {
                 graphics2D.fillRoundRect(slotX, slotY, game.tileSize, game.tileSize, 10, 10);
             }
 
-            graphics2D.drawImage(UtilityTool.deserializeImage(mob.getInventory().get(i).icon), slotX, slotY, null);
+            graphics2D.drawImage(mob.getInventory().get(i).icon.getImage(), slotX, slotY, null);
 
             // Draw Amount
             if (mob.getInventory().get(i).amount > 1) {
@@ -1310,7 +1310,7 @@ public class UI {
             width = (game.tileSize * 2) + (game.tileSize / 2);
             height = game.tileSize;
             drawSubWindow(x, y, width, height);
-            graphics2D.drawImage(UtilityTool.deserializeImage(coin), x + 10, y + 8, 32, 32, null);
+            graphics2D.drawImage(coin.getImage(), x + 10, y + 8, 32, 32, null);
 
             int price = npc.getInventory().get(itemIndex).price;
             String text = String.valueOf(price);
@@ -1355,7 +1355,7 @@ public class UI {
             width = (game.tileSize * 2) + (game.tileSize / 2);
             height = game.tileSize;
             drawSubWindow(x, y, width, height);
-            graphics2D.drawImage(UtilityTool.deserializeImage(coin), x + 10, y + 8, 32, 32, null);
+            graphics2D.drawImage(coin.getImage(), x + 10, y + 8, 32, 32, null);
 
             int price = game.player.getInventory().get(itemIndex).price / 2;
             String text = String.valueOf(price);

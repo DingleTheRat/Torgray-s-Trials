@@ -8,15 +8,14 @@ import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public abstract class Mob extends Entity implements Serializable {
     // Sprites
-    public byte[] up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
-    public byte[] attackUp, attackDown, attackLeft, attackRight;
+    public Image up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
+    public Image attackUp, attackDown, attackLeft, attackRight;
     protected int spriteCounter = 0;
     protected int spriteNumber = 1;
     protected int spriteSpeed = 10;

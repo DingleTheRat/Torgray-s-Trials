@@ -1,19 +1,19 @@
 package net.dinglezz.torgrays_trials.entity.item;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
+import net.dinglezz.torgrays_trials.entity.Image;
 import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public abstract class Item extends Entity implements Serializable {
     // Icon
-    public byte[] icon;
+    public Image icon;
 
     // Collision
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
