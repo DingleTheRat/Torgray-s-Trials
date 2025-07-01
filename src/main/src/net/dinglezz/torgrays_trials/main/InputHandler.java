@@ -74,7 +74,7 @@ public class InputHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                 if (Main.game.ui.commandNumber == 0) {
-                    Main.game.ui.subUIState = "Modes";
+                    Main.game.ui.subUIState = "Difficulties";
                     Main.game.ui.commandNumber = 1;
                 } else if (Main.game.ui.commandNumber == 1) {
                     Main.game.ui.subUIState = "Saves";
@@ -83,7 +83,7 @@ public class InputHandler implements KeyListener {
                     System.exit(0);
                 }
             }
-        } else if (Objects.equals(Main.game.ui.subUIState, "Modes")) {
+        } else if (Objects.equals(Main.game.ui.subUIState, "Difficulties")) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 Main.game.ui.commandNumber--;
                 Sound.playSFX("Cursor");

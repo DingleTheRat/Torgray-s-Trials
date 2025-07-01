@@ -269,12 +269,11 @@ public class UI {
             if (commandNumber == 2) {
                 graphics2D.drawString(">", x - game.tileSize,  y);
             }
-        } else if (Objects.equals(subUIState, "Modes")) {
-            // GameMode Selection
+        } else if (Objects.equals(subUIState, "Difficulties")) {
             graphics2D.setColor(Color.white);
             graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 42f));
 
-            String text = "Select a GameMode";
+            String text = "Select a Difficulty";
             int x = getCentreX(text);
             int y = game.tileSize * 3;
             graphics2D.drawString(text, x, y);
