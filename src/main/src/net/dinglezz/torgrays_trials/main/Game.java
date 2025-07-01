@@ -1,8 +1,8 @@
 package net.dinglezz.torgrays_trials.main;
 
-import net.dinglezz.torgrays_trials.entity.*;
-import net.dinglezz.torgrays_trials.entity.item.Item;
-import net.dinglezz.torgrays_trials.entity.monster.Monster;
+import net.dinglezz.torgrays_trials.entity.Entity;
+import net.dinglezz.torgrays_trials.entity.LootTableHandler;
+import net.dinglezz.torgrays_trials.entity.Player;
 import net.dinglezz.torgrays_trials.environment.EnvironmentManager;
 import net.dinglezz.torgrays_trials.pathfinding.Pathfinder;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
@@ -11,7 +11,6 @@ import net.dinglezz.torgrays_trials.tile.TileManager;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.*;
 
 public class Game extends JPanel implements Runnable {
