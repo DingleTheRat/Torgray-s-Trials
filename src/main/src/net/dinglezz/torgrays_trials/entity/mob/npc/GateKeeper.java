@@ -1,11 +1,10 @@
-package net.dinglezz.torgrays_trials.entity.npc;
+package net.dinglezz.torgrays_trials.entity.mob.npc;
 
-import net.dinglezz.torgrays_trials.entity.Mob;
+import net.dinglezz.torgrays_trials.entity.mob.Mob;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 
-import java.awt.*;
 import java.util.Random;
 
 public class GateKeeper extends Mob {

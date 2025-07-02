@@ -2,7 +2,9 @@ package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.*;
 import net.dinglezz.torgrays_trials.entity.item.Item;
-import net.dinglezz.torgrays_trials.entity.monster.Monster;
+import net.dinglezz.torgrays_trials.entity.mob.Mob;
+import net.dinglezz.torgrays_trials.entity.mob.Player;
+import net.dinglezz.torgrays_trials.entity.mob.monster.Monster;
 import net.dinglezz.torgrays_trials.environment.EnvironmentManager;
 import net.dinglezz.torgrays_trials.pathfinding.Pathfinder;
 import net.dinglezz.torgrays_trials.tile.MapHandler;

@@ -1,4 +1,4 @@
-package net.dinglezz.torgrays_trials.entity.monster;
+package net.dinglezz.torgrays_trials.entity.mob.monster;
 
 import net.dinglezz.torgrays_trials.entity.item.Item;
 import net.dinglezz.torgrays_trials.entity.LootTableHandler;

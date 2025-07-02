@@ -1,6 +1,6 @@
 package net.dinglezz.torgrays_trials.main;
 
-import net.dinglezz.torgrays_trials.entity.Mob;
+import net.dinglezz.torgrays_trials.entity.mob.Mob;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 import org.json.JSONArray;

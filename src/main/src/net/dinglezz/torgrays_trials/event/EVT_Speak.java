@@ -1,6 +1,6 @@
 package net.dinglezz.torgrays_trials.event;
 
-import net.dinglezz.torgrays_trials.entity.Mob;
+import net.dinglezz.torgrays_trials.entity.mob.Mob;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.tile.TilePoint;

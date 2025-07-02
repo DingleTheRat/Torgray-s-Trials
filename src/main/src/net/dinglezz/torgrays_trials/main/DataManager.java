@@ -1,10 +1,10 @@
 package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
-import net.dinglezz.torgrays_trials.entity.Mob;
-import net.dinglezz.torgrays_trials.entity.Player;
+import net.dinglezz.torgrays_trials.entity.mob.Mob;
+import net.dinglezz.torgrays_trials.entity.mob.Player;
 import net.dinglezz.torgrays_trials.entity.item.Item;
-import net.dinglezz.torgrays_trials.entity.monster.Monster;
+import net.dinglezz.torgrays_trials.entity.mob.monster.Monster;
 
 import java.io.*;
 import java.util.ArrayList;

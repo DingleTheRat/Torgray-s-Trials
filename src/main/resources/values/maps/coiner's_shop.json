@@ -7,7 +7,7 @@
   },
   "entities": {
     "npcs": [{
-      "path": "net.dinglezz.torgrays_trials.entity.npc.Coiner",
+      "path": "net.dinglezz.torgrays_trials.entity.mob.npc.Coiner",
       "col": 12,
       "row": 9
     }],

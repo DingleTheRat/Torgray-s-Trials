@@ -1,5 +1,8 @@
-package net.dinglezz.torgrays_trials.entity;
+package net.dinglezz.torgrays_trials.entity.mob;
 
+import net.dinglezz.torgrays_trials.entity.Effect;
+import net.dinglezz.torgrays_trials.entity.Entity;
+import net.dinglezz.torgrays_trials.entity.Image;
 import net.dinglezz.torgrays_trials.entity.item.Item;
 import net.dinglezz.torgrays_trials.main.CollisionChecker;
 import net.dinglezz.torgrays_trials.main.Main;
@@ -14,7 +17,7 @@ import java.util.Objects;
 
 public abstract class Mob extends Entity implements Serializable {
     // Sprites
-    public Image up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
+    public net.dinglezz.torgrays_trials.entity.Image up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
     public Image attackUp, attackDown, attackLeft, attackRight;
     protected int spriteCounter = 0;
     protected int spriteNumber = 1;

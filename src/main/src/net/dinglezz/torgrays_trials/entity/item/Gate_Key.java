@@ -1,7 +1,7 @@
 package net.dinglezz.torgrays_trials.entity.item;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
-import net.dinglezz.torgrays_trials.entity.Mob;
+import net.dinglezz.torgrays_trials.entity.mob.Mob;
 import net.dinglezz.torgrays_trials.main.CollisionChecker;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.Sound;

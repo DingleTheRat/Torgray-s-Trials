@@ -1,6 +1,5 @@
 package net.dinglezz.torgrays_trials.entity.item;
 
-import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.tile.TilePoint;

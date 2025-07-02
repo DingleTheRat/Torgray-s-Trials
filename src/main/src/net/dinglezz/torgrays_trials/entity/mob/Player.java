@@ -1,8 +1,9 @@
-package net.dinglezz.torgrays_trials.entity;
+package net.dinglezz.torgrays_trials.entity.mob;
 
+import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.item.*;
 import net.dinglezz.torgrays_trials.entity.item.light.Lantern;
-import net.dinglezz.torgrays_trials.entity.monster.Monster;
+import net.dinglezz.torgrays_trials.entity.mob.monster.Monster;
 import net.dinglezz.torgrays_trials.event.EventHandler;
 import net.dinglezz.torgrays_trials.main.*;
 import net.dinglezz.torgrays_trials.entity.item.shield.Shield_Iron;
