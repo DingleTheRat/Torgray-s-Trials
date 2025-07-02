@@ -223,6 +223,7 @@ public class Player extends Mob implements Serializable {
                 Sound.playSFX("Swing");
                 Main.game.player.attacking = true;
                 Main.game.player.spriteCounter = 0;
+                attackArea = currentWeapon.attackArea;
             }
 
             // Reset Values
@@ -409,8 +410,12 @@ public class Player extends Mob implements Serializable {
         changeAlpha(graphics2D, 1f);
 
          if (Main.game.debugHitBoxes) {
+             // Solid area
              graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
              graphics2D.fillRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+
+             // Attack area
+             graphics2D.fillRect(screenX + attackArea.x, screenY + attackArea.y, attackArea.width, attackArea.height);
          }
     }
 
