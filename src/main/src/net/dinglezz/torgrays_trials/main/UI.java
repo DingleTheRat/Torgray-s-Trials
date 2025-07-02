@@ -1,6 +1,6 @@
 package net.dinglezz.torgrays_trials.main;
 
-import net.dinglezz.torgrays_trials.entity.Effect;
+import net.dinglezz.torgrays_trials.entity.mob.effects.Effect;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.Image;
 import net.dinglezz.torgrays_trials.entity.mob.Mob;
@@ -54,12 +54,8 @@ public class UI {
     public boolean transitioning = false;
     private boolean fadeBack = false;
 
-    // Effects defaults
-    public int effectIconSize;
-
     public UI(Game game) {
         this.game = game;
-        effectIconSize = (game.tileSize) + (game.tileSize / 4);
 
         try {
             InputStream inputStream = getClass().getResourceAsStream("/font/Maru_Monica.ttf");

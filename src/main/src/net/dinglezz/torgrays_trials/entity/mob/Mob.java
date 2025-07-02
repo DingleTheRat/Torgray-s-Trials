@@ -1,6 +1,6 @@
 package net.dinglezz.torgrays_trials.entity.mob;
 
-import net.dinglezz.torgrays_trials.entity.Effect;
+import net.dinglezz.torgrays_trials.entity.mob.effects.Effect;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.Image;
 import net.dinglezz.torgrays_trials.entity.item.Item;
@@ -150,6 +150,9 @@ public abstract class Mob extends Entity implements Serializable {
                 }
             }
         }
+
+        // Update effects
+        effects.stream().toList().forEach(Effect::update);
     }
 
     @Override

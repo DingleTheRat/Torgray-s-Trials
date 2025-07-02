@@ -3,6 +3,8 @@ package net.dinglezz.torgrays_trials.entity.mob;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.item.*;
 import net.dinglezz.torgrays_trials.entity.item.light.Lantern;
+import net.dinglezz.torgrays_trials.entity.mob.effects.Effect;
+import net.dinglezz.torgrays_trials.entity.mob.effects.TestEffect;
 import net.dinglezz.torgrays_trials.entity.mob.monster.Monster;
 import net.dinglezz.torgrays_trials.event.EventHandler;
 import net.dinglezz.torgrays_trials.main.*;
@@ -15,6 +17,7 @@ import org.json.JSONObject;
 
 import java.awt.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Player extends Mob implements Serializable {
     // Attributes
@@ -46,6 +49,7 @@ public class Player extends Mob implements Serializable {
         getImage();
         getAttackImage();
         setItems();
+        effects.add(new TestEffect(10, this));
     }
 
     public void getImage() {
@@ -237,6 +241,9 @@ public class Player extends Mob implements Serializable {
             inventoryCanceled = false;
             Main.game.inputHandler.interactKeyPressed = false;
         }
+
+        // Update effects
+        effects.stream().toList().forEach(Effect::update);
     }
     public void attack() {
         spriteCounter ++;

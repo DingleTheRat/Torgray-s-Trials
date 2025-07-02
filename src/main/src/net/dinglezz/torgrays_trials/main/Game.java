@@ -4,6 +4,7 @@ import net.dinglezz.torgrays_trials.entity.*;
 import net.dinglezz.torgrays_trials.entity.item.Item;
 import net.dinglezz.torgrays_trials.entity.mob.Mob;
 import net.dinglezz.torgrays_trials.entity.mob.Player;
+import net.dinglezz.torgrays_trials.entity.mob.effects.Effect;
 import net.dinglezz.torgrays_trials.entity.mob.monster.Monster;
 import net.dinglezz.torgrays_trials.environment.EnvironmentManager;
 import net.dinglezz.torgrays_trials.pathfinding.Pathfinder;
@@ -50,7 +51,7 @@ public class Game extends JPanel implements Runnable {
     public boolean debugHitBoxes = false;
 
     // FPS
-    int FPS = 60;
+    public int FPS = 60;
     public long drawStart;
 
     // System
@@ -137,8 +138,6 @@ public class Game extends JPanel implements Runnable {
         inputHandler = new InputHandler();
         environmentManager = new EnvironmentManager(this);
         player = new Player();
-        player.effects.add(new Effect("My cool soup", 10, player.registerEntitySprite("entity/item/soup/torgray_soup", ui.effectIconSize, ui.effectIconSize)));
-        player.effects.add(new Effect("Big Fat Rat", 60, player.registerEntitySprite("entity/item/light/lantern", ui.effectIconSize, ui.effectIconSize)));
     }
     public void adjustDifficulty() {
         if (difficulty.equals("Easy")) {

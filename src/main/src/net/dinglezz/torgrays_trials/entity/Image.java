@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Image implements Serializable {
 	private final byte[] data;
 	private transient BufferedImage image;
-	Image(byte[] data) {
+	public Image(byte[] data) {
 		this.data = data;
 	}
 	public BufferedImage getImage() {
