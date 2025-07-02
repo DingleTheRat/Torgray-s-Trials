@@ -49,7 +49,8 @@ public class Player extends Mob implements Serializable {
         getImage();
         getAttackImage();
         setItems();
-        effects.add(new TestEffect(10, this));
+        addEffect(new TestEffect(5, this));
+        addEffect(new TestEffect(5, this));
     }
 
     public void getImage() {

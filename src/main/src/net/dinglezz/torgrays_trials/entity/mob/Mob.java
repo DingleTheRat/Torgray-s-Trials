@@ -297,6 +297,19 @@ public abstract class Mob extends Entity implements Serializable {
         else alive = false;
     }
 
+    // Effects
+    public void addEffect(Effect effect) {
+        // Check if effect already exists
+        for (Effect existingEffect : effects) {
+            if (existingEffect.name.equals(effect.name)) {
+                existingEffect.time = (existingEffect.time + effect.time);
+                return;
+            }
+        }
+
+        // If not, add the effect
+        effects.add(effect);
+    }
 
     // Inventory
     public ArrayList<Item> getInventory() {

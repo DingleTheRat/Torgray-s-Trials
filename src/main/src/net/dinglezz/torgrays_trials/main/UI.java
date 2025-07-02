@@ -854,7 +854,13 @@ public class UI {
         drawPlayerHealth();
         drawDarknessState();
 
-        // Draw effect frames
+        // When there is no effects to display, there's space for the debug menu
+        if (game.player.effects.isEmpty()) drawDebugMenu();
+
+        // If there is less than 4 effects, there's space for mini notifications
+        if (game.player.effects.size() <= 3) drawMiniNotifications();
+
+        // Draw effect displays
         int frameY = game.tileSize / 2;
 
         for (Effect effect : game.player.effects) {
