@@ -1,12 +1,9 @@
 package net.dinglezz.torgrays_trials.entity;
 
-import net.dinglezz.torgrays_trials.entity.item.Item;
+import net.dinglezz.torgrays_trials.entity.item.*;
 import net.dinglezz.torgrays_trials.entity.monster.Monster;
 import net.dinglezz.torgrays_trials.event.EventHandler;
 import net.dinglezz.torgrays_trials.main.*;
-import net.dinglezz.torgrays_trials.entity.item.Coins;
-import net.dinglezz.torgrays_trials.entity.item.Lantern;
-import net.dinglezz.torgrays_trials.entity.item.ItemTags;
 import net.dinglezz.torgrays_trials.entity.item.shield.Shield_Iron;
 import net.dinglezz.torgrays_trials.entity.item.weapon.Sword_Iron;
 import net.dinglezz.torgrays_trials.tile.MapHandler;
@@ -232,9 +229,7 @@ public class Player extends Mob implements Serializable {
         if (Main.game.inputHandler.interactKeyPressed) {
             checkCollision();
 
-            if (!inventoryCanceled && Main.game.ui.uiState == States.UIStates.JUST_DEFAULT) {
-                Main.game.ui.uiState = States.UIStates.CHARACTER;
-            }
+            if (!inventoryCanceled && Main.game.ui.uiState == States.UIStates.JUST_DEFAULT) Main.game.ui.uiState = States.UIStates.CHARACTER;
 
             // Reset Values
             inventoryCanceled = false;
@@ -246,8 +241,7 @@ public class Player extends Mob implements Serializable {
 
         if (spriteCounter <= 5) {
             spriteNumber = 1;
-        }
-        if (spriteCounter > 5 && spriteCounter <= 25) {
+        } else if (spriteCounter <= 25) {
             spriteNumber = 2;
 
             // Save current worldX, worldY and solidArea

@@ -11,7 +11,7 @@ public class Shield_Amethyst extends Item {
         icon = registerEntitySprite("entity/item/amethyst_shield");
         currentImage = icon;
         defenceValue = 2;
-        description = "A majestic purple shield \nDefence: +" + defenceValue;
+        description = "A majestic purple shield \nDefence: " + defenceValue;
         price = 6;
     }
 }

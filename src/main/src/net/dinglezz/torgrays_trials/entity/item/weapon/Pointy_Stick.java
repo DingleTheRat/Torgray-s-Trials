@@ -16,7 +16,7 @@ public class Pointy_Stick extends Item {
         knockBackPower = 3;
         attackArea.width = 36;
         attackArea.height = 36;
-        description = "Knockback > Damage \nAttack: +" + attackValue + "\nKnockback: +" + knockBackPower;
+        description = "Knockback > Damage \nAttack: " + attackValue + "\nKnockback: " + knockBackPower;
         price = 5;
     }
 }

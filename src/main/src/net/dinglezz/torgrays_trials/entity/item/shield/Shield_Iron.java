@@ -11,7 +11,7 @@ public class Shield_Iron extends Item {
         icon = registerEntitySprite("entity/item/iron_shield");
         currentImage = icon;
         defenceValue = 1;
-        description = "A shiny iron shield \nDefence: +" + defenceValue;
+        description = "A shiny iron shield \nDefence: " + defenceValue;
         price = 4;
     }
 }

@@ -18,13 +18,13 @@ public class Dracore extends Monster {
         speed = defaultSpeed;
         maxHealth = 5;
         heal(maxHealth);
-        attack = 4;
+        attack = 3;
 
         if (Main.game.environmentManager.lighting != null) {
             if (Main.game.environmentManager.lighting.darknessState == States.DarknessStates.GLOOM ||
                     Main.game.environmentManager.lighting.darknessState == States.DarknessStates.LIGHT_GLOOM ||
                     Main.game.environmentManager.lighting.darknessState == States.DarknessStates.DARK_GLOOM) {
-                attack += 1;
+                attack += 2;
                 maxHealth = maxHealth * 5;
                 heal(maxHealth);
             }

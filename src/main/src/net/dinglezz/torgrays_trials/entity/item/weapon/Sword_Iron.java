@@ -15,7 +15,7 @@ public class Sword_Iron extends Item {
         knockBackPower = 1;
         attackArea.width = 36;
         attackArea.height = 36;
-        description = "A shiny iron sword \nAttack: +" + attackValue + "\nKnockback: +" + knockBackPower;
+        description = "A shiny iron sword \nAttack: " + attackValue + "\nKnockback: " + knockBackPower;
         price = 4;
     }
 }

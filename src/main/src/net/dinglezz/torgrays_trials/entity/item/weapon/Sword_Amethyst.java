@@ -16,7 +16,7 @@ public class Sword_Amethyst extends Item {
         knockBackPower = 2;
         attackArea.width = 36;
         attackArea.height = 36;
-        description = "A majestic purple sword \nAttack: +" + attackValue + "\nKnockback: +" + knockBackPower;
+        description = "A majestic purple sword \nAttack: " + attackValue + "\nKnockback: " + knockBackPower;
         price = 6;
     }
 }

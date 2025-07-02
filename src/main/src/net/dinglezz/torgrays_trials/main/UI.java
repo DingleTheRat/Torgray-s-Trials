@@ -1,5 +1,6 @@
 package net.dinglezz.torgrays_trials.main;
 
+import net.dinglezz.torgrays_trials.entity.Effect;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.Image;
 import net.dinglezz.torgrays_trials.entity.Mob;
@@ -53,8 +54,12 @@ public class UI {
     public boolean transitioning = false;
     private boolean fadeBack = false;
 
+    // Effects defaults
+    public int effectIconSize;
+
     public UI(Game game) {
         this.game = game;
+        effectIconSize = (game.tileSize) + (game.tileSize / 4);
 
         try {
             InputStream inputStream = getClass().getResourceAsStream("/font/Maru_Monica.ttf");
@@ -848,106 +853,34 @@ public class UI {
     }
 
     public void drawCharacterScreen() {
-        // Inventory
+        // Draw inventory, health, and darkness state
         drawInventory(game.player, true);
+        drawPlayerHealth();
+        drawDarknessState();
 
-//        // Make a frame
-//        final int frameX = game.tileSize / 2;
-//        final int frameY = game.tileSize / 2;
-//        final int frameWidth = game.tileSize * 6;
-//        final int frameHeight = game.tileSize * 11;
-//        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
-//
-//        // Text
-//        graphics2D.setColor(Color.white);
-//        graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 30f));
-//
-//        int textX = frameX + 20;
-//        int textY = frameY + game.tileSize;
-//        final int lineHeight = 35;
-//
-//        // Titles
-//        graphics2D.drawString("Level", textX, textY);
-//        textY += lineHeight;
-//        graphics2D.drawString("Next Level", textX, textY);
-//        textY += lineHeight;
-//        graphics2D.drawString("Exp", textX, textY);
-//        textY += lineHeight;
-//        graphics2D.drawString("--------", textX, textY);
-//        textY += lineHeight;
-//        graphics2D.drawString("Strength", textX, textY);
-//        textY += lineHeight;
-//        graphics2D.drawString("Dexterity", textX, textY);
-//        textY += lineHeight;
-//        graphics2D.drawString("Attack", textX, textY);
-//        textY += lineHeight;
-//        graphics2D.drawString("Defence", textX, textY);
-//        textY += lineHeight;
-//        graphics2D.drawString("--------", textX, textY);
-//        textY += lineHeight;
-//        graphics2D.drawString("Health", textX, textY);
-//        textY += lineHeight;
-//        graphics2D.drawString("Coins", textX, textY);
-//        textY += lineHeight;
-//        graphics2D.drawString("--------", textX, textY);
-//        textY += lineHeight;
-//        graphics2D.drawString("Weapon", textX, textY);
-//        textY += lineHeight;
-//        graphics2D.drawString("Shield", textX, textY);
-//
-//        // Values
-//        int tailX = (frameX + frameWidth) - 30;
-//        textY = frameY + game.tileSize;
-//        String value;
-//
-//        value = String.valueOf(game.player.level);
-//        textX = alignXToRight(value, tailX);
-//        graphics2D.drawString(value, textX, textY);
-//        textY += lineHeight;
-//
-//        value = String.valueOf(game.player.nextLevelExp);
-//        textX = alignXToRight(value, tailX);
-//        graphics2D.drawString(value, textX, textY);
-//        textY += lineHeight;
-//
-//        value = String.valueOf(game.player.exp);
-//        textX = alignXToRight(value, tailX);
-//        graphics2D.drawString(value, textX, textY);
-//        textY += lineHeight * 2;
-//
-//        value = String.valueOf(game.player.strength);
-//        textX = alignXToRight(value, tailX);
-//        graphics2D.drawString(value, textX, textY);
-//        textY += lineHeight;
-//
-//        value = String.valueOf(game.player.dexterity);
-//        textX = alignXToRight(value, tailX);
-//        graphics2D.drawString(value, textX, textY);
-//        textY += lineHeight;
-//
-//        value = String.valueOf(game.player.attack);
-//        textX = alignXToRight(value, tailX);
-//        graphics2D.drawString(value, textX, textY);
-//        textY += lineHeight;
-//
-//        value = String.valueOf(game.player.defence);
-//        textX = alignXToRight(value, tailX);
-//        graphics2D.drawString(value, textX, textY);
-//        textY += lineHeight * 2;
-//
-//        value = game.player.getHealth() + "/" + game.player.maxHealth;
-//        textX = alignXToRight(value, tailX);
-//        graphics2D.drawString(value, textX, textY);
-//        textY += lineHeight;
-//
-//        value = String.valueOf(game.player.coins);
-//        textX = alignXToRight(value, tailX);
-//        graphics2D.drawString(value, textX, textY);
-//        textY += lineHeight * 2 - (lineHeight / 4);
-//
-//       graphics2D.drawImage(game.player.currentWeapon.icon.getImage(), tailX - game.tileSize, textY - 37, null);
-//       textY += game.tileSize;
-//       graphics2D.drawImage(game.player.currentShield.icon.getImage(), tailX - game.tileSize, textY - 37, null);
+        // Draw effect frames
+        int frameY = game.tileSize / 2;
+
+        for (Effect effect : game.player.effects) {
+            // Frame
+            int frameX = game.tileSize / 2;
+            frameY = frameY + (game.tileSize * 2) + (game.tileSize / 4);
+            int frameWidth = game.tileSize * 6;
+            int frameHeight = game.tileSize * 2;
+            drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+            // Icon
+            graphics2D.drawImage(effect.image.getImage(), frameX + game.tileSize / 3, frameY + (int) (game.tileSize / 2.5), null);
+
+            // Name
+            graphics2D.setFont(graphics2D.getFont().deriveFont(Font.BOLD, 20f));
+            graphics2D.drawString(effect.name, frameX + (game.tileSize * 2) - (game.tileSize / 8), frameY + game.tileSize - (game.tileSize / 4));
+
+            // Time Left
+            graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 38f));
+            String timeString = effect.time / 60 + ":" + String.format("%02d", effect.time % 60);
+            graphics2D.drawString(timeString, frameX + (game.tileSize * 2) - (game.tileSize / 8), frameY + game.tileSize * 2 - (game.tileSize / 2 ));
+        }
     }
     public void drawInventory(Mob mob, boolean cursor) {
         // Frame

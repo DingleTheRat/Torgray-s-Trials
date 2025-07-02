@@ -27,11 +27,11 @@ public abstract class Mob extends Entity implements Serializable {
     // Attributes
     public int defaultSpeed;
     public int speed;
-    public int maxHealth;
     public int coins;
 
     // Health
     private int health;
+    public int maxHealth;
     public boolean alive = true;
     public boolean dying = false;
     public boolean healthBar = false;
@@ -61,6 +61,7 @@ public abstract class Mob extends Entity implements Serializable {
     protected int knockBackCounter = 0;
 
     // Other
+    public ArrayList<Effect> effects = new ArrayList<>();
     public String hitSound = "Receive Damage";
     public String lootTable;
 

@@ -135,6 +135,8 @@ public class Game extends JPanel implements Runnable {
         inputHandler = new InputHandler();
         environmentManager = new EnvironmentManager(this);
         player = new Player();
+        player.effects.add(new Effect("My cool soup", 10, player.registerEntitySprite("entity/item/torgray_soup", ui.effectIconSize, ui.effectIconSize)));
+        player.effects.add(new Effect("Big Fat Rat", 60, player.registerEntitySprite("entity/item/lantern", ui.effectIconSize, ui.effectIconSize)));
     }
     public void adjustDifficulty() {
         if (difficulty.equals("Easy")) {

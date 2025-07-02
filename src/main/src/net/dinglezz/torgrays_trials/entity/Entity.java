@@ -145,9 +145,7 @@ public abstract class Entity implements Serializable {
 
         if (onScreen) {
             // Draw the entity
-            if (currentImage != null) {
-                graphics2D.drawImage(currentImage.getImage(), screenX, screenY, null);
-            }
+            if (currentImage != null) graphics2D.drawImage(currentImage.getImage(), screenX, screenY, null);
 
             // Reset alpha to 1.0f
             changeAlpha(graphics2D, 1f);

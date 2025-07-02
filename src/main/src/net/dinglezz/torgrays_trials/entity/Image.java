@@ -12,9 +12,7 @@ public class Image implements Serializable {
 		this.data = data;
 	}
 	public BufferedImage getImage() {
-		if (image == null) {
-			image = UtilityTool.deserializeImage(data);
-		}
+		if (image == null) image = UtilityTool.deserializeImage(data);
 		return image;
 	}
 }
