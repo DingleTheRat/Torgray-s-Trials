@@ -1,6 +1,7 @@
 package net.dinglezz.torgrays_trials.entity;
 
 import net.dinglezz.torgrays_trials.entity.item.*;
+import net.dinglezz.torgrays_trials.entity.item.light.Lantern;
 import net.dinglezz.torgrays_trials.entity.monster.Monster;
 import net.dinglezz.torgrays_trials.event.EventHandler;
 import net.dinglezz.torgrays_trials.main.*;

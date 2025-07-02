@@ -8,7 +8,7 @@ public class Shield_Iron extends Item {
     public Shield_Iron(TilePoint tilePoint) {
         super("Iron Shield", tilePoint);
         tags.add(ItemTags.TAG_SHIELD);
-        icon = registerEntitySprite("entity/item/iron_shield");
+        icon = registerEntitySprite("entity/item/shield/iron_shield");
         currentImage = icon;
         defenceValue = 1;
         description = "A shiny iron shield \nDefence: " + defenceValue;

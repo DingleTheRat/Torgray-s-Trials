@@ -5,7 +5,7 @@ import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.entity.item.Gate_Key;
 import net.dinglezz.torgrays_trials.entity.item.World_Map;
-import net.dinglezz.torgrays_trials.entity.item.Torgray_Soup;
+import net.dinglezz.torgrays_trials.entity.item.soup.Torgray_Soup;
 import net.dinglezz.torgrays_trials.entity.item.weapon.Stick;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 

@@ -8,7 +8,7 @@ public class Stick extends Item {
     public Stick(TilePoint tilePoint) {
         super("Stick", tilePoint);
         tags.add(ItemTags.TAG_WEAPON);
-        icon = registerEntitySprite("entity/item/stick");
+        icon = registerEntitySprite("entity/item/weapon/stick");
         currentImage = icon;
         knockBackPower = 5;
         attackArea.width = 36;

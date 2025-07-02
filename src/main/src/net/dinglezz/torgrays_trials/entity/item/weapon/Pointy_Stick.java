@@ -10,7 +10,7 @@ public class Pointy_Stick extends Item {
 
         name = "Stick";
         tags.add(ItemTags.TAG_WEAPON);
-        icon = registerEntitySprite("entity/item/pointy_stick");
+        icon = registerEntitySprite("entity/item/weapon/pointy_stick");
         currentImage = icon;
         attackValue = 1;
         knockBackPower = 3;

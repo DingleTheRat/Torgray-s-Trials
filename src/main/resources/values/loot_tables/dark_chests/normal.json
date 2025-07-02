@@ -7,7 +7,7 @@
       "loot": [{
         "amount": 1,
         "chance": 1,
-        "item": "net.dinglezz.torgrays_trials.entity.item.Torgray_Soup"
+        "item": "net.dinglezz.torgrays_trials.entity.item.soup.Torgray_Soup"
       }]
     },
     {

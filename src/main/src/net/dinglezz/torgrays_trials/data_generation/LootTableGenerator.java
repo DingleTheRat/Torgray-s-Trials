@@ -4,7 +4,7 @@ import com.ususstudios.torgrays_datagen.DataGenerationException;
 import com.ususstudios.torgrays_datagen.dataclasses.LootTableItem;
 import com.ususstudios.torgrays_datagen.dataclasses.SpecialLootTableItem;
 import net.dinglezz.torgrays_trials.entity.item.Coins;
-import net.dinglezz.torgrays_trials.entity.item.Torgray_Soup;
+import net.dinglezz.torgrays_trials.entity.item.soup.Torgray_Soup;
 import net.dinglezz.torgrays_trials.entity.item.shield.Shield_Amethyst;
 import net.dinglezz.torgrays_trials.entity.item.weapon.Stick;
 import net.dinglezz.torgrays_trials.entity.item.weapon.Sword_Amethyst;

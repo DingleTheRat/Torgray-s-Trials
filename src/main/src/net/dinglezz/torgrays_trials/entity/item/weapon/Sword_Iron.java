@@ -9,7 +9,7 @@ public class Sword_Iron extends Item {
         super("Iron Sword", tilePoint);
 
         tags.add(ItemTags.TAG_WEAPON);
-        icon = registerEntitySprite("entity/item/iron_sword");
+        icon = registerEntitySprite("entity/item/weapon/iron_sword");
         currentImage = icon;
         attackValue = 1;
         knockBackPower = 1;

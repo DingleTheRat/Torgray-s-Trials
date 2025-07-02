@@ -10,7 +10,7 @@ public class Sword_Amethyst extends Item {
 
         name = "Amethyst Sword";
         tags.add(ItemTags.TAG_WEAPON);
-        icon = registerEntitySprite("entity/item/amethyst_sword");
+        icon = registerEntitySprite("entity/item/weapon/amethyst_sword");
         currentImage = icon;
         attackValue = 2;
         knockBackPower = 2;

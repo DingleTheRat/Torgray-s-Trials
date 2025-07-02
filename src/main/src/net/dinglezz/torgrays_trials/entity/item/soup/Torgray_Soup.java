@@ -1,6 +1,8 @@
-package net.dinglezz.torgrays_trials.entity.item;
+package net.dinglezz.torgrays_trials.entity.item.soup;
 
 import net.dinglezz.torgrays_trials.entity.Mob;
+import net.dinglezz.torgrays_trials.entity.item.Item;
+import net.dinglezz.torgrays_trials.entity.item.ItemTags;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
@@ -14,7 +16,7 @@ public class Torgray_Soup extends Item {
         super("Torgray's Soup", tilePoint);
 
         tags.add(ItemTags.TAG_CONSUMABLE);
-        icon = registerEntitySprite("entity/item/torgray_soup");
+        icon = registerEntitySprite("entity/item/soup/torgray_soup");
         currentImage = icon;
         description = "Torgray's wisest soup. \nIt's warm and a bit hearty. \nHealing: +4";
         maxStack = 12;
