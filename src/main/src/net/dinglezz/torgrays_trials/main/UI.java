@@ -1,9 +1,9 @@
 package net.dinglezz.torgrays_trials.main;
 
-import net.dinglezz.torgrays_trials.entity.mob.effects.Effect;
+import net.dinglezz.torgrays_trials.effects.Effect;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.Image;
-import net.dinglezz.torgrays_trials.entity.mob.Mob;
+import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.entity.item.Item;
 import net.dinglezz.torgrays_trials.entity.item.Coins;
 import net.dinglezz.torgrays_trials.entity.object.Heart;

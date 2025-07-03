@@ -9,9 +9,9 @@ import net.dinglezz.torgrays_trials.event.EVT_Healing_Pond;
 import net.dinglezz.torgrays_trials.event.EVT_Pit;
 import net.dinglezz.torgrays_trials.event.EVT_Speak;
 import net.dinglezz.torgrays_trials.event.EVT_Teleport;
-import net.dinglezz.torgrays_trials.entity.mob.monster.Dracore;
-import net.dinglezz.torgrays_trials.entity.mob.npc.Coiner;
-import net.dinglezz.torgrays_trials.entity.mob.npc.GateKeeper;
+import net.dinglezz.torgrays_trials.entity.monster.Dracore;
+import net.dinglezz.torgrays_trials.entity.npc.Coiner;
+import net.dinglezz.torgrays_trials.entity.npc.GateKeeper;
 
 import java.util.HashMap;
 

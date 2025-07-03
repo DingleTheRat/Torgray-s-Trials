@@ -1,7 +1,7 @@
 package net.dinglezz.torgrays_trials.main;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
-import net.dinglezz.torgrays_trials.entity.mob.Mob;
+import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.tile.TileManager;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 

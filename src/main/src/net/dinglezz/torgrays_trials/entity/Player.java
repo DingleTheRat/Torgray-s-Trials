@@ -1,11 +1,10 @@
-package net.dinglezz.torgrays_trials.entity.mob;
+package net.dinglezz.torgrays_trials.entity;
 
-import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.item.*;
 import net.dinglezz.torgrays_trials.entity.item.light.Lantern;
 import net.dinglezz.torgrays_trials.entity.item.soup.Coiner_Soup;
-import net.dinglezz.torgrays_trials.entity.mob.effects.Effect;
-import net.dinglezz.torgrays_trials.entity.mob.monster.Monster;
+import net.dinglezz.torgrays_trials.effects.Effect;
+import net.dinglezz.torgrays_trials.entity.monster.Monster;
 import net.dinglezz.torgrays_trials.event.EventHandler;
 import net.dinglezz.torgrays_trials.main.*;
 import net.dinglezz.torgrays_trials.entity.item.shield.Shield_Iron;

@@ -1,6 +1,6 @@
-package net.dinglezz.torgrays_trials.entity.mob.monster;
+package net.dinglezz.torgrays_trials.entity.monster;
 
-import net.dinglezz.torgrays_trials.entity.mob.Mob;
+import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 

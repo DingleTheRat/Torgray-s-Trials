@@ -1,6 +1,6 @@
 package net.dinglezz.torgrays_trials.entity.item.soup;
 
-import net.dinglezz.torgrays_trials.entity.mob.Mob;
+import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.entity.item.Item;
 import net.dinglezz.torgrays_trials.entity.item.ItemTags;
 import net.dinglezz.torgrays_trials.main.Main;
