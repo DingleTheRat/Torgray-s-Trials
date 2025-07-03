@@ -16,7 +16,7 @@ public class Torgray_Soup extends Item {
         super("Torgray's Soup", tilePoint);
 
         tags.add(ItemTags.TAG_CONSUMABLE);
-        icon = registerEntitySprite("entity/item/soup/torgray_soup");
+        icon = registerEntitySprite("entity/item/soup/torgray's_soup");
         currentImage = icon;
         description = "Torgray's wisest soup. \nIt's warm and a bit hearty. \nHealing: +4";
         maxStack = 12;
@@ -42,7 +42,7 @@ public class Torgray_Soup extends Item {
         });
 
         Main.game.player.heal(4);
-        Main.game.player.generateParticles(this, Main.game.player);
+        generateParticles(Main.game.player, Main.game.player);
         Sound.playSFX("Power Up");
         return true;
     }
