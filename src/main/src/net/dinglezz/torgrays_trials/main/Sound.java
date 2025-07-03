@@ -111,7 +111,7 @@ public class Sound {
         stopMusic();
         JSONObject currentMapFile = MapHandler.mapFiles.get(Main.game.currentMap);
         
-        if (currentMapFile.getString("music").equals("Default")) {
+        if (currentMapFile.getString("music").equals("default")) {
             playMusic(
                 switch (darknessState) {
                     case DUSK -> "Umbral Force";
