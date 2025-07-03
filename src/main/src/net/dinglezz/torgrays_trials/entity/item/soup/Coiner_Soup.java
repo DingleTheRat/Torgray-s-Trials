@@ -1,5 +1,6 @@
 package net.dinglezz.torgrays_trials.entity.item.soup;
 
+import net.dinglezz.torgrays_trials.effects.GenerousCoins;
 import net.dinglezz.torgrays_trials.entity.item.Item;
 import net.dinglezz.torgrays_trials.entity.item.ItemTags;
 import net.dinglezz.torgrays_trials.entity.Mob;
@@ -9,6 +10,7 @@ import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Coiner_Soup extends Item {
     public Coiner_Soup(TilePoint tilePoint) {
@@ -24,7 +26,12 @@ public class Coiner_Soup extends Item {
 
     @Override
     public boolean use(Mob mob) {
+        // Effects
         Main.game.player.addEffect(new Cuteness(30, Main.game.player));
+        // (60% chance to apply GenerousCoins effect cuz it's too OP)
+        int random = new Random().nextInt(100) + 1;
+        if (random <= 60) Main.game.player.addEffect(new GenerousCoins(15, Main.game.player));
+
         generateParticles(this, Main.game.player);
         Sound.playSFX("Power Up");
         return true;

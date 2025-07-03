@@ -8,17 +8,13 @@ public class Coins extends Item {
     public Coins(TilePoint tilePoint, int amount) {
         super("Coins", tilePoint);
         this.amount = amount;
-
-        maxStack = 2;
-        tags.add(ItemTags.TAG_PICKUP_ONLY);
-        tags.add(ItemTags.TAG_NON_SELLABLE);
-        icon = registerEntitySprite("entity/item/coin");
-        currentImage = icon;
-        description = "Precious pieces of gold";
-        price = 1;
+        setDefaultValues();
     }
     public Coins(TilePoint tilePoint) {
         super("Coins", tilePoint);
+        setDefaultValues();
+    }
+    private void setDefaultValues() {
         maxStack = 2;
         tags.add(ItemTags.TAG_PICKUP_ONLY);
         tags.add(ItemTags.TAG_NON_SELLABLE);
@@ -26,10 +22,15 @@ public class Coins extends Item {
         currentImage = icon;
         description = "Precious pieces of gold";
         price = 1;
+
+        // Increase the amount of coins if the "Generous Coins" effect is active
+        if (Main.game.player != null && Main.game.player.hasEffect("Generous Coins")) amount = amount * 2;
     }
 
     @Override
     public void onPlayerHit() {
+        setDefaultValues();
+
         Main.game.player.coins += amount;
         Sound.playSFX("Coin");
 

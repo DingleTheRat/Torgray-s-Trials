@@ -296,6 +296,17 @@ public abstract class Mob extends Entity implements Serializable {
     }
 
     // Effects
+    public boolean hasEffect(String effectName) {
+        // Check if the mob has the effect
+        for (Effect effect : effects) {
+            if (effect.name.equals(effectName)) {
+                // If it does, return true
+                return true;
+            }
+        }
+        // If not, return false
+        return false;
+    }
     public void addEffect(Effect effect) {
         // Check if effect already exists
         for (Effect existingEffect : effects) {
@@ -307,6 +318,17 @@ public abstract class Mob extends Entity implements Serializable {
 
         // If not, add the effect
         effects.add(effect);
+    }
+    public Effect getEffect(String effectName) {
+        // Check if the mob has the effect
+        for (Effect effect : effects) {
+            if (effect.name.equals(effectName)) {
+                // If it does, return it
+                return effect;
+            }
+        }
+        // If not, return null
+        return null;
     }
 
     // Inventory
