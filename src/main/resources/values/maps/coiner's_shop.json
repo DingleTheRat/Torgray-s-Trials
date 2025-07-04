@@ -23,7 +23,13 @@
         "path": "net.dinglezz.torgrays_trials.entity.object.Dark_Chest",
         "col": 10,
         "row": 9,
-        "loot table": "Normal Dark Chest"
+        "loot table": "Coiner's Dark Chest"
+      },
+      {
+        "path": "net.dinglezz.torgrays_trials.entity.object.Dark_Chest",
+        "col": 14,
+        "row": 9,
+        "loot table": "Coiner's Dark Chest"
       }
     ]
   },

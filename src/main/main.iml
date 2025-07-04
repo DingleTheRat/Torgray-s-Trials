@@ -11,5 +11,6 @@
     <orderEntry type="library" name="org.json-1.6-20240205" level="project" />
     <orderEntry type="library" name="gradle-api-8.12.jar" level="project" />
     <orderEntry type="library" name="Gradle: com.github.UsUsStudios:Torgrays-Datagen:v0.15" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.UsUsStudios:Torgrays-Datagen:v1.0" level="project" />
   </component>
 </module>

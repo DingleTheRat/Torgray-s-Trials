@@ -94,7 +94,7 @@ public class LootTableHandler {
                                 return finalLoot;
                             }
                         }
-                        if (totalChance != 1f) {
+                        if (Math.abs(totalChance - 1f) > 1e-6) {
                             System.err.println("Loot items chances do not add up to 1f in " + singleSelectLoot + " in loot table by the name of '" + lootTable.getString("name") + "'");
                             return finalLoot;
                         }

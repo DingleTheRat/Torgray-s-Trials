@@ -112,7 +112,6 @@ public class Player extends Mob implements Serializable {
         giveItem(currentWeapon);
         giveItem(currentShield);
         giveItem(currentLight);
-        giveItem(new Coiner_Soup(null));
     }
 
     @Override
