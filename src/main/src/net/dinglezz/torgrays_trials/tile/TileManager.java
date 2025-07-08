@@ -65,14 +65,19 @@ public class TileManager {
             registerTile(40, "planks", true);
 
             // Tree
-            registerTile(41, "tree", true);
+            registerTile(41, "tree/tree", true);
 
             // Event Tiles
             registerTile(42, "path/path_pit", false);
             registerTile(43, "grass/grass_pit", false);
             registerTile(44, "grass/grass_healing", false);
-
             registerTile(45, "coiner's_hut", false);
+
+            // Dark Tiles
+            registerTile(46, "tree/dark_tree", true);
+            registerTile(47, "grass/dark_grass", false);
+
+            registerTile(48, "tunnel_door", true);
     }
     public static void registerTile(int i, String imageName, boolean collision) {
         try {
