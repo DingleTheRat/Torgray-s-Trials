@@ -85,6 +85,7 @@ public class Player extends Mob implements Serializable {
         // Player Stats
         level = 1;
         maxHealth = 12;
+        invincibilityTime = 60;
         heal(maxHealth);
         dying = false;
         exp = 0;
@@ -198,8 +199,8 @@ public class Player extends Mob implements Serializable {
             }
         }
         if (invincible) {
-            invincibilityCounter++;
-            if (invincibilityCounter > 60) {
+            invincibilityCounter--;
+            if (invincibilityCounter <= 0) {
                 invincible = false;
                 invincibilityCounter = 0;
             }

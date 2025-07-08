@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public abstract class Mob extends Entity implements Serializable {
     // Sprites
-    public net.dinglezz.torgrays_trials.entity.Image up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
+    public Image up1, up2, up3, down1, down2, down3, left1, left2, left3, right1, right2, right3;
     public Image attackUp, attackDown, attackLeft, attackRight;
     protected int spriteCounter = 0;
     protected int spriteNumber = 1;
@@ -48,18 +48,21 @@ public abstract class Mob extends Entity implements Serializable {
     public Item currentShield;
     public Item currentLight;
 
-    // States
-    public boolean invincible = false;
+    // State
     public boolean attacking = false;
     public boolean onPath = false;
     public boolean knockBack = false;
 
     // Counters
-    protected int actionLockCounter = 0;
-    protected int invincibilityCounter = 0;
+    protected int actionLockCounter = 0;;
     protected int dyingCounter = 0;
     protected int healthBarCounter = 0;
     protected int knockBackCounter = 0;
+
+    // Invincibility
+    public boolean invincible = false;
+    protected int invincibilityCounter = 0;
+    protected int invincibilityTime = 40;
 
     // Other
     public ArrayList<Effect> effects = new ArrayList<>();
@@ -141,8 +144,8 @@ public abstract class Mob extends Entity implements Serializable {
             }
 
             if (invincible) {
-                invincibilityCounter++;
-                if (invincibilityCounter > 40) {
+                invincibilityCounter--;
+                if (invincibilityCounter <= 0) {
                     invincible = false;
                     invincibilityCounter = 0;
                 }
@@ -236,6 +239,7 @@ public abstract class Mob extends Entity implements Serializable {
         if (!invincible && !dying) {
             // Enable invincibility
             invincible = true;
+            invincibilityCounter = invincibilityTime;
 
             // Ensure that the damage is not negative
             if (damage < 0) damage = 0;
