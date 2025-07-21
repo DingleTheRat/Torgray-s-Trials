@@ -343,18 +343,12 @@ public abstract class Mob extends Entity implements Serializable {
         inventory.clear();
     }
     public void removeItem(int index) {
-        if (inventory.get(index).amount == 1) {
-            inventory.remove(index);
-        } else {
-            inventory.get(index).amount--;
-        }
+        if (inventory.get(index).amount == 1) inventory.remove(index);
+        else inventory.get(index).amount--;
     }
     public void removeItem(Item item) {
-        if (item.amount == 1) {
-            inventory.remove(item);
-        } else {
-            item.amount--;
-        }
+        if (item.amount == 1) inventory.remove(item);
+        else item.amount--;
     }
     public boolean giveItem(Item item) {
         boolean canObtain = false;
@@ -395,6 +389,9 @@ public abstract class Mob extends Entity implements Serializable {
     public void damageReaction() {}
     public void checkDrop() {}
     public void speak(boolean facePlayer) {
+        // Make sure it shows the dialogue
+        Main.game.ui.uiState = States.UIStates.DIALOGUE;
+
         // If the dialogues finish, restart and exit
         if (dialogueIndex >= dialogues.size()) {
             dialogueIndex = 0;

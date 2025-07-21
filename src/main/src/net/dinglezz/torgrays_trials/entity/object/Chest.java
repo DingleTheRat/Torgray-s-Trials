@@ -28,6 +28,7 @@ public class Chest extends Entity implements Serializable {
         image2 = registerEntitySprite("entity/object/chest/opened");
         currentImage = image;
         collision = true;
+        interactPrompt = true;
     }
 
     @Override
@@ -55,6 +56,7 @@ public class Chest extends Entity implements Serializable {
             Main.game.ui.setCurrentDialogue(stringBuilder.toString());
             currentImage = image2;
             opened = true;
+            interactPrompt = false;
         }
     }
 

@@ -141,8 +141,20 @@ public class Player extends Mob implements Serializable {
         Monster collidingMonster = CollisionChecker.checkEntity(this, Main.game.monsters.get(Main.game.currentMap));
         if (collidingMonster != null) collidingMonster.onPlayerHit();
         if (collidingMonster != null && Main.game.inputHandler.interactKeyPressed) collidingMonster.onInteract();
-
         contactMonster(collidingMonster);
+
+        // If any of the above have interactPrompt enabled we show it
+        boolean promptShown = false;
+        if (Main.game.ui.uiState == States.UIStates.JUST_DEFAULT) {
+            if (collidingObject != null && collidingObject.interactPrompt) {Main.game.ui.uiState = States.UIStates.INTERACT; promptShown = true;}
+            if (collidingItem != null && collidingItem.interactPrompt) {Main.game.ui.uiState = States.UIStates.INTERACT; promptShown = true;}
+            if (collidingNPC != null && collidingNPC.interactPrompt) {Main.game.ui.uiState = States.UIStates.INTERACT; promptShown = true;}
+            if (collidingMonster != null && collidingMonster.interactPrompt) {Main.game.ui.uiState = States.UIStates.INTERACT; promptShown = true;}
+        }
+
+        //If no prompt was shown, and the ui state is INTERACT, that means the prompt no longer needs to be shown
+        if (!promptShown && Main.game.ui.uiState == States.UIStates.INTERACT) Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
+
 
         // Check if the player is on an event
         EventHandler.checkEvents();

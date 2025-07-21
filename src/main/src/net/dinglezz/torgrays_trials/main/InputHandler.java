@@ -243,12 +243,8 @@ public class InputHandler implements KeyListener {
         }
     }
     public void characterState(int code) {
-        if (code == KeyEvent.VK_E || code == KeyEvent.VK_ESCAPE) {
-            Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
-        }
-        if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {
-            Main.game.player.selectItem();
-        }
+        if (code == KeyEvent.VK_E || code == KeyEvent.VK_ESCAPE) Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
+        if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) Main.game.player.selectItem();
         playerInventory(code);
     }
     public void playerInventory(int code) {

@@ -10,13 +10,13 @@ import org.json.JSONObject;
 import java.awt.*;
 import java.util.Objects;
 
-public class EVT_Teleport extends Event {
+public class Teleport extends Event {
     public static String nextMap;
     public static int nextCol;
     public static int nextRow;
     public static String nextDirection;
 
-    public EVT_Teleport(TilePoint tilePoint, JSONObject parameters) {
+    public Teleport(TilePoint tilePoint, JSONObject parameters) {
         super(tilePoint, parameters);
     }
 
@@ -44,16 +44,16 @@ public class EVT_Teleport extends Event {
             Main.game.ui.setTransitionSettings(Color.BLACK, 0.02f, 0.02f);
 
             Main.game.ui.transitionAction = () -> {
-                Main.game.currentMap = EVT_Teleport.nextMap;
+                Main.game.currentMap = Teleport.nextMap;
 
                 // Set player position
-                if (EVT_Teleport.nextCol == Integer.MIN_VALUE || EVT_Teleport.nextRow == Integer.MIN_VALUE) {
+                if (Teleport.nextCol == Integer.MIN_VALUE || Teleport.nextRow == Integer.MIN_VALUE) {
                     Main.game.player.setDefaultPosition();
                 } else {
-                    Main.game.player.worldX = EVT_Teleport.nextCol;
-                    Main.game.player.worldY = EVT_Teleport.nextRow;
+                    Main.game.player.worldX = Teleport.nextCol;
+                    Main.game.player.worldY = Teleport.nextRow;
                 }
-                Main.game.player.direction = EVT_Teleport.nextDirection;
+                Main.game.player.direction = Teleport.nextDirection;
                 Main.game.environmentManager.lightUpdated = true;
 
                 // Save game (if a slot is selected)

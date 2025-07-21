@@ -253,47 +253,47 @@
   },
   "events": [
     {
-      "path": "net.dinglezz.torgrays_trials.event.EVT_Pit",
+      "path": "net.dinglezz.torgrays_trials.event.Pit",
       "col": 23,
       "row": 19
     },
     {
-      "path": "net.dinglezz.torgrays_trials.event.EVT_Pit",
+      "path": "net.dinglezz.torgrays_trials.event.Pit",
       "col": 22,
       "row": 40
     },
     {
-      "path": "net.dinglezz.torgrays_trials.event.EVT_Pit",
+      "path": "net.dinglezz.torgrays_trials.event.Pit",
       "col": 14,
       "row": 26
     },
     {
-      "path": "net.dinglezz.torgrays_trials.event.EVT_Pit",
+      "path": "net.dinglezz.torgrays_trials.event.Pit",
       "col": 36,
       "row": 9
     },
     {
-      "path": "net.dinglezz.torgrays_trials.event.EVT_Pit",
+      "path": "net.dinglezz.torgrays_trials.event.Pit",
       "col": 37,
       "row": 34
     },
     {
-      "path": "net.dinglezz.torgrays_trials.event.EVT_Pit",
+      "path": "net.dinglezz.torgrays_trials.event.Pit",
       "col": 35,
       "row": 38
     },
     {
-      "path": "net.dinglezz.torgrays_trials.event.EVT_Pit",
+      "path": "net.dinglezz.torgrays_trials.event.Pit",
       "col": 9,
       "row": 30
     },
     {
-      "path": "net.dinglezz.torgrays_trials.event.EVT_Healing_Pond",
+      "path": "net.dinglezz.torgrays_trials.event.Healing_Pond",
       "col": 23,
       "row": 12
     },
     {
-      "path": "net.dinglezz.torgrays_trials.event.EVT_Teleport",
+      "path": "net.dinglezz.torgrays_trials.event.Teleport",
       "col": 10,
       "row": 39,
       "parameters": {

@@ -29,6 +29,7 @@ public abstract class Entity implements Serializable {
     public String name;
     public boolean updateOffScreen = false;
     public boolean onScreen = false;
+    public boolean interactPrompt = false;
 
     public Entity(String name, TilePoint tilePoint) {
         this.name = name;
@@ -115,7 +116,7 @@ public abstract class Entity implements Serializable {
         colliding = false;
         contactPlayer = false;
 
-        // Check objects collision
+        // Check for other entities
         CollisionChecker.checkEntity(this, Main.game.objects.get(Main.game.currentMap));
 
         // Check player collision

@@ -12,6 +12,7 @@ public class GateKeeper extends Mob {
         super("Gate Keeper", tilePoint);
         direction = "down";
         speed = 1;
+        interactPrompt = true;
 
         // Solid Area
         solidArea.x = 8;
@@ -61,15 +62,11 @@ public class GateKeeper extends Mob {
             if (actionLockCounter == 120) {
                 int random = new Random().nextInt(100);
 
-                if (random <= 25) {
-                    direction = "up";
-                } else if (random <= 50) {
-                    direction = "down";
-                } else if ( random <= 75) {
-                    direction = "left";
-                } else {
-                    direction = "right";
-                }
+                if (random <= 25) direction = "up";
+                else if (random <= 50) direction = "down";
+                else if ( random <= 75) direction = "left";
+                else direction = "right";
+
                 actionLockCounter = 0;
             }
         }
@@ -85,7 +82,6 @@ public class GateKeeper extends Mob {
     @Override
     public void onInteract() {
         Main.game.player.cancelInventory();
-        Main.game.ui.uiState = States.UIStates.DIALOGUE;
-        speak(false);
+        speak(true);
     }
 }

@@ -1182,6 +1182,7 @@ public class UI {
         game.inputHandler.spacePressed = false;
     }
     public void drawTradeSelectScreen() {
+        drawBasics();
         drawDialogueScreen();
 
         // Draw Window
@@ -1268,6 +1269,8 @@ public class UI {
         }
     }
     public void drawTradeSellScreen() {
+        drawBasics();
+
         // Inventory
         drawInventory(game.player, true);
 

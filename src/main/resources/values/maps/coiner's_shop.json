@@ -158,7 +158,7 @@
   },
   "events": [
     {
-      "path": "net.dinglezz.torgrays_trials.event.EVT_Teleport",
+      "path": "net.dinglezz.torgrays_trials.event.Teleport",
       "col": 12,
       "row": 13,
       "parameters": {
@@ -170,7 +170,7 @@
       }
     },
     {
-      "path": "net.dinglezz.torgrays_trials.event.EVT_Speak",
+      "path": "net.dinglezz.torgrays_trials.event.Speak",
       "col": 12,
       "row": 11,
       "parameters": {

@@ -6,8 +6,8 @@ import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 import org.json.JSONObject;
 
-public class EVT_Speak extends Event {
-    public EVT_Speak(TilePoint tilePoint, JSONObject parameters) {
+public class Speak extends Event {
+    public Speak(TilePoint tilePoint, JSONObject parameters) {
         super(tilePoint, parameters);
     }
 

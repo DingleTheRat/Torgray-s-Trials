@@ -15,6 +15,7 @@ public class Coiner extends Mob {
         direction = "down";
         speed = 1;
         spriteSpeed = 80;
+        interactPrompt = true;
 
         // Solid Area
         solidArea.x = 8;
@@ -55,7 +56,6 @@ public class Coiner extends Mob {
     @Override
     public void onInteract() {
         Main.game.player.cancelInventory();
-        Main.game.ui.uiState = States.UIStates.DIALOGUE;
         speak(false);
     }
 }

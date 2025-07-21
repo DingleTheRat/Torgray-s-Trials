@@ -5,10 +5,10 @@ import com.ususstudios.torgrays_datagen.dataclasses.Event;
 import net.dinglezz.torgrays_trials.entity.item.Gate_Key;
 import net.dinglezz.torgrays_trials.entity.object.Chest;
 import net.dinglezz.torgrays_trials.entity.object.*;
-import net.dinglezz.torgrays_trials.event.EVT_Healing_Pond;
-import net.dinglezz.torgrays_trials.event.EVT_Pit;
-import net.dinglezz.torgrays_trials.event.EVT_Speak;
-import net.dinglezz.torgrays_trials.event.EVT_Teleport;
+import net.dinglezz.torgrays_trials.event.Healing_Pond;
+import net.dinglezz.torgrays_trials.event.Pit;
+import net.dinglezz.torgrays_trials.event.Speak;
+import net.dinglezz.torgrays_trials.event.Teleport;
 import net.dinglezz.torgrays_trials.entity.monster.Dracore;
 import net.dinglezz.torgrays_trials.entity.npc.Coiner;
 import net.dinglezz.torgrays_trials.entity.npc.GateKeeper;
@@ -170,17 +170,17 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 						new Entity(Gate_Key.class, 38, 8, null)
 				},
 				new Event[]{
-						new Event(EVT_Pit.class, 23, 19),
-						new Event(EVT_Pit.class, 22, 40),
-						new Event(EVT_Pit.class, 14, 26),
-						new Event(EVT_Pit.class, 36, 9),
-						new Event(EVT_Pit.class, 37, 34),
-						new Event(EVT_Pit.class, 35, 38),
-						new Event(EVT_Pit.class, 9, 30),
+						new Event(Pit.class, 23, 19),
+						new Event(Pit.class, 22, 40),
+						new Event(Pit.class, 14, 26),
+						new Event(Pit.class, 36, 9),
+						new Event(Pit.class, 37, 34),
+						new Event(Pit.class, 35, 38),
+						new Event(Pit.class, 9, 30),
 
-						new Event(EVT_Healing_Pond.class, 23, 12),
+						new Event(Healing_Pond.class, 23, 12),
 
-						new Event(EVT_Teleport.class, 10, 39, new HashMap<>(){{
+						new Event(Teleport.class, 10, 39, new HashMap<>(){{
 							put("map", "Coiner's Shop");put("direction", "up");put("required direction", "up");}})
 				});
 		register("coiner's_shop",
@@ -308,11 +308,11 @@ public class MapGenerator extends com.ususstudios.torgrays_datagen.generators.Ma
 				new Entity[] {},
 				new Entity[] {},
 				new Event[]{
-					new Event(EVT_Teleport.class, 12, 13, new HashMap<>(){{
+					new Event(Teleport.class, 12, 13, new HashMap<>(){{
 						put("map", "Main Island");put("direction", "down");put("required direction", "down");
 						put("col", 10); put("row", 39);}
 					}),
-					new Event(EVT_Speak.class, 12, 11, new HashMap<>(){{
+					new Event(Speak.class, 12, 11, new HashMap<>(){{
 						put("type", "npc"); put("index", 0);
 					}}),
 		});

@@ -6,8 +6,8 @@ import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 import org.json.JSONObject;
 
-public class EVT_Healing_Pond extends Event {
-    public EVT_Healing_Pond(TilePoint tilePoint, JSONObject parameters) {
+public class Healing_Pond extends Event {
+    public Healing_Pond(TilePoint tilePoint, JSONObject parameters) {
         super(tilePoint, parameters);
     }
 

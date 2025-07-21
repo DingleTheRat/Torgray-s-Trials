@@ -1,13 +1,12 @@
 package net.dinglezz.torgrays_trials.event;
 
 import net.dinglezz.torgrays_trials.main.Main;
-import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 import org.json.JSONObject;
 
-public class EVT_Pit extends Event {
-    public EVT_Pit(TilePoint tilePoint, JSONObject parameters) {
+public class Pit extends Event {
+    public Pit(TilePoint tilePoint, JSONObject parameters) {
         super(tilePoint, parameters);
     }
 
