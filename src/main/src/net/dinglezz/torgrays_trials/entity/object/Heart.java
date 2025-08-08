@@ -1,9 +1,10 @@
 package net.dinglezz.torgrays_trials.entity.object;
 
+import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.item.Item;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 
-public class Heart extends Item {
+public class Heart extends Entity {
     public Heart(TilePoint tilePoint) {
         super("Heart", tilePoint);
 

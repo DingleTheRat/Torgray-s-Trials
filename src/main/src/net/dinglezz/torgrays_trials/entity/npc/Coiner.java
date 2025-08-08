@@ -1,5 +1,6 @@
 package net.dinglezz.torgrays_trials.entity.npc;
 
+import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.States;
@@ -17,13 +18,7 @@ public class Coiner extends Mob {
         spriteSpeed = 80;
         interactPrompt = true;
 
-        // Solid Area
-        solidArea.x = 8;
-        solidArea.y = 21;
-        solidAreaDefaultX = solidArea.x;
-        solidAreaDefaultY = solidArea.y;
-        solidArea.width = 32;
-        solidArea.height = 28;
+        resizeSolidArea(8, 21, 32, 28, 0);
 
         getImage();
         setDialogue();
@@ -54,8 +49,10 @@ public class Coiner extends Mob {
     }
 
     @Override
-    public void onInteract() {
-        Main.game.player.cancelInventory();
-        speak(false);
+    public <T extends Entity> void whileHit(T entity) {
+        if (Main.game.inputHandler.interactKeyPressed) {
+            Main.game.player.cancelInventory();
+            speak(false);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package net.dinglezz.torgrays_trials.entity.npc;
 
+import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.States;
@@ -14,13 +15,7 @@ public class GateKeeper extends Mob {
         speed = 1;
         interactPrompt = true;
 
-        // Solid Area
-        solidArea.x = 8;
-        solidArea.y = 16;
-        solidAreaDefaultX = solidArea.x;
-        solidAreaDefaultY = solidArea.y;
-        solidArea.width = 32;
-        solidArea.height = 32;
+        resizeSolidArea(8, 16, 32, 32, 0);
 
         setImages();
         setDialogue();
@@ -80,8 +75,10 @@ public class GateKeeper extends Mob {
     }
 
     @Override
-    public void onInteract() {
-        Main.game.player.cancelInventory();
-        speak(true);
+    public <T extends Entity>  void whileHit(T entity) {
+        if (Main.game.inputHandler.interactKeyPressed) {
+            Main.game.player.cancelInventory();
+            speak(true);
+        }
     }
 }

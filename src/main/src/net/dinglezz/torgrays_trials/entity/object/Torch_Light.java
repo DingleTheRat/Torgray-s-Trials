@@ -8,9 +8,5 @@ public class Torch_Light extends Entity {
         super("Torch Light", tilePoint);
         image = registerEntitySprite("entity/object/torch_light/on_wall");
         currentImage = image;
-        collision = false;
     }
-
-    @Override
-    public void onPlayerHit() {}
 }

@@ -89,11 +89,12 @@ public abstract class Mob extends Entity implements Serializable {
         attackUp = registerEntitySprite("disabled");
         attackDown = registerEntitySprite("disabled");
         attackLeft = registerEntitySprite("disabled");
+        collision = true;
     }
 
     @Override
-    public void checkCollision() {
-        super.checkCollision();
+    public void checkCollisions() {
+        super.checkCollisions();
 
         // Check tile collision
         CollisionChecker.checkTile(this);
@@ -105,7 +106,7 @@ public abstract class Mob extends Entity implements Serializable {
 
         if (onScreen) {
             if (knockBack) {
-                checkCollision();
+                checkCollisions();
 
                 if (colliding || knockBackCounter == 10) {
                     knockBackCounter = 0;
@@ -122,7 +123,7 @@ public abstract class Mob extends Entity implements Serializable {
                 }
             } else {
                 setAction();
-                checkCollision();
+                checkCollisions();
 
                 // If colliding is false, move the entity
                 if (!colliding) {
@@ -450,25 +451,25 @@ public abstract class Mob extends Entity implements Serializable {
             else if (enTopY > nextY && enLeftX > nextX) {
                 // Up or Left
                 direction = "up";
-                checkCollision();
+                checkCollisions();
                 if (colliding) direction = "left";
             }
             else if (enTopY > nextY && enLeftX < nextX) {
                 // Up or Right
                 direction = "up";
-                checkCollision();
+                checkCollisions();
                 if (colliding) direction = "right";
             }
             else if (enTopY < nextY && enLeftX > nextX) {
                 // Down or Left
                 direction = "down";
-                checkCollision();
+                checkCollisions();
                 if (colliding) direction = "left";
             }
             else if (enTopY < nextY && enLeftX < nextX) {
                 // Down or Right
                 direction = "down";
-                checkCollision();
+                checkCollisions();
                 if (colliding) direction = "right";
             }
 
@@ -481,7 +482,4 @@ public abstract class Mob extends Entity implements Serializable {
             }
         }
     }
-
-    @Override
-    public void onPlayerHit() {}
 }

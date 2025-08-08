@@ -1,5 +1,7 @@
 package net.dinglezz.torgrays_trials.entity.item;
 
+import net.dinglezz.torgrays_trials.entity.Entity;
+import net.dinglezz.torgrays_trials.entity.Player;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
@@ -28,17 +30,19 @@ public class Coins extends Item {
     }
 
     @Override
-    public void onPlayerHit() {
-        setDefaultValues();
+    public <T extends Entity> void onHit(T entity) {
+        if (entity instanceof Player player) {
+            setDefaultValues();
 
-        Main.game.player.coins += amount;
-        Sound.playSFX("Coin");
+            player.coins += amount;
+            Sound.playSFX("Coin");
 
-        // Grammar check
-        if (amount == 1) Main.game.ui.addMiniNotification("+" + amount + " Coin");
-        else Main.game.ui.addMiniNotification("+" + amount + " Coins");
+            // Grammar check
+            if (amount == 1) Main.game.ui.addMiniNotification("+" + amount + " Coin");
+            else Main.game.ui.addMiniNotification("+" + amount + " Coins");
 
-        // Remove it
-        Main.game.items.get(Main.game.currentMap).remove(this);
+            // Remove it
+            Main.game.items.get(Main.game.currentMap).remove(this);
+        }
     }
 }

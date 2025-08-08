@@ -34,9 +34,6 @@ public class Particle extends Entity{
         time = maxTime;
     }
 
-    @Override
-    public void onPlayerHit() {}
-
     public void update() {
         super.update();
         time--;
@@ -49,12 +46,10 @@ public class Particle extends Entity{
 
     @Override
     public void draw(Graphics2D graphics2D) {
-        if (true) {
-            int screenX = worldX - Main.game.player.worldX + Main.game.player.screenX;
-            int screenY = worldY - Main.game.player.worldY + Main.game.player.screenY;
+        int screenX = worldX - Main.game.player.worldX + Main.game.player.screenX;
+        int screenY = worldY - Main.game.player.worldY + Main.game.player.screenY;
 
-            graphics2D.setColor(color);
-            graphics2D.fillRect(screenX, screenY, size, size);
-        }
+        graphics2D.setColor(color);
+        graphics2D.fillRect(screenX, screenY, size, size);
     }
 }

@@ -2,7 +2,6 @@ package net.dinglezz.torgrays_trials.entity;
 
 import net.dinglezz.torgrays_trials.entity.item.*;
 import net.dinglezz.torgrays_trials.entity.item.light.Lantern;
-import net.dinglezz.torgrays_trials.entity.item.soup.Coiner_Soup;
 import net.dinglezz.torgrays_trials.effects.Effect;
 import net.dinglezz.torgrays_trials.entity.monster.Monster;
 import net.dinglezz.torgrays_trials.event.EventHandler;
@@ -34,14 +33,7 @@ public class Player extends Mob implements Serializable {
         screenX = Main.game.screenWidth / 2 - (Main.game.tileSize / 2);
         screenY = Main.game.screenHeight / 2 - (Main.game.tileSize / 2);
 
-        // Solid Area
-        solidArea = new Rectangle();
-        solidArea.x = 8;
-        solidArea.y = 16;
-        solidAreaDefaultX = solidArea.x;
-        solidAreaDefaultY = solidArea.y;
-        solidArea.width = 32;
-        solidArea.height = 32;
+        resizeSolidArea(8, 16 , 32, 32, 0);
 
         setDefaultValues();
         getImage();
@@ -116,34 +108,19 @@ public class Player extends Mob implements Serializable {
     }
 
     @Override
-    public void checkCollision() {
-        // Check tile collision
+    public void checkCollisions() {
         colliding = false;
+
+        // Check tile collision
         CollisionChecker.checkTile(this);
 
-        // Check Entity collision and call the necessary methods
-        // Objects
+        // Check collisions for all entities
         Entity collidingObject = CollisionChecker.checkEntity(this, Main.game.objects.get(Main.game.currentMap));
-        if (collidingObject != null && Main.game.inputHandler.interactKeyPressed) collidingObject.onInteract();
-        if (collidingObject != null) collidingObject.onPlayerHit();
-
-        // Items
         Item collidingItem = CollisionChecker.checkEntity(this, Main.game.items.get(Main.game.currentMap));
-        if (collidingItem != null && Main.game.inputHandler.interactKeyPressed) collidingItem.onInteract();
-        if (collidingItem != null) collidingItem.onPlayerHit();
-
-        // NPCs
         Mob collidingNPC = CollisionChecker.checkEntity(this, Main.game.npcs.get(Main.game.currentMap));
-        if (collidingNPC != null) collidingNPC.onPlayerHit();
-        if (collidingNPC != null && Main.game.inputHandler.interactKeyPressed) collidingNPC.onInteract();
-
-        // Monsters
         Monster collidingMonster = CollisionChecker.checkEntity(this, Main.game.monsters.get(Main.game.currentMap));
-        if (collidingMonster != null) collidingMonster.onPlayerHit();
-        if (collidingMonster != null && Main.game.inputHandler.interactKeyPressed) collidingMonster.onInteract();
-        contactMonster(collidingMonster);
 
-        // If any of the above have interactPrompt enabled we show it
+        // If any of the above have interactPrompt enabled, we show it
         boolean promptShown = false;
         if (Main.game.ui.uiState == States.UIStates.JUST_DEFAULT) {
             if (collidingObject != null && collidingObject.interactPrompt) {Main.game.ui.uiState = States.UIStates.INTERACT; promptShown = true;}
@@ -154,7 +131,6 @@ public class Player extends Mob implements Serializable {
 
         //If no prompt was shown, and the ui state is INTERACT, that means the prompt no longer needs to be shown
         if (!promptShown && Main.game.ui.uiState == States.UIStates.INTERACT) Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
-
 
         // Check if the player is on an event
         EventHandler.checkEvents();
@@ -175,7 +151,7 @@ public class Player extends Mob implements Serializable {
             else direction = "right";
 
             // Check collision
-            checkCollision();
+            checkCollisions();
 
             // If no collision, move the player
             if (!colliding) {
@@ -227,7 +203,7 @@ public class Player extends Mob implements Serializable {
 
         // Attacking
         if (Main.game.inputHandler.spacePressed && !attackCheckCanceled) {
-            checkCollision();
+            checkCollisions();
 
             if (!attacking && !attackCanceled) {
                 Sound.playSFX("Swing");
@@ -237,20 +213,18 @@ public class Player extends Mob implements Serializable {
             }
 
             // Reset Values
-            Main.game.inputHandler.spacePressed = false;
             attackCanceled = false;
         }
         attackCheckCanceled = false;
 
         // Inventory
         if (Main.game.inputHandler.interactKeyPressed) {
-            checkCollision();
+            checkCollisions();
 
             if (!inventoryCanceled && Main.game.ui.uiState == States.UIStates.JUST_DEFAULT) Main.game.ui.uiState = States.UIStates.CHARACTER;
 
             // Reset Values
             inventoryCanceled = false;
-            Main.game.inputHandler.interactKeyPressed = false;
         }
 
         // Update effects
@@ -262,9 +236,10 @@ public class Player extends Mob implements Serializable {
         if (spriteCounter <= 5) {
             spriteNumber = 1;
         } else if (spriteCounter <= 25) {
+            // TODO: Make a method to check the attack area stuff, so I don't have tp use the solidArea
             spriteNumber = 2;
 
-            // Save current worldX, worldY and solidArea
+            // Save current worldX, worldY and hitArea
             int currentWorldX = worldX;
             int currentWorldY = worldY;
             int solidAreaWidth = solidArea.width;
@@ -277,12 +252,12 @@ public class Player extends Mob implements Serializable {
                 case "left", "down left", "up left" -> worldX -= attackArea.width;
                 case "right", "up right", "down right" -> worldX += attackArea.width;
             }
-            // Attack Area = Solid Area
+            // Solid Area = Attack Area
             solidArea.width = attackArea.width;
             solidArea.height = attackArea.height;
 
             // Check collision with the updates
-            Monster collidingMonster = CollisionChecker.checkEntity(this, Main.game.monsters.get(Main.game.currentMap));
+            Monster collidingMonster = CollisionChecker.checkEntityCollision(this, Main.game.monsters.get(Main.game.currentMap));
             damageMonster(collidingMonster, currentWeapon.knockBackPower);
 
             // Restore original data
@@ -301,12 +276,6 @@ public class Player extends Mob implements Serializable {
     public void cancelAttack() {attackCanceled = true;}
     public void cancelInventory() {inventoryCanceled = true;}
     public void cancelAttackCheck() {attackCheckCanceled = true;}
-
-    public void contactMonster(Monster monster) {
-        if (monster != null && !monster.dying) {
-            damage(monster.attack);
-        }
-    }
 
     public void damageMonster(Monster monster, int knockBackPower) {
         if (monster != null && !monster.dying && !monster.invincible) {
@@ -335,7 +304,7 @@ public class Player extends Mob implements Serializable {
 
         if (itemIndex < getInventory().size()) {
             Item selectedItem = getInventory().get(itemIndex);
-
+            
             if (selectedItem.tags.contains(ItemTags.TAG_WEAPON)) {
                 currentWeapon = selectedItem;
                 getAttackImage();
@@ -344,18 +313,23 @@ public class Player extends Mob implements Serializable {
                 currentShield = selectedItem;
             }
             if (selectedItem.tags.contains(ItemTags.TAG_LIGHT)) {
-                if (currentLight == selectedItem) {
-                    currentLight = null;
-                } else {
-                    currentLight = selectedItem;
-                }
+                if (currentLight == selectedItem) currentLight = null;
+                else currentLight = selectedItem;
                 Main.game.environmentManager.lightUpdated = true;
             }
             if (selectedItem.tags.contains(ItemTags.TAG_CONSUMABLE)) {
-                if (selectedItem.use(this)) {
-                    removeItem(selectedItem);
-                }
+                if (selectedItem.use(this)) removeItem(selectedItem);
             }
+        }
+    }
+
+    // Hit Methods
+    @Override
+    public <T extends Entity> void whileHit(T entity) {
+        if (entity instanceof Monster monster) {
+            System.err.println("Player hit by monster");
+            if (monster.dying) return;
+            damage(monster.attack);
         }
     }
 
@@ -419,13 +393,10 @@ public class Player extends Mob implements Serializable {
         graphics2D.drawImage(currentImage.getImage(), temporaryScreenX, temporaryScreenY, null);
         changeAlpha(graphics2D, 1f);
 
-         if (Main.game.debugHitBoxes) {
+         if (Main.game.debugHitBoxes && collision) {
              // Solid area
              graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
              graphics2D.fillRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
-
-             // Attack area
-             graphics2D.fillRect(screenX + attackArea.x, screenY + attackArea.y, attackArea.width, attackArea.height);
          }
     }
 

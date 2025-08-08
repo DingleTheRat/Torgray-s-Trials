@@ -8,16 +8,8 @@ public class Table extends Entity {
         super("Table", tilePoint);
         image = registerEntitySprite("entity/object/table");
         currentImage = image;
+
         collision = true;
-
-        solidArea.x = 0;
-        solidArea.y = 16;
-        solidArea.width = 48;
-        solidArea.height = 32;
-        solidAreaDefaultX = solidArea.x;
-        solidAreaDefaultY = solidArea.y;
+        resizeSolidArea(0, 16, 48, 32 , 2);
     }
-
-    @Override
-    public void onPlayerHit() {}
 }

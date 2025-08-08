@@ -10,6 +10,11 @@ public class InputHandler implements KeyListener {
     // Debug
     public boolean debug = false;
 
+    public void cancelInputs() {
+        spacePressed = false;
+        interactKeyPressed = false;
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
         // Not used, but required by KeyListener interface :/

@@ -31,6 +31,8 @@ public class Dracore extends Monster {
         }
 
         getImage();
+
+        resizeSolidArea(0, 0, 45, 45, 3);
     }
     public void getImage() {
         up1 = registerEntitySprite("entity/monster/dracore/dracore_1");

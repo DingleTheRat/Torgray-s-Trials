@@ -1,6 +1,8 @@
 package net.dinglezz.torgrays_trials.entity.monster;
 
+import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.Mob;
+import net.dinglezz.torgrays_trials.entity.Player;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 
@@ -36,12 +38,11 @@ public abstract class Monster extends Mob implements Serializable {
     }
 
     @Override
-    public void checkCollision() {
-        super.checkCollision();
-
-        // If it's touching the player, then attack
-        if (contactPlayer) {
-            Main.game.player.damage(attack);
+    public <T extends Entity> void whileHit(T entity) {
+        // If the entity is a player, then attack
+        if (entity instanceof Player player) {
+            if (dying) return;
+            player.damage(attack);
         }
     }
 }

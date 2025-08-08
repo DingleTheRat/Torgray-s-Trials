@@ -8,18 +8,18 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public abstract class Entity implements Serializable {
     // Images
     public Image image, image2, image3;
-    public Image currentImage = image;
+    public Image currentImage;
 
     // Collision
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
-    public int solidAreaDefaultX, solidAreaDefaultY;
+    public Rectangle hitArea = new Rectangle(-1, -1, 50, 50);
     public boolean collision = false;
     public boolean colliding = false;
-    public boolean contactPlayer = false;
 
     // Position
     public int worldX, worldY;
@@ -50,11 +50,12 @@ public abstract class Entity implements Serializable {
         image3 = registerEntitySprite("disabled");
     }
 
-    // Overrides
-    public abstract void onPlayerHit();
-    public void onInteract() {}
+    // Hit methods
+    public <T extends Entity> void onHit(T entity) {}
+    public <T extends Entity> void whileHit(T entity) {}
+    public <T extends Entity> void onLeave(T entity) {}
 
-    // Particles (I need to rework this)_
+    // Particles (I need to rework this)
     public Color getParticleColor() {return null;}
     public int getParticleSize() {return 0;}
     public int getParticleSpeed() {return 0;}
@@ -112,19 +113,41 @@ public abstract class Entity implements Serializable {
         // Serialize the image to a byte array
         return new Image(UtilityTool.serializeImage(image));
     }
-    public void checkCollision() {
+
+    // Collision
+    public void checkCollisions() {
         colliding = false;
-        contactPlayer = false;
 
-        // Check for other entities
+        // Check collision for all entities in the current map
         CollisionChecker.checkEntity(this, Main.game.objects.get(Main.game.currentMap));
+        CollisionChecker.checkEntity(this, Main.game.npcs.get(Main.game.currentMap));
+        CollisionChecker.checkEntity(this, Main.game.monsters.get(Main.game.currentMap));
+        CollisionChecker.checkEntity(this, Main.game.items.get(Main.game.currentMap));
+        CollisionChecker.checkEntity(this, new ArrayList<Player>() {{
+            add(Main.game.player);
+        }});
+    }
+    /**
+     * Resizes the solid area and hit area of the entity based on specified dimensions and offset.
+     *
+     * @param worldX The x-coordinate of the solid area's position in the world.
+     * @param worldY The y-coordinate of the solid area's position in the world.
+     * @param width  The width of the solid area.
+     * @param height The height of the solid area.
+     * @param hitAreaOffset The offset used to adjust the hit area's boundaries relative to the solid area.
+     */
+    public void resizeSolidArea(int worldX, int worldY, int width, int height, int hitAreaOffset) {
+        // Do what the method is supposed to do lol
+        solidArea.x = worldX;
+        solidArea.y = worldY;
+        solidArea.width = width;
+        solidArea.height = height;
 
-        // Check player collision
-        contactPlayer = CollisionChecker.checkPlayer(this);
-
-        // Check NPC and monsters collisions
-        if (Main.game.npcs.get(Main.game.currentMap) != null) CollisionChecker.checkEntity(this, Main.game.npcs.get(Main.game.currentMap));
-        if (Main.game.monsters.get(Main.game.currentMap) != null) CollisionChecker.checkEntity(this, Main.game.monsters.get(Main.game.currentMap));
+        // Resize the hit area to be a tad bit bigger than the solid area
+        hitArea.x = solidArea.x - hitAreaOffset / 2;
+        hitArea.y = solidArea.y - hitAreaOffset / 2;
+        hitArea.width = solidArea.width + hitAreaOffset;
+        hitArea.height = solidArea.height + hitAreaOffset;
     }
 
     public void update() {
@@ -132,7 +155,7 @@ public abstract class Entity implements Serializable {
                 worldX - Main.game.tileSize < Main.game.player.worldX + Main.game.player.screenX &&
                 worldY + Main.game.tileSize > Main.game.player.worldY - Main.game.player.screenY &&
                 worldY - Main.game.tileSize < Main.game.player.worldY + Main.game.player.screenY || updateOffScreen){
-            checkCollision();
+            checkCollisions();
             onScreen = true;
         } else {
             onScreen = false;
@@ -152,7 +175,17 @@ public abstract class Entity implements Serializable {
             changeAlpha(graphics2D, 1f);
 
             // Draw the solid area for debugging
+            // TODO: Change the color depending if it's colliding or not
             if (Main.game.debugHitBoxes) {
+                // Hit area
+                graphics2D.setColor(new Color(0.7f, 0.5f, 0, 0.5f));
+                graphics2D.setStroke(new BasicStroke(3));
+                graphics2D.drawRect(screenX + hitArea.x, screenY + hitArea.y, hitArea.width, hitArea.height);
+
+                // Reset stroke
+                graphics2D.setStroke(new BasicStroke(1));
+
+                // Solid area
                 graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
                 graphics2D.fillRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
             }

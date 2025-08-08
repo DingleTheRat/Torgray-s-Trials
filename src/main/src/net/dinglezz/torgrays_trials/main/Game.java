@@ -264,17 +264,20 @@ public class Game extends JPanel implements Runnable {
             player.update();
 
             // Items
-            items.getOrDefault(currentMap, new ArrayList<>()).stream()
+            ArrayList<Item> currentItems = new ArrayList<>(items.getOrDefault(currentMap, new ArrayList<>()));
+            currentItems.stream()
                     .filter(Objects::nonNull)
                     .forEach(Entity::update);
 
             // Objects
-            objects.getOrDefault(currentMap, new ArrayList<>()).stream()
+            ArrayList<Entity> currentObjects = new ArrayList<>(objects.getOrDefault(currentMap, new ArrayList<>()));
+            currentObjects.stream()
                     .filter(Objects::nonNull)
                     .forEach(Entity::update);
 
             // NPCs
-            npcs.getOrDefault(currentMap, new ArrayList<>()).stream()
+            ArrayList<Mob> currentNPCs = new ArrayList<>(npcs.getOrDefault(currentMap, new ArrayList<>()));
+            currentNPCs.stream()
                     .filter(Objects::nonNull)
                     .forEach(Entity::update);
 
@@ -303,6 +306,9 @@ public class Game extends JPanel implements Runnable {
                     .forEach(Particle::update);
 
             environmentManager.update();
+
+            // Finally, reset all inputs
+            inputHandler.cancelInputs();
         }
     }
 
@@ -317,19 +323,12 @@ public class Game extends JPanel implements Runnable {
             TileManager.draw(graphics2D);
 
             // Add entities to the list
-            entityList.clear(); // Clear once at the start
             if (gameState != States.GameStates.GAME_END) entityList.add(player);
 
             entityList.addAll(npcs.getOrDefault(currentMap, new ArrayList<>()));
             entityList.addAll(items.getOrDefault(currentMap, new ArrayList<>()));
             entityList.addAll(objects.getOrDefault(currentMap, new ArrayList<>()));
             entityList.addAll(monsters.getOrDefault(currentMap, new ArrayList<>()));
-
-            // Filter out null particles before adding
-            particleList.stream()
-                    .filter(Objects::nonNull)
-                    .filter(particle -> particle.exists)
-                    .forEach(particle -> particle.draw(graphics2D));
 
             // Sort and draw entities
             entityList.stream()
@@ -339,6 +338,12 @@ public class Game extends JPanel implements Runnable {
 
             // Empty Entity List
             entityList.clear();
+
+            // Filter out null particles before drawing
+            particleList.stream()
+                    .filter(Objects::nonNull)
+                    .filter(particle -> particle.exists)
+                    .forEach(particle -> particle.draw(graphics2D));
 
             // More  drawing :D
             environmentManager.draw(graphics2D);

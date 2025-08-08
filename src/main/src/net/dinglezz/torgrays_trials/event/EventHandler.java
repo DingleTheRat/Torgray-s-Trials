@@ -60,10 +60,10 @@ public class EventHandler {
     /**
      * Checks if the player has collided with a specific event rectangle
      * corresponding to the provided tile point and triggers the event if necessary.
-     *
+     * <p>
      * The method calculates the player's position and the event rectangle's position
      * and checks if they intersect. If a collision is detected and the event has not
-     * already been triggered, it updates event states accordingly.
+     * yet been triggered, it updates event states accordingly.
      *
      * @param tilePoint the tile point representing the location and map of the event
      *                  to check collision with
@@ -73,20 +73,24 @@ public class EventHandler {
         boolean hit = false;
 
         if (Objects.equals(tilePoint.map(), Main.game.currentMap)) {
-            Main.game.player.solidArea.x = Math.round(Main.game.player.worldX + Main.game.player.solidArea.x);
-            Main.game.player.solidArea.y = Math.round(Main.game.player.worldY + Main.game.player.solidArea.y);
-            eventRectangles.get(tilePoint).x = tilePoint.col() * Main.game.tileSize + eventRectangles.get(tilePoint).x;
-            eventRectangles.get(tilePoint).y = tilePoint.row() * Main.game.tileSize + eventRectangles.get(tilePoint).y;
+            EventRectangle eventRectangle = eventRectangles.get(tilePoint);
+            int playerSolidAreaX = Main.game.player.solidArea.x;
+            int playerSolidAreaY = Main.game.player.solidArea.y;
 
-            if (Main.game.player.solidArea.intersects(eventRectangles.get(tilePoint)) && !eventRectangles.get(tilePoint).eventDone) {
+            Main.game.player.solidArea.x = Main.game.player.worldX + Main.game.player.solidArea.x;
+            Main.game.player.solidArea.y = Main.game.player.worldY + Main.game.player.solidArea.y;
+            eventRectangle.x = tilePoint.col() * Main.game.tileSize + eventRectangle.x;
+            eventRectangle.y = tilePoint.row() * Main.game.tileSize + eventRectangle.y;
+
+            if (Main.game.player.solidArea.intersects(eventRectangle) && !eventRectangle.eventDone) {
                 hit = true;
                 previousEventX = Main.game.player.worldX;
                 previousEventY = Main.game.player.worldY;
             }
-            Main.game.player.solidArea.x = Main.game.player.solidAreaDefaultX;
-            Main.game.player.solidArea.y = Main.game.player.solidAreaDefaultY;
-            eventRectangles.get(tilePoint).x = eventRectangles.get(tilePoint).eventRectangleDefaultX;
-            eventRectangles.get(tilePoint).y = eventRectangles.get(tilePoint).eventRectangleDefaultY;
+            Main.game.player.solidArea.x = playerSolidAreaX;
+            Main.game.player.solidArea.y = playerSolidAreaY;
+            eventRectangle.x = eventRectangle.eventRectangleDefaultX;
+            eventRectangle.y = eventRectangle.eventRectangleDefaultY;
         }
 
         return hit;
