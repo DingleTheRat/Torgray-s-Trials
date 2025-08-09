@@ -29,7 +29,6 @@ public abstract class Entity implements Serializable {
     public String name;
     public boolean updateOffScreen = false;
     public boolean onScreen = false;
-    public boolean interactPrompt = false;
 
     public Entity(String name, TilePoint tilePoint) {
         this.name = name;
@@ -118,14 +117,12 @@ public abstract class Entity implements Serializable {
     public void checkCollisions() {
         colliding = false;
 
-        // Check collision for all entities in the current map
+        // Check collision for all entities in the current map (Even the player)
         CollisionChecker.checkEntity(this, Main.game.objects.get(Main.game.currentMap));
         CollisionChecker.checkEntity(this, Main.game.npcs.get(Main.game.currentMap));
         CollisionChecker.checkEntity(this, Main.game.monsters.get(Main.game.currentMap));
         CollisionChecker.checkEntity(this, Main.game.items.get(Main.game.currentMap));
-        CollisionChecker.checkEntity(this, new ArrayList<Player>() {{
-            add(Main.game.player);
-        }});
+        CollisionChecker.checkEntity(this, new ArrayList<Player>() {{add(Main.game.player);}});
     }
     /**
      * Resizes the solid area and hit area of the entity based on specified dimensions and offset.
@@ -144,10 +141,10 @@ public abstract class Entity implements Serializable {
         solidArea.height = height;
 
         // Resize the hit area to be a tad bit bigger than the solid area
-        hitArea.x = solidArea.x - hitAreaOffset / 2;
-        hitArea.y = solidArea.y - hitAreaOffset / 2;
-        hitArea.width = solidArea.width + hitAreaOffset;
-        hitArea.height = solidArea.height + hitAreaOffset;
+        hitArea.x = worldX - (hitAreaOffset / 2);
+        hitArea.y = worldY - (hitAreaOffset / 2);
+        hitArea.width = width + hitAreaOffset;
+        hitArea.height = height + hitAreaOffset;
     }
 
     public void update() {
@@ -157,9 +154,8 @@ public abstract class Entity implements Serializable {
                 worldY - Main.game.tileSize < Main.game.player.worldY + Main.game.player.screenY || updateOffScreen){
             checkCollisions();
             onScreen = true;
-        } else {
+        } else 
             onScreen = false;
-        }
     }
 
     public void draw(Graphics2D graphics2D) {
@@ -175,7 +171,6 @@ public abstract class Entity implements Serializable {
             changeAlpha(graphics2D, 1f);
 
             // Draw the solid area for debugging
-            // TODO: Change the color depending if it's colliding or not
             if (Main.game.debugHitBoxes) {
                 // Hit area
                 graphics2D.setColor(new Color(0.7f, 0.5f, 0, 0.5f));
@@ -186,7 +181,10 @@ public abstract class Entity implements Serializable {
                 graphics2D.setStroke(new BasicStroke(1));
 
                 // Solid area
-                graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
+                    // Change the color depending on it's state
+                    if (!collision) graphics2D.setColor(new Color(0, 0.7f, 0, 0.3f));
+                    else if (colliding) graphics2D.setColor(new Color(0.7f, 0, 0, 0.5f));
+                    else graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
                 graphics2D.fillRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
             }
         }

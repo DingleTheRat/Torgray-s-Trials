@@ -1,6 +1,6 @@
 package net.dinglezz.torgrays_trials.main;
 
-import net.dinglezz.torgrays_trials.effects.Effect;
+import net.dinglezz.torgrays_trials.effect.Effect;
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.Image;
 import net.dinglezz.torgrays_trials.entity.Mob;

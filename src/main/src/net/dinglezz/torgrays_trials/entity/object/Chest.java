@@ -30,23 +30,34 @@ public class Chest extends Entity implements Serializable {
         image2 = registerEntitySprite("entity/object/chest/opened");
         currentImage = image;
         collision = true;
-        interactPrompt = true;
     }
 
+    // Interact Prompts
+    @Override
+    public <T extends Entity> void onHit(T entity) {
+        if (!opened) Main.game.ui.uiState = States.UIStates.INTERACT;
+    }
+    @Override
+    public <T extends Entity> void onLeave(T entity) {
+        if (!opened) Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
+    }
+
+    // Functionality
     @Override
     public <T extends Entity> void whileHit(T entity) {
         if (entity instanceof Player player && !opened) {
             if (Main.game.inputHandler.interactKeyPressed) {
-
+                // Play sound :D
                 Sound.playSFX("Unlock");
+
+                // Get Ready for dialogue
                 Main.game.ui.uiState = States.UIStates.DIALOGUE;
+                StringBuilder stringBuilder = new StringBuilder();
                 player.cancelInventory();
 
-                StringBuilder stringBuilder = new StringBuilder();
-
-                if (lootTable.isEmpty()) {
+                if (lootTable.isEmpty())
                     stringBuilder.append("This chest is empty :(");
-                } else {
+                else {
                     ArrayList<Item> loot = LootTableHandler.generateLoot(LootTableHandler.lootTables.get(lootTable));
                     if (loot.isEmpty()) stringBuilder.append("This chest is empty :(");
                     else stringBuilder.append("Woah, this chest is shiny!");
@@ -60,7 +71,6 @@ public class Chest extends Entity implements Serializable {
                 Main.game.ui.setCurrentDialogue(stringBuilder.toString());
                 currentImage = image2;
                 opened = true;
-                interactPrompt = false;
             }
         }
     }

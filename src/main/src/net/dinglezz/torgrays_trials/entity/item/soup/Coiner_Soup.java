@@ -1,10 +1,10 @@
 package net.dinglezz.torgrays_trials.entity.item.soup;
 
-import net.dinglezz.torgrays_trials.effects.GenerousCoins;
+import net.dinglezz.torgrays_trials.effect.GenerousCoins;
 import net.dinglezz.torgrays_trials.entity.item.Item;
 import net.dinglezz.torgrays_trials.entity.item.ItemTags;
 import net.dinglezz.torgrays_trials.entity.Mob;
-import net.dinglezz.torgrays_trials.effects.Cuteness;
+import net.dinglezz.torgrays_trials.effect.Cuteness;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.tile.TilePoint;

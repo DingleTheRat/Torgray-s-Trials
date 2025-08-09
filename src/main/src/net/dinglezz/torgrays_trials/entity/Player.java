@@ -2,7 +2,7 @@ package net.dinglezz.torgrays_trials.entity;
 
 import net.dinglezz.torgrays_trials.entity.item.*;
 import net.dinglezz.torgrays_trials.entity.item.light.Lantern;
-import net.dinglezz.torgrays_trials.effects.Effect;
+import net.dinglezz.torgrays_trials.effect.Effect;
 import net.dinglezz.torgrays_trials.entity.monster.Monster;
 import net.dinglezz.torgrays_trials.event.EventHandler;
 import net.dinglezz.torgrays_trials.main.*;
@@ -33,7 +33,7 @@ public class Player extends Mob implements Serializable {
         screenX = Main.game.screenWidth / 2 - (Main.game.tileSize / 2);
         screenY = Main.game.screenHeight / 2 - (Main.game.tileSize / 2);
 
-        resizeSolidArea(8, 16 , 32, 32, 0);
+        resizeSolidArea(8, 16 , 32, 32, 2);
 
         setDefaultValues();
         getImage();
@@ -115,30 +115,19 @@ public class Player extends Mob implements Serializable {
         CollisionChecker.checkTile(this);
 
         // Check collisions for all entities
-        Entity collidingObject = CollisionChecker.checkEntity(this, Main.game.objects.get(Main.game.currentMap));
-        Item collidingItem = CollisionChecker.checkEntity(this, Main.game.items.get(Main.game.currentMap));
-        Mob collidingNPC = CollisionChecker.checkEntity(this, Main.game.npcs.get(Main.game.currentMap));
-        Monster collidingMonster = CollisionChecker.checkEntity(this, Main.game.monsters.get(Main.game.currentMap));
+        CollisionChecker.checkEntity(this, Main.game.objects.get(Main.game.currentMap));
+        CollisionChecker.checkEntity(this, Main.game.items.get(Main.game.currentMap));
+        CollisionChecker.checkEntity(this, Main.game.npcs.get(Main.game.currentMap));
+        CollisionChecker.checkEntity(this, Main.game.monsters.get(Main.game.currentMap));
 
-        // If any of the above have interactPrompt enabled, we show it
-        boolean promptShown = false;
-        if (Main.game.ui.uiState == States.UIStates.JUST_DEFAULT) {
-            if (collidingObject != null && collidingObject.interactPrompt) {Main.game.ui.uiState = States.UIStates.INTERACT; promptShown = true;}
-            if (collidingItem != null && collidingItem.interactPrompt) {Main.game.ui.uiState = States.UIStates.INTERACT; promptShown = true;}
-            if (collidingNPC != null && collidingNPC.interactPrompt) {Main.game.ui.uiState = States.UIStates.INTERACT; promptShown = true;}
-            if (collidingMonster != null && collidingMonster.interactPrompt) {Main.game.ui.uiState = States.UIStates.INTERACT; promptShown = true;}
-        }
-
-        //If no prompt was shown, and the ui state is INTERACT, that means the prompt no longer needs to be shown
-        if (!promptShown && Main.game.ui.uiState == States.UIStates.INTERACT) Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
-
-        // Check if the player is on an event
+        // Check if the player is at an event
         EventHandler.checkEvents();
     }
 
     @Override
     public void update() {
-        if (attacking) attack();
+        if (attacking)
+            attack();
         else if (Main.game.inputHandler.upPressed || Main.game.inputHandler.downPressed || Main.game.inputHandler.leftPressed || Main.game.inputHandler.rightPressed) {
             // Set direction based on input
             if (Main.game.inputHandler.upPressed && Main.game.inputHandler.leftPressed) direction = "up left";
@@ -327,7 +316,6 @@ public class Player extends Mob implements Serializable {
     @Override
     public <T extends Entity> void whileHit(T entity) {
         if (entity instanceof Monster monster) {
-            System.err.println("Player hit by monster");
             if (monster.dying) return;
             damage(monster.attack);
         }
@@ -393,9 +381,20 @@ public class Player extends Mob implements Serializable {
         graphics2D.drawImage(currentImage.getImage(), temporaryScreenX, temporaryScreenY, null);
         changeAlpha(graphics2D, 1f);
 
-         if (Main.game.debugHitBoxes && collision) {
+         if (Main.game.debugHitBoxes) {
+             // Hit area
+             graphics2D.setColor(new Color(0.7f, 0.5f, 0, 0.5f));
+             graphics2D.setStroke(new BasicStroke(3));
+             graphics2D.drawRect(screenX + hitArea.x, screenY + hitArea.y, hitArea.width, hitArea.height);
+
+             // Reset stroke
+             graphics2D.setStroke(new BasicStroke(1));
+
              // Solid area
-             graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
+                // Change the color depending on it's state
+                if (!collision) graphics2D.setColor(new Color(0, 0.7f, 0, 0.3f));
+                else if (colliding) graphics2D.setColor(new Color(0.7f, 0, 0, 0.5f));
+                else graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
              graphics2D.fillRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
          }
     }

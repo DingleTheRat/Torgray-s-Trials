@@ -1,6 +1,7 @@
 package net.dinglezz.torgrays_trials.tile;
 
 import net.dinglezz.torgrays_trials.main.Main;
+import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.main.UtilityTool;
 
 import javax.imageio.ImageIO;
@@ -77,16 +78,21 @@ public class TileManager {
             registerTile(46, "tree/dark_tree", true);
             registerTile(47, "grass/dark_grass", false);
 
-            registerTile(48, "tunnel_door", true);
+            registerTile(48, "tunnel_door", false);
     }
     public static void registerTile(int i, String imageName, boolean collision) {
         try {
             tile.put(i, new Tile());
             try {
                 tile.get(i).image = ImageIO.read(TileManager.class.getResourceAsStream("/drawable/tile/" + imageName + ".png"));
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException exception) {
+                // If the image is not found, use the disabled image and print a warning
                 System.err.println("\"" + imageName + "\" is not a valid path.");
                 tile.get(i).image = ImageIO.read(TileManager.class.getResourceAsStream("/drawable/disabled.png"));
+
+                // Then, throw the exception
+                Main.game.exceptionState = States.ExceptionStates.ONLY_IGNORABLE;
+                throw exception;
             }
             tile.get(i).image = UtilityTool.scaleImage(tile.get(i).image, Main.game.tileSize, Main.game.tileSize);
             tile.get(i).collision = collision;
@@ -105,31 +111,33 @@ public class TileManager {
         for (String layer : TileManager.mapTileNumbers.keySet()) {
             // Skip the layer if it is not present in the map
             if (TileManager.mapTileNumbers.get(layer).get(new TilePoint(Main.game.currentMap, 0, 0)) == null && layer.equals("foreground")) continue;
-            
+
             IntStream.range(0, Main.game.maxWorldRow).parallel().forEach(
-                worldRow -> IntStream.range(0, Main.game.maxWorldCol).parallel().forEach(worldCol -> {
-                int tileNumber = mapTileNumbers.get(layer).get(new TilePoint(Main.game.currentMap, worldCol, worldRow));
-                int worldX = worldCol * tileSize;
-                int worldY = worldRow * tileSize;
-                float screenX = worldX - playerWorldX + playerScreenX;
-                float screenY = worldY - playerWorldY + playerScreenY;
-                // Check if the tile is within the visible screen
-                if (worldX + tileSize > playerWorldX - playerScreenX &&
-                        worldX - tileSize < playerWorldX + playerScreenX &&
-                        worldY + tileSize > playerWorldY - playerScreenY &&
-                        worldY - tileSize < playerWorldY + playerScreenY) {
-                    Tile currentTile = tile.get(tileNumber);
-                    graphics2D.drawImage(currentTile.image, Math.round(screenX), Math.round(screenY), null);
-                    if (Main.game.debugHitBoxes && currentTile.collision && layer.equals("foreground")) {
-                        graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
-                        graphics2D.fillRect(Math.round(screenX), Math.round(screenY), tileSize, tileSize);
-                    }
-                }
-            }));
+                    worldRow -> IntStream.range(0, Main.game.maxWorldCol).parallel().forEach(worldCol -> {
+                        // Position Fields
+                        int tileNumber = mapTileNumbers.get(layer).get(new TilePoint(Main.game.currentMap, worldCol, worldRow));
+                        int worldX = worldCol * tileSize;
+                        int worldY = worldRow * tileSize;
+                        float screenX = worldX - playerWorldX + playerScreenX;
+                        float screenY = worldY - playerWorldY + playerScreenY;
+
+                        // Check if the tile is within the visible screen
+                        if (worldX + tileSize > playerWorldX - playerScreenX &&
+                                worldX - tileSize < playerWorldX + playerScreenX &&
+                                worldY + tileSize > playerWorldY - playerScreenY &&
+                                worldY - tileSize < playerWorldY + playerScreenY) {
+                            Tile currentTile = tile.get(tileNumber);
+                            graphics2D.drawImage(currentTile.image, Math.round(screenX), Math.round(screenY), null);
+                            if (Main.game.debugHitBoxes && currentTile.collision && layer.equals("foreground")) {
+                                graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
+                                graphics2D.fillRect(Math.round(screenX), Math.round(screenY), tileSize, tileSize);
+                            }
+                        }
+                    }));
         }
 
         if (Main.game.debugPathfinding) {
-            graphics2D.setColor(new Color(0.7f, 0, 0, 0.3f));
+            graphics2D.setColor(new Color(0, 0, 0.7f, 0.3f));
             for (var pathNode : Main.game.pathFinder.pathList) {
                 int worldX = pathNode.col * tileSize;
                 int worldY = pathNode.row * tileSize;

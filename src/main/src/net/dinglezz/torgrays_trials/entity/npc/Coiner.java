@@ -16,7 +16,6 @@ public class Coiner extends Mob {
         direction = "down";
         speed = 1;
         spriteSpeed = 80;
-        interactPrompt = true;
 
         resizeSolidArea(8, 21, 32, 28, 0);
 
@@ -48,6 +47,17 @@ public class Coiner extends Mob {
         Main.game.ui.npc = this;
     }
 
+    // Interact Prompt
+    @Override
+    public <T extends Entity> void onHit(T entity) {
+        Main.game.ui.uiState = States.UIStates.INTERACT;
+    }
+    @Override
+    public <T extends Entity> void onLeave(T entity) {
+        Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
+    }
+
+    // Functionality
     @Override
     public <T extends Entity> void whileHit(T entity) {
         if (Main.game.inputHandler.interactKeyPressed) {

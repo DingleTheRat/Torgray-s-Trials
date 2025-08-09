@@ -1,4 +1,4 @@
-package net.dinglezz.torgrays_trials.effects;
+package net.dinglezz.torgrays_trials.effect;
 
 import net.dinglezz.torgrays_trials.entity.Image;
 import net.dinglezz.torgrays_trials.entity.Mob;

@@ -38,11 +38,6 @@ public class Main {
                 if (game.gameState != States.GameStates.TITLE) {
                     game.ui.commandNumber = 1;
 
-                    game.gameState = States.GameStates.PAUSE;
-                    game.ui.subUIState = "Confirm";
-                    game.ui.uiState = States.UIStates.PAUSE;
-                    game.ui.setCurrentDialogue("Ending the game without saving \nmay result in you loosing progress. \nPLEASE SAVE BEFORE CONTINUING!!!!!!");
-
                     game.ui.yesAction = () -> {
                         game.gameState = States.GameStates.TITLE;
                         game.ui.uiState = States.UIStates.JUST_DEFAULT;
@@ -56,6 +51,11 @@ public class Main {
                         game.gameState = States.GameStates.PLAY;
                         game.ui.uiState = States.UIStates.JUST_DEFAULT;
                     };
+
+                    game.gameState = States.GameStates.PAUSE;
+                    game.ui.subUIState = "Confirm";
+                    game.ui.uiState = States.UIStates.PAUSE;
+                    game.ui.setCurrentDialogue("Ending the game without saving \nmay result in you loosing progress. \nPLEASE SAVE BEFORE CONTINUING!!!!!!");
                 } else {
                     System.exit(0);
                 }

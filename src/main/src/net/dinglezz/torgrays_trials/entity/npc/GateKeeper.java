@@ -13,9 +13,8 @@ public class GateKeeper extends Mob {
         super("Gate Keeper", tilePoint);
         direction = "down";
         speed = 1;
-        interactPrompt = true;
 
-        resizeSolidArea(8, 16, 32, 32, 0);
+        resizeSolidArea(8, 16, 32, 32, 5);
 
         setImages();
         setDialogue();
@@ -74,6 +73,17 @@ public class GateKeeper extends Mob {
         if (Main.game.pathFinding) onPath = true;
     }
 
+    // Interact Prompt
+    @Override
+    public <T extends Entity> void onHit(T entity) {
+        Main.game.ui.uiState = States.UIStates.INTERACT;
+    }
+    @Override
+    public <T extends Entity> void onLeave(T entity) {
+        Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
+    }
+
+    // Functionality
     @Override
     public <T extends Entity>  void whileHit(T entity) {
         if (Main.game.inputHandler.interactKeyPressed) {

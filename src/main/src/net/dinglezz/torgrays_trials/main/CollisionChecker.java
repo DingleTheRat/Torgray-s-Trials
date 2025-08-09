@@ -15,11 +15,13 @@ public class CollisionChecker {
     public static void checkTile(Mob mob) {
         if (TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, 0, 0)) == null) return;
 
+        // World coordinates of the mob's solid area
         int mobLeftWorldX = mob.worldX + mob.solidArea.x;
         int mobRightWorldX = mob.worldX + mob.solidArea.x + mob.solidArea.width;
         int mobTopWorldY = mob.worldY + mob.solidArea.y;
         int mobBottomWorldY = mob.worldY + mob.solidArea.y + mob.solidArea.height;
 
+        // Tile coordinates of the mob's solid area'
         int mobLeftCol = mobLeftWorldX / Main.game.tileSize;
         int mobRightCol = mobRightWorldX / Main.game.tileSize;
         int mobTopRow = mobTopWorldY / Main.game.tileSize;
@@ -27,95 +29,29 @@ public class CollisionChecker {
 
         int tileNumber1, tileNumber2;
 
-        switch (mob.direction) {
-            case "up":
-                mobTopRow = (mobTopWorldY - mob.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobTopRow));
-                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobRightCol, mobTopRow));
-                if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
-                    mob.colliding = true;
-                }
-                break;
-            case  "up left":
-                mobTopRow = (mobTopWorldY - mob.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobTopRow));
-                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobRightCol, mobTopRow));
-                if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
-                    mob.colliding = true;
-                }
-                mobLeftCol = (mobLeftWorldX - mob.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobTopRow));
-                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobRightCol, mobBottomRow));
-                if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
-                    mob.colliding = true;
-                }
-                break;
-            case "up right":
-                mobTopRow = (mobTopWorldY - mob.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobTopRow));
-                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobRightCol, mobTopRow));
-                if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
-                    mob.colliding = true;
-                }
-                mobRightCol = (mobRightWorldX + mob.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobTopRow));
-                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobRightCol, mobBottomRow));
-                if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
-                    mob.colliding = true;
-                }
-                break;
-            case "down":
-                mobBottomRow = (mobBottomWorldY + mob.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobBottomRow));
-                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobRightCol, mobBottomRow));
-                if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
-                    mob.colliding = true;
-                }
-                break;
-            case "down left":
-                mobBottomRow = (mobBottomWorldY + mob.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobBottomRow));
-                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobRightCol, mobBottomRow));
-                if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
-                    mob.colliding = true;
-                }
-                mobLeftCol = (mobLeftWorldX - mob.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobTopRow));
-                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobRightCol, mobBottomRow));
-                if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
-                    mob.colliding = true;
-                }
-                break;
-            case  "down right":
-                mobBottomRow = (mobBottomWorldY + mob.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobBottomRow));
-                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobRightCol, mobBottomRow));
-                if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
-                    mob.colliding = true;
-                }
-                mobRightCol = (mobRightWorldX + mob.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobBottomRow));
-                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobRightCol, mobBottomRow));
-                if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
-                    mob.colliding = true;
-                }
-                break;
-            case "left":
-                mobLeftCol = (mobLeftWorldX - mob.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobTopRow));
-                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobRightCol, mobBottomRow));
-                if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
-                    mob.colliding = true;
-                }
-                break;
-            case "right":
-                mobRightCol = (mobRightWorldX + mob.speed) / Main.game.tileSize;
-                tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobTopRow));
-                tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobRightCol, mobBottomRow));
-                if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) {
-                    mob.colliding = true;
-                }
-                break;
+        if (mob.direction.contains("up")) {
+            mobTopRow = (mobTopWorldY - mob.speed) / Main.game.tileSize;
+            tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobTopRow));
+            tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobRightCol, mobTopRow));
+            if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) mob.colliding = true;
+        }
+        if (mob.direction.contains("down")) {
+            mobBottomRow = (mobBottomWorldY + mob.speed) / Main.game.tileSize;
+            tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobBottomRow));
+            tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobRightCol, mobBottomRow));
+            if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) mob.colliding = true;
+        }
+        if (mob.direction.contains("left")) {
+            mobLeftCol = (mobLeftWorldX - mob.speed) / Main.game.tileSize;
+            tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobTopRow));
+            tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobBottomRow));
+            if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) mob.colliding = true;
+        }
+        if (mob.direction.contains("right")) {
+            mobRightCol = (mobRightWorldX + mob.speed) / Main.game.tileSize;
+            tileNumber1 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobLeftCol, mobTopRow));
+            tileNumber2 = TileManager.mapTileNumbers.get("foreground").get(new TilePoint(Main.game.currentMap, mobRightCol, mobBottomRow));
+            if (TileManager.tile.get(tileNumber1).collision || TileManager.tile.get(tileNumber2).collision) mob.colliding = true;
         }
     }
 

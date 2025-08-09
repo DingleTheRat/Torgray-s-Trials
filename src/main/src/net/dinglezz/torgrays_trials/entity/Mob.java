@@ -1,6 +1,6 @@
 package net.dinglezz.torgrays_trials.entity;
 
-import net.dinglezz.torgrays_trials.effects.Effect;
+import net.dinglezz.torgrays_trials.effect.Effect;
 import net.dinglezz.torgrays_trials.entity.item.Item;
 import net.dinglezz.torgrays_trials.main.CollisionChecker;
 import net.dinglezz.torgrays_trials.main.Main;
