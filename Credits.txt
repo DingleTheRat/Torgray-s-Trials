@@ -1,9 +1,9 @@
 -----------------Credits-----------------
 ## Main
-Coding - Dinglezz and UsUsStudios (A bit)
+Coding - DingleTheRat and UsUsStudios(A bit)
 Data Generation - UsUsStudios
-Sprites - Dinglezz
-Ideas - Dinglezz
+Sprites - DingleTheRat
+Ideas - DingleTheRat
 Marmonica (Font) - 患者長ひっく
 Playtesting - UsUsStudios and Headshot_Hitter
 
