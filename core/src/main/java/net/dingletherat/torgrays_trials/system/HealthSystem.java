@@ -9,11 +9,12 @@ import net.dingletherat.torgrays_trials.component.InvincibilityComponent;
 import net.dingletherat.torgrays_trials.component.signal.*;
 import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.main.Sounds;
+import net.dingletherat.torgrays_trials.main.World;
 import net.dingletherat.torgrays_trials.rendering.UI;
 
 public class HealthSystem implements System {
-    public void draw() { }
-    public void update(float deltaTime) {
+    public void draw(World world) { }
+    public void update(World world, float deltaTime) {
         for (Integer entity : EntityHandler.queryAll(HealthComponent.class, DamageSignal.class)) {
 
             // Declare all necessary components
@@ -22,10 +23,10 @@ public class HealthSystem implements System {
 
             // Make sure the entity isn't currently invincible, if so, add in an InvincibilityComponent to keep it away from further damage
             if (EntityHandler.getComponent(entity, InvincibilityComponent.class).isPresent()) {
-                Main.world.removeComponent(entity, damageSignal);
+                Main.gameWorld.removeComponent(entity, damageSignal);
                 continue;
             }
-            Main.world.addComponent(entity, new InvincibilityComponent(new BigDecimal(healthComponent.invincibilityLength)));
+            Main.gameWorld.addComponent(entity, new InvincibilityComponent(new BigDecimal(healthComponent.invincibilityLength)));
 
             // Remove the damage amount from the health in the HealthComponent
             healthComponent.health -= damageSignal.amount;
@@ -34,11 +35,11 @@ public class HealthSystem implements System {
             if (healthComponent.health < 0) healthComponent.health = 0;
 
             // Update the UI (if its the player) and play a goofy sound
-            if (Main.world.getPlayer() == entity) UI.updateHearts();
+            if (Main.gameWorld.getPlayer() == entity) UI.updateHearts();
             Sounds.playSFX("Receive Damage", true);
 
             // Remove the damage signal
-            Main.world.removeComponent(entity, damageSignal);
+            Main.gameWorld.removeComponent(entity, damageSignal);
         }
         for (Integer entity : EntityHandler.queryAll(HealthComponent.class, HealSignal.class)) {
             // Declare all necessary components
@@ -52,11 +53,11 @@ public class HealthSystem implements System {
             if (healthComponent.health > healthComponent.maxHealth) healthComponent.health = healthComponent.maxHealth;
 
             // Update the UI (if its the player) and play a goofy sound
-            if (Main.world.getPlayer() == entity) UI.updateHearts();
+            if (Main.gameWorld.getPlayer() == entity) UI.updateHearts();
             Sounds.playSFX("Power Up", false);
 
             // Remove the HealSignal
-            Main.world.removeComponent(entity, healSignal);
+            Main.gameWorld.removeComponent(entity, healSignal);
         }
     }
 }

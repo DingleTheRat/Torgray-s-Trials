@@ -224,7 +224,7 @@ public class World {
         Matrix4 original = new Matrix4(Main.batch.getProjectionMatrix());
         Main.batch.getProjectionMatrix().setToOrtho(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 
-        for (System system : drawSystems) system.draw();
+        for (System system : drawSystems) system.draw(this);
 
         // Unflip the Y axis and draw the UI. UI isn't drawn upside-down, which is why we flip it back
         Main.batch.setProjectionMatrix(original);
@@ -237,7 +237,7 @@ public class World {
             cameraY = component.y;
         });
 
-        for (System system : updateSystems) system.update(deltaTime);
+        for (System system : updateSystems) system.update(this, deltaTime);
 
         // Update UI
         UI.update();

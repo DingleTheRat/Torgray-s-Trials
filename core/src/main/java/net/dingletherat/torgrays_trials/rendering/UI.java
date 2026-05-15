@@ -197,7 +197,7 @@ public class UI {
         table.pad(12);
 
         // Add in hearts if the player has a HealthComponent
-        EntityHandler.getComponent(Main.world.getPlayer(), HealthComponent.class).ifPresent(component -> {
+        EntityHandler.getComponent(Main.gameWorld.getPlayer(), HealthComponent.class).ifPresent(component -> {
             // Scale heartsSheet
             heartsSheet.scaleImage(Main.tileSize * 3, Main.tileSize);
 
@@ -236,7 +236,7 @@ public class UI {
         });
     }
     public static void updateHearts() {
-        EntityHandler.getComponent(Main.world.getPlayer(), HealthComponent.class).ifPresent(component -> {
+        EntityHandler.getComponent(Main.gameWorld.getPlayer(), HealthComponent.class).ifPresent(component -> {
             for (int i = 0; i < HEARTS.size(); i++) {
                 // Every heart is worth 2 health, that's why we do this
                 int heartIndex = i * 2;
@@ -312,7 +312,7 @@ public class UI {
 
         // Set up an update method to update the labels when the actors are active
         uiUpdates.put("Debug", () -> {
-            EntityHandler.getComponent(Main.world.getPlayer(), PositionComponent.class).ifPresent(component -> {
+            EntityHandler.getComponent(Main.gameWorld.getPlayer(), PositionComponent.class).ifPresent(component -> {
                 // Position
                 x.setText("X: " + component.x);
                 y.setText("Y: " + component.y);
@@ -321,18 +321,18 @@ public class UI {
             });
 
             // States
-            EntityHandler.getComponent(Main.world.getPlayer(), MovementComponent.class).ifPresent(component -> {
+            EntityHandler.getComponent(Main.gameWorld.getPlayer(), MovementComponent.class).ifPresent(component -> {
                 direction.setText("Direction: " + component.direction);
                 player.setText("Player: " + component.state);
             });
             ui.setText("UI: " + uiState);
 
             // Player Sprite Stuff
-            EntityHandler.getComponent(Main.world.getPlayer(), SpriteSheetComponent.class).ifPresent(component -> {
+            EntityHandler.getComponent(Main.gameWorld.getPlayer(), SpriteSheetComponent.class).ifPresent(component -> {
                 scol.setText("SCol: " + component.column);
                 srow.setText("SRow: " + component.row);
             });
-            EntityHandler.getComponent(Main.world.getPlayer(), EyesSheetComponent.class).ifPresent(component -> {
+            EntityHandler.getComponent(Main.gameWorld.getPlayer(), EyesSheetComponent.class).ifPresent(component -> {
                 ecol.setText("ECol: " + component.column);
                 erow.setText("ERow: " + component.row);
             });

@@ -71,19 +71,19 @@ public class AreaChecker {
         // Check if the entity's position (and maybe area components) are in the camera. If it is, or one areaComponent is, return true
         // If there's no areaComponents, simply use the position in the calculation
         if (areaComponents.isEmpty()) {
-            if (positionComponent.x > Main.world.cameraX - Main.screenWidth / 2f &&
-                positionComponent.x < Main.world.cameraX + Main.screenWidth / 2f &&
-                positionComponent.y > Main.world.cameraY - Main.screenHeight / 2f &&
-                positionComponent.y < Main.world.cameraY + Main.screenHeight / 2f) return true;
+            if (positionComponent.x > Main.gameWorld.cameraX - Main.screenWidth / 2f &&
+                positionComponent.x < Main.gameWorld.cameraX + Main.screenWidth / 2f &&
+                positionComponent.y > Main.gameWorld.cameraY - Main.screenHeight / 2f &&
+                positionComponent.y < Main.gameWorld.cameraY + Main.screenHeight / 2f) return true;
             return false;
         }
 
         // Otherwise, loop through each areaComponent and see if they are in the camera, taking the width, height, ect.. into consideration
         for (AreaComponent areaComponent : areaComponents) {
-            if (positionComponent.x + areaComponent.offsetX - areaComponent.width / 2f < Main.world.cameraX + Main.screenWidth / 2f &&
-                positionComponent.x + areaComponent.offsetX + areaComponent.width / 2f > Main.world.cameraX - Main.screenWidth / 2f &&
-                positionComponent.y + areaComponent.offsetY - areaComponent.height / 2f < Main.world.cameraY + Main.screenHeight / 2f &&
-                positionComponent.y + areaComponent.offsetY + areaComponent.height / 2f > Main.world.cameraY - Main.screenHeight / 2f)
+            if (positionComponent.x + areaComponent.offsetX - areaComponent.width / 2f < Main.gameWorld.cameraX + Main.screenWidth / 2f &&
+                positionComponent.x + areaComponent.offsetX + areaComponent.width / 2f > Main.gameWorld.cameraX - Main.screenWidth / 2f &&
+                positionComponent.y + areaComponent.offsetY - areaComponent.height / 2f < Main.gameWorld.cameraY + Main.screenHeight / 2f &&
+                positionComponent.y + areaComponent.offsetY + areaComponent.height / 2f > Main.gameWorld.cameraY - Main.screenHeight / 2f)
                     return true;
         }
         return false;
@@ -126,9 +126,9 @@ public class AreaChecker {
 
         // Check collision with player too (if it's not the player)
         if (EntityHandler.getComponent(entity, PlayerComponent.class).isEmpty())
-            if (check2EntityIntersecting(entity, Main.world.getPlayer(), CollisionComponent.class, true)) return true;
+            if (check2EntityIntersecting(entity, Main.gameWorld.getPlayer(), CollisionComponent.class, true)) return true;
 
-        Map map = TileSystem.maps.get(Main.world.getMap());
+        Map map = TileSystem.maps.get(Main.gameWorld.getMap());
         if (map == null) return false;
 
         for (int row = 0; row < map.y(); row++) {

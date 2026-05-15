@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 
 import net.dingletherat.torgrays_trials.Main;
+import net.dingletherat.torgrays_trials.main.World;
 import net.dingletherat.torgrays_trials.rendering.DataImage;
 import net.dingletherat.torgrays_trials.rendering.Map;
 import net.dingletherat.torgrays_trials.rendering.Tile;
@@ -123,9 +124,9 @@ public class TileSystem implements System {
      * @param tilePosition A {@link Pair}, which is a class that holds the X and Y values of your target tile.
      * @return True if at least one point is collidable, false if not.
      **/
-    public static boolean getTileCollision(Pair tilePosition) {
+    public static boolean getTileCollision(World world, Pair tilePosition) {
         // Get the tile's position in the current map's foreground
-        Map map = maps.get(Main.world.getMap());
+        Map map = maps.get(world.getMap());
         int tileNumber = map.foreground().get(tilePosition);
 
         // Get its tile type (and return if it's null)
@@ -146,28 +147,28 @@ public class TileSystem implements System {
     }
 
     @Override
-    public void draw() {
-        if (!maps.containsKey(Main.world.getMap())) {
-            Main.LOGGER.error("Map '{}' not found", Main.world.getMap());
+    public void draw(World world) {
+        if (!maps.containsKey(world.getMap())) {
+            Main.LOGGER.error("Map '{}' not found", world.getMap());
             return;
         }
-        Map map = maps.get(Main.world.getMap());
+        Map map = maps.get(world.getMap());
 
         Main.batch.begin();
 
         // Draw the ground
-        drawLayer(map, map.ground());
-        drawLayer(map, map.foreground());
+        drawLayer(world, map, map.ground());
+        drawLayer(world, map, map.foreground());
 
         Main.batch.end();
     }
 
     @Override
-    public void update(float deltaTime) { }
+    public void update(World world, float deltaTime) { }
 
-    private void drawLayer(Map map, HashMap<Pair, Integer> layer) {
-        float cameraX = Main.world.cameraX;
-        float cameraY = Main.world.cameraY;
+    private void drawLayer(World world, Map map, HashMap<Pair, Integer> layer) {
+        float cameraX = world.cameraX;
+        float cameraY = world.cameraY;
         int tileSize = Main.tileSize;
         for (int worldRow = 0; worldRow < map.y(); worldRow++) {
             for (int worldCol = 0; worldCol < map.x(); worldCol++) {

@@ -9,19 +9,20 @@ import net.dingletherat.torgrays_trials.component.MovementComponent;
 import net.dingletherat.torgrays_trials.component.PlayerComponent;
 import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.main.States;
+import net.dingletherat.torgrays_trials.main.World;
 import net.dingletherat.torgrays_trials.rendering.Map;
 
 public class PlayerSystem implements System {
-    public void update(float deltaTime) {
+    public void update(World world, float deltaTime) {
         for (Integer entity : EntityHandler.queryAll(PlayerComponent.class)) {
             // Clamp the camera to the map bounds
-            Map map = TileSystem.maps.get(Main.world.getMap());
+            Map map = TileSystem.maps.get(world.getMap());
             int maxCameraX = map.x() * Main.tileSize - Main.screenWidth / 2;
             int maxCameraY = map.y() * Main.tileSize - Main.screenHeight / 2;
-            if (Main.world.cameraX < Main.screenWidth / 2f) Main.world.cameraX = Main.screenWidth / 2f;
-            if (Main.world.cameraY < Main.screenHeight / 2f) Main.world.cameraY = Main.screenHeight / 2f;
-            if (Main.world.cameraX > maxCameraX) Main.world.cameraX = maxCameraX;
-            if (Main.world.cameraY > maxCameraY) Main.world.cameraY = maxCameraY;
+            if (world.cameraX < Main.screenWidth / 2f) world.cameraX = Main.screenWidth / 2f;
+            if (world.cameraY < Main.screenHeight / 2f) world.cameraY = Main.screenHeight / 2f;
+            if (world.cameraX > maxCameraX) world.cameraX = maxCameraX;
+            if (world.cameraY > maxCameraY) world.cameraY = maxCameraY;
 
             EntityHandler.getComponent(entity, MovementComponent.class).ifPresent(component -> {
                 StringBuilder newDirection = new StringBuilder();
@@ -43,5 +44,5 @@ public class PlayerSystem implements System {
             });
         }
     }
-    public void draw() { }
+    public void draw(World world) { }
 }

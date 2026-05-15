@@ -7,9 +7,10 @@ import net.dingletherat.torgrays_trials.component.pathfinding.TargetComponent;
 import net.dingletherat.torgrays_trials.component.pathfinding.WanderComponent;
 import net.dingletherat.torgrays_trials.component.pathfinding.behaviour.DracoreBehaviour;
 import net.dingletherat.torgrays_trials.main.EntityHandler;
+import net.dingletherat.torgrays_trials.main.World;
 
 public class BehaviourSystem implements System {
-    public void update(float deltaTime) {
+    public void update(World world, float deltaTime) {
         // Dracore Behaviour
         for (Integer entity : EntityHandler.queryAll(DracoreBehaviour.class, WanderComponent.class,
                     TargetComponent.class, PathfindingComponent.class)) {
@@ -35,5 +36,5 @@ public class BehaviourSystem implements System {
             }
         }
     }
-    public void draw() {}
+    public void draw(World world) {}
 }

@@ -7,11 +7,12 @@ import net.dingletherat.torgrays_trials.component.*;
 import net.dingletherat.torgrays_trials.component.pathfinding.PathfindingComponent;
 import net.dingletherat.torgrays_trials.main.AreaChecker;
 import net.dingletherat.torgrays_trials.main.EntityHandler;
+import net.dingletherat.torgrays_trials.main.World;
 import net.dingletherat.torgrays_trials.main.States.MovementStates;
 
 public class MovementSystem implements System {
     @Override
-    public void update(float deltaTime) {
+    public void update(World world, float deltaTime) {
         for (Integer entity : EntityHandler.queryAll(MovementComponent.class, PositionComponent.class)) {
             // Get component
             MovementComponent component = EntityHandler.getComponent(entity, MovementComponent.class).get();
@@ -87,5 +88,5 @@ public class MovementSystem implements System {
         }
     }
     @Override
-    public void draw() { }
+    public void draw(World world) { }
 }

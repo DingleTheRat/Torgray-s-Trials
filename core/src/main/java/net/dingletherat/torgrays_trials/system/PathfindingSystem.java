@@ -7,12 +7,13 @@ import net.dingletherat.torgrays_trials.component.PositionComponent;
 import net.dingletherat.torgrays_trials.component.pathfinding.*;
 import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.main.PathfindingHandler;
+import net.dingletherat.torgrays_trials.main.World;
 import net.dingletherat.torgrays_trials.main.States.MovementStates;
 
 public class PathfindingSystem implements System{
-    public void draw() { }
+    public void draw(World world) { }
 
-    public void update(float deltaTime) {
+    public void update(World world, float deltaTime) {
         // Wandering
         for (Integer entity : EntityHandler.queryAll(WanderComponent.class, PathfindingComponent.class, MovementComponent.class)) {
             // Check if the WanderComponent is active
@@ -88,7 +89,7 @@ public class PathfindingSystem implements System{
                 // Only regenerate the path if the target has moved to a different tile, to avoid interrupting movement mid-path
                 TileSystem.Pair currentTargetNode = targetComponent.path.isEmpty() ? null : targetComponent.path.get(targetComponent.path.size() - 1);
                 if (!targetNode.equals(currentTargetNode))
-                    targetComponent.path = PathfindingHandler.findPath(entityNode, targetNode);
+                    targetComponent.path = PathfindingHandler.findPath(world, entityNode, targetNode);
             }
 
             // If the entity already reached the target location (the path is empty), set the entity to idle and stop

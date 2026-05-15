@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.MathUtils;
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.*;
 import net.dingletherat.torgrays_trials.main.EntityHandler;
+import net.dingletherat.torgrays_trials.main.World;
 
 public class DarknessSystem implements System{
     public float ambientDarkness = 0.92f;  // How dark it is without lights (0.0 = no darkness, 1.0 = complete darkness)
@@ -47,7 +48,7 @@ public class DarknessSystem implements System{
     }
 
     @Override
-    public void draw() {
+    public void draw(World world) {
         // Save the current batch state and end it
         Main.batch.flush();
 
@@ -91,8 +92,8 @@ public class DarknessSystem implements System{
             }
 
             // Get the light's position on the screen
-            x = x - Main.world.cameraX + Main.screenWidth / 2f + 24 - radius;
-            y = y - Main.world.cameraY + Main.screenHeight / 2f + 24 - radius;
+            x = x - world.cameraX + Main.screenWidth / 2f + 24 - radius;
+            y = y - world.cameraY + Main.screenHeight / 2f + 24 - radius;
 
             Main.batch.setColor(1f, 1f, 1f, intensity);
             Main.batch.draw(radialLightTexture, x, y, radius * 2, radius * 2);
@@ -119,5 +120,5 @@ public class DarknessSystem implements System{
     }
 
     @Override
-    public void update(float deltaTime) { }
+    public void update(World world, float deltaTime) { }
 }

@@ -184,7 +184,7 @@ public class EntityHandler {
         List<Integer> result = new ArrayList<>();
         boolean wantsCooldown = Arrays.asList(components).contains(CooldownComponent.class);
 
-        for (int entity : Main.world.getEntities().keySet()) {
+        for (int entity : Main.gameWorld.getEntities().keySet()) {
             if (getComponent(entity, CooldownComponent.class).isPresent() && !wantsCooldown) continue;
 
             boolean match = true;
@@ -192,7 +192,7 @@ public class EntityHandler {
             for (Class<? extends Component> componentClass : components) {
                 boolean found = false;
 
-                for (Component component : Main.world.getEntities().get(entity)) {
+                for (Component component : Main.gameWorld.getEntities().get(entity)) {
 
                     if (componentClass.isInstance(component)) {
                         found = true;
@@ -216,12 +216,12 @@ public class EntityHandler {
         List<Integer> result = new ArrayList<>();
         boolean wantsCooldown = Arrays.asList(components).contains(CooldownComponent.class);
 
-        for (int entity : Main.world.getEntities().keySet()) {
+        for (int entity : Main.gameWorld.getEntities().keySet()) {
             if (getComponent(entity, CooldownComponent.class).isPresent() && !wantsCooldown) continue;
             boolean match = false;
 
             for (Class<? extends Component> componentClass : components) {
-                for (Component component : Main.world.getEntities().get(entity)) {
+                for (Component component : Main.gameWorld.getEntities().get(entity)) {
                     if (componentClass.isInstance(component)) {
                         match = true;
                         break;
@@ -235,9 +235,9 @@ public class EntityHandler {
         return result;
     }
     public static <T extends Component> Optional<T> getComponent(int identifier, Class<T> type) {
-        if (!Main.world.getEntities().containsKey(identifier)) return Optional.empty();
+        if (!Main.gameWorld.getEntities().containsKey(identifier)) return Optional.empty();
 
-        List<Component> entity = Main.world.getEntities().get(identifier);
+        List<Component> entity = Main.gameWorld.getEntities().get(identifier);
 
         for (Component element : entity) {
             if (type.isInstance(element))
@@ -247,7 +247,7 @@ public class EntityHandler {
     }
     public static <T extends Component> List<T> getComponents(int identifier, Class<T> type) {
         List<T> result = new ArrayList<>();
-        List<Component> entity = Main.world.getEntities().get(identifier);
+        List<Component> entity = Main.gameWorld.getEntities().get(identifier);
 
         for (Component component : entity) {
             if (type.isInstance(component))

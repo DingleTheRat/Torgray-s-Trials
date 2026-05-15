@@ -41,7 +41,7 @@ public class Main extends ApplicationAdapter {
     public static String language = "english";
 
     // Essential, but miscellaneous
-    public static World world;
+    public static World gameWorld;
     public static SpriteBatch batch;
     public static ShapeRenderer shapes;
     public static Random random = new Random();
@@ -89,8 +89,8 @@ public class Main extends ApplicationAdapter {
         //}
 
         // Create the title world
-        world = new World();
-        world.drawSystems.add(new DarknessSystem());
+        gameWorld = new World();
+        gameWorld.drawSystems.add(new DarknessSystem());
 
         // Lastly, load the backdrop
         backdrop = DataImage.loadImage("backdrop");
@@ -110,12 +110,12 @@ public class Main extends ApplicationAdapter {
                 batch.draw(backdrop.getTexture(), 0, 0);
                 batch.end();
 
-                world.draw();
+                gameWorld.draw();
 
                 // Draw UI
                 UI.stage.draw();
             }
-            case PLAY -> world.draw();
+            case PLAY -> gameWorld.draw();
         }
     }
     public void update(float deltaTime) {
@@ -124,7 +124,7 @@ public class Main extends ApplicationAdapter {
                 // Update UI and fireflies
                 UI.update();
             }
-            case PLAY -> world.update(deltaTime);
+            case PLAY -> gameWorld.update(deltaTime);
         }
     }
 
@@ -150,12 +150,12 @@ public class Main extends ApplicationAdapter {
     }
 
     public static void loadWorld() {
-        world = new World();
+        gameWorld = new World();
 
         // Load maps and tiles
         TileSystem.loadTiles();
         MapHandler.loadMaps();
-        world.setMap("Main Island");
+        gameWorld.setMap("Main Island");
 
         // Set the state to play, so mobs and stuff could be updated and drawn. As well as the uiState for the, well, UI
         Main.gameState = GameStates.PLAY;
@@ -166,22 +166,22 @@ public class Main extends ApplicationAdapter {
         SpriteSystem spriteSystem = new SpriteSystem();
 
         // Add draw systems
-        world.drawSystems.add(new TileSystem());
-        world.drawSystems.add(spriteSystem);
-        world.drawSystems.add(new DarknessSystem());
+        gameWorld.drawSystems.add(new TileSystem());
+        gameWorld.drawSystems.add(spriteSystem);
+        gameWorld.drawSystems.add(new DarknessSystem());
 
         // Add update systems
-        world.updateSystems.add(new PlayerSystem());
-        world.updateSystems.add(new MovementSystem());
-        world.updateSystems.add(spriteSystem);
-        world.updateSystems.add(new BehaviourSystem());
-        world.updateSystems.add(new PathfindingSystem());
-        world.updateSystems.add(new HealthSystem());
-        world.updateSystems.add(new TouchSystem());
-        world.updateSystems.add(new CooldownSystem());
+        gameWorld.updateSystems.add(new PlayerSystem());
+        gameWorld.updateSystems.add(new MovementSystem());
+        gameWorld.updateSystems.add(spriteSystem);
+        gameWorld.updateSystems.add(new BehaviourSystem());
+        gameWorld.updateSystems.add(new PathfindingSystem());
+        gameWorld.updateSystems.add(new HealthSystem());
+        gameWorld.updateSystems.add(new TouchSystem());
+        gameWorld.updateSystems.add(new CooldownSystem());
 
         // Change the music to the "playing music"
         Sounds.stopMusic("Tech Geek", Main.titleMusic);
-        world.currentSong = Sounds.playMusic("Umbral Force");
+        gameWorld.currentSong = Sounds.playMusic("Umbral Force");
     }
 }

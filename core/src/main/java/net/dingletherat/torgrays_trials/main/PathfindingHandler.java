@@ -43,7 +43,7 @@ public class PathfindingHandler {
         HashMap<TileSystem.Pair, Node> returnMap = new HashMap<>();
 
         // Get the current map
-        Map map = TileSystem.maps.get(Main.world.getMap());
+        Map map = TileSystem.maps.get(Main.gameWorld.getMap());
 
         /* Loop through all the pairs in the map (pairs are just records with X and Y values) and create a node for each
            Each pair represents a tile, so looping through all pairs is basically looping through all tiles */
@@ -85,7 +85,7 @@ public class PathfindingHandler {
 
         return finalPath;
     }
-    public static List<TileSystem.Pair> findPath(TileSystem.Pair start, TileSystem.Pair end) {
+    public static List<TileSystem.Pair> findPath(World world, TileSystem.Pair start, TileSystem.Pair end) {
         // Get all the nodes in the map and get the start and end nodes from that
         HashMap<TileSystem.Pair, Node> nodes = generateNodes();
         Node startNode = nodes.get(start);
@@ -131,7 +131,7 @@ public class PathfindingHandler {
                 if (neighbor == null) continue;
 
                 // If the neighbor is collidable, rule it out, it's useless
-                if (TileSystem.getTileCollision(neighborPair)) continue;
+                if (TileSystem.getTileCollision(world, neighborPair)) continue;
 
                 // Skip it if we checked it already
                 if (closed.contains(neighbor)) continue;

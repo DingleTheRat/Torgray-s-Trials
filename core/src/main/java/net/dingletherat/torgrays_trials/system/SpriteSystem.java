@@ -11,13 +11,13 @@ import net.dingletherat.torgrays_trials.component.*;
 import net.dingletherat.torgrays_trials.component.sprite.*;
 import net.dingletherat.torgrays_trials.main.AreaChecker;
 import net.dingletherat.torgrays_trials.main.EntityHandler;
+import net.dingletherat.torgrays_trials.main.World;
 import net.dingletherat.torgrays_trials.main.States.MovementStates;
 
 public class SpriteSystem implements System {
 
     @Override
-    public void draw() {
-
+    public void draw(World world) {
         // Add in all the entities to draw into an ArrayList that we can sort depending on their Y position (if they have one)
         List<Integer> entitiesToDraw = new ArrayList<>();
         for (Integer entity : EntityHandler.queryAny(SpriteComponent.class, SpriteSheetComponent.class))
@@ -44,13 +44,13 @@ public class SpriteSystem implements System {
             if (!AreaChecker.checkVisibility(entity)) continue;
 
             // Get the entity's positon on the screen. If the entity has positionComponent, draw it at the positon. Otherwise, draw it at 0
-            float screenX = 0 - Main.world.cameraX + Main.screenWidth / 2f;
-            float screenY = 0 - Main.world.cameraY + Main.screenHeight / 2f;
+            float screenX = 0 - world.cameraX + Main.screenWidth / 2f;
+            float screenY = 0 - world.cameraY + Main.screenHeight / 2f;
 
             PositionComponent positionComponent = EntityHandler.getComponent(entity, PositionComponent.class).orElse(null);
             if (positionComponent != null) {
-                screenX = positionComponent.x - Main.world.cameraX + Main.screenWidth / 2f;
-                screenY = positionComponent.y - Main.world.cameraY + Main.screenHeight / 2f;
+                screenX = positionComponent.x - world.cameraX + Main.screenWidth / 2f;
+                screenY = positionComponent.y - world.cameraY + Main.screenHeight / 2f;
             }
 
             // Get all sprite components inside of the entity and sort them depending on their z value
@@ -85,7 +85,7 @@ public class SpriteSystem implements System {
     }
 
     @Override
-    public void update(float deltaTime) {
+    public void update(World world, float deltaTime) {
         // WalkingSheetComponent
         for (Integer entity : EntityHandler.queryAll(WalkingSheetComponent.class, MovementComponent.class)) {
             // Declare components
