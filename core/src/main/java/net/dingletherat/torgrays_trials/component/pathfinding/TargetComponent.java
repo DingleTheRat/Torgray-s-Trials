@@ -8,8 +8,8 @@ import java.util.List;
 import net.dingletherat.torgrays_trials.component.Component;
 import net.dingletherat.torgrays_trials.component.PositionComponent;
 import net.dingletherat.torgrays_trials.main.PathfindingHandler;
+import net.dingletherat.torgrays_trials.rendering.TileManager.Position;
 import net.dingletherat.torgrays_trials.system.PathfindingSystem;
-import net.dingletherat.torgrays_trials.system.TileSystem;
 
 /**
  * @since Beta-1.0
@@ -27,7 +27,7 @@ public class TargetComponent implements Component {
     /** How fast does the entity update its path to the target entity? **/
     public float updateSpeed = 0.1f;
     /** The path currently being used to reach the target entity **/
-    public List<TileSystem.Pair> path = new ArrayList<>();
+    public List<Position> path = new ArrayList<>();
 
     // Counters
     public float updateCounter;

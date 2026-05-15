@@ -15,6 +15,8 @@ import net.dingletherat.torgrays_trials.component.MovementComponent;
 import net.dingletherat.torgrays_trials.component.PositionComponent;
 import net.dingletherat.torgrays_trials.main.States.MovementStates;
 import net.dingletherat.torgrays_trials.rendering.Map;
+import net.dingletherat.torgrays_trials.rendering.TileManager;
+import net.dingletherat.torgrays_trials.rendering.TileManager.Position;
 import net.dingletherat.torgrays_trials.system.TileSystem;
 
 public class PathfindingHandler {
@@ -38,35 +40,35 @@ public class PathfindingHandler {
         }
     }
 
-    public static HashMap<TileSystem.Pair, Node> generateNodes() {
+    public static HashMap<Position, Node> generateNodes() {
         // Create the HashMap that we'll return
-        HashMap<TileSystem.Pair, Node> returnMap = new HashMap<>();
+        HashMap<Position, Node> returnMap = new HashMap<>();
 
         // Get the current map
-        Map map = TileSystem.maps.get(Main.gameWorld.getMap());
+        Map map = TileManager.maps.get(Main.gameWorld.getMap());
 
         /* Loop through all the pairs in the map (pairs are just records with X and Y values) and create a node for each
            Each pair represents a tile, so looping through all pairs is basically looping through all tiles */
-        for (TileSystem.Pair pair : map.foreground().keySet())
+        for (Position pair : map.foreground().keySet())
             returnMap.put(pair, new Node(pair.x(), pair.y()));
 
         return returnMap;
     }
-    public static List<TileSystem.Pair> getNeighbors(TileSystem.Pair pair) {
+    public static List<Position> getNeighbors(Position pair) {
         return List.of(
-            new TileSystem.Pair(pair.x() + 1, pair.y()),
-            new TileSystem.Pair(pair.x() - 1, pair.y()),
-            new TileSystem.Pair(pair.x(), pair.y() + 1),
-            new TileSystem.Pair(pair.x(), pair.y() - 1)
+            new Position(pair.x() + 1, pair.y()),
+            new Position(pair.x() - 1, pair.y()),
+            new Position(pair.x(), pair.y() + 1),
+            new Position(pair.x(), pair.y() - 1)
         );
     }
     public static int calculateHeuristic(Node nodeA, Node nodeB) {
         return Math.abs(nodeA.x - nodeB.x) + Math.abs(nodeA.y - nodeB.y);
     }
 
-    public static List<TileSystem.Pair> generatePath(Node endNode) {
+    public static List<Position> generatePath(Node endNode) {
         // Create our regular return list
-        List<TileSystem.Pair> finalPath = new ArrayList<>();
+        List<Position> finalPath = new ArrayList<>();
 
         // Declare the current node as the end node, but it'll eventually change to that node's parent and so on
         Node current = endNode;
@@ -74,7 +76,7 @@ public class PathfindingHandler {
         // Go through the chain of parent nodes until we reach the final startNode, the one with no parent
         while (current != null) {
             // Add the node, or actually its position (in pairs) to our favourite return list
-            finalPath.add(new TileSystem.Pair(current.x, current.y));
+            finalPath.add(new Position(current.x, current.y));
 
             // Then, move onto our next target :3
             current = current.parent;
@@ -85,9 +87,9 @@ public class PathfindingHandler {
 
         return finalPath;
     }
-    public static List<TileSystem.Pair> findPath(World world, TileSystem.Pair start, TileSystem.Pair end) {
+    public static List<Position> findPath(World world, Position start, Position end) {
         // Get all the nodes in the map and get the start and end nodes from that
-        HashMap<TileSystem.Pair, Node> nodes = generateNodes();
+        HashMap<Position, Node> nodes = generateNodes();
         Node startNode = nodes.get(start);
         Node endNode = nodes.get(end);
 
@@ -122,16 +124,16 @@ public class PathfindingHandler {
             if (current == endNode) return generatePath(endNode);
 
             // Otherwise, get its pairs
-            TileSystem.Pair currentPair = new TileSystem.Pair(current.x, current.y);
+            Position currentPair = new Position(current.x, current.y);
 
             // Loop through all the currentPair's neighbors
-            for (TileSystem.Pair neighborPair : getNeighbors(currentPair)) {
+            for (Position neighborPair : getNeighbors(currentPair)) {
                 // Get the node for this neighboring tile, making sure that's its not a null peice of junk
                 Node neighbor = nodes.get(neighborPair);
                 if (neighbor == null) continue;
 
                 // If the neighbor is collidable, rule it out, it's useless
-                if (TileSystem.getTileCollision(world, neighborPair)) continue;
+                if (TileManager.getTileCollision(world, neighborPair)) continue;
 
                 // Skip it if we checked it already
                 if (closed.contains(neighbor)) continue;
@@ -162,7 +164,7 @@ public class PathfindingHandler {
         return new ArrayList<>();
     }
 
-    public static boolean moveToTarget(int entity, TileSystem.Pair target) {
+    public static boolean moveToTarget(int entity, Position target) {
         // Get necessary components and check if they're there. If not, return
         PositionComponent positionComponent = EntityHandler.getComponent(entity, PositionComponent.class).orElse(null);
         MovementComponent movementComponent = EntityHandler.getComponent(entity, MovementComponent.class).orElse(null);

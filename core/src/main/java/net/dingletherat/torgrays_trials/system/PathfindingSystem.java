@@ -9,6 +9,7 @@ import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.main.PathfindingHandler;
 import net.dingletherat.torgrays_trials.main.World;
 import net.dingletherat.torgrays_trials.main.States.MovementStates;
+import net.dingletherat.torgrays_trials.rendering.TileManager.Position;
 
 public class PathfindingSystem implements System{
     public void draw(World world) { }
@@ -79,15 +80,15 @@ public class PathfindingSystem implements System{
                 PositionComponent targetPosition = EntityHandler.getComponent(targetEntity, PositionComponent.class).get();
 
                 // Create pairs for both entities' positions
-                TileSystem.Pair entityNode = new TileSystem.Pair(
+                Position entityNode = new Position(
                     (int) Math.floor(positionComponent.x / Main.tileSize),
                     (int) Math.floor(positionComponent.y / Main.tileSize));
-                TileSystem.Pair targetNode = new TileSystem.Pair(
+                Position targetNode = new Position(
                     (int) Math.floor(targetPosition.x / Main.tileSize),
                     (int) Math.floor(targetPosition.y / Main.tileSize));
 
                 // Only regenerate the path if the target has moved to a different tile, to avoid interrupting movement mid-path
-                TileSystem.Pair currentTargetNode = targetComponent.path.isEmpty() ? null : targetComponent.path.get(targetComponent.path.size() - 1);
+                Position currentTargetNode = targetComponent.path.isEmpty() ? null : targetComponent.path.get(targetComponent.path.size() - 1);
                 if (!targetNode.equals(currentTargetNode))
                     targetComponent.path = PathfindingHandler.findPath(world, entityNode, targetNode);
             }

@@ -1,7 +1,7 @@
 package net.dingletherat.torgrays_trials.system;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.component.PositionComponent;
+import net.dingletherat.torgrays_trials.component.*;
 import net.dingletherat.torgrays_trials.component.pathfinding.PathfindingComponent;
 import net.dingletherat.torgrays_trials.component.pathfinding.TargetComponent;
 import net.dingletherat.torgrays_trials.component.pathfinding.WanderComponent;

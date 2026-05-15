@@ -7,15 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import net.dingletherat.torgrays_trials.main.EntityHandler;
-import net.dingletherat.torgrays_trials.main.World;
+import net.dingletherat.torgrays_trials.main.*;
 import net.dingletherat.torgrays_trials.main.States.GameStates;
-import net.dingletherat.torgrays_trials.main.Sounds;
-import net.dingletherat.torgrays_trials.main.States;
-import net.dingletherat.torgrays_trials.main.Translations;
-import net.dingletherat.torgrays_trials.rendering.DataImage;
-import net.dingletherat.torgrays_trials.rendering.MapHandler;
-import net.dingletherat.torgrays_trials.rendering.UI;
+import net.dingletherat.torgrays_trials.rendering.*;
 import net.dingletherat.torgrays_trials.system.*;
 
 import java.util.Random;
@@ -153,12 +147,12 @@ public class Main extends ApplicationAdapter {
         gameWorld = new World();
 
         // Load maps and tiles
-        TileSystem.loadTiles();
+        TileManager.loadTiles();
         MapHandler.loadMaps();
         gameWorld.setMap("Main Island");
 
         // Set the state to play, so mobs and stuff could be updated and drawn. As well as the uiState for the, well, UI
-        Main.gameState = GameStates.PLAY;
+        gameState = GameStates.PLAY;
         UI.uiState = "Play";
         UI.playState();
 

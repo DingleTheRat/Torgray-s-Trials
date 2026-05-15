@@ -3,7 +3,7 @@ package net.dingletherat.torgrays_trials.rendering;
 
 import java.util.HashMap;
 
-import net.dingletherat.torgrays_trials.system.TileSystem;
+import net.dingletherat.torgrays_trials.rendering.TileManager.Position;
 
-public record Map (HashMap<TileSystem.Pair, Integer> ground, HashMap<TileSystem.Pair, Integer> foreground,
+public record Map (HashMap<Position, Integer> ground, HashMap<Position, Integer> foreground,
                    int x, int y) {}

@@ -10,6 +10,8 @@ import net.dingletherat.torgrays_trials.component.PositionComponent;
 import net.dingletherat.torgrays_trials.component.area.AreaComponent;
 import net.dingletherat.torgrays_trials.component.area.CollisionComponent;
 import net.dingletherat.torgrays_trials.rendering.Map;
+import net.dingletherat.torgrays_trials.rendering.TileManager;
+import net.dingletherat.torgrays_trials.rendering.TileManager.Position;
 import net.dingletherat.torgrays_trials.system.TileSystem;
 
 public class AreaChecker {
@@ -128,13 +130,13 @@ public class AreaChecker {
         if (EntityHandler.getComponent(entity, PlayerComponent.class).isEmpty())
             if (check2EntityIntersecting(entity, Main.gameWorld.getPlayer(), CollisionComponent.class, true)) return true;
 
-        Map map = TileSystem.maps.get(Main.gameWorld.getMap());
+        Map map = TileManager.maps.get(Main.gameWorld.getMap());
         if (map == null) return false;
 
         for (int row = 0; row < map.y(); row++) {
             for (int col = 0; col < map.x(); col++) {
-                int tileNumber = map.foreground().get(new TileSystem.Pair(col, row));
-                var tile = TileSystem.tileTypes.get(tileNumber);
+                int tileNumber = map.foreground().get(new Position(col, row));
+                var tile = TileManager.tileTypes.get(tileNumber);
                 if (tile == null) continue;
 
                 boolean[][] collisionPoints = tile.collision();

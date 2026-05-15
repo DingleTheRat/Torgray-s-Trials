@@ -11,12 +11,13 @@ import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.main.States;
 import net.dingletherat.torgrays_trials.main.World;
 import net.dingletherat.torgrays_trials.rendering.Map;
+import net.dingletherat.torgrays_trials.rendering.TileManager;
 
 public class PlayerSystem implements System {
     public void update(World world, float deltaTime) {
         for (Integer entity : EntityHandler.queryAll(PlayerComponent.class)) {
             // Clamp the camera to the map bounds
-            Map map = TileSystem.maps.get(world.getMap());
+            Map map = TileManager.maps.get(world.getMap());
             int maxCameraX = map.x() * Main.tileSize - Main.screenWidth / 2;
             int maxCameraY = map.y() * Main.tileSize - Main.screenHeight / 2;
             if (world.cameraX < Main.screenWidth / 2f) world.cameraX = Main.screenWidth / 2f;
