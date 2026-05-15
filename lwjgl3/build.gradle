@@ -19,13 +19,13 @@ apply plugin: 'io.github.fourlastor.construo'
 import io.github.fourlastor.construo.Target
 
 sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
-mainClassName = 'net.dingletherat.torgrays_trials.lwjgl3.Lwjgl3Launcher'
-application.setMainClass(mainClassName)
+application {
+    mainClass = 'net.dingletherat.torgrays_trials.lwjgl3.Lwjgl3Launcher'
+}
 eclipse.project.name = appName + '-lwjgl3'
-java.sourceCompatibility = 17
-java.targetCompatibility = 17
-if (JavaVersion.current().isJava9Compatible()) {
-        compileJava.options.release.set(17)
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 dependencies {
@@ -52,6 +52,8 @@ run {
     jvmArgs += "-XstartOnFirstThread"
   }
 
+  jvmArgs += "--enable-native-access=ALL-UNNAMED"
+
   // Prevent IDE false-positive “build failed” error
   // setIgnoreExitValue(true)
 }
@@ -70,9 +72,9 @@ jar {
     exclude('META-INF/INDEX.LIST', 'META-INF/maven/**')
   }
   // setting the manifest makes the JAR runnable.
-// enabling native access helps avoid a warning when Java 24 or later runs the JAR.
+  // enabling native access helps avoid a warning when Java 24 or later runs the JAR.
   manifest {
-    attributes 'Main-Class': project.mainClassName, 'Enable-Native-Access': 'ALL-UNNAMED'
+      attributes 'Main-Class': application.mainClass.get(), 'Enable-Native-Access': 'ALL-UNNAMED'
   }
   // this last step may help on some OSes that need extra instruction to make runnable JARs.
   doLast {
