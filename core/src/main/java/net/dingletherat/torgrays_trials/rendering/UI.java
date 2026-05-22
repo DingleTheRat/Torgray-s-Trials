@@ -26,7 +26,7 @@ import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.component.*;
 import net.dingletherat.torgrays_trials.component.sprite.*;
 import net.dingletherat.torgrays_trials.main.Sounds;
-import net.dingletherat.torgrays_trials.main.Translations;
+import net.dingletherat.torgrays_trials.main.TranslationReader;
 
 public class UI {
     private final static HashMap<String, HashMap<Integer, BitmapFont>> fontCache = new HashMap<>();
@@ -158,14 +158,14 @@ public class UI {
         buttonStyle.font = getFont("Maru_Monica", 80);
 
         // Create the title
-        Label title = new Label(Translations.get(Main.identifier, "title"), titleStyle);
+        Label title = new Label(TranslationReader.get(Main.identifier, "title"), titleStyle);
         table.add(title);
 
         // New Row
         table.row().pad(5);
 
         // Create the first actual button that creates a new game
-        TextButton newMain = createButton(Translations.get(Main.identifier, "new_game"),
+        TextButton newMain = createButton(TranslationReader.get(Main.identifier, "new_game"),
             buttonStyle, () -> Main.loadWorld());
         table.add(newMain);
 
@@ -173,14 +173,14 @@ public class UI {
         table.row().pad(5);
 
         // A load button (no functionality for now)
-        TextButton loadMain = new TextButton(Translations.get(Main.identifier, "load_game"), buttonStyle);
+        TextButton loadMain = new TextButton(TranslationReader.get(Main.identifier, "load_game"), buttonStyle);
         table.add(loadMain);
 
         // New Row
         table.row().pad(5);
 
         // Finally, a quit button, so players can touch grass
-        TextButton quit = createButton(Translations.get(Main.identifier, "quit"),
+        TextButton quit = createButton(TranslationReader.get(Main.identifier, "quit"),
             buttonStyle, () -> Gdx.app.exit());
         table.add(quit);
 

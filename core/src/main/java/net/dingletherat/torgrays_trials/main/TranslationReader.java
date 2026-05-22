@@ -7,8 +7,11 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 
-public class Translations {
+public class TranslationReader {
     private static final HashMap<String, JSONObject> TRANSLATION_FILES = new HashMap<>();
+
+    // Keys
+    public static final String PATH = "values/translations/";
 
     /**
      * Gets the translation from the current language's translation files using a {@code translationKey}.
@@ -46,14 +49,14 @@ public class Translations {
      * Note: Non JSON files will not be added to the HashMap
      **/
     public static void loadFiles() {
-        // Get the names of all the files in "/values/translations"
-        List<String> translationFiles = UtilityTool.getFileNames("values/translations", ".json");
+        // Get the names of all the files in "/values/translations" (PATH)
+        List<String> translationFiles = UtilityTool.getFileNames(PATH, ".json");
 
         // Loop through the translation files and add them to the TRANSLATION_FILES HashMap
         for (String file : translationFiles) {
             /* Get the filePath of the file and use it to convert the contents of the file
             into a getJsonObject to be able to add it to the TRANSLATION_FILES HashMap */
-            String filePath = "values/translations/" + file;
+            String filePath = PATH + file;
             JSONObject jsonObject = UtilityTool.getJsonObject(filePath);
             if (jsonObject != null) TRANSLATION_FILES.put(file.replace(".json", ""), jsonObject);
         }

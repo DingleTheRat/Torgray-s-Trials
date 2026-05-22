@@ -61,7 +61,7 @@ public class Main extends ApplicationAdapter {
         shapes = new ShapeRenderer();
 
         // Load JSON files
-        Translations.loadFiles();
+        TranslationReader.loadFiles();
         EntityHandler.generateTemplates();
 
         // Setup UI

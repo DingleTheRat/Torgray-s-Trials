@@ -23,6 +23,9 @@ public class EntityHandler {
     public static final String KEY_ARGS = "args";
     public static final String KEY_ENTRY_INDEX = "entry index";
     public static final String KEY_ACTION = "action";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_COMPONENTS = "components";
+    public static final String PATH = "values/templates/";
 
     public static final Map<String, List<Component.Entry>> TEMPLATES = new HashMap<>();
 
@@ -137,13 +140,12 @@ public class EntityHandler {
 
     public static void generateTemplates() {
         TEMPLATES.clear();
-        String filepath = "values/templates/";
 
         // Get the fileNames of everything inside the directory from the filepath
-        List<String> fileNames = UtilityTool.getDecendantFileNames(filepath, ".json");
+        List<String> fileNames = UtilityTool.getDecendantFileNames(PATH, ".json");
 
         // Append the filepath onto the fileNames
-        fileNames.replaceAll(name -> filepath + name);
+        fileNames.replaceAll(name -> PATH + name);
 
         // Create a new jsons list that contains a list of all the fileNames in JSONObject form
         List<JSONObject> jsons = new ArrayList<>(fileNames.stream()
@@ -156,12 +158,12 @@ public class EntityHandler {
         // Loop through the rest of the stuff
         for (JSONObject json : jsons) {
             // Check if the json has the necessary stuff. If not, warn and continue
-            if (!json.has("name") || !(json.get("name") instanceof String)) {
-                Main.LOGGER.warn("Invalid entity template '{}': 'name' field is missing or is not a String.", fileNames.get(jsons.indexOf(json)));
+            if (!json.has(KEY_NAME) || !(json.get(KEY_NAME) instanceof String)) {
+                Main.LOGGER.warn("Invalid entity template \"{}\": \"{}\" field is missing or is not a String.", fileNames.get(jsons.indexOf(json)), KEY_NAME);
                 continue;
             }
-            if (!json.has("components") || !(json.get("components") instanceof JSONArray)) {
-                Main.LOGGER.warn("Invalid entity template '{}': 'components' field is missing or is not a JSONArray.", fileNames.get(jsons.indexOf(json)));
+            if (!json.has(KEY_COMPONENTS) || !(json.get(KEY_COMPONENTS) instanceof JSONArray)) {
+                Main.LOGGER.warn("Invalid entity template \"{}\": \"{}\" field is missing or is not a JSONArray.", fileNames.get(jsons.indexOf(json)), KEY_COMPONENTS);
                 continue;
             }
 
