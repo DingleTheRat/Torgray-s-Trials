@@ -12,7 +12,6 @@ import net.dingletherat.torgrays_trials.component.area.CollisionComponent;
 import net.dingletherat.torgrays_trials.rendering.Map;
 import net.dingletherat.torgrays_trials.rendering.TileManager;
 import net.dingletherat.torgrays_trials.rendering.TileManager.Position;
-import net.dingletherat.torgrays_trials.system.TileSystem;
 
 public class AreaChecker {
     // Check if two entities are colliding
@@ -149,5 +148,4 @@ public class AreaChecker {
 
         return false;
     }
-
 }

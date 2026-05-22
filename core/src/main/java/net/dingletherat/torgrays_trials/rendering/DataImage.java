@@ -75,7 +75,6 @@ public class DataImage implements Serializable, Disposable {
             return;
         }
 
-        // FIX: Swapped the null check order. Checked file == null first to prevent a NullPointerException.
         if (file == null || !file.exists()) {
             Main.LOGGER.warn("{} is not a valid member of \"/drawable/\". ", imageName);
             image = new Texture(Gdx.files.internal("drawable/disabled.png"));
@@ -99,7 +98,6 @@ public class DataImage implements Serializable, Disposable {
     If a game was loaded in, it turns the data into a texture, then returns it. **/
     public Texture getTexture() {
         // In the case that the game was loaded (meaning the image is null), set the image to the unserialized data
-        // FIX: Fixed the argument order from (data, height, width) to (data, width, height) to match the parameter expectations.
         if (image == null) image = deserializeImage(data, width, height);
         return image;
     }
@@ -117,8 +115,7 @@ public class DataImage implements Serializable, Disposable {
         if (!image.getTextureData().isPrepared()) image.getTextureData().prepare();
 
         Pixmap originalPixmap = image.getTextureData().consumePixmap();
-        // FIX: Track if LibGDX requires us to dispose of the original pixmap to avoid breaking its internal state
-        boolean weOwnPixmap = image.getTextureData().disposePixmap();
+        boolean shouldDisposeMap = image.getTextureData().disposePixmap();
 
         // First, scale the image normally
         Pixmap scaledPixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
@@ -142,7 +139,7 @@ public class DataImage implements Serializable, Disposable {
 
         // Replace the scaled pixmap with the flipped one
         scaledPixmap.dispose();
-        if (weOwnPixmap) {
+        if (shouldDisposeMap) {
             originalPixmap.dispose();
         }
 
@@ -150,10 +147,7 @@ public class DataImage implements Serializable, Disposable {
         Texture scaledImage = new Texture(flippedPixmap);
         flippedPixmap.dispose();
 
-        // FIX: Dispose of the old Texture to clean its memory footprint out of VRAM before replacing it
-        if (image != null) {
-            image.dispose();
-        }
+        if (image != null) image.dispose();
 
         // Update height and width
         this.height = height;
@@ -182,7 +176,6 @@ public class DataImage implements Serializable, Disposable {
         return bytes;
     }
 
-    // FIX: Swapped the position of the height and width parameters to match how they are handled inside the method standardly.
     public static Texture deserializeImage(byte[] data, int width, int height) {
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         pixmap.getPixels().put(data);
@@ -192,7 +185,6 @@ public class DataImage implements Serializable, Disposable {
         return texture;
     }
 
-    // FIX: Added standard disposal utility to clean up the allocated Texture safely when wiping data
     @Override
     public void dispose() {
         if (image != null) {

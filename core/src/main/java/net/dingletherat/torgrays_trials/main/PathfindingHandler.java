@@ -17,7 +17,6 @@ import net.dingletherat.torgrays_trials.main.States.MovementStates;
 import net.dingletherat.torgrays_trials.rendering.Map;
 import net.dingletherat.torgrays_trials.rendering.TileManager;
 import net.dingletherat.torgrays_trials.rendering.TileManager.Position;
-import net.dingletherat.torgrays_trials.system.TileSystem;
 
 public class PathfindingHandler {
     public static class Node {
