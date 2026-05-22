@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import com.badlogic.gdx.graphics.Texture;
+
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.*;
 import net.dingletherat.torgrays_trials.component.sprite.*;
@@ -60,14 +62,16 @@ public class SpriteSystem implements System {
             // Loop through all the sprites and draw the provided sprite
             Main.batch.begin();
             for (SpriteComponent component : sprites) {
+                Texture texture = component.sprite.getTexture();
+
                 // If the component is a SpriteSheetComponent or an extension of it, draw only a part of the provided sprite
                 if (component instanceof SpriteSheetComponent sheetComponent) {
                     // Store what part of the sprite sheet to draw
                     int imageX = Main.tileSize * sheetComponent.column;
                     int imageY = Main.tileSize * sheetComponent.row;
-                    int srcY = sheetComponent.sprite.getTexture().getHeight() - imageY - Main.tileSize;
+                    int srcY = texture.getHeight() - imageY - Main.tileSize;
 
-                    Main.batch.draw(sheetComponent.sprite.getTexture(),
+                    Main.batch.draw(texture,
                         // Image position in the world
                         Math.round(screenX), Math.round(screenY), Main.tileSize, Main.tileSize,
                         // Image position in the sprite sheet
@@ -75,10 +79,9 @@ public class SpriteSystem implements System {
                         // Flip X and Y
                         false, false);
                     }
-                else {
+                else
                     // Otherwise, just simply draw the provided image
-                    Main.batch.draw(component.sprite.getTexture(), Math.round(screenX), Math.round(screenY));
-                }
+                    Main.batch.draw(texture, Math.round(screenX), Math.round(screenY));
             }
             Main.batch.end();
         }

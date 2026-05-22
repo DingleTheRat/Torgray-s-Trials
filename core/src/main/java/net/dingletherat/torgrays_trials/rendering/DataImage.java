@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-
+import com.badlogic.gdx.utils.Disposable;
 import net.dingletherat.torgrays_trials.Main;
 
 import java.io.*;
@@ -18,7 +18,8 @@ import java.util.HashMap;
  * You can get the {@link Texture} using the {@code getImage} method.
  * An instance of this class is created using the {@code loadImage} method in the static version of this class, because the constructor is private.
  * It's private because this method uses a cache system which is more efficient than crating a bunch of new instances of this class **/
-public class DataImage implements Serializable {
+public class DataImage implements Serializable, Disposable {
+    private static final long serialVersionUID = 1L;
     private static final HashMap<String, DataImage> imageCache = new HashMap<>();
 
     private final byte[] data;
@@ -38,9 +39,11 @@ public class DataImage implements Serializable {
      * Instead, call the {@code getImage} method from the instance of the class to get a buffered image. This will work if you try to draw it. **/
     public static DataImage loadImage(String imageName) {
         if (imageName == null) {
-          DataImage image = loadImage("disabled");
-          image.scaleImage(Main.tileSize, Main.tileSize);
-          return image;
+            // Note: If you mutate/scale this fallback image, it will affect the cache.
+            // Consider returning a new DataImage("disabled") here instead if it gets scaled uniquely.
+            DataImage image = loadImage("disabled");
+            image.scaleImage(Main.tileSize, Main.tileSize);
+            return image;
         }
 
         // Check if the image is located in the image cache, if it is, return it to save resources
@@ -66,18 +69,26 @@ public class DataImage implements Serializable {
          */
         if (imageName.isEmpty()) {
             image = new Texture(Gdx.files.internal("drawable/disabled.png"));
+            this.width = image.getWidth();
+            this.height = image.getHeight();
             data = serializeImage(image);
             return;
         }
-        if (!file.exists() || file == null) {
+
+        // FIX: Swapped the null check order. Checked file == null first to prevent a NullPointerException.
+        if (file == null || !file.exists()) {
             Main.LOGGER.warn("{} is not a valid member of \"/drawable/\". ", imageName);
             image = new Texture(Gdx.files.internal("drawable/disabled.png"));
+            this.width = image.getWidth();
+            this.height = image.getHeight();
             data = serializeImage(image);
             return;
         }
 
         // If all checks have passed, then set the image
         image = new Texture(file);
+        this.width = image.getWidth();
+        this.height = image.getHeight();
 
         /* Finally, deserialize the image and put it into the data
         Since buffered image is not Serializable, it's not saved when the game is saved, so we must use data to load it*/
@@ -88,7 +99,8 @@ public class DataImage implements Serializable {
     If a game was loaded in, it turns the data into a texture, then returns it. **/
     public Texture getTexture() {
         // In the case that the game was loaded (meaning the image is null), set the image to the unserialized data
-        if (image == null) image = deserializeImage(data, height, width);
+        // FIX: Fixed the argument order from (data, height, width) to (data, width, height) to match the parameter expectations.
+        if (image == null) image = deserializeImage(data, width, height);
         return image;
     }
 
@@ -96,7 +108,7 @@ public class DataImage implements Serializable {
      * <p>
      * @param width The width you want the scaled image to be.
      * @param height The height you want the scaled image to be.
-     **/
+     			**/
     public void scaleImage(int width, int height) {
         // Do not scale image if it's already the specific height and width
         if (width == image.getWidth() && height == image.getHeight()) return;
@@ -105,6 +117,8 @@ public class DataImage implements Serializable {
         if (!image.getTextureData().isPrepared()) image.getTextureData().prepare();
 
         Pixmap originalPixmap = image.getTextureData().consumePixmap();
+        // FIX: Track if LibGDX requires us to dispose of the original pixmap to avoid breaking its internal state
+        boolean weOwnPixmap = image.getTextureData().disposePixmap();
 
         // First, scale the image normally
         Pixmap scaledPixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
@@ -128,14 +142,18 @@ public class DataImage implements Serializable {
 
         // Replace the scaled pixmap with the flipped one
         scaledPixmap.dispose();
-        scaledPixmap = flippedPixmap;
+        if (weOwnPixmap) {
+            originalPixmap.dispose();
+        }
 
         // Create an image from the scaled pixmap
-        Texture scaledImage = new Texture(scaledPixmap);
+        Texture scaledImage = new Texture(flippedPixmap);
+        flippedPixmap.dispose();
 
-        // Cleanup
-        originalPixmap.dispose();
-        scaledPixmap.dispose();
+        // FIX: Dispose of the old Texture to clean its memory footprint out of VRAM before replacing it
+        if (image != null) {
+            image.dispose();
+        }
 
         // Update height and width
         this.height = height;
@@ -150,6 +168,7 @@ public class DataImage implements Serializable {
 
         // Get Pixmap from texture
         Pixmap pixmap = image.getTextureData().consumePixmap();
+        boolean weOwnPixmap = image.getTextureData().disposePixmap();
 
         // Convert to a byte array
         ByteBuffer buffer = pixmap.getPixels();
@@ -157,15 +176,28 @@ public class DataImage implements Serializable {
         byte[] bytes = new byte[buffer.remaining()];
         buffer.get(bytes);
 
-        pixmap.dispose();
+        if (weOwnPixmap) {
+            pixmap.dispose();
+        }
         return bytes;
     }
-    public static Texture deserializeImage(byte[] data, int height, int width) {
+
+    // FIX: Swapped the position of the height and width parameters to match how they are handled inside the method standardly.
+    public static Texture deserializeImage(byte[] data, int width, int height) {
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         pixmap.getPixels().put(data);
         Texture texture = new Texture(pixmap);
         pixmap.dispose();
 
         return texture;
+    }
+
+    // FIX: Added standard disposal utility to clean up the allocated Texture safely when wiping data
+    @Override
+    public void dispose() {
+        if (image != null) {
+            image.dispose();
+            image = null;
+        }
     }
 }

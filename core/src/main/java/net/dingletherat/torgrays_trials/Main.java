@@ -85,6 +85,9 @@ public class Main extends ApplicationAdapter {
         // Create the title world
         gameWorld = new World();
         gameWorld.drawSystems.add(new DarknessSystem());
+        SpriteSystem spriteSystem = new SpriteSystem();
+        gameWorld.drawSystems.add(spriteSystem);
+        gameWorld.updateSystems.add(spriteSystem);
 
         // Lastly, load the backdrop
         backdrop = DataImage.loadImage("backdrop");
@@ -97,36 +100,24 @@ public class Main extends ApplicationAdapter {
         // Clear the screen from the last drawing
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
-        switch (gameState) {
-            case TITLE -> {
-                // Draw the background
-                batch.begin();
-                batch.draw(backdrop.getTexture(), 0, 0);
-                batch.end();
-
-                gameWorld.draw();
-
-                // Draw UI
-                UI.stage.draw();
-            }
-            case PLAY -> gameWorld.draw();
+        if (gameState == GameStates.TITLE) {
+            // Draw the background
+            batch.begin();
+            batch.draw(backdrop.getTexture(), 0, 0);
+            batch.end();
         }
+
+        gameWorld.draw();
     }
     public void update(float deltaTime) {
-        switch (gameState) {
-            case TITLE -> {
-                // Update UI and fireflies
-                UI.update();
-            }
-            case PLAY -> gameWorld.update(deltaTime);
-        }
+        gameWorld.update(deltaTime);
     }
 
     @Override
     public void render() {
        float deltaTime = Gdx.graphics.getDeltaTime();
-        update(deltaTime);
-        draw();
+       update(deltaTime);
+       draw();
     }
 
     @Override
