@@ -11,6 +11,7 @@ public class TranslationReader {
     private static final HashMap<String, JSONObject> TRANSLATION_FILES = new HashMap<>();
 
     // Keys
+    /** The path used to get translation files **/
     public static final String PATH = "values/translations/";
 
     /**
@@ -48,7 +49,7 @@ public class TranslationReader {
      * <p>
      * Note: Non JSON files will not be added to the HashMap
      **/
-    public static void loadFiles() {
+    public static void loadTranslations() {
         // Get the names of all the files in "/values/translations" (PATH)
         List<String> translationFiles = UtilityTool.getFileNames(PATH, ".json");
 

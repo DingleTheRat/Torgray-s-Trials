@@ -1,44 +1,45 @@
 {
-  "self": "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent",
+  "name": "Torgray Walk",
+  "speed": 0.4,
   "dependencies": [
+    "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent",
     "net.dingletherat.torgrays_trials.component.MovementComponent"
   ],
-  "speed": 0.4,
   "frames": {
-    "0:direction=up": [
+    "1:direction:=up": [
       {
-        "self:row": 0
+        "0:row": 0
       }
     ],
-    "0:direction=down": [
+    "1:direction:=down": [
       {
-        "self:row": 1
+        "0:row": 1
       }
     ],
-    "0:direction=left": [
+    "1:direction:=left": [
       {
-        "self:row": 2
+        "0:state": 2
       }
     ],
-    "0:direction=right": [
+    "1:direction:=right": [
       {
-        "self:row": 3
+        "0:row": 3
       }
     ],
-    "0:state=WALKING": [
+    "1:state:=WALKING": [
       {
-        "self:col": 0
+        "0:col": 0
       },
       {
-        "self:col": 1
+        "0:col": 1
       },
       {
-        "self:col": 2
+        "0:col": 2
       }
     ],
-    "0:state=IDLE": [
+    "1:state:=IDLE": [
       {
-        "self:col": 0
+        "0:col": 0
       }
     ]
   }

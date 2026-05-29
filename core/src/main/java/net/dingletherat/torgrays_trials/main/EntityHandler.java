@@ -19,12 +19,19 @@ import net.dingletherat.torgrays_trials.component.*;
 
 public class EntityHandler {
     // JSON keys for stuff
+    /** Key used to obtain a component in a components list **/
     public static final String KEY_COMPONENT = "component";
+    /** Key used to obtain an argument for a component in a components list **/
     public static final String KEY_ARGS = "args";
+    /** Key used to obtain the entry index of a MULTI component in a components list **/
     public static final String KEY_ENTRY_INDEX = "entry index";
+    /** Key used to obtain an action for the specified component (removing/adding) in anywhere that can modify components **/
     public static final String KEY_ACTION = "action";
+    /** Key used to obtain a name for an entity template **/
     public static final String KEY_NAME = "name";
+    /** Key used to obtain components from entity templates **/
     public static final String KEY_COMPONENTS = "components";
+    /** The path used to get entity templates **/
     public static final String PATH = "values/templates/";
 
     public static final Map<String, List<Component.Entry>> TEMPLATES = new HashMap<>();
@@ -60,13 +67,8 @@ public class EntityHandler {
             }
 
             // Get the component class. If it does not exist, it will throw a class not found exception. In that case, we continue and warn
-            Class<? extends Component> componentClass;
-            try {
-                componentClass = Class.forName(componentPath).asSubclass(Component.class);
-            } catch (ClassNotFoundException exception) {
-                Main.LOGGER.error("[Location: {}] Component path \"{}\" is not a path to a component or does not implement the {} interface!", location, componentPath, Component.class.getSimpleName());
-                continue;
-            }
+            Class<? extends Component> componentClass = UtilityTool.getClassFromPath(componentPath, Component.class, location);
+            if (componentClass == null) continue;
 
             // Convert the "args" JSONArray into a list and turn it into an entry, ready to be added
             JSONArray argsArray = component.getJSONArray(KEY_ARGS);
@@ -91,7 +93,7 @@ public class EntityHandler {
     }
 
     /**
-     * Used by {@code getModifiedComponentClasses} to return a result that cointains a list of additions and removals.
+     * Used by {@code getModifiedComponentClasses} to return a result that contains a list of additions and removals.
      * @param additions What needs to be added to the component classes.
      * @param removals What needs to be removed from the component classes.
      **/
@@ -103,7 +105,7 @@ public class EntityHandler {
      * @param componentData A list of JSONObjects that contains all the componentData.
      * Each JSONObject needs to have a filepath string to the component ("component") and an action boolean ("action").
      * If the field is true, it's set to want to add a component. If false, it's set to want to remove.
-     * A JSONObject that want to addcomponent must also provide a JSONArray of arguments ("args").
+     * A JSONObject that wants to add component must also provide a JSONArray of arguments ("args").
      * @param location Whenever an error is thrown, which JSON file should the error blame?
      * @return The {@code ComponentModifications} record with two lists of componentClasses: additions and removals.
      **/
@@ -138,7 +140,7 @@ public class EntityHandler {
         return componentModifications;
     }
 
-    public static void generateTemplates() {
+    public static void loadTemplates() {
         TEMPLATES.clear();
 
         // Get the fileNames of everything inside the directory from the filepath

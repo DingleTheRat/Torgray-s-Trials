@@ -61,8 +61,8 @@ public class Main extends ApplicationAdapter {
         shapes = new ShapeRenderer();
 
         // Load JSON files
-        TranslationReader.loadFiles();
-        EntityHandler.generateTemplates();
+        TranslationReader.loadTranslations();
+        EntityHandler.loadTemplates();
 
         // Setup UI
         UI.setup();
@@ -141,6 +141,9 @@ public class Main extends ApplicationAdapter {
         TileManager.loadTiles();
         MapHandler.loadMaps();
         gameWorld.setMap("Main Island");
+
+        // Load even more stuff
+        AnimationReader.loadAnimations();
 
         // Set the state to play, so mobs and stuff could be updated and drawn. As well as the uiState for the, well, UI
         gameState = GameStates.PLAY;

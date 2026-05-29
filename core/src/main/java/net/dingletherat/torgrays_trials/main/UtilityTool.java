@@ -3,6 +3,7 @@ package net.dingletherat.torgrays_trials.main;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+
 import net.dingletherat.torgrays_trials.Main;
 import org.json.JSONObject;
 
@@ -45,7 +46,40 @@ public class UtilityTool {
         }
     }
 
+    /**
+     * A super-duper simple method that just gets a class from a class path.
+     * @param path The path to the class you want to get
+     * @param location Provide information about where this is called, so it's easier to debug should an error be thrown
+     * @return If the class is found, it will return the class. If not, it'll return null and error.
+     **/
+    public static Class<?> getClassFromPath(String path, String location) {
+        try {
+            return Class.forName(path);
+        } catch (ClassNotFoundException exception) {
+            Main.LOGGER.error("[Location: {}] Class path \"{}\" is not a valid path to a Class!", location, path);
+        }
+        return null;
+    }
 
+    /**
+     * An alternate version of the method that gets a class from the class path, but also ensures it extends the provided class.
+     * @param path The path to the class you want to get
+     * @param expected What do you want the class to extend? If it doesn't extend this, it'll error and return null.
+     * @param location Provide information about where this is called, so it's easier to debug should an error be thrown
+     * @return If the class is found and it extends the class you provided, it will return the class. If not, it'll return null and error.
+     **/
+    public static <T> Class<? extends T> getClassFromPath(String path, Class<T> expected, String location) {
+        try {
+            return Class.forName(path).asSubclass(expected);
+        } catch (ClassNotFoundException exception) {
+            Main.LOGGER.error("[Location: {}] Class path \"{}\" could not be found!",
+                location, path);
+        } catch (ClassCastException exception) {
+            Main.LOGGER.error("[Location: {}] Class \"{}\" does not extend {}!",
+                location, path, expected.getSimpleName());
+        }
+        return null;
+    }
 
     /**
      * Gets all the names of the files in a given directory.
