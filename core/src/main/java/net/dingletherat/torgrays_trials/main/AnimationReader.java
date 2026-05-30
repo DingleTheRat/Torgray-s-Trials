@@ -23,6 +23,9 @@ public class AnimationReader {
     public static final String KEY_NAME = "name";
     /** The key used to get a list of components whose fields an animation JSON will modify (optional) **/
     public static final String KEY_DEPENDENCIES = "dependencies";
+    /** An optional key that sets what the target component (set by the {@link AnimationComponent}) needs to be for this animation to function correctly.
+    If the target component doesn't match the self you set, then the {@link AnimationComponent} will be discarded with a warning **/
+    public static final String KEY_SELF = "self";
     /** The key used to get the speed at which the animation will run at **/
     public static final String KEY_SPEED = "speed";
     /** The key used to obtain the frames  **/
@@ -34,10 +37,14 @@ public class AnimationReader {
     /** Animation files, when all goes according to plan, will be parsed into this record.
      * It holds all the data that the JSON contains, just in its proper form (EX: Class paths as classes).
      * <p>
-     * @param dependencies A list of paths to components whose fields you wanna modify in frames.
+     * @param dependencies A list of paths to SELF components whose fields you wanna modify in frames.
      *      For instance, if I add the path to a {@link SpriteComponent}, I may modify one of its fields in a frame
      *      by putting its position in the list starting from 0 (since its the only one I'll use 0) and the field I wanna modify after a ":".
      *      So I would make it look like so: {@code "[LIST_POSITION]:[FIELD]": [VALUE]} or in my case {@code "0:sprite": "entity/player/torgray_sheet"}
+     * @param self Whenever a {@link AnimationComponent} calls an animation, its target parameter gets passed as "self" and can be used as a dependency with "self" instead of a number.
+     *      However, self is very unpredictable, so you can also add a self field (this) that specifies what the target component (self) should be.
+     *      If it is not that, the animation component will be removed with a warning. Self is also really the only way animations can access multi-components,
+     *      such as Sprites, so use it wisely.
      * @param speed The speed at which each frame of the animation is running in delta-time, as a float.
      * @param frames This is basically the actual animation. The first layer is the map of conditions to frames. If you don't want a condition, just leave an empty string.
      *      If you do want one, put it in this format: {@code [DEPENDENCY]:[FIELD]:[=/>/<][VALUE]}. If it passes the condition, it will play the frames that you put.
@@ -46,7 +53,7 @@ public class AnimationReader {
      *      Every entry in the list is a frame inside the animation that will play while the condition is met. In each frame, you may change the properties of any dependency.
      *      (see parameter {@code dependencies} for more info on the format). This is a map, so you're able to change multiple properties at once if you want.
      **/
-    public record Animation(List<Class<? extends Component>> dependencies,
+    public record Animation(List<Class<? extends Component>> dependencies, Class<? extends Component> self,
             float speed, Map<Condition, List<Map<Class<? extends Component>, Object>>> frames) { }
 
     /** A helper record to the {@link Animations} record, which stores important data to a condition.
@@ -107,6 +114,11 @@ public class AnimationReader {
                 }
             }
 
+            // Do the same for the self, just don't do all the weird looping shenanigans
+            Class<? extends Component> self = null;
+            if (json.has(KEY_SELF) && json.get(KEY_SELF) instanceof String selfPath)
+                self = UtilityTool.getClassFromPath(selfPath, Component.class, name + " animation file");
+
             // Now, onto THE BIG ONE, the animations
             Map<Condition, List<Map<Class<? extends Component>, Object>>> frames = new HashMap<>();
 
@@ -130,7 +142,7 @@ public class AnimationReader {
                         Object newValue = rawFrame.get(targetField);
 
                         // Get the dependency from the targetField as well, adding both the newValue and the obtained dependency to the frame map
-                        Class<? extends Component> targetDependency = getDependencyFromString("TargetField \"" + targetField + "\" in " + name, dependencies, targetField);
+                        Class<? extends Component> targetDependency = getDependencyFromString("TargetField \"" + targetField + "\" in " + name, dependencies, self, targetField);
                         frame.put(targetDependency, newValue);
                     }
 
@@ -140,7 +152,7 @@ public class AnimationReader {
                 // Split the rawCondition into (what's supposed to be) 3 strings: the dependency, variable, and condition.
                 // Get the dependency class with the first one, and use the second two in the condition declaration
                 String[] splitCondition = rawCondition.split(":");
-                Class<? extends Component> conditionDependency = getDependencyFromString("Condition \"" + rawCondition + "\" in " + name, dependencies, rawCondition);
+                Class<? extends Component> conditionDependency = getDependencyFromString("Condition \"" + rawCondition + "\" in " + name, dependencies, self, rawCondition);
                 Condition condition = new Condition(conditionDependency, splitCondition[1], splitCondition[2]);
 
                 frames.put(condition, conditionFrames);
@@ -149,23 +161,47 @@ public class AnimationReader {
             Main.LOGGER.debug("{}", frames);
 
             // Least but last, create the animation and add it into THE ANIMATIONS LIST
-            Animation animation = new Animation(dependencies, speed.floatValue(), frames);
+            Animation animation = new Animation(dependencies, self, speed.floatValue(), frames);
             ANIMATIONS.put(name, animation);
         }
 
         Main.LOGGER.info("Loaded {} animations!", ANIMATIONS.size());
     }
 
-    public static Class<? extends Component> getDependencyFromString(String location, List<Class<? extends Component>> dependencies, String string) {
+    /**
+     * A helper method that uses a field string (looks like this {@code [DEPENDENCY_POSITION]:[FIELD]}) to get a dependency from the provided dependencies list.
+     * <p>
+     * @param location Provide information about where this is called, so it's easier to debug should an error be thrown.
+     * @param dependencies An ordered list of {@link Component}s that the code can index into via the provided string
+     * @param string The string that will be used to obtain the index to use to get a dependency (format like so: {@code [DEPENDENCY_POSITION]:[FIELD]})
+     * @return The successfully obtained dependency from the {@code dependencies}.
+     **/
+    public static Class<? extends Component> getDependencyFromString(String location, List<Class<? extends Component>> dependencies,  String string) {
+        // Split the string into parts split in between ":", since the dependencyIndex is SUPPOSED to be first, set the dependency index to the first part of the split
         String[] splitTargetField = string.split(":");
         String dependencyIndex = splitTargetField[0];
 
+        // If the dependency is successfully obtained (no exception), return that. If not, get very angry.
         try {
              return dependencies.get(Integer.valueOf(dependencyIndex));
         } catch (NumberFormatException exception) {
-            Main.LOGGER.error("[Location: {}] Invalid dependency index \"{}\": Index isn't a number!", location, string);
-            Main.LOGGER.error("Did you follow the \"[DEPENDENCY_POSITION]:[FIELD]\" format?");
+            Main.LOGGER.error("[Location: {}] Invalid dependency index \"{}\": Index isn't a number! Did you follow the \"[DEPENDENCY_POSITION]:[FIELD]\" format?", location, string);
+        } catch (IndexOutOfBoundsException exception) {
+            Main.LOGGER.error("[Location: {}]: Dependency index provided is {}, however there are only {} dependencies! Remember that dependency indexes start at 0", location, dependencyIndex, dependencies.size());
         }
         return null;
+    }
+
+    /**
+     * An overload method of the method sharing its name that also accepts {@code self} as an index.
+     * <p>
+     * @param location Provide information about where this is called, so it's easier to debug should an error be thrown.
+     * @param dependencies An ordered list of {@link Component}s that the code can index into via the provided string
+     * @param string The string that will be used to obtain the index to use to get a dependency (format like so: {@code [DEPENDENCY_POSITION]:[FIELD]})
+     * @return The successfully obtained dependency from the {@code dependencies}.
+     **/
+    public static Class<? extends Component> getDependencyFromString(String location, List<Class<? extends Component>> dependencies, Class<? extends Component> self, String string) {
+        if (string.contains("self")) return getDependencyFromString(location + " (via self)", List.of(self), string.replace("self", "0"));
+        else return getDependencyFromString(location, dependencies, string);
     }
 }
