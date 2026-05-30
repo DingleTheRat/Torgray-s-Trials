@@ -10,7 +10,8 @@ import net.dingletherat.torgrays_trials.system.PlayerSystem;
  * It basically gives you god powers :b
  * Oh yeah, only one entity in a world can have it, as it's stored inside the {@code player} variable in {@link World}.
  * If you ever decide to add a second one with it, this component will be automatically removed from the entity with a warning.
- * See all the goofy stuff it does in {@link PlayerSystem}
+ * <p>
+ * - Implemented by {@link PlayerSystem}
  **/
 public class PlayerComponent implements Component {
     @Override

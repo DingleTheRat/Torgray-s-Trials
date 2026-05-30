@@ -10,8 +10,9 @@ import net.dingletherat.torgrays_trials.system.HealthSystem;
 /**
  * Makes the entity who has it not be able to take damage from the {@link DamageSignal} for a set amount of time.
  * <p>
- * Most commonly added by the {@link HealthSystem} whenever a {@link DamageSignal} is recived.
- * This component is implemented in {@link CooldownSystem}/
+ * Most commonly added by the {@link HealthSystem} whenever a {@link DamageSignal} is received.
+ * <p>
+ * - Implemented by {@link CooldownSystem}
  **/
 public class InvincibilityComponent implements Component {
     public float amount;

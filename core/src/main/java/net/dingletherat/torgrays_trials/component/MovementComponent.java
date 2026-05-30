@@ -10,6 +10,9 @@ import net.dingletherat.torgrays_trials.system.MovementSystem;
  * This component allows for any kind of movement. Including walking and idling (all states are in the {@link MovementStates} class).
  * Moving is essentially changing the {@link PositionComponent} X and Y values (Oh yeah, you need that for it to function).
  * It's implemented in the {@link MovementSystem}.
+ * <p>
+ * - Recommended components: {@link PositionComponent}
+ * - Implemented by {@link MovementSystem}
  **/
 public class MovementComponent implements Component {
     /// Determine how the entity moves (if at all) (Ex: Idle = Does nothing, Walking moves at speed)

@@ -7,14 +7,14 @@ import net.dingletherat.torgrays_trials.component.PositionComponent;
 import net.dingletherat.torgrays_trials.system.SpriteSystem;
 
 /**
- * An extention of the {@link SpriteSheetComponent} class that add in eyes to the entity.
+ * An extension of the {@link SpriteSheetComponent} class that add in eyes to the entity.
  * <p>
  * The eyes will blink, look around as an idle animation, and even look in the direction that the entity is walking in.
  * It's super cool :D
  * <p>
- * Unfortunatly, right now the sprite sheet must be arranged in this specific order
- * - Required layout: Two rows: Normal on the top, blinking at the bottom. Expresions are on the column
- * - Expresions must be in this order: Neutral, Happy, Sad, Mad
+ * Sadly, right now the sprite sheet must be arranged in this specific order
+ * - Required layout: Two rows: Normal on the top, blinking at the bottom. Expressions are on the column
+ * - Expressions must be in this order: Neutral, Happy, Sad, Mad
  * <p>
  * - Recommended components: {@link PositionComponent}
  * - Implemented by {@link SpriteSystem}

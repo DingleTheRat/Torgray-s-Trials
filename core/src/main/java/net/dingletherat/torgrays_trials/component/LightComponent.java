@@ -9,7 +9,8 @@ import net.dingletherat.torgrays_trials.system.DarknessSystem;
  * Add a circle of light around the entity.
  * <p>
  * Creates a kind of "hole" inside the darkness effect on the screen wherever the entity is.
- * This component is implemented in the {@link DarknessSystem}.
+ * <p>
+ * - Implemented by {@link DarknessSystem}.
  **/
 public class LightComponent implements Component {
     /// How large the circle of light is.

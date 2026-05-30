@@ -8,7 +8,7 @@ import net.dingletherat.torgrays_trials.component.PositionComponent;
 import net.dingletherat.torgrays_trials.system.SpriteSystem;
 
 /**
- * An extention of the {@link SpriteSheetComponent} class that animates the SpriteSheet depending on the entity's movement.
+ * An extension of the {@link SpriteSheetComponent} class that animates the SpriteSheet depending on the entity's movement.
  * <p>
  * For instance, if an entity is walking up, the sprite will switch to the walking up portion of the sheet.
  * <p>

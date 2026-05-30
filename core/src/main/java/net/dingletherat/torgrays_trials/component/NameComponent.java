@@ -8,7 +8,8 @@ import net.dingletherat.torgrays_trials.main.EntityHandler;
  * <p>
  * Its main use is to keep track of templates in a HashMap inside of the {@link EntityHandler}.
  * However, it's also used for error messages and other misc stuff.
- * Implemented/Automatically added in inside of {@link EntityHandler}
+ * <p>
+ * - Automatically added by {@link SpriteSystem}
  **/
 public class NameComponent implements Component {
     public String name;
