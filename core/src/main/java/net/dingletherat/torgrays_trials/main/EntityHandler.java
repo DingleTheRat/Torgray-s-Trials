@@ -180,7 +180,7 @@ public class EntityHandler {
             TEMPLATES.put(json.getString("name"), componentClasses);
         }
 
-        Main.LOGGER.info("Loaded {} templates!", TEMPLATES.size());
+        Main.LOGGER.info("Loaded {} templates", TEMPLATES.size());
     }
 
     @SafeVarargs
@@ -238,16 +238,22 @@ public class EntityHandler {
 
         return result;
     }
-    public static <T extends Component> Optional<T> getComponent(int identifier, Class<T> type) {
+    public static <T extends Component> Optional<T> getComponent(int identifier, Class<T> type, int entryIndex) {
         if (!Main.gameWorld.getEntities().containsKey(identifier)) return Optional.empty();
+        if (entryIndex < 0) return Optional.empty();
 
         List<Component> entity = Main.gameWorld.getEntities().get(identifier);
 
+        int entry = 0;
         for (Component element : entity) {
             if (type.isInstance(element))
-                return Optional.of((T) element);
+                if (entry != entryIndex) entry++;
+                else return Optional.of((T) element);
         }
         return Optional.empty();
+    }
+    public static <T extends Component> Optional<T> getComponent(int identifier, Class<T> type) {
+        return getComponent(identifier, type, 0);
     }
     public static <T extends Component> List<T> getComponents(int identifier, Class<T> type) {
         List<T> result = new ArrayList<>();

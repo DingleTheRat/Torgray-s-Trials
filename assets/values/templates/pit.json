@@ -4,8 +4,8 @@
     {
       "component": "net.dingletherat.torgrays_trials.component.area.TouchComponent",
       "args": [
-        0.3,
-        0.3,
+        0.05,
+        0.05,
         [],
         [
           {

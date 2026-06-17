@@ -71,8 +71,7 @@ public class World {
 
                 components.add(component);
             } catch (NoSuchMethodException exception) {
-                Main.LOGGER.error("[Location: {}] Failed to generate components: Component '{}' has invalid args!", location, componentClass.getSimpleName());
-                Main.LOGGER.error("The args are for this constructor that doesn't exist: {}", exception.getMessage());
+                Main.LOGGER.error("[Location: {}] Failed to generate component '{}': constructor with provided args doesn't exist! Args: {}", location, componentClass.getSimpleName(), exception.getMessage());
             } catch (Exception exception) {
                 Main.handleException(exception);
             }

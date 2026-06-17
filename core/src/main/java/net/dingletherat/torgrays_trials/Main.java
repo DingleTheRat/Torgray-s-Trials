@@ -17,7 +17,7 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
+/** {@link ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
     // Tile Settings
     final static int originalTileSize = 16; // 16x16 tile
@@ -62,7 +62,6 @@ public class Main extends ApplicationAdapter {
 
         // Load JSON files
         TranslationReader.loadTranslations();
-        EntityHandler.loadTemplates();
 
         // Setup UI
         UI.setup();
@@ -135,15 +134,18 @@ public class Main extends ApplicationAdapter {
     }
 
     public static void loadWorld() {
+        LOGGER.info("--Loading World--");
+
         gameWorld = new World();
+
+        // Load some JSONs
+        AnimationReader.loadRawAnimations();
+        EntityHandler.loadTemplates();
 
         // Load maps and tiles
         TileManager.loadTiles();
         MapHandler.loadMaps();
         gameWorld.setMap("Main Island");
-
-        // Load even more stuff
-        AnimationReader.loadAnimations();
 
         // Set the state to play, so mobs and stuff could be updated and drawn. As well as the uiState for the, well, UI
         gameState = GameStates.PLAY;
@@ -157,6 +159,7 @@ public class Main extends ApplicationAdapter {
         gameWorld.drawSystems.add(new TileSystem());
         gameWorld.drawSystems.add(spriteSystem);
         gameWorld.drawSystems.add(new DarknessSystem());
+        Main.LOGGER.info("Loaded {} draw systems", gameWorld.drawSystems.size());
 
         // Add update systems
         gameWorld.updateSystems.add(new PlayerSystem());
@@ -167,9 +170,13 @@ public class Main extends ApplicationAdapter {
         gameWorld.updateSystems.add(new HealthSystem());
         gameWorld.updateSystems.add(new TouchSystem());
         gameWorld.updateSystems.add(new CooldownSystem());
+        gameWorld.updateSystems.add(new AnimationSystem());
+        Main.LOGGER.info("Loaded {} update systems", gameWorld.updateSystems.size());
 
         // Change the music to the "playing music"
         Sounds.stopMusic("Tech Geek", Main.titleMusic);
         gameWorld.currentSong = Sounds.playMusic("Umbral Force");
+
+        LOGGER.info("--World Loaded!--");
     }
 }

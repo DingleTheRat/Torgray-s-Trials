@@ -32,6 +32,10 @@
     {
       "component": "net.dingletherat.torgrays_trials.component.HealthComponent",
       "args": [12, false, 1.0]
+    },
+    {
+      "component": "net.dingletherat.torgrays_trials.component.AnimationComponent",
+      "args": ["Torgray Walk", "net.dingletherat.torgrays_trials.component.sprite.WalkingSheetComponent"]
     }
   ]
 }

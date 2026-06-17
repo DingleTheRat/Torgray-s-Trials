@@ -2,7 +2,7 @@
   "name": "Torgray Walk",
   "speed": 0.4,
 
-  "self": "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent",
+  "self": "net.dingletherat.torgrays_trials.component.sprite.WalkingSheetComponent",
   "dependencies": [
     "net.dingletherat.torgrays_trials.component.MovementComponent"
   ],
