@@ -1,5 +1,6 @@
 package net.dingletherat.torgrays_trials.main;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -15,6 +17,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import net.dingletherat.torgrays_trials.Main;
+import net.dingletherat.torgrays_trials.component.AnimationComponent;
 import net.dingletherat.torgrays_trials.component.Component;
 import net.dingletherat.torgrays_trials.component.MovementComponent;
 import net.dingletherat.torgrays_trials.component.NameComponent;
@@ -51,40 +54,42 @@ public class AnimationReader {
      *      If it is not that, the animation component will be removed with a warning. Self is also really the only way animations can access multi-components,
      *      such as Sprites, so use it wisely.
      * @param speed The speed at which each frame of the animation is running in delta-time, as a float.
-     * @param frames This is basically the actual animation. The first layer is the map of conditions to frames. If you don't want a condition, just leave an empty string.
-     *      If you do want one, put it in this format: {@code [DEPENDENCY]:[FIELD]:[=/>/<][VALUE]}. If it passes the condition, it will play the frames that you put.
+     * @param frames This is basically the actual animation. The first layer is the map of {@link RawDependencyField}s to frames. If you don't want a condition, just leave an empty string.
+     *      If you do want one, put it in this format: {@code [DEPENDENCY]:[FIELD]:[=/>/<][VALUE]}. If it passes the condition, it will play the frames that you put
      *      in the condition. For instance, if I wanted an animation to only play if my entity is idle (uses {@link MovementComponent}), I would do {@code "0:state:=IDLE": [animation...]}.
-     *      Onto the animations. The condition must lead into another list, a list of {@link JSONObject} in the JSON. Or, in this case a list of maps.
-     *      Every entry in the list is a frame inside the animation that will play while the condition is met. In each frame, you may change the properties of any dependency.
-     *      (see parameter {@code dependencies} for more info on the format). This is a map, so you're able to change multiple properties at once if you want.
+     *      The condition must lead into another array, an array of {@link JSONObject} in the JSON, these are the frames. In code, this would be a list of lists of {@link RawDependencyField}s.
+     *      Every entry in the list is a frame inside the animation that will play every few seconds (determined by the {@link #speed}) while the condition is met. In each frame, you may change the properties of any dependency, these are called fieldSetters in code.
+     *      (see parameter {@link #dependencies} for more info on the format). This is a list, so you're able to change multiple properties at once if you want.
      **/
     public record RawAnimation(List<Class<? extends Component>> dependencies, Class<? extends Component> self,
-            float speed, Map<RawCondition, List<Map<Class<? extends Component>, Object>>> frames) { }
+            float speed, Map<RawDependencyField, List<List<RawDependencyField>>> frames) { }
 
-    // TODO: Document
+    /**
+     * When an {@link AnimationComponent} is declared, its entity's components and the will be used to initialize the dependencies of an animation and store it in here via {@link }.
+     **/
     public record Animation(List<Component> dependencies, Component self,
-            float speed, Map<Condition, List<Map<Component, Object>>> frames) { }
+            float speed, Map<DependencyField, List<List<DependencyField>>> frames) { }
 
-    /** A helper record to the {@link Animations} record, which stores important data to a condition.
-     * If you wanna know more about the parameters here, check that record.
+    /** A helper record to the {@link RawAnimation} record, which stores data related to fields, but with the dependency uninitialized and the field's name as a string.
+     * It's mainly used to store conditions and fieldSetters, with the {@link #expectation} parameter being exclusively for conditions.
+     * If you wanna learn more, about how it's used, checked out the {@link #frames} in the {@link RawAnimation} record.
      * <p>
-     * @param dependency The component class that will be used to find the {@code field}.
-     * @param field The field that will be checked an made sure it matches the {@code expectedValue}
-     * @param expectedValue This is what we're checking the field to be. If the field is larger, smaller, or not equal to this, (depending on what you put) the animation under this condition will not play.
+     * @param dependency The component class in which the {@link #field} SHOULD be located
+     * @param field The name of the field that's in the {@link #dependency}
+     * @param value This is either going to be the new value of the field (when used as a fieldSetter) or the expected value of the field (when used as a condition), depending on the use case of this record.
      **/
-    public record RawCondition(Class<? extends Component> dependency, String field, Object expectedValue) { }
+    public record RawDependencyField(Class<? extends Component> dependency, String field, Object value, String expectation) { }
 
+    public record DependencyField(Component dependency, Field field, Object expectedValue, String expectation) { }
 
-    /** A helper record to the {@link Animations} record, which stores important data to a condition.
-     * If you wanna know more about the parameters here, check that record.
+    /**
+     * Calls {@code loadRawAnimations} for every file in the {@code PATH}, as long as it's a JSON.
+     * All {@link RawAnimation}s created by the {@code loadRawAnimations} is added into the {@code ANIMATIONS} {@code List} to be used by other methods.
+     * This method is recommended to be called upon world creation or at the game's start.
+     * If you wanna know more, look at {@code loadRawAnimations}'s documentation.
      * <p>
-     * @param dependency The component class that will be used to find the {@code field}.
-     * @param field The field that will be checked an made sure it matches the {@code expectedValue}
-     * @param expectedValue This is what we're checking the field to be. If the field is larger, smaller, or not equal to this, (depending on what you put) the animation under this condition will not play.
+     * Note: The {@code ANIMATIONS} list is cleared at the start of the method.
      **/
-    public record Condition(Component dependency, String field, Object expectedValue) { }
-
-
     public static void loadRawAnimations() {
         ANIMATIONS.clear();
 
@@ -151,7 +156,7 @@ public class AnimationReader {
             self = UtilityTool.getClassFromPath(selfPath, Component.class, name + " animation file");
 
         // Now, onto THE BIG ONE, the animations
-        Map<RawCondition, List<Map<Class<? extends Component>, Object>>> frames = new HashMap<>();
+        Map<RawDependencyField, List<List<RawDependencyField>>> frames = new HashMap<>();
 
         // Since we're dealing with a JSON object instead of the list, we'll loop through its keySet and get the array with the key
         for (String rawCondition : framesObject.keySet()) {
@@ -163,18 +168,18 @@ public class AnimationReader {
                             .toList());
 
             // Then, once again loop through it, putting all the data obtained in the list below
-            List<Map<Class<? extends Component>, Object>> conditionFrames = new ArrayList<>();
+            List<List<RawDependencyField>> conditionFrames = new ArrayList<>();
             for (JSONObject rawFrame : rawConditionFrames) {
 
-                // All done here is just converting the dependencyIndex to a dependency and get the newValue, adding both to the Map below.
-                Map<Class<? extends Component>, Object> frame = new HashMap<>();
+                // All done here is just converting the dependencyIndex to a dependency class and get the newValue, putting both as well as the field portion of the targetField into the RawDependencyField record
+                List<RawDependencyField> frame = new ArrayList<>();
                 for (String targetField : rawFrame.keySet()) {
                     // Get the new value from the JSONObject by using the targetField as a key (like last time)
                     Object newValue = rawFrame.get(targetField);
 
-                    // Get the dependency from the targetField as well, adding both the newValue and the obtained dependency to the frame map
+                    // Get the dependency from the targetField as well, adding both the newValue, the field portion of targetField, and the obtained dependency to a RawDependencyField, adding that to the list
                     Class<? extends Component> targetDependency = getDependencyFromString("TargetField \"" + targetField + "\" in " + name, dependencies, self, targetField);
-                    frame.put(targetDependency, newValue);
+                    frame.add(new RawDependencyField(targetDependency, targetField.split(":")[1], newValue, ""));
                 }
 
                 conditionFrames.add(frame);
@@ -184,7 +189,7 @@ public class AnimationReader {
             // Get the dependency class with the first one, and use the second two in the condition declaration
             String[] splitCondition = rawCondition.split(":");
             Class<? extends Component> conditionDependency = getDependencyFromString("Condition \"" + rawCondition + "\" in " + name, dependencies, self, rawCondition);
-            RawCondition condition = new RawCondition(conditionDependency, splitCondition[1], splitCondition[2]);
+            RawDependencyField condition = new RawDependencyField(conditionDependency, splitCondition[1], splitCondition[3], splitCondition[2]);
 
             frames.put(condition, conditionFrames);
         }
@@ -238,10 +243,22 @@ public class AnimationReader {
            .forEach(dependency -> Main.LOGGER.warn("Dependency \"{}\" in animation \"{}\" was skipped: not found in entity {}", dependency.getSimpleName(), animationName, entity));
 
         // Do the same for conditions, but also keep track of the raw condition as a key so we can pair them with frames later
-        Map<RawCondition, Condition> resolvedConditions = new LinkedHashMap<>();
+        Map<RawDependencyField, DependencyField> resolvedConditions = new LinkedHashMap<>();
+        AtomicInteger index = new AtomicInteger();
         rawAnimation.frames().keySet().stream()
            .flatMap(rawCondition -> EntityHandler.getComponent(entity, rawCondition.dependency())
-               .map(dependency -> new Condition(dependency, rawCondition.field(), rawCondition.expectedValue()))
+               .map(dependency -> {
+                   // The field from the RawDependencyField must be converted into an actual field, so do that as well
+                   int i = index.getAndIncrement(); // This is for the warning below
+                   try {
+                        Field field = rawCondition.dependency().getDeclaredField(rawCondition.field());
+                        return new DependencyField(dependency, field, rawCondition.value(), rawCondition.expectation());
+                   } catch (NoSuchFieldException exception) {
+                       Main.LOGGER.warn("Condition #{} was skipped in animation {}: field {} not found in dependency {}", i, animationName, rawCondition.field(), rawCondition.dependency().getSimpleName());
+                   }
+                   return null;
+               })
+               .filter(Objects::nonNull)
                .map(condition -> Map.entry(rawCondition, condition))
                .stream())
            .forEach(entry -> resolvedConditions.put(entry.getKey(), entry.getValue()));
@@ -250,28 +267,40 @@ public class AnimationReader {
         rawAnimation.frames().keySet().stream()
            .filter(rawCondition -> !resolvedConditions.containsKey(rawCondition))
            .forEach(rawCondition -> Main.LOGGER.warn("Condition \"{}:{}:{}\" in animation \"{}\" was skipped: dependency \"{}\" not found in entity {}",
-               rawCondition.dependency().getSimpleName(), rawCondition.field(), rawCondition.expectedValue(), animationName, rawCondition.dependency().getSimpleName(), entity));
+               rawCondition.dependency().getSimpleName(), rawCondition.field(), rawCondition.value(), animationName, rawCondition.dependency().getSimpleName(), entity));
 
         // Pair up conditions with their frames, digging into the raw animation to get the uninitialized frames and resolving the dependencies within
-        Map<Condition, List<Map<Component, Object>>> frames = new HashMap<>();
+        Map<DependencyField, List<List<DependencyField>>> frames = new HashMap<>();
         resolvedConditions.forEach((rawCondition, condition) -> {
-           List<Map<Component, Object>> frameList = rawAnimation.frames().get(rawCondition).stream()
-               .map(frame -> frame.entrySet().stream()
-                   .flatMap(entry -> EntityHandler.getComponent(entity, entry.getKey())
-                       .map(dependency -> Map.entry((Component) dependency, entry.getValue()))
+           List<List<DependencyField>> frameList = rawAnimation.frames().get(rawCondition).stream()
+               .map(frame -> frame.stream()
+                   .flatMap(fieldSetter -> EntityHandler.getComponent(entity, fieldSetter.dependency())
+                       .map(dependency -> {
+                           // The field from the RawDependencyField must be converted into an actual field, so do that as well
+                           int i = index.getAndIncrement(); // This is for the warning below
+                           try {
+                               // TODO: Check supers as well
+                                Field field = fieldSetter.dependency().getDeclaredField(fieldSetter.field());
+                                return new DependencyField(dependency, field, fieldSetter.value(), fieldSetter.expectation());
+                           } catch (NoSuchFieldException exception) {
+                               Main.LOGGER.warn("Field setter #{} was skipped in animation {}: field {} not found in dependency {}", i, animationName, fieldSetter.field(), fieldSetter.dependency().getSimpleName());
+                           }
+                           return null;
+                       })
+                       .filter(Objects::nonNull)
                        .stream())
-                   .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
+                   .collect(Collectors.toList()))
                .collect(Collectors.toList());
            frames.put(condition, frameList);
         });
 
         // EVEN MORE SKIP WARNINGS
         resolvedConditions.forEach((rawCondition, condition) ->
-           rawAnimation.frames().get(rawCondition).forEach(frame ->
-               frame.keySet().stream()
-                   .filter(dependency -> EntityHandler.getComponent(entity, dependency).isEmpty())
-                   .forEach(dependency -> Main.LOGGER.warn("Frame dependency \"{}\" in condition \"{}:{}:{}\" of animation \"{}\" was skipped: not found in entity {}",
-                       dependency.getSimpleName(), rawCondition.dependency().getSimpleName(), rawCondition.field(), rawCondition.expectedValue(), animationName, entity))));
+           rawAnimation.frames().get(rawCondition).stream()
+                   .flatMap(frame -> frame.stream())
+                   .filter(fieldSetter -> EntityHandler.getComponent(entity, fieldSetter.dependency()).isEmpty())
+                   .forEach(fieldSetter -> Main.LOGGER.warn("Frame dependency \"{}\" in condition \"{}:{}:{}\" of animation \"{}\" was skipped: not found in entity {}",
+                       fieldSetter.dependency().getSimpleName(), rawCondition.dependency().getSimpleName(), rawCondition.field(), rawCondition.value(), animationName, entity)));
 
         // Use all that to create our animation!
         Animation animation = new Animation(dependencies, self, rawAnimation.speed(), frames);

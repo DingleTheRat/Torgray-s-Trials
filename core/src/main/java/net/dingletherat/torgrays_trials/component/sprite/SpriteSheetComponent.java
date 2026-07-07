@@ -16,14 +16,14 @@ import net.dingletherat.torgrays_trials.system.SpriteSystem;
  * - Implemented by {@link SpriteSystem}
  **/
 public class SpriteSheetComponent extends SpriteComponent {
-	/// This is the colum where the sprite would be pulled from. Set to -1 to disable it.
+	/** This is the column where the sprite would be pulled from. Set to -1 to disable it. **/
 	public int column;
-	/// This is the row where the sprite would be pulled from. Set to -1 to disable it.
+	/** This is the row where the sprite would be pulled from. Set to -1 to disable it. **/
 	public int row;
 
     /**
      * @param spriteSheetName The name or path of the sheet in the files.
-     * @param column This is the colum where the sprite would be pulled from.
+     * @param column This is the column where the sprite would be pulled from.
      * @param row This is the row where the sprite would be pulled from.
      * @param sizeX What's the size of the sprite sheet on the X in world units?
      * @param sizeY What's the size of the sprite sheet on the Y in world units?
@@ -37,7 +37,7 @@ public class SpriteSheetComponent extends SpriteComponent {
     }
     /**
      * @param spriteSheetName The name or path of the sheet in the files.
-     * @param column This is the colum where the sprite would be pulled from.
+     * @param column This is the column where the sprite would be pulled from.
      * @param row This is the row where the sprite would be pulled from.
      * @param sizeX What's the size of the sprite sheet on the X in tiles?
      * @param sizeY What's the size of the sprite sheet on the Y in tiles?

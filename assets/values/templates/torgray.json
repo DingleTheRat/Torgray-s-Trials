@@ -22,7 +22,7 @@
       "args": [1, 1, [], []]
     },
     {
-      "component": "net.dingletherat.torgrays_trials.component.sprite.WalkingSheetComponent",
+      "component": "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent",
       "args": ["entity/player/torgray_sheet", 3, 4, 0]
     },
     {
@@ -35,7 +35,7 @@
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.AnimationComponent",
-      "args": ["Torgray Walk", "net.dingletherat.torgrays_trials.component.sprite.WalkingSheetComponent"]
+      "args": ["Torgray Walk", "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent"]
     }
   ]
 }
