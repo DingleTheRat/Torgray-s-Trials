@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,7 +81,7 @@ public class AnimationReader {
      **/
     public record RawDependencyField(Class<? extends Component> dependency, String field, Object value, String expectation) { }
 
-    public record DependencyField(Component dependency, Field field, Object expectedValue, String expectation) { }
+    public record DependencyField(Component dependency, Field field, Object value, String expectation) { }
 
     /**
      * Calls {@code loadRawAnimations} for every file in the {@code PATH}, as long as it's a JSON.
@@ -155,8 +156,8 @@ public class AnimationReader {
         if (json.has(KEY_SELF) && json.get(KEY_SELF) instanceof String selfPath)
             self = UtilityTool.getClassFromPath(selfPath, Component.class, name + " animation file");
 
-        // Now, onto THE BIG ONE, the animations
-        Map<RawDependencyField, List<List<RawDependencyField>>> frames = new HashMap<>();
+        // Now, onto THE BIG ONE, the animations. This is an IdentityHashMap, as it may contain some completely blank conditions
+        Map<RawDependencyField, List<List<RawDependencyField>>> frames = new IdentityHashMap<>();
 
         // Since we're dealing with a JSON object instead of the list, we'll loop through its keySet and get the array with the key
         for (String rawCondition : framesObject.keySet()) {
@@ -170,8 +171,7 @@ public class AnimationReader {
             // Then, once again loop through it, putting all the data obtained in the list below
             List<List<RawDependencyField>> conditionFrames = new ArrayList<>();
             for (JSONObject rawFrame : rawConditionFrames) {
-
-                // All done here is just converting the dependencyIndex to a dependency class and get the newValue, putting both as well as the field portion of the targetField into the RawDependencyField record
+                // Convert the dependencyIndex to a dependency class and get the newValue, putting both as well as the field portion of the targetField into the RawDependencyField record
                 List<RawDependencyField> frame = new ArrayList<>();
                 for (String targetField : rawFrame.keySet()) {
                     // Get the new value from the JSONObject by using the targetField as a key (like last time)
@@ -185,6 +185,13 @@ public class AnimationReader {
                 conditionFrames.add(frame);
             }
 
+            // If the targetField is just empty, meaning they want it to always pass, add a fully null RawDependencyField to the list
+            if (rawCondition.isBlank()) {
+                RawDependencyField blankField = new RawDependencyField(null, null, null, null);
+                frames.put(blankField, conditionFrames);
+                continue;
+            }
+
             // Split the rawCondition into (what's supposed to be) 3 strings: the dependency, variable, and condition.
             // Get the dependency class with the first one, and use the second two in the condition declaration
             String[] splitCondition = rawCondition.split(":");
@@ -193,9 +200,6 @@ public class AnimationReader {
 
             frames.put(condition, conditionFrames);
         }
-
-        // TODO: Remove
-        Main.LOGGER.debug("{}", frames);
 
         // Create the animation and return it
         RawAnimation animation = new RawAnimation(dependencies, self, speed.floatValue(), frames);
@@ -246,7 +250,8 @@ public class AnimationReader {
         Map<RawDependencyField, DependencyField> resolvedConditions = new LinkedHashMap<>();
         AtomicInteger index = new AtomicInteger();
         rawAnimation.frames().keySet().stream()
-           .flatMap(rawCondition -> EntityHandler.getComponent(entity, rawCondition.dependency())
+            .filter(rawCondition -> !(rawCondition.dependency() == null && rawCondition.field() == null && rawCondition.value() == null && rawCondition.expectation() == null))
+            .flatMap(rawCondition -> EntityHandler.getComponent(entity, rawCondition.dependency())
                .map(dependency -> {
                    // The field from the RawDependencyField must be converted into an actual field, so do that as well
                    int i = index.getAndIncrement(); // This is for the warning below
@@ -261,11 +266,17 @@ public class AnimationReader {
                .filter(Objects::nonNull)
                .map(condition -> Map.entry(rawCondition, condition))
                .stream())
-           .forEach(entry -> resolvedConditions.put(entry.getKey(), entry.getValue()));
+            .forEach(entry -> resolvedConditions.put(entry.getKey(), entry.getValue()));
+
+        // Add in the blank conditions that were previously skipped as well (they were skipped cuz they don't need initialization, they're blank)
+        rawAnimation.frames().keySet().stream()
+            .filter(rawCondition -> rawCondition.dependency() == null && rawCondition.field() == null && rawCondition.value() == null && rawCondition.expectation() == null)
+            .forEach(rawCondition -> resolvedConditions.put(rawCondition, new DependencyField(null, null, null, null)));
 
         // More warnings
         rawAnimation.frames().keySet().stream()
            .filter(rawCondition -> !resolvedConditions.containsKey(rawCondition))
+           .filter(rawCondition -> !(rawCondition.dependency() == null && rawCondition.field() == null && rawCondition.value() == null && rawCondition.expectation() == null))
            .forEach(rawCondition -> Main.LOGGER.warn("Condition \"{}:{}:{}\" in animation \"{}\" was skipped: dependency \"{}\" not found in entity {}",
                rawCondition.dependency().getSimpleName(), rawCondition.field(), rawCondition.value(), animationName, rawCondition.dependency().getSimpleName(), entity));
 

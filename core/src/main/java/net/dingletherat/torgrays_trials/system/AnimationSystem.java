@@ -40,6 +40,12 @@ public class AnimationSystem implements System {
             for (int index = 0; index < component.animation.frames().size(); index++) {
                 DependencyField condition = new ArrayList<>(component.animation.frames().keySet()).get(index);
 
+                // If the condition is blank, meaning it always passes, make it, well, always pass
+                if (condition.dependency() == null && condition.field() == null && condition.value() == null && condition.expectation() == null) {
+                    passedConditions.add(condition);
+                    continue;
+                }
+
                 // Get the field's value from the dependency. Warn and continue if that fails
                 Object value;
                 try {
@@ -51,20 +57,20 @@ public class AnimationSystem implements System {
 
                 // If an expectation has the "~" symbol, meaning contains, it can only be verified if it's a string, so make sure the expectation is a string
                 if (condition.expectation().contains("~") && !(value instanceof String)) {
-                    Main.LOGGER.warn("Condition #{} skipped: field {} in dependency {} must be a string to use the \"~\" operator, but it's a {}", index, condition.field().getName(), condition.dependency().getClass().getSimpleName(), condition.expectedValue().getClass().getSimpleName());
+                    Main.LOGGER.warn("Condition #{} skipped: field {} in dependency {} must be a string to use the \"~\" operator, but it's a {}", index, condition.field().getName(), condition.dependency().getClass().getSimpleName(), condition.value().getClass().getSimpleName());
                     continue;
                 }
 
                 // Declare a boolean that is true when the condition, depending on the expectation, is met
                 boolean met = switch (condition.expectation()) {
-                    case "~" -> ((String) value).contains((String) condition.expectedValue());
-                    case "!~" -> !((String) value).contains((String) condition.expectedValue());
-                    case "!=" -> !value.equals(condition.expectedValue());
-                    case ">=" -> ((Comparable<Object>) value).compareTo(condition.expectedValue()) >= 0;
-                    case ">" -> ((Comparable<Object>) value).compareTo(condition.expectedValue()) > 0;
-                    case "<=" -> ((Comparable<Object>) value).compareTo(condition.expectedValue()) <= 0;
-                    case "<" -> ((Comparable<Object>) value).compareTo(condition.expectedValue()) < 0;
-                    default -> value.equals(condition.expectedValue());
+                    case "~" -> ((String) value).contains((String) condition.value());
+                    case "!~" -> !((String) value).contains((String) condition.value());
+                    case "!=" -> !value.equals(condition.value());
+                    case ">=" -> ((Comparable<Object>) value).compareTo(condition.value()) >= 0;
+                    case ">" -> ((Comparable<Object>) value).compareTo(condition.value()) > 0;
+                    case "<=" -> ((Comparable<Object>) value).compareTo(condition.value()) <= 0;
+                    case "<" -> ((Comparable<Object>) value).compareTo(condition.value()) < 0;
+                    default -> value.equals(condition.value());
                 };
 
                 if (met) passedConditions.add(condition);
@@ -82,7 +88,7 @@ public class AnimationSystem implements System {
                 // Get the correct frame from the frames and loop through each of its variable changes, implementing them
                 for (DependencyField dependencyField : frame) {
                     try {
-                        dependencyField.field().set(dependencyField.dependency(), dependencyField.expectedValue());
+                        dependencyField.field().set(dependencyField.dependency(), dependencyField.value());
                     } catch (IllegalAccessException exception) {
                        Main.LOGGER.warn("Removed field setter #{} from condition {}'s frames: unable to access field \"{}\" in dependency while trying to modify it", frame.indexOf(dependencyField), condition, dependencyField.field().getName());
                        component.animation.frames().get(condition).get(frameNumber).remove(dependencyField);
