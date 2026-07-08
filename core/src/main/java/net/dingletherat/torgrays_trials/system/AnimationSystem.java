@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.AnimationComponent;
+import net.dingletherat.torgrays_trials.component.MovementComponent;
 import net.dingletherat.torgrays_trials.main.AnimationReader;
 import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.main.World;
@@ -30,9 +31,10 @@ public class AnimationSystem implements System {
                 component.animation = animation;
             }
 
-            // Increment the counter until the speed goal is met
-            component.counter++;
+            // Increment the counter until the speed goal is met. Then, reset it
+            component.counter += deltaTime;
             if (!(component.counter >= component.animation.speed())) continue;
+            component.counter = 0f;
 
             /* Loop through all the conditions and look for a valid one. If a valid one is found, add it into passedConditions. It will then be used to get its frames
                We get the conditions instead of the frames directly cuz it's used for a warning */
@@ -55,7 +57,10 @@ public class AnimationSystem implements System {
                     continue;
                 }
 
-                // If an expectation has the "~" symbol, meaning contains, it can only be verified if it's a string, so make sure the expectation is a string
+                // Convert the expectedValue to whatever the field's type actually is to make it checkable
+                Object expectedValue = convertToType(condition.value(), condition.field().getType());
+
+                // If the expectation has the "~" symbol, meaning contains, it can only be verified if it's a string, so make sure the expectation is a string
                 if (condition.expectation().contains("~") && !(value instanceof String)) {
                     Main.LOGGER.warn("Condition #{} skipped: field {} in dependency {} must be a string to use the \"~\" operator, but it's a {}", index, condition.field().getName(), condition.dependency().getClass().getSimpleName(), condition.value().getClass().getSimpleName());
                     continue;
@@ -63,14 +68,14 @@ public class AnimationSystem implements System {
 
                 // Declare a boolean that is true when the condition, depending on the expectation, is met
                 boolean met = switch (condition.expectation()) {
-                    case "~" -> ((String) value).contains((String) condition.value());
-                    case "!~" -> !((String) value).contains((String) condition.value());
-                    case "!=" -> !value.equals(condition.value());
-                    case ">=" -> ((Comparable<Object>) value).compareTo(condition.value()) >= 0;
-                    case ">" -> ((Comparable<Object>) value).compareTo(condition.value()) > 0;
-                    case "<=" -> ((Comparable<Object>) value).compareTo(condition.value()) <= 0;
-                    case "<" -> ((Comparable<Object>) value).compareTo(condition.value()) < 0;
-                    default -> value.equals(condition.value());
+                    case "~" -> ((String) value).contains((String) expectedValue);
+                    case "!~" -> !((String) value).contains((String) expectedValue);
+                    case "!=" -> !value.equals(expectedValue);
+                    case ">=" -> ((Comparable<Object>) value).compareTo(expectedValue) >= 0;
+                    case ">" -> ((Comparable<Object>) value).compareTo(expectedValue) > 0;
+                    case "<=" -> ((Comparable<Object>) value).compareTo(expectedValue) <= 0;
+                    case "<" -> ((Comparable<Object>) value).compareTo(expectedValue) < 0;
+                    default -> value.equals(expectedValue);
                 };
 
                 if (met) passedConditions.add(condition);
@@ -81,14 +86,14 @@ public class AnimationSystem implements System {
                 List<List<DependencyField>> frames = component.animation.frames().get(condition);
 
                 // Get the current frame number and get the current frame with it
-                int frameNumber = component.frames.getOrDefault(frames.size(), 0);
+                int framesSize = frames.size() - 1; // The size is decreased by 1 to account for indexes starting at 0
+                int frameNumber = component.frames.getOrDefault(framesSize, 0);
                 List<DependencyField> frame = frames.get(frameNumber);
-                Main.LOGGER.debug("Key {}, Value {}", frames.size(), frameNumber);
 
                 // Get the correct frame from the frames and loop through each of its variable changes, implementing them
                 for (DependencyField dependencyField : frame) {
                     try {
-                        dependencyField.field().set(dependencyField.dependency(), dependencyField.value());
+                        dependencyField.field().set(dependencyField.dependency(), convertToType(dependencyField.value(), dependencyField.field().getType()));
                     } catch (IllegalAccessException exception) {
                        Main.LOGGER.warn("Removed field setter #{} from condition {}'s frames: unable to access field \"{}\" in dependency while trying to modify it", frame.indexOf(dependencyField), condition, dependencyField.field().getName());
                        component.animation.frames().get(condition).get(frameNumber).remove(dependencyField);
@@ -96,9 +101,19 @@ public class AnimationSystem implements System {
                 }
 
                 // Last and least, update the frame to the next one
-                component.frames.put(frame.size(), frameNumber++);
-                if (frameNumber >= frames.size()) component.frames.put(frame.size(), 0);
+                frameNumber++;
+                component.frames.put(framesSize, frameNumber);
+                if (frameNumber > framesSize) component.frames.put(framesSize, 0);
             }
         }
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static <T> T convertToType(Object toConvert, Class<T> currentType) {
+        return (T) switch (toConvert) {
+            case String string when currentType.isEnum() -> Enum.valueOf((Class<? extends Enum>) currentType, string);
+            case String string when currentType == Boolean.class -> Boolean.parseBoolean(string);
+            default -> toConvert;
+        };
     }
 }
