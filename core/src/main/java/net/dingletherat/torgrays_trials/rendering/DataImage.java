@@ -19,7 +19,6 @@ import java.util.HashMap;
  * An instance of this class is created using the {@code loadImage} method in the static version of this class, because the constructor is private.
  * It's private because this method uses a cache system which is more efficient than crating a bunch of new instances of this class **/
 public class DataImage implements Serializable, Disposable {
-    private static final long serialVersionUID = 1L;
     private static final HashMap<String, DataImage> imageCache = new HashMap<>();
 
     private final byte[] data;

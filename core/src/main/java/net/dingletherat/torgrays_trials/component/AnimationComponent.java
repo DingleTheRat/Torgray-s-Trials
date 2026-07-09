@@ -39,6 +39,6 @@ public class AnimationComponent implements Component {
 
     @Override
     public ComponentType getType() {
-        return ComponentType.SINGLE;
+        return ComponentType.MULTI;
     }
 }

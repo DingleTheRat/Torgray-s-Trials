@@ -23,11 +23,12 @@
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent",
-      "args": ["entity/player/torgray_sheet", 3, 4, 0]
+      "args": ["entity/player/torgray_sheet", 0, 1, 3, 4, 0]
     },
     {
-      "component": "net.dingletherat.torgrays_trials.component.sprite.EyesSheetComponent",
-      "args": ["entity/eyes_sheet", 6, 2, 1]
+      "component": "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent",
+      "entry index": 1,
+      "args": ["entity/eyes_sheet", 0, 1, 4, 4, 1]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.HealthComponent",
@@ -35,7 +36,17 @@
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.AnimationComponent",
-      "args": ["Torgray Walk", "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent"]
+      "args": ["Basic Walk", "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent"]
+    },
+    {
+      "component": "net.dingletherat.torgrays_trials.component.AnimationComponent",
+      "entry index": 1,
+      "args": ["Directional Row", "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent"]
+    },
+    {
+      "component": "net.dingletherat.torgrays_trials.component.AnimationComponent",
+      "entry index": 2,
+      "args": ["Directional Row", "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent", 1]
     }
   ]
 }

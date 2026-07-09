@@ -3,6 +3,7 @@ package net.dingletherat.torgrays_trials.main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,17 +79,23 @@ public class EntityHandler {
             int entryIndex = component.optInt(KEY_ENTRY_INDEX);
             Component.Entry entry = new Component.Entry(componentClass, args, entryIndex);
 
-            // Check if the component has a duplicate entryIndex with any other componentClass. If so, error and don't add it
-            boolean hasDuplicate = componentClasses.stream().anyMatch(existing -> existing.entryIndex() == entry.entryIndex());
-            boolean isSameClass = componentClasses.stream().anyMatch(existing -> existing.componentClass() == entry.componentClass());
-            if (hasDuplicate && isSameClass) {
-                Main.LOGGER.error("[Location: {}] Entry index {} is already used for component {}! Did you add an \"{}\" int field?", location, entryIndex, componentClass.getSimpleName(), KEY_ENTRY_INDEX);
+            // Search for a component that has a duplicate entryIndex with any other componentClass. If one does, error and don't add it
+            Optional<Component.Entry> duplicate = componentClasses.stream()
+                .filter(existing -> existing.entryIndex() == entry.entryIndex())
+                .filter(existing -> existing.componentClass() == entry.componentClass())
+                .findFirst();
+
+            if (duplicate.isPresent()) {
+                Main.LOGGER.error("[Location: {}] Entry index {} is already used for component {}! Did you add an \"{}\" int field?", location, entry.entryIndex(), entry.componentClass().getSimpleName(), KEY_ENTRY_INDEX);
                 continue;
             }
 
             // If it passes all that, add it in!
             componentClasses.add(entry);
         }
+
+        // Sort everything by entry index and return
+        componentClasses.sort(Comparator.comparingInt(Component.Entry::entryIndex));
         return componentClasses;
     }
 
@@ -238,17 +245,19 @@ public class EntityHandler {
 
         return result;
     }
+    @SuppressWarnings("unchecked")
     public static <T extends Component> Optional<T> getComponent(int identifier, Class<T> type, int entryIndex) {
         if (!Main.gameWorld.getEntities().containsKey(identifier)) return Optional.empty();
         if (entryIndex < 0) return Optional.empty();
 
         List<Component> entity = Main.gameWorld.getEntities().get(identifier);
-
         int entry = 0;
+
         for (Component element : entity) {
-            if (type.isInstance(element))
-                if (entry != entryIndex) entry++;
-                else return Optional.of((T) element);
+            if (!type.isInstance(element)) continue;
+
+            if (entry != entryIndex) entry++;
+            else return Optional.of((T) element);
         }
         return Optional.empty();
     }

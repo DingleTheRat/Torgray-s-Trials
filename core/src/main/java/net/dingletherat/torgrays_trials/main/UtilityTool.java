@@ -149,4 +149,15 @@ public class UtilityTool {
         }
         return fileNames;
     }
+
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    // TODO: Document
+    public static <T> T convertToType(Object toConvert, Class<T> currentType) {
+        return (T) switch (toConvert) {
+            case String string when currentType.isEnum() -> Enum.valueOf((Class<? extends Enum>) currentType, string);
+            case String string when currentType == Boolean.class -> Boolean.parseBoolean(string);
+            default -> toConvert;
+        };
+    }
 }

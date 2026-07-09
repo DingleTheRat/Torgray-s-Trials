@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -157,7 +156,7 @@ public class AnimationReader {
             self = UtilityTool.getClassFromPath(selfPath, Component.class, name + " animation file");
 
         // Now, onto THE BIG ONE, the animations. This is an IdentityHashMap, as it may contain some completely blank conditions
-        Map<RawDependencyField, List<List<RawDependencyField>>> frames = new IdentityHashMap<>();
+        Map<RawDependencyField, List<List<RawDependencyField>>> frames = new LinkedHashMap<>();
 
         // Since we're dealing with a JSON object instead of the list, we'll loop through its keySet and get the array with the key
         for (String rawCondition : framesObject.keySet()) {
@@ -230,7 +229,7 @@ public class AnimationReader {
         // Using EntityHandler.getComponent, get the dependency component from the entity. If it's not present, warn and return null.
         Component self = EntityHandler.getComponent(entity, rawSelf, entryIndex).orElse(null);
         if (self == null) {
-           Main.LOGGER.warn("Failed to find self for {}'s animation component: entity expects {}, but it wasn't found", entity, animationName, rawSelf.getSimpleName());
+           Main.LOGGER.warn("Failed to find self for {}'s animation component: entity expects {}, but it wasn't found", name, rawSelf.getSimpleName());
            return null;
         }
 
@@ -251,7 +250,7 @@ public class AnimationReader {
         AtomicInteger index = new AtomicInteger();
         rawAnimation.frames().keySet().stream()
             .filter(rawCondition -> !(rawCondition.dependency() == null && rawCondition.field() == null && rawCondition.value() == null && rawCondition.expectation() == null))
-            .flatMap(rawCondition -> EntityHandler.getComponent(entity, rawCondition.dependency())
+            .flatMap(rawCondition -> (rawCondition.dependency() == rawSelf ? Optional.of(self) : EntityHandler.getComponent(entity, rawCondition.dependency()))
                .map(dependency -> {
                    // The field from the RawDependencyField must be converted into an actual field, so do that as well
                    int i = index.getAndIncrement(); // This is for the warning below
@@ -281,11 +280,11 @@ public class AnimationReader {
                rawCondition.dependency().getSimpleName(), rawCondition.field(), rawCondition.value(), animationName, rawCondition.dependency().getSimpleName(), entity));
 
         // Pair up conditions with their frames, digging into the raw animation to get the uninitialized frames and resolving the dependencies within
-        Map<DependencyField, List<List<DependencyField>>> frames = new HashMap<>();
+        Map<DependencyField, List<List<DependencyField>>> frames = new LinkedHashMap<>();
         resolvedConditions.forEach((rawCondition, condition) -> {
            List<List<DependencyField>> frameList = rawAnimation.frames().get(rawCondition).stream()
                .map(frame -> frame.stream()
-                   .flatMap(fieldSetter -> EntityHandler.getComponent(entity, fieldSetter.dependency())
+                   .flatMap(fieldSetter -> (fieldSetter.dependency() == rawSelf ? Optional.of(self) : EntityHandler.getComponent(entity, fieldSetter.dependency()))
                        .map(dependency -> {
                            // The field from the RawDependencyField must be converted into an actual field, so do that as well
                            int i = index.getAndIncrement(); // This is for the warning below

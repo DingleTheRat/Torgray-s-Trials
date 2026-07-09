@@ -280,10 +280,10 @@ public class UI {
         Label player = new Label("Player: null", style);
 
         // Player Sprite Stuff
-        Label scol = new Label("SCol: null", style);
-        Label srow = new Label("SRow: null", style);
-        Label ecol = new Label("SCol: null", style);
-        Label erow = new Label("SRow: null", style);
+        Label spriteColumn = new Label("Sprite Column: null", style);
+        Label spriteRow = new Label("Sprite Row: null", style);
+        Label eyesColumn = new Label("Eyes Column: null", style);
+        Label eyesRow = new Label("Eyes Column: null", style);
 
         // Add all the labels to the table (The .left() aligns the text to the left)
         // Position
@@ -302,10 +302,10 @@ public class UI {
         table.add(divider).left().row(); // Divider
 
         // Player Sprite Stuff
-        table.add(scol).left().row();
-        table.add(srow).left().row();
-        table.add(ecol).left().row();
-        table.add(erow).left().row();
+        table.add(spriteColumn).left().row();
+        table.add(spriteRow).left().row();
+        table.add(eyesColumn).left().row();
+        table.add(eyesRow).left().row();
 
         // Create the uiState
         uiStates.put("Debug", table);
@@ -329,12 +329,12 @@ public class UI {
 
             // Player Sprite Stuff
             EntityHandler.getComponent(Main.gameWorld.getPlayer(), SpriteSheetComponent.class).ifPresent(component -> {
-                scol.setText("SCol: " + component.column);
-                srow.setText("SRow: " + component.row);
+                spriteColumn.setText("Sprite Column: " + component.column);
+                spriteRow.setText("Sprite Row: " + component.row);
             });
-            EntityHandler.getComponent(Main.gameWorld.getPlayer(), EyesSheetComponent.class).ifPresent(component -> {
-                ecol.setText("ECol: " + component.column);
-                erow.setText("ERow: " + component.row);
+            EntityHandler.getComponent(Main.gameWorld.getPlayer(), SpriteSheetComponent.class, 1).ifPresent(component -> {
+                eyesColumn.setText("Eyes Column: " + component.column);
+                eyesRow.setText("Eyes Row: " + component.row);
             });
         });
     }
