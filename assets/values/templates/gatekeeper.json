@@ -28,17 +28,17 @@
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.AnimationComponent",
-      "args": ["Basic Walk", "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent"]
+      "args": ["Basic Walk"]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.AnimationComponent",
       "entry index": 1,
-      "args": ["Directional Row", "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent"]
+      "args": ["Directional Row"]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.AnimationComponent",
       "entry index": 2,
-      "args": ["Directional Row", "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent", 1]
+      "args": ["Directional Row", {"net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent": 1}]
     }
   ]
 }

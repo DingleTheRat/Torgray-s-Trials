@@ -1,31 +1,30 @@
 {
   "name": "Directional Row",
   "speed": 0.1,
-
-  "self": "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent",
   "dependencies": [
+    "net.dingletherat.torgrays_trials.component.sprite.SpriteSheetComponent",
     "net.dingletherat.torgrays_trials.component.MovementComponent"
   ],
 
   "frames": {
-    "0:direction:~:left": [
+    "1:direction:~:up": [
       {
-        "self:row": 2
+        "0:row": 0
       }
     ],
-    "0:direction:~:right": [
+    "1:direction:~:down": [
       {
-        "self:row": 3
+        "0:row": 1
       }
     ],
-    "0:direction:~:up": [
+    "1:direction:~:left": [
       {
-        "self:row": 0
+        "0:row": 2
       }
     ],
-    "0:direction:~:down": [
+    "1:direction:~:right": [
       {
-        "self:row": 1
+        "0:row": 3
       }
     ]
   }

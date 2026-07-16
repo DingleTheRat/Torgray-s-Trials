@@ -20,7 +20,7 @@ public class AnimationSystem implements System {
                 // If the animation for it hasn't yet been initialized, do that (as long as there is a raw animation)
                 if (component.animation == null && component.rawAnimation != null) {
                     // Create de animation. If it returns null, something likely went wrong, so remove the component and continue. If nothing goes wrong, set it
-                    Animation animation = AnimationReader.initializeAnimation(entity, component.rawAnimation, component.selfPath, component.selfEntryIndex);
+                    Animation animation = AnimationReader.initializeAnimation(entity, component.rawAnimation, component.dependencyIndices);
                     if (animation == null) {
                         Main.gameWorld.removeComponent(entity, component);
                         continue;
@@ -38,7 +38,7 @@ public class AnimationSystem implements System {
                 List<DependencyField> conditionList = new ArrayList<>(component.animation.frames().keySet());
                 List<DependencyField> passedConditions = new ArrayList<>();
                 for (int index = 0; index < conditionList.size(); index++) {
-                    DependencyField condition = new ArrayList<>(component.animation.frames().keySet()).get(index);
+                    DependencyField condition = conditionList.get(index);
 
                     // If the condition is blank, meaning it always passes, make it, well, always pass
                     if (condition.dependency() == null && condition.field() == null && condition.value() == null && condition.expectation() == null) {
@@ -84,6 +84,7 @@ public class AnimationSystem implements System {
 
                     if (met) passedConditions.add(condition);
                 }
+                Main.LOGGER.debug("{}", passedConditions);
 
                 // Loop through the passedConditions, getting the frames of each condition
                 for (DependencyField condition : passedConditions) {

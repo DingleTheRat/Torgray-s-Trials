@@ -3,6 +3,8 @@ package net.dingletherat.torgrays_trials.component;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONObject;
+
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.main.AnimationReader;
 import net.dingletherat.torgrays_trials.main.AnimationReader.Animation;
@@ -18,23 +20,23 @@ public class AnimationComponent implements Component {
      * In the alternate constructor, it is automatically set to 0.
      * It's declared in the constructor and used to initialize the self for {@link #animation} in {@link AnimationSystem}
      **/
-    public int selfEntryIndex;
-    public String selfPath;
+
+    public JSONObject dependencyIndices;
     public float counter;
     public Map<Integer, Integer> frames = new HashMap<>();
 
-    public AnimationComponent(String animationName, String targetComponent, Integer targetEntryIndex) {
+    public AnimationComponent(String animationName, JSONObject dependencyIndices) {
         if (!AnimationReader.ANIMATIONS.containsKey(animationName)) {
             Main.LOGGER.warn("Couldn't find animation \"{}\"", animationName);
             return;
         }
 
         rawAnimation = AnimationReader.ANIMATIONS.get(animationName);
-        this.selfPath = targetComponent;
-        this.selfEntryIndex = targetEntryIndex;
+        this.dependencyIndices = dependencyIndices;
     }
-    public AnimationComponent(String animationName, String targetComponent) {
-        this(animationName, targetComponent, 0);
+
+    public AnimationComponent(String animationName) {
+        this(animationName, new JSONObject());
     }
 
     @Override

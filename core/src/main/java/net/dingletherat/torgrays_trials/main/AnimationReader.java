@@ -32,7 +32,6 @@ public class AnimationReader {
     public static final String KEY_DEPENDENCIES = "dependencies";
     /** An optional key that sets what the target component (set by the {@link AnimationComponent}) needs to be for this animation to function correctly.
     If the target component doesn't match the self you set, then the {@link AnimationComponent} will be discarded with a warning **/
-    public static final String KEY_SELF = "self";
     /** The key used to get the speed at which the animation will run at **/
     public static final String KEY_SPEED = "speed";
     /** The key used to obtain the frames  **/
@@ -61,14 +60,12 @@ public class AnimationReader {
      *      Every entry in the list is a frame inside the animation that will play every few seconds (determined by the {@link #speed}) while the condition is met. In each frame, you may change the properties of any dependency, these are called fieldSetters in code.
      *      (see parameter {@link #dependencies} for more info on the format). This is a list, so you're able to change multiple properties at once if you want.
      **/
-    public record RawAnimation(List<Class<? extends Component>> dependencies, Class<? extends Component> self,
-            float speed, Map<RawDependencyField, List<List<RawDependencyField>>> frames) { }
+    public record RawAnimation(List<Class<? extends Component>> dependencies, float speed, Map<RawDependencyField, List<List<RawDependencyField>>> frames) { }
 
     /**
      * When an {@link AnimationComponent} is declared, its entity's components and the will be used to initialize the dependencies of an animation and store it in here via {@link }.
      **/
-    public record Animation(List<Component> dependencies, Component self,
-            float speed, Map<DependencyField, List<List<DependencyField>>> frames) { }
+    public record Animation(List<Component> dependencies, float speed, Map<DependencyField, List<List<DependencyField>>> frames) { }
 
     /** A helper record to the {@link RawAnimation} record, which stores data related to fields, but with the dependency uninitialized and the field's name as a string.
      * It's mainly used to store conditions and fieldSetters, with the {@link #expectation} parameter being exclusively for conditions.
@@ -150,16 +147,12 @@ public class AnimationReader {
             }
         }
 
-        // Do the same for the self, just don't do all the weird looping shenanigans
-        Class<? extends Component> self = null;
-        if (json.has(KEY_SELF) && json.get(KEY_SELF) instanceof String selfPath)
-            self = UtilityTool.getClassFromPath(selfPath, Component.class, name + " animation file");
-
         // Now, onto THE BIG ONE, the animations. This is an IdentityHashMap, as it may contain some completely blank conditions
         Map<RawDependencyField, List<List<RawDependencyField>>> frames = new LinkedHashMap<>();
 
         // Since we're dealing with a JSON object instead of the list, we'll loop through its keySet and get the array with the key
         for (String rawCondition : framesObject.keySet()) {
+        Main.LOGGER.info("{}: {}", name, framesObject.keySet());
             JSONArray conditionFramesArray = framesObject.getJSONArray(rawCondition);
 
             // As usual with JSONArrays, turn the conditionFrames into a list
@@ -177,7 +170,7 @@ public class AnimationReader {
                     Object newValue = rawFrame.get(targetField);
 
                     // Get the dependency from the targetField as well, adding both the newValue, the field portion of targetField, and the obtained dependency to a RawDependencyField, adding that to the list
-                    Class<? extends Component> targetDependency = getDependencyFromString("TargetField \"" + targetField + "\" in " + name, dependencies, self, targetField);
+                    Class<? extends Component> targetDependency = getDependencyFromString("TargetField \"" + targetField + "\" in " + name, dependencies, targetField);
                     frame.add(new RawDependencyField(targetDependency, targetField.split(":")[1], newValue, ""));
                 }
 
@@ -194,50 +187,28 @@ public class AnimationReader {
             // Split the rawCondition into (what's supposed to be) 3 strings: the dependency, variable, and condition.
             // Get the dependency class with the first one, and use the second two in the condition declaration
             String[] splitCondition = rawCondition.split(":");
-            Class<? extends Component> conditionDependency = getDependencyFromString("Condition \"" + rawCondition + "\" in " + name, dependencies, self, rawCondition);
+            Class<? extends Component> conditionDependency = getDependencyFromString("Condition \"" + rawCondition + "\" in " + name, dependencies, rawCondition);
             RawDependencyField condition = new RawDependencyField(conditionDependency, splitCondition[1], splitCondition[3], splitCondition[2]);
 
             frames.put(condition, conditionFrames);
         }
 
         // Create the animation and return it
-        RawAnimation animation = new RawAnimation(dependencies, self, speed.floatValue(), frames);
+        RawAnimation animation = new RawAnimation(dependencies, speed.floatValue(), frames);
         return animation;
     }
 
-    public static Animation initializeAnimation(int entity, RawAnimation rawAnimation, String selfPath, int entryIndex) {
+    public static Animation initializeAnimation(int entity, RawAnimation rawAnimation, JSONObject dependencyIndices) {
         // Get the name for warning purposes
         String name = EntityHandler.getComponent(entity, NameComponent.class).get().name;
         String animationName = ANIMATIONS.entrySet().stream()
             .filter(entry -> entry.getValue().equals(rawAnimation)).map(Map.Entry::getKey).findFirst().orElse("unknown");
 
-        /*
-         * The reason we don't use the self from the rawAnimation here is because the rawAnimation self is the one expected, not provided by the component.
-         * Even though we could just declare the expected one, it's optional, meaning if it's not provided we can't get a self.
-         * With the self from rawAnimation, we also can't get a self with an entry index, which is its whole point.
-         */
-        // Get the raw self via the get class from path the method
-        Class<? extends Component> rawSelf = UtilityTool.getClassFromPath(selfPath, Component.class, "AnimationComponent self declaration");
-        if (rawSelf == null) return null;
-
-        // Make sure the raw self matches up with the rawAnimation's expected self, if it has one
-        if (rawAnimation.self() != null && rawAnimation.self() != rawSelf) {
-            Main.LOGGER.warn("Self mismatch in entity {}: animation {} expects \"{}\", but got \"{}\"", name, animationName, rawAnimation.self().getSimpleName(), rawSelf.getSimpleName());
-            return null;
-        }
-
-        // Using EntityHandler.getComponent, get the dependency component from the entity. If it's not present, warn and return null.
-        Component self = EntityHandler.getComponent(entity, rawSelf, entryIndex).orElse(null);
-        if (self == null) {
-           Main.LOGGER.warn("Failed to find self for {}'s animation component: entity expects {}, but it wasn't found", name, rawSelf.getSimpleName());
-           return null;
-        }
-
-        // It returns an optional, and if the component is present, add it in. Warn if any were skipped.
+        // Go through the raw animation's dependencies and resolve them, adding the resolved ones into the list below
         List<Component> dependencies = new ArrayList<>();
         rawAnimation.dependencies().stream()
            .map(dependency -> EntityHandler.getComponent(entity, dependency))
-           .flatMap(Optional::stream) // FYI Flat-map skips over nulls
+           .flatMap(Optional::stream) // FYI: Flat-map skips over nulls
            .forEach(dependencies::add);
 
         // Warn if something was skipped
@@ -245,12 +216,15 @@ public class AnimationReader {
            .filter(dependency -> EntityHandler.getComponent(entity, dependency).isEmpty())
            .forEach(dependency -> Main.LOGGER.warn("Dependency \"{}\" in animation \"{}\" was skipped: not found in entity {}", dependency.getSimpleName(), animationName, entity));
 
+        // Index all the resolved dependencies
+        List<Component> indexedDependencies = applyDependencyIndices(entity, dependencies, dependencyIndices);
+
         // Do the same for conditions, but also keep track of the raw condition as a key so we can pair them with frames later
         Map<RawDependencyField, DependencyField> resolvedConditions = new LinkedHashMap<>();
         AtomicInteger index = new AtomicInteger();
         rawAnimation.frames().keySet().stream()
             .filter(rawCondition -> !(rawCondition.dependency() == null && rawCondition.field() == null && rawCondition.value() == null && rawCondition.expectation() == null))
-            .flatMap(rawCondition -> (rawCondition.dependency() == rawSelf ? Optional.of(self) : EntityHandler.getComponent(entity, rawCondition.dependency()))
+            .flatMap(rawCondition -> indexedDependencies.stream().filter(rawCondition.dependency()::isInstance).findFirst()
                .map(dependency -> {
                    // The field from the RawDependencyField must be converted into an actual field, so do that as well
                    int i = index.getAndIncrement(); // This is for the warning below
@@ -284,7 +258,7 @@ public class AnimationReader {
         resolvedConditions.forEach((rawCondition, condition) -> {
            List<List<DependencyField>> frameList = rawAnimation.frames().get(rawCondition).stream()
                .map(frame -> frame.stream()
-                   .flatMap(fieldSetter -> (fieldSetter.dependency() == rawSelf ? Optional.of(self) : EntityHandler.getComponent(entity, fieldSetter.dependency()))
+                    .flatMap(fieldSetter -> indexedDependencies.stream().filter(fieldSetter.dependency()::isInstance).findFirst()
                        .map(dependency -> {
                            // The field from the RawDependencyField must be converted into an actual field, so do that as well
                            int i = index.getAndIncrement(); // This is for the warning below
@@ -308,12 +282,12 @@ public class AnimationReader {
         resolvedConditions.forEach((rawCondition, condition) ->
            rawAnimation.frames().get(rawCondition).stream()
                    .flatMap(frame -> frame.stream())
-                   .filter(fieldSetter -> EntityHandler.getComponent(entity, fieldSetter.dependency()).isEmpty())
+                    .filter(fieldSetter -> indexedDependencies.stream().noneMatch(fieldSetter.dependency()::isInstance))
                    .forEach(fieldSetter -> Main.LOGGER.warn("Frame dependency \"{}\" in condition \"{}:{}:{}\" of animation \"{}\" was skipped: not found in entity {}",
                        fieldSetter.dependency().getSimpleName(), rawCondition.dependency().getSimpleName(), rawCondition.field(), rawCondition.value(), animationName, entity)));
 
         // Use all that to create our animation!
-        Animation animation = new Animation(dependencies, self, rawAnimation.speed(), frames);
+        Animation animation = new Animation(dependencies, rawAnimation.speed(), frames);
         return animation;
     }
 
@@ -341,16 +315,45 @@ public class AnimationReader {
         return null;
     }
 
-    /**
-     * An overload method of the method sharing its name that also accepts {@code self} as an index.
-     * <p>
-     * @param location Provide information about where this is called, so it's easier to debug should an error be thrown.
-     * @param dependencies An ordered list of {@link Component}s that the code can index into via the provided string
-     * @param string The string that will be used to obtain the index to use to get a dependency (format like so: {@code [DEPENDENCY_POSITION]:[FIELD]})
-     * @return The successfully obtained dependency from the {@code dependencies}.
-     **/
-    public static Class<? extends Component> getDependencyFromString(String location, List<Class<? extends Component>> dependencies, Class<? extends Component> self, String string) {
-        if (string.contains("self")) return getDependencyFromString(location + " (via self)", List.of(self), string.replace("self", "0"));
-        else return getDependencyFromString(location, dependencies, string);
+    public static List<Component> applyDependencyIndices(int entity, List<Component> dependencies, JSONObject dependencyIndices) {
+        // Loop through all the dependencyIndices, checking if each one is correct. If it is, add it to the returnList, which is a copy of the dependencies list
+        List<Component> returnList = new ArrayList<>(dependencies);
+        for (String rawDependency : dependencyIndices.keySet()) {
+
+            Class<? extends Component> dependencyClass = UtilityTool.getClassFromPath(rawDependency, Component.class, "");
+            if (dependencyClass == null) continue;
+
+            // Get the dependency index and make sure it's an Integer. This is done first for warnings
+            Object rawEntryIndex = dependencyIndices.get(rawDependency);
+            if (!(rawEntryIndex instanceof Integer entryIndex)) {
+                Main.LOGGER.warn("Invalid entry index \"{}\" for dependency \"{}\": expected an Integer but got {}", rawEntryIndex, rawDependency,
+                    rawEntryIndex == null ? "null" : rawEntryIndex.getClass().getSimpleName());
+                continue;
+            }
+
+            // Get the component from the entity, via our previously obtained index
+            Component indexedDependency = EntityHandler.getComponent(entity, dependencyClass, entryIndex).orElse(null);
+            if (indexedDependency == null) {
+                Main.LOGGER.warn("Couldn't find component \"{}\" at index {}: no such component present for entity {}", dependencyClass.getSimpleName(), entryIndex, entity);
+                continue;
+            }
+
+            // Find the position of the original dependency, so we can replace it with the new one
+            int oldIndex = IntStream.range(0, returnList.size())
+                .filter(i -> dependencyClass.isInstance(returnList.get(i)))
+                .findFirst()
+                .orElse(-1);
+
+            // If nothing is found, warn
+            if (oldIndex == -1) {
+                Main.LOGGER.warn("Couldn't load dependency index \"{}\" for component \"{}\": component is not a declared component in animation's dependencies!", entryIndex, dependencyClass.getSimpleName());
+                continue;
+            }
+
+            // Replace the old dependency with the new one
+            returnList.set(oldIndex, indexedDependency);
+        }
+
+        return returnList;
     }
 }
