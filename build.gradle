@@ -71,7 +71,7 @@ subprojects {
     maven { url 'https://jitpack.io' }
   }
   dependencies {
-    implementation "org.json:json:20250107"
+    implementation "org.json:json:20260522"
     implementation "com.github.UsUsStudios:Torgrays-Datagen:v1.2.4"
     implementation "org.apache.logging.log4j:log4j-slf4j2-impl:2.24.0"
     implementation "org.apache.logging.log4j:log4j-core:2.24.0"
