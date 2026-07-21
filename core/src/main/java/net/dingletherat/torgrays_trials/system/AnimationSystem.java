@@ -84,7 +84,6 @@ public class AnimationSystem implements System {
 
                     if (met) passedConditions.add(condition);
                 }
-                Main.LOGGER.debug("{}", passedConditions);
 
                 // Loop through the passedConditions, getting the frames of each condition
                 for (DependencyField condition : passedConditions) {

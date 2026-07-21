@@ -7,12 +7,12 @@
   ],
 
   "frames": {
-    "1:direction:~:up": [
+    "1|1:direction:~:up": [
       {
         "0:row": 0
       }
     ],
-    "1:direction:~:down": [
+    "1|1:direction:~:down": [
       {
         "0:row": 1
       }

@@ -18,7 +18,7 @@
         "0:column": 2
       }
     ],
-    "1:state:=:IDLE": [
+    "1|1:state:=:IDLE": [
       {
         "0:column": 0,
         "0:row": 1
