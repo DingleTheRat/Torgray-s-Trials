@@ -38,7 +38,7 @@
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.AnimationComponent",
-      "args": ["Basic Walk"]
+      "args": ["Basic Walk", 0.6]
     }
   ]
 }

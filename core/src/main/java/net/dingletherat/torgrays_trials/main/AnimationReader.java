@@ -62,7 +62,11 @@ public class AnimationReader {
      *      Every entry in the list is a frame inside the animation that will play every few seconds (determined by the {@link #speed}) while the condition is met. In each frame, you may change the properties of any dependency, these are called fieldSetters in code.
      *      (see parameter {@link #dependencies} for more info on the format). This is a list, so you're able to change multiple properties at once if you want.
      **/
-    public record RawAnimation(List<Class<? extends Component>> dependencies, float speed, Map<RawDependencyField, List<List<RawDependencyField>>> frames) { }
+    public record RawAnimation(List<Class<? extends Component>> dependencies, float speed, Map<RawDependencyField, List<List<RawDependencyField>>> frames) {
+        public RawAnimation changeSpeed(float newSpeed) {
+            return new RawAnimation(dependencies, newSpeed, frames);
+        }
+    }
 
     /**
      * When an {@link AnimationComponent} is declared, its entity's components and the will be used to initialize the dependencies of an animation and store it in here via {@link }.

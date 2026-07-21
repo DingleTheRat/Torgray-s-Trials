@@ -1,5 +1,6 @@
 package net.dingletherat.torgrays_trials.component;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,14 +26,23 @@ public class AnimationComponent implements Component {
     public float counter;
     public Map<Integer, Integer> frames = new HashMap<>();
 
-    public AnimationComponent(String animationName, JSONObject dependencyIndices) {
+    public AnimationComponent(String animationName, BigDecimal speed, JSONObject dependencyIndices) {
         if (!AnimationReader.ANIMATIONS.containsKey(animationName)) {
             Main.LOGGER.warn("Couldn't find animation \"{}\"", animationName);
             return;
         }
 
         rawAnimation = AnimationReader.ANIMATIONS.get(animationName);
+        if (speed != null) rawAnimation = rawAnimation.changeSpeed(speed.floatValue());
         this.dependencyIndices = dependencyIndices;
+    }
+
+    public AnimationComponent(String animationName, JSONObject dependencyIndices) {
+        this(animationName, null, dependencyIndices);
+    }
+
+    public AnimationComponent(String animationName, BigDecimal speed) {
+        this(animationName, speed, new JSONObject());
     }
 
     public AnimationComponent(String animationName) {
