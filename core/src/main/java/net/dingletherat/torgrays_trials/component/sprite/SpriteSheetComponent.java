@@ -1,8 +1,10 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.component.sprite;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
+import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.PositionComponent;
 import net.dingletherat.torgrays_trials.system.SpriteSystem;
 
@@ -20,6 +22,7 @@ public class SpriteSheetComponent extends SpriteComponent {
 	public int column;
 	/** This is the row where the sprite would be pulled from. Set to -1 to disable it. **/
 	public int row;
+    private int ow;
 
     /**
      * @param spriteSheetName The name or path of the sheet in the files.

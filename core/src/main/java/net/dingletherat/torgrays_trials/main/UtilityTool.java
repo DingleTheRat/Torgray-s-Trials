@@ -18,9 +18,9 @@ public class UtilityTool {
     /**
      * Converts a given JSON file into a {@code JSONObject}.
      *
-     * @param path The file path for the file, which has to be a JSON, that is going to be converted to a {@code
+     * @param path The file path for the file, which has to be a JSON, that is going to be converted to a {@link
      * JSONObject}. {@code EX: "values/translations/english.json"}
-     * @return Returns a {@code JSONObject} that was made from the file
+     * @return Returns a {@link JSONObject} that was made from the file
      **/
     public static JSONObject getJsonObject(String path) {
         try {
@@ -152,12 +152,31 @@ public class UtilityTool {
 
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    // TODO: Document
+    /**
+     * Converts a provided object's type to something more proper, such as an enum or a boolean if it's a string that can be one.
+     * This is used when JSON parsing, because the amount of types you can provide in a JSON is limited
+     * <p>
+     * Types it can currently convert to: Enums, Booleans.
+     * <p>
+     * @param toConvert The object who's type you want to be converted to another
+     * @param currentType The object's current type, which is needed to be casted for some conversions
+     * @return The {@code toConvert} parameter you provided, but converted to a type if there is one it can be converted to. If there isn't it'll keep its current type.
+     **/
     public static <T> T convertToType(Object toConvert, Class<T> currentType) {
         return (T) switch (toConvert) {
             case String string when currentType.isEnum() -> Enum.valueOf((Class<? extends Enum>) currentType, string);
             case String string when currentType == Boolean.class -> Boolean.parseBoolean(string);
             default -> toConvert;
         };
+    }
+
+    /**
+     * Capitalizes the first letter of the provided string
+     * <p>
+     * @param string the string you want the capitalization to be preformed on
+     * @return The string you provided but with its first letter capitalized
+     **/
+    public static String capitalize(String string) {
+        return Character.toUpperCase(string.charAt(0)) + string.substring(1);
     }
 }

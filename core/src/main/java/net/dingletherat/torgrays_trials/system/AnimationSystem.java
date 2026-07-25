@@ -1,5 +1,7 @@
 package net.dingletherat.torgrays_trials.system;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,12 +96,30 @@ public class AnimationSystem implements System {
                     int frameNumber = component.frames.getOrDefault(framesSize, 0);
                     List<DependencyField> frame = frames.get(frameNumber);
 
-                    // Get the correct frame from the frames and loop through each of its variable changes, implementing them
+                    // Get the correct frame from the frames and loop through each of its field changes, implementing them
                     for (DependencyField dependencyField : frame) {
+
+                        /* If there's a setter method, use that instead of changing the field. If not, it'll throw an exception and we move on
+                           This is done first to prioritize setters */
+                        String setterName = "set" + UtilityTool.capitalize(dependencyField.field().getName());
+                        try {
+                            Method setter = dependencyField.dependency().getClass().getMethod(setterName, dependencyField.field().getType());
+                            setter.invoke(dependencyField.dependency(), dependencyField.value());
+                            continue;
+                        } catch (NoSuchMethodException exception) { } // As mentioned, means it has no setter, so just go to the field block
+                        catch (IllegalAccessException exception) {
+                           Main.LOGGER.warn("Couldn't invoke setter method \"{}\" for field setter #{} from condition {}: method is inaccessible", setterName, condition, frame.indexOf(dependencyField));
+                           continue;
+                        } catch (InvocationTargetException exception) {
+                            Main.handleException(exception);
+                            continue;
+                        }
+
+                        // Set the field value to whatever specified
                         try {
                             dependencyField.field().set(dependencyField.dependency(), UtilityTool.convertToType(dependencyField.value(), dependencyField.field().getType()));
                         } catch (IllegalAccessException exception) {
-                           Main.LOGGER.warn("Removed field setter #{} from condition {}'s frames: unable to access field \"{}\" in dependency while trying to modify it", frame.indexOf(dependencyField), condition, dependencyField.field().getName());
+                           Main.LOGGER.warn("Removed field setter #{} from condition {}'s frames: unable to access field \"{}\" in dependency {} while trying to modify it", frame.indexOf(dependencyField), condition, dependencyField.field().getName(), dependencyField.dependency().getClass().getSimpleName());
                            component.animation.frames().get(condition).get(frameNumber).remove(dependencyField);
                         }
                     }

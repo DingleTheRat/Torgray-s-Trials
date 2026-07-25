@@ -63,8 +63,7 @@ public class World {
                 if (component.getType() == ComponentType.SINGLE) {
                     boolean hasDuplicate = components.stream().anyMatch(existing -> existing.getClass().equals(componentClass));
                     if (hasDuplicate) {
-                        Main.LOGGER.warn("[Location: {}] Component {} is already present, despite the type being SINGLE! Component won't be added.",
-                                 location, componentClass.getSimpleName());
+                        Main.LOGGER.warn("[Location: {}] Component {} is already present, despite the type being SINGLE! Component won't be added.", location, componentClass.getSimpleName());
                         continue;
                     }
                 }

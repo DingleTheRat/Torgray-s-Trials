@@ -1,6 +1,8 @@
 package net.dingletherat.torgrays_trials.main;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -255,20 +257,13 @@ public class AnimationReader {
 
         // Do the same for conditions, but also keep track of the raw condition as a key so we can pair them with frames later
         Map<RawDependencyField, DependencyField> resolvedConditions = new LinkedHashMap<>();
-        AtomicInteger index = new AtomicInteger();
+        AtomicInteger conditionIndex = new AtomicInteger(); // This is to provide more info for the location below
         rawAnimation.frames().keySet().stream()
             .filter(rawCondition -> !(rawCondition.dependency() == null && rawCondition.field() == null && rawCondition.value() == null && rawCondition.expectation() == null))
             .flatMap(rawCondition -> indexedDependencies.stream().filter(rawCondition.dependency()::isInstance).findFirst()
                .map(dependency -> {
-                   // The field from the RawDependencyField must be converted into an actual field, so do that as well
-                   int i = index.getAndIncrement(); // This is for the warning below
-                   try {
-                        Field field = rawCondition.dependency().getDeclaredField(rawCondition.field());
-                        return new DependencyField(dependency, field, rawCondition.value(), rawCondition.expectation());
-                   } catch (NoSuchFieldException exception) {
-                       Main.LOGGER.warn("Condition #{} was skipped in animation {}: field {} not found in dependency {}", i, animationName, rawCondition.field(), rawCondition.dependency().getSimpleName());
-                   }
-                   return null;
+                   int i = conditionIndex.getAndIncrement();
+                   return resolveDependencyField(rawCondition, dependency, "Condition #" + i + " in animation \"" + animationName + "\"");
                })
                .filter(Objects::nonNull)
                .map(condition -> Map.entry(rawCondition, condition))
@@ -289,21 +284,16 @@ public class AnimationReader {
 
         // Pair up conditions with their frames, digging into the raw animation to get the uninitialized frames and resolving the dependencies within
         Map<DependencyField, List<List<DependencyField>>> frames = new LinkedHashMap<>();
+        AtomicInteger setterConditionIndex = new AtomicInteger();
+        AtomicInteger setterIndex = new AtomicInteger();
         resolvedConditions.forEach((rawCondition, condition) -> {
+           int conditionI = setterConditionIndex.getAndIncrement();
            List<List<DependencyField>> frameList = rawAnimation.frames().get(rawCondition).stream()
                .map(frame -> frame.stream()
                     .flatMap(fieldSetter -> indexedDependencies.stream().filter(fieldSetter.dependency()::isInstance).findFirst()
                        .map(dependency -> {
-                           // The field from the RawDependencyField must be converted into an actual field, so do that as well
-                           int i = index.getAndIncrement(); // This is for the warning below
-                           try {
-                               // TODO: Check supers as well
-                                Field field = fieldSetter.dependency().getDeclaredField(fieldSetter.field());
-                                return new DependencyField(dependency, field, fieldSetter.value(), fieldSetter.expectation());
-                           } catch (NoSuchFieldException exception) {
-                               Main.LOGGER.warn("Field setter #{} was skipped in animation {}: field {} not found in dependency {}", i, animationName, fieldSetter.field(), fieldSetter.dependency().getSimpleName());
-                           }
-                           return null;
+                           int i = setterIndex.getAndIncrement();
+                           return resolveDependencyField(fieldSetter, dependency, "Field setter #" + i + " in condition #" + conditionI + " in animation \"" + animationName + "\"");
                        })
                        .filter(Objects::nonNull)
                        .stream())
@@ -344,7 +334,7 @@ public class AnimationReader {
         } catch (NumberFormatException exception) {
             Main.LOGGER.error("[Location: {}] Invalid dependency index \"{}\": Index isn't a number! Did you follow the \"[DEPENDENCY_POSITION]:[FIELD]\" format?", location, dependencyIndex);
         } catch (IndexOutOfBoundsException exception) {
-            Main.LOGGER.error("[Location: {}] Dependency index provided is {}, however there are only {} dependencies! Remember that dependency indexes start at 0", location, dependencyIndex, dependencies.size());
+            Main.LOGGER.error("[Location: {}] Dependency index provided is \"{}\", however there are only {} dependencies! Remember that dependency indexes start at 0", location, dependencyIndex, dependencies.size());
         }
         return null;
     }
@@ -389,5 +379,45 @@ public class AnimationReader {
         }
 
         return returnList;
+    }
+
+    public static DependencyField resolveDependencyField(RawDependencyField rawDependencyField, Component dependency, String location) {
+        Field field = null;
+
+        /* If there's a getter method, use that instead of getting the field normally. If not, it'll throw an exception and we move on
+           This is done first to prioritize getters */
+        String getterName = "get" + UtilityTool.capitalize(rawDependencyField.field());
+        try {
+             Method getter = rawDependencyField.dependency().getMethod(getterName);
+             Object getterResult = getter.invoke(dependency);
+
+            if (getterResult == null) {
+                Main.LOGGER.debug("[Location: {}] Attempting to get field: getter \"{}\" returned null", location, getterName);
+                throw new NoSuchMethodException();
+            }
+            if(!(getterResult instanceof Field getterField)) {
+                Main.LOGGER.warn("[Location: {}] Couldn't invoke getter method \"{}\": method doesn't return a \"Field\" object", location, getterName);
+                return null;
+            }
+            field = getterField;
+        } catch (NoSuchMethodException exception) { } // As mentioned, means it has no getter, so just go to the field block
+        catch (IllegalAccessException exception) {
+            Main.LOGGER.warn("[Location: {}] Couldn't invoke getter method \"{}\": method is inaccessible", location, getterName);
+            return null;
+        } catch (InvocationTargetException exception) {
+            Main.handleException(exception);
+            return null;
+        }
+
+        if (field == null) {
+            try {
+                field = rawDependencyField.dependency().getField(rawDependencyField.field());
+            } catch (NoSuchFieldException exception) {
+                Main.LOGGER.warn("[Location: {}] Field \"{}\" not found in dependency {} nor its supers. Is the field's visibility restricted?", location, rawDependencyField.field(), rawDependencyField.dependency().getSimpleName());
+                return null;
+            }
+        }
+
+        return new DependencyField(dependency, field, rawDependencyField.value(), rawDependencyField.expectation());
     }
 }
