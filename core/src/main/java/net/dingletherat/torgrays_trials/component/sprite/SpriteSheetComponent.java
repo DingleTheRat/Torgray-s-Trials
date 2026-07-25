@@ -22,7 +22,6 @@ public class SpriteSheetComponent extends SpriteComponent {
 	public int column;
 	/** This is the row where the sprite would be pulled from. Set to -1 to disable it. **/
 	public int row;
-    private int ow;
 
     /**
      * @param spriteSheetName The name or path of the sheet in the files.
