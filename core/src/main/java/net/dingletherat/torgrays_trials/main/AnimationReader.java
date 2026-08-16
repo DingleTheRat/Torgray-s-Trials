@@ -5,7 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import net.dingletherat.torgrays_trials.Main;
@@ -29,7 +27,11 @@ import net.dingletherat.torgrays_trials.component.NameComponent;
 public class AnimationReader {
     public static final Map<String, RawAnimation> ANIMATIONS = new HashMap<>();
 
-    // Keys for stuff (yay!)
+    // ---------------------
+    // Keys
+    // ---------------------
+
+    // Keys for main JSON
     /** The key used to get the name of the animation, which will be used in errors and as a key in the {@link #ANIMATIONS} map**/
     public static final String KEY_NAME = "name";
     /** The key used to get a list of components whose fields an animation JSON will modify (optional) **/
@@ -38,12 +40,25 @@ public class AnimationReader {
     If the target component doesn't match the self you set, then the {@link AnimationComponent} will be discarded with a warning **/
     /** The key used to get the speed at which the animation will run at **/
     public static final String KEY_SPEED = "speed";
-    /** The key used to obtain the frames  **/
-    public static final String KEY_FRAMES = "frames";
+    /** The key used to obtain the conditions **/
+    public static final String KEY_CONDITIONS = "conditions";
+
+    // Keys for conditions
+    public static String KEY_CONDITION = "condition";
+    public static String KEY_FRAMES = "frames";
+    public static final String KEY_DEPENDENCY_INDEX = "dependency_index";
+    public static final String KEY_FIELD = "field";
+    public static final String KEY_EXPECTATION = "expectation";
+    public static final String KEY_EXPECTED = "expected";
+
+    // Other keys
     /** The path used to get animations **/
     public static final String PATH = "values/animations/";
 
+    // ---------------------
     // Records
+    // ---------------------
+
     /** Animation files, when all goes according to plan, will be parsed into this record.
      * It holds all the data that the JSON contains, just in its proper form (EX: Class paths as classes).
      * However, none of the classes are actually initialized, so it's called "RawAnimation", not animation
@@ -86,6 +101,10 @@ public class AnimationReader {
     public record RawDependencyField(Class<? extends Component> dependency, String field, Object value, String expectation) { }
 
     public record DependencyField(Component dependency, Field field, Object value, String expectation) { }
+
+    // ---------------------
+    // Main methods
+    // ---------------------
 
     /**
      * Calls {@link #loadRawAnimations} for every file in the {@link #PATH}, as long as it's a JSON.
@@ -135,8 +154,8 @@ public class AnimationReader {
             Main.LOGGER.warn("Invalid animation \"{}\": \"{}\" field is missing or is not a BigDecimal.", name, KEY_SPEED);
             return null;
         }
-        if (!json.has(KEY_FRAMES) || !(json.get(KEY_FRAMES) instanceof JSONObject framesObject)) {
-            Main.LOGGER.warn("Invalid animation \"{}\": \"{}\" field is missing or is not a JSONObject.", name, KEY_FRAMES);
+        if (!json.has(KEY_CONDITIONS) || !(json.get(KEY_CONDITIONS) instanceof JSONArray conditionsArray)) {
+            Main.LOGGER.warn("Invalid animation \"{}\": \"{}\" field is missing or is not a JSONArray.", name, KEY_CONDITIONS);
             return null;
         }
 
@@ -155,82 +174,75 @@ public class AnimationReader {
             }
         }
 
-        // Now, onto THE BIG ONE, the animations themselves
-        Map<RawDependencyField, List<List<RawDependencyField>>> frames = new LinkedHashMap<>();
+        // Convert the conditions array
+        List<JSONObject> conditionJsons = new ArrayList<>(IntStream.range(0, conditionsArray.length())
+                        .mapToObj(conditionsArray::getJSONObject)
+                        .toList());
 
-        /* Get each rawCondition's priority (default to 0), adding it to a list of map entries with the priority as the key and the rawCondition as the value
-           the list of entires is then sorted to be used to loop through (most corporate thing I ever wrote btw) */
-        List<Map.Entry<Integer, String>> prioritizedRawConditions = new ArrayList<>();
-        for (String rawCondition : framesObject.keySet()) {
-            // The format is meant to be "PRIORITY|RAW_CONDITION". However, a priority is optional, so we account for that
-            boolean noPriority = !rawCondition.contains("|");
-            String[] splitCondition = noPriority ? new String[]{rawCondition} : rawCondition.split("|", 2);
-            String rawPriority = noPriority ? "0" : splitCondition[0];
-            rawCondition = noPriority ? splitCondition[0] : splitCondition[1].replace("|", ""); // The second split includes the regex, so remove that
+        /*
+         * Each JSONObject should either contain fields that make up a condition or a condition field.
+         * Determine which one it is and call the corresponding method to parse it. Once parsed add it into the conditions list
+         * A map is used here because, later, we'll need to obtain the JSONObject for the frames, and since fails are not added indexes wouldn't match up with lists.
+         */
+        Map<JSONObject, RawDependencyField> conditions = new LinkedHashMap<>();
+        conditionJsons.stream()
+            .map(conditionJson -> Map.entry(conditionJson, conditionJson.has(KEY_CONDITION) ?
+                    stringToCondition(conditionJson.getString(KEY_CONDITION), dependencies, "String condition " + conditionJson.getString(KEY_CONDITION)) : // Compact Format
+                    jsonToCondition(conditionJson))) // Expanded Format
+            .filter(entry -> entry.getValue() != null)
+            .forEach(entry -> conditions.put(entry.getKey(), entry.getValue()));
 
-            int priority;
-            try {
-                priority = Integer.parseInt(rawPriority);
-            } catch (NumberFormatException exception) {
-                Main.LOGGER.warn("Condition \"{}\" was skipped: priority isn't a number! Did you follow the \"[PRIORITY]|[CONDITION]\" format?");
+        /* Now, onto the frames. We loop through the keySet of the conditions, as it's more useful here, though the values will be used later
+           All frames will be paired up with their condition into the final conditionsAndFrames map */
+        Map<RawDependencyField, List<List<RawDependencyField>>> conditionsAndFrames = new LinkedHashMap<>();
+        int conditionIndex = 0; // For warning purposes
+        for (JSONObject conditionJson : conditions.keySet()) {
+            conditionIndex++;
+
+            // Ensure frames is actually there
+            if (!(conditionJson.has(KEY_FRAMES)) || !(conditionJson.get(KEY_FRAMES) instanceof JSONArray framesArray)) {
+                Main.LOGGER.warn("Condition #{} in animation \"{}\": \"{}\" field is missing or is not a JSONArray.", conditionIndex, name, KEY_FRAMES);
                 continue;
             }
 
-            prioritizedRawConditions.add(Map.entry(priority, rawCondition));
-        }
-        prioritizedRawConditions.sort(Comparator.comparingInt(Map.Entry<Integer, String>::getKey).reversed()); // It's reversed, cuz higher values are prioritized
+            // Convert the frames to a list so it's easier to loop through
+            List<JSONObject> jsonFrames = new ArrayList<>(IntStream.range(0, framesArray.length())
+                            .mapToObj(framesArray::getJSONObject)
+                            .toList());
 
-        // Go through each condition and its frames, converting both to RawDependencyFields, allowing info to be accessed easier
-        for (Map.Entry<Integer, String> entry : prioritizedRawConditions) {
-            String rawCondition = entry.getValue();
-
-            // Attempt to get the conditionFramesArray, if it throws a JSONException, that means it likely had a priority in the key, so add that.
-            JSONArray conditionFramesArray;
-            try {
-                 conditionFramesArray = framesObject.getJSONArray(rawCondition);
-            } catch (JSONException exception) {
-                 conditionFramesArray = framesObject.getJSONArray(entry.getKey() + "|" + rawCondition);
-            }
-
-            // As usual with JSONArrays, turn the conditionFrames into a list
-            List<JSONObject> rawConditionFrames = new ArrayList<>(IntStream.range(0, conditionFramesArray.length()).mapToObj(conditionFramesArray::getJSONObject).toList());
-
-            // Then, once again loop through it, getting the FieldSetters, putting all the data obtained in the list below
-            List<List<RawDependencyField>> conditionFrames = new ArrayList<>();
-            for (JSONObject rawFrame : rawConditionFrames) {
-                // Convert the dependencyIndex to a dependency class and get the newValue, putting both as well as the field portion of the targetField into the RawDependencyField record
+            // Loop through the jsonFrames, which is a list of jsons that should each contain a fieldSetter that modifies a field
+            List<List<RawDependencyField>> frames = new ArrayList<>();
+            for (JSONObject frameJson : jsonFrames) {
                 List<RawDependencyField> frame = new ArrayList<>();
+                int targetFieldIndex = 0;
 
-                for (String targetField : rawFrame.keySet()) {
-                    // Get the new value from the JSONObject by using the targetField as a key (like last time)
-                    Object newValue = rawFrame.get(targetField);
+                for (String targetField : frameJson.keySet()) {
+                    targetFieldIndex++;
 
-                    // Get the dependency from the targetField as well, adding both the newValue, the field portion of targetField, and the obtained dependency to a RawDependencyField, adding that to the list
-                    Class<? extends Component> targetDependency = getDependencyFromString("TargetField \"" + targetField + "\" in " + name, dependencies, targetField);
-                    frame.add(new RawDependencyField(targetDependency, targetField.split(":")[1], newValue, ""));
+                    // Each targetField should ideally be in this format: "[DEPENDENCY]:[FIELD]", so make sure it's following that format
+                    String[] splitTargetField = targetField.split(":");
+                    if (splitTargetField.length != 2) {
+                        Main.LOGGER.warn("[Location: Condition #{} in animation {}] Target field #{} doesn't have enough \":\": expected 1, but got {}! Did you follow the \"[DEPENDENCY_INDEX:FIELD]\" format?", conditionIndex, name, targetFieldIndex, splitTargetField.length);
+                        continue;
+                    }
+
+                    // Get the 3 essential parts for a fieldModifier
+                    Class<? extends Component> dependency = getDependencyFromString(dependencies, targetField, "TargetField \"" + targetField + "\" in condition #" + conditionIndex + " in " + name);
+                    String field = splitTargetField[1];
+                    Object newValue = frameJson.get(targetField);
+
+                    // Then create a new RawDependencyField with them and add it into the frame
+                    frame.add(new RawDependencyField(dependency, field, newValue, null));
                 }
 
-                conditionFrames.add(frame);
+                frames.add(frame);
             }
 
-            // If the targetField is just empty, meaning they want it to always pass, add a fully null RawDependencyField to the list
-            if (rawCondition.isBlank()) {
-                RawDependencyField blankField = new RawDependencyField(null, null, null, null);
-                frames.put(blankField, conditionFrames);
-                continue;
-            }
-
-            // Split the rawCondition into (what's supposed to be) 3 strings: the dependency, variable, and condition.
-            // Get the dependency class with the first one, and use the second two in the condition declaration
-            String[] splitCondition = rawCondition.split(":");
-            Class<? extends Component> conditionDependency = getDependencyFromString("Condition \"" + rawCondition + "\" in " + name, dependencies, rawCondition);
-            RawDependencyField condition = new RawDependencyField(conditionDependency, splitCondition[1], splitCondition[3], splitCondition[2]);
-
-            frames.put(condition, conditionFrames);
+            conditionsAndFrames.put(conditions.get(conditionJson), frames);
         }
 
         // Create the animation and return it
-        RawAnimation animation = new RawAnimation(dependencies, speed.floatValue(), frames);
+        RawAnimation animation = new RawAnimation(dependencies, speed.floatValue(), conditionsAndFrames);
         return animation;
     }
 
@@ -305,7 +317,7 @@ public class AnimationReader {
         // EVEN MORE SKIP WARNINGS
         resolvedConditions.forEach((rawCondition, condition) ->
            rawAnimation.frames().get(rawCondition).stream()
-                   .flatMap(frame -> frame.stream())
+                   .flatMap(List::stream)
                     .filter(fieldSetter -> indexedDependencies.stream().noneMatch(fieldSetter.dependency()::isInstance))
                    .forEach(fieldSetter -> Main.LOGGER.warn("Frame dependency \"{}\" in condition \"{}:{}:{}\" of animation \"{}\" was skipped: not found in entity {}",
                        fieldSetter.dependency().getSimpleName(), rawCondition.dependency().getSimpleName(), rawCondition.field(), rawCondition.value(), animationName, entity)));
@@ -313,6 +325,36 @@ public class AnimationReader {
         // Use all that to create our animation!
         Animation animation = new Animation(dependencies, rawAnimation.speed(), frames);
         return animation;
+    }
+
+    // ---------------------
+    // Helper methods
+    // ---------------------
+
+    // TODO: Allow for blank conditions
+    public static RawDependencyField stringToCondition(String string, List<Class<? extends Component>> dependencies, String location) {
+        /* Split the rawCondition into (what's supposed to be) 4 strings: the dependency, field, type of expectation (such as =) and the expected value.
+           Warn in the case there's not 4 "splits" present */
+        String[] splitString = string.split(":");
+        if (splitString.length != 4) {
+            Main.LOGGER.warn("[Location: {}] String condition doesn't have enough \":\": expected 4, but got {}! Did you follow the \"[DEPENDENCY_INDEX:FIELD]:[EXPECTATION]:[EXPECTED]\" format?", location, splitString.length);
+            return null;
+        }
+
+        /* Get the 4 necessary segments.
+           For the dependency specifically, we'll use the getDependencyFromString method on the whole string as it splits every by itself */
+        Class<? extends Component> dependency = getDependencyFromString(dependencies, string, location);
+        String field = splitString[1];
+        String expectation = splitString[2];
+        String expected = splitString[3];
+
+        // Insert the segments accordingly into the RawDependencyField and return
+        return new RawDependencyField(dependency, field, expected, expectation);
+    }
+
+    public static RawDependencyField jsonToCondition(JSONObject json) {
+        Main.LOGGER.warn("Json to condition format not supported!");
+        return null;
     }
 
     /**
@@ -323,7 +365,7 @@ public class AnimationReader {
      * @param string The string that will be used to obtain the index to use to get a dependency (format like so: {@code [DEPENDENCY_POSITION]:[FIELD]})
      * @return The successfully obtained dependency from the {@code dependencies}.
      **/
-    public static Class<? extends Component> getDependencyFromString(String location, List<Class<? extends Component>> dependencies,  String string) {
+    public static Class<? extends Component> getDependencyFromString(List<Class<? extends Component>> dependencies, String string, String location) {
         // Split the string into parts split in between ":", since the dependencyIndex is SUPPOSED to be first, set the dependency index to the first part of the split
         String[] splitTargetField = string.split(":");
         String dependencyIndex = splitTargetField[0];

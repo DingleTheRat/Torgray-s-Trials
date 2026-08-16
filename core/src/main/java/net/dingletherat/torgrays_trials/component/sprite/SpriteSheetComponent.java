@@ -1,10 +1,8 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.component.sprite;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
-import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.PositionComponent;
 import net.dingletherat.torgrays_trials.system.SpriteSystem;
 

@@ -88,6 +88,10 @@ public class Main extends ApplicationAdapter {
         gameWorld.drawSystems.add(spriteSystem);
         gameWorld.updateSystems.add(spriteSystem);
 
+        // Load some JSONs
+        AnimationReader.loadRawAnimations();
+        EntityHandler.loadTemplates();
+
         // Lastly, load the backdrop
         backdrop = DataImage.loadImage("backdrop");
 
@@ -137,10 +141,6 @@ public class Main extends ApplicationAdapter {
         LOGGER.info("--Loading World--");
 
         gameWorld = new World();
-
-        // Load some JSONs
-        AnimationReader.loadRawAnimations();
-        EntityHandler.loadTemplates();
 
         // Load maps and tiles
         TileManager.loadTiles();

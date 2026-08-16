@@ -6,26 +6,30 @@
     "net.dingletherat.torgrays_trials.component.MovementComponent"
   ],
 
-  "frames": {
-    "1|1:direction:~:up": [
-      {
-        "0:row": 0
-      }
-    ],
-    "1|1:direction:~:down": [
-      {
-        "0:row": 1
-      }
-    ],
-    "1:direction:~:left": [
-      {
-        "0:row": 2
-      }
-    ],
-    "1:direction:~:right": [
-      {
-        "0:row": 3
-      }
-    ]
-  }
+  "conditions": [
+    {
+      "condition": "1:direction:~:up",
+      "frames": [
+        { "0:row": 0 }
+      ]
+    },
+    {
+      "condition": "1:direction:~:down",
+      "frames": [
+        { "0:row": 1 }
+      ]
+    },
+    {
+      "condition": "1:direction:~:left",
+      "frames": [
+        { "0:row": 2 }
+      ]
+    },
+    {
+      "condition": "1:direction:~:right",
+      "frames": [
+        { "0:row": 3 }
+      ]
+    }
+  ]
 }
